@@ -53,7 +53,7 @@ const Navbar = () => {
                 Services
               </Link>
               <Link
-                to="/"
+                to="/contact"
                 className="text-gray-700 hover:text-blue-600 transition-colors"
               >
                 Contact
@@ -105,7 +105,7 @@ const Navbar = () => {
                 About
               </Link>
               <Link
-                to="/"
+                to="/contact"
                 className="block px-3 py-2 text-gray-700 hover:text-blue-600"
               >
                 Contact
