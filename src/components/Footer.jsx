@@ -1,22 +1,34 @@
+import React, { useState, useEffect } from "react";
 import {
-  Menu,
-  X,
-  ArrowRight,
-  Star,
-  Users,
-  Clock,
-  Shield,
-  Heart,
   Stethoscope,
-  Calendar,
-  MessageCircle,
   Phone,
   Mail,
   MapPin,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
+  const [isAtTop, setIsAtTop] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsAtTop(window.scrollY < 100);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const handleScrollToggle = () => {
+    if (isAtTop) {
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   return (
     <>
       {/* Footer */}
@@ -120,6 +132,19 @@ const Footer = () => {
           </div>
         </div>
       </footer>
+
+      {/* Scroll Toggle Button */}
+      <button
+        onClick={handleScrollToggle}
+        className="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-colors z-50"
+        aria-label="Scroll toggle"
+      >
+        {isAtTop ? (
+          <ChevronDown className="w-5 h-5" />
+        ) : (
+          <ChevronUp className="w-5 h-5" />
+        )}
+      </button>
     </>
   );
 };
