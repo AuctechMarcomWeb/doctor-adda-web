@@ -284,7 +284,7 @@ const TermsAndConditions = () => {
                   </p>
                 </section>
 
-                <section className="mb-8">
+                {/* <section className="mb-8">
                   <h2 className="text-2xl font-bold text-gray-900 mb-4">
                     14. Contact Information
                   </h2>
@@ -304,7 +304,7 @@ const TermsAndConditions = () => {
                       City, MC 12345
                     </p>
                   </div>
-                </section>
+                </section> */}
 
                 <section className="mb-8">
                   <h2 className="text-2xl font-bold text-gray-900 mb-4">
