@@ -52,7 +52,7 @@ const HeroSection = () => {
               {/* Mobile Phone Mockup */}
               <div className="relative z-10 transform hover:scale-105 transition-transform duration-500">
                 {/* Phone Frame */}
-                <div className="bg-gray-900 rounded-[3rem] p-2 shadow-2xl w-72 h-[580px]">
+                <div className="bg-gray-900 rounded-[3rem] p-2 shadow-2xl w-68 h-[576px]">
                   {/* Screen */}
                   <div className="bg-black rounded-[2.5rem] p-1 h-full">
                     {/* Content Area */}
