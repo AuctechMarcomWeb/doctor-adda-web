@@ -19,9 +19,8 @@ const Contact = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
-  
-    useEffect(() => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
     setIsVisible(true);
   }, []);
 
@@ -45,20 +44,20 @@ const Contact = () => {
     {
       icon: <Mail className="w-6 h-6" />,
       title: "Email",
-      content: "hello@company.com",
+      content: "support@doctoradda.com",
       description: "Send us an email anytime!",
     },
     {
       icon: <Phone className="w-6 h-6" />,
       title: "Phone",
-      content: "+1 (555) 123-4567",
+      content: "+919838075493",
       description: "Mon-Fri from 8am to 5pm",
     },
     {
       icon: <MapPin className="w-6 h-6" />,
       title: "Office",
-      content: "123 Business Ave",
-      description: "New York, NY 10001",
+      content: "Vibhuti Khand, Gomti Nagar, Lucknow",
+      description: "Sai Heights, C-3/76, Vibhuti Khand, Gomti Nagar, Lucknow, Uttar Pradesh 226010",
     },
   ];
 
@@ -71,9 +70,12 @@ const Contact = () => {
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
           }`}
         >
-          <h1 className="text-5xl mt-10 font-bold mb-4 text-[#0B63F6]">Let's Connect</h1>
+          <h1 className="text-5xl mt-10 font-bold mb-4 text-[#0B63F6]">
+            Let's Connect
+          </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Have a question or want to work together? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+            Have a question or want to work together? We'd love to hear from
+            you. Send us a message and we'll respond as soon as possible.
           </p>
         </div>
 
@@ -81,7 +83,9 @@ const Contact = () => {
           {/* Contact Info */}
           <div
             className={`space-y-8 transition-all duration-1000 delay-200 ${
-              isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"
+              isVisible
+                ? "opacity-100 translate-x-0"
+                : "opacity-0 -translate-x-10"
             }`}
           >
             <div className="p-8 rounded-3xl bg-gray-100 shadow-lg">
@@ -102,8 +106,12 @@ const Contact = () => {
                       </div>
                       <div>
                         <h3 className="text-xl font-semibold">{info.title}</h3>
-                        <p className="text-gray-800 font-medium">{info.content}</p>
-                        <p className="text-gray-500 text-sm mt-1">{info.description}</p>
+                        <p className="text-gray-800 font-medium">
+                          {info.content}
+                        </p>
+                        <p className="text-gray-500 text-sm mt-1">
+                          {info.description}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -113,7 +121,9 @@ const Contact = () => {
               <div className="mt-8 p-6 bg-[#0B63F6]/10 rounded-2xl border border-[#0B63F6]/20">
                 <div className="flex items-center gap-3 mb-2">
                   <Clock className="w-5 h-5 text-[#0B63F6]" />
-                  <h3 className="text-lg font-semibold text-[#0B63F6]">Business Hours</h3>
+                  <h3 className="text-lg font-semibold text-[#0B63F6]">
+                    Business Hours
+                  </h3>
                 </div>
                 <p>Monday - Friday: 8:00 AM - 6:00 PM</p>
                 <p>Saturday: 9:00 AM - 4:00 PM</p>
@@ -125,7 +135,9 @@ const Contact = () => {
           {/* Contact Form */}
           <div
             className={`transition-all duration-1000 delay-400 ${
-              isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-10"
+              isVisible
+                ? "opacity-100 translate-x-0"
+                : "opacity-0 translate-x-10"
             }`}
           >
             <div className="p-8 rounded-3xl bg-gray-100 shadow-lg">
@@ -137,7 +149,9 @@ const Contact = () => {
               {isSubmitted ? (
                 <div className="text-center py-12">
                   <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-                  <h3 className="text-2xl font-bold text-[#0B63F6] mb-2">Message Sent!</h3>
+                  <h3 className="text-2xl font-bold text-[#0B63F6] mb-2">
+                    Message Sent!
+                  </h3>
                   <p className="text-gray-600">
                     Thank you for reaching out. We'll get back to you soon.
                   </p>
@@ -217,9 +231,12 @@ const Contact = () => {
           }`}
         >
           <div className="bg-[#0B63F6]/10 rounded-2xl p-8 border border-[#0B63F6]/20 max-w-4xl mx-auto">
-            <h3 className="text-2xl font-bold text-[#0B63F6] mb-4">Ready to start your project?</h3>
+            <h3 className="text-2xl font-bold text-[#0B63F6] mb-4">
+              Ready to start your project?
+            </h3>
             <p className="text-gray-600 mb-6">
-              Join hundreds of satisfied clients who have trusted us with their projects.
+              Join hundreds of satisfied clients who have trusted us with their
+              projects.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <button className="bg-[#0B63F6] text-white px-6 py-3 rounded-lg hover:shadow-lg transition-transform transform hover:scale-105">

@@ -7,6 +7,8 @@ import {
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
+
+import logo from "../assets/doctor-adda-logo.png";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
@@ -39,6 +41,7 @@ const Footer = () => {
               <div className="flex items-center space-x-2 mb-6">
                 <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-lg flex items-center justify-center">
                   <Stethoscope className="w-6 h-6 text-white" />
+                   <img src={logo} alt="" />
                 </div>
                 <span className="text-2xl font-bold">Doctor Adda</span>
               </div>
@@ -51,30 +54,25 @@ const Footer = () => {
             <div>
               <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
               <div className="space-y-2">
-                <a
-                  href="#home"
+                <Link
+                  to="/"
                   className="block text-gray-400 hover:text-white transition-colors"
                 >
                   Home
-                </a>
-                <a
-                  href="#services"
+                </Link>
+                <Link
+                  to="/"
                   className="block text-gray-400 hover:text-white transition-colors"
                 >
                   Services
-                </a>
-                <a
-                  href="#doctors"
+                </Link>
+               
+                <Link
+                  to="/contact"
                   className="block text-gray-400 hover:text-white transition-colors"
                 >
-                  Doctors
-                </a>
-                <a
-                  href="#about"
-                  className="block text-gray-400 hover:text-white transition-colors"
-                >
-                  About
-                </a>
+                  Contact
+                </Link>
               </div>
             </div>
 
@@ -93,16 +91,16 @@ const Footer = () => {
               <div className="space-y-3">
                 <div className="flex items-center space-x-3">
                   <Phone className="w-5 h-5 text-blue-400" />
-                  <span className="text-gray-400">+1 (555) 123-4567</span>
+                  <span className="text-gray-400">+919838075493</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Mail className="w-5 h-5 text-blue-400" />
-                  <span className="text-gray-400">info@doctoradda.com</span>
+                  <span className="text-gray-400">support@doctoradda.com</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <MapPin className="w-5 h-5 text-blue-400" />
+                  <MapPin className="w-5 h-5 fs-6 text-blue-400" />
                   <span className="text-gray-400">
-                    123 Health St, Medical City
+                    Sai Heights, C-3/76, Vibhuti <br /> Khand, Gomti Nagar, Lucknow, Uttar Pradesh 226010
                   </span>
                 </div>
               </div>
@@ -111,8 +109,7 @@ const Footer = () => {
 
           <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
             <p>
-              &copy; 2024 Doctor Adda. All rights reserved. Made with ❤️ for
-              better healthcare.
+              &copy; 2024 Doctor Adda. All rights reserved. Made with Auctech It Solutions
             </p>
             <div className="mt-4 flex justify-center items-center gap-4 text-sm">
               <Link

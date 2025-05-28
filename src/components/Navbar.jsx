@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Menu, X, Stethoscope } from "lucide-react";
 import { Link } from "react-router-dom";
 
+import logo from "../assets/doctor-adda-logo.png";
+
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState({});
@@ -33,6 +35,7 @@ const Navbar = () => {
             <div className="flex items-center space-x-2">
               <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-lg flex items-center justify-center">
                 <Stethoscope className="w-6 h-6 text-white" />
+                <img src={logo} alt="" />
               </div>
               <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                 Doctor Adda
