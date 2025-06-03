@@ -24,15 +24,17 @@ const PrivacyPolicy = () => {
                   <h2 className="text-2xl font-bold text-gray-900 mb-4">
                     1. What Information We Collect
                   </h2>
-                   <p className="text-gray-700 mb-4">
-                   We may collect the following personal details:
+                  <p className="text-gray-700 mb-4">
+                    We may collect the following personal details:
                   </p>
-                  
+
                   <ul className="list-disc pl-6 mb-4 text-gray-700">
                     <li>Full Name</li>
+                    <li>DOB</li>
                     <li>Phone Number</li>
                     <li>Gender</li>
                     <li>Email Address</li>
+                    <li>medical data (appointments, prescriptions)</li>
                   </ul>
                 </section>
 
@@ -40,15 +42,13 @@ const PrivacyPolicy = () => {
                   <h2 className="text-2xl font-bold text-gray-900 mb-4">
                     2. How We Use Your Information
                   </h2>
-                   <p className="text-gray-700 mb-4">
-                   Your Data Helps us:
-                  </p>
+                  <p className="text-gray-700 mb-4">Your Data Helps us:</p>
 
                   <ul className="list-disc pl-6 mb-4 text-gray-700">
-                    <li>Provide and enhance our services</li>
-                    <li>Respond to appointment requests and queries</li>
-                    <li>Send confirmations and relivent updates</li>
-                    <li>Share health-related tips (with your consent)</li>
+                    <li>Data is used for authentication</li>
+                    <li>bookings</li>
+                    <li>consultations</li>
+                    <li>medicine orders and to personalize user experience</li>
                   </ul>
                 </section>
 
@@ -57,7 +57,9 @@ const PrivacyPolicy = () => {
                     3. Protection Measures
                   </h2>
                   <p className="text-gray-700 mb-4">
-                    We apply encryption, access controls, and secure server infrastructure to protect your data from unauthorized access and misuse.
+                    We apply encryption, access controls, and secure server
+                    infrastructure to protect your data from unauthorized access
+                    and misuse.
                   </p>
                 </section>
 
@@ -67,43 +69,62 @@ const PrivacyPolicy = () => {
                   </h2>
 
                   <p className="text-gray-700 mb-4">
-                    We do not share your personal data unless:
+                    We only share data with doctors, pharmacies, labs, and legal
+                    authorities when required.
                   </p>
-                  <ul className="list-disc pl-6 mb-4 text-gray-700">
-                    <li>You give us explicit consent</li>
-                    <li>We are legally obligated to do so</li>
-                  </ul>
                 </section>
 
                 <section className="mb-8">
                   <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                    5. Your Rights
+                    5. Data Security
                   </h2>
                   <p className="text-gray-700 mb-4">
-                   You have the right to:
+                    We use encryption and secure servers, but users should also
+                    protect their account credentials.
                   </p>
-                  <ul className="list-disc pl-6 text-gray-700">
-                    <li>Access your personal data</li>
-                    <li>Update your details</li>
-                    <li>Request deletion of your data</li>
-                  </ul>
                 </section>
                 <section className="mb-8">
                   <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                    6. Updates to This Policy
+                    6. Data Retention
                   </h2>
                   <p className="text-gray-700 mb-4">
-                   We may update this Privacy Policy periodically. Any changes will be reflected here with the latest effective date.
+                    Data is retained temporarily and deleted after a certain
+                    period. Users can export their data.{" "}
                   </p>
-                 
+                </section>
+                <section className="mb-8">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                    7. Changes to Policy
+                  </h2>
+                  <p className="text-gray-700 mb-4">
+                    We may update this policy and notify you through the app.{" "}
+                  </p>
+                </section>
+                <section className="mb-8">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                    8. Contact Us
+                  </h2>
+
+                  <ul className="list-disc pl-6 mb-4 text-gray-700">
+                    <li>Email: support@doctoradda.com</li>
+                    <li>
+                      Address: Sai Heights, C-3/76, Vibhuti Khand, Gomti Nagar,
+                      Lucknow, Uttar Pradesh 226010{" "}
+                    </li>
+                    <li>Phone: +919838075493</li>
+                  </ul>
                 </section>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+   
     </>
   );
 };
+
+
 
 export default PrivacyPolicy;
