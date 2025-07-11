@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import DoctorAddaLanding from "../components/DoctorAddaLanding";
 import DoctorAddaHero from "../components/DoctorAddaHero";
 import DoctorCategoryCards from "../components/DoctorCategoryCards";
+import ScrollingNotice from "../components/ScrollingNotice/ScrollingNotice";
 
 const Home = () => {
     useEffect(() => {
@@ -11,8 +12,10 @@ const Home = () => {
   return (
     <>
 <DoctorAddaHero/>
+<ScrollingNotice />
 <DoctorCategoryCards/>
       <DoctorAddaLanding />
+      
     </>
   );
 };

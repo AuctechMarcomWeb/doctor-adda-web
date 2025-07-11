@@ -65,7 +65,7 @@ const Navbar = () => {
               <div>
                 <div className="text-xs text-gray-500">Your Location</div>
                 <div className="text-sm text-black font-semibold flex items-center">
-                  Ahmadnagar <span className="ml-1">▾</span>
+                  Lucknow <span className="ml-1">▾</span>
                 </div>
               </div>
             </div>
