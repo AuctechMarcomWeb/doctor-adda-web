@@ -6,6 +6,9 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import Contact from "./pages/Contact";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 
 function App() {
   return (

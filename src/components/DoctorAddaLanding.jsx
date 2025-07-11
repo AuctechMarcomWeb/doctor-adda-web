@@ -27,7 +27,7 @@ const DoctorAddaLanding = () => {
 
       {/* Hero Section */}
     
-<HeroSection/>
+{/* <HeroSection/> */}
     
 
       {/* Stats Section */}
