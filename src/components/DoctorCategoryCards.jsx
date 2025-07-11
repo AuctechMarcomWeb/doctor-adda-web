@@ -45,6 +45,14 @@ const DoctorCategoryCards = () => {
       image: "https://images.unsplash.com/photo-1581056771107-24ca5f033842?w=400&h=300&fit=crop",
       description: "Child Healthcare",
       color: "from-yellow-500 to-orange-600"
+    },
+    {
+      id: 5,
+      name: "Hospital & Clinics",
+      icon: Baby,
+      image: "https://images.unsplash.com/photo-1581056771107-24ca5f033842?w=400&h=300&fit=crop",
+      description: "Child Healthcare",
+      color: "from-yellow-500 to-orange-600"
     }
     
   ];
