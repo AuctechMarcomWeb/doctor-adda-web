@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import DoctorAddaLanding from "../components/DoctorAddaLanding";
+import DoctorAddaHero from "../components/DoctorAddaHero";
+import DoctorCategoryCards from "../components/DoctorCategoryCards";
 
 const Home = () => {
     useEffect(() => {
@@ -8,7 +10,8 @@ const Home = () => {
     }, []);
   return (
     <>
-
+<DoctorAddaHero/>
+<DoctorCategoryCards/>
       <DoctorAddaLanding />
     </>
   );
