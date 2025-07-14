@@ -410,7 +410,7 @@ const DoctorAddaHero = () => {
               grid-template-columns: 1fr !important;
               gap: 30px !important;
               text-align: center !important;
-              padding: 40px 0 !important;
+              padding: 70px 0 !important;
             }
             
             .hero-title {
