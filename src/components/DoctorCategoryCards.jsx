@@ -107,12 +107,12 @@ const DoctorCategoryCards = () => {
   ];
 
   return (
-    <div className=" min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-8 py-20">
+    <div className=" min-h-screen  p-8 py-20"  style={{backgroundColor: '#eef8ff' }}>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-800 mb-4">
-            Medical <span className="text-blue-600">Specialties</span>
+            Medical <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Specialties</span>
           </h1>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
             Choose from our comprehensive range of medical specialties and connect with expert doctors
