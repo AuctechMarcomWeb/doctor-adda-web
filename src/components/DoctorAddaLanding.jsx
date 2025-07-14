@@ -58,7 +58,7 @@ const DoctorAddaLanding = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className={`text-center mb-16 `}>
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Our Services
+              Our <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent"> Services</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Comprehensive healthcare services designed to meet all your
@@ -199,7 +199,7 @@ const DoctorAddaLanding = () => {
       </section> */}
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-blue-900 via-blue-800 to-cyan-800 text-white">
+      {/* <section className="py-20 bg-gradient-to-br from-blue-900 via-blue-800 to-cyan-800 text-white">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <h2 className="text-4xl font-bold mb-6">
             Ready to Take Control of Your Health?
@@ -218,7 +218,7 @@ const DoctorAddaLanding = () => {
             </button>
           </div>
         </div>
-      </section>
+      </section> */}
 
      
     </div>

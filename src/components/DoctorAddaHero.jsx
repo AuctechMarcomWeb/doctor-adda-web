@@ -536,7 +536,7 @@ const DoctorAddaHero = () => {
                     e.target.style.transform = 'translateY(0)';
                   }}
                 >
-                  Emergency Care
+                  Download App Now
                 </button>
               </div>
             </div>

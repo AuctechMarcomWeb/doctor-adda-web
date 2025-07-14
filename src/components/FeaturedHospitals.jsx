@@ -44,7 +44,7 @@ const FeaturedHospitals = () => {
   return (
     <div className="max-w-7xl mx-auto py-16 px-4">
       <h2 className="text-4xl font-bold text-gray-800 mb-12 text-center">
-        Featured  <span className="text-blue-600">Hospitals</span>
+        Featured  <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Hospitals</span>
       </h2>
 
       <div className="relative">
