@@ -3,7 +3,7 @@ import { FaGooglePlay, FaApple } from "react-icons/fa";
 
 const DownloadAppSection = () => {
   return (
-    <section className="bg-gradient-to-r from-blue-600 to-cyan-600  text-white py-16 px-6 md:px-20">
+    <section className="bg-gradient-to-r from-blue-600 to-cyan-600  text-white py-12 px-6 md:px-12">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
         {/* Left Content */}
         <div className="flex-1">

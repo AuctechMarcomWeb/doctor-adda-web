@@ -7,6 +7,8 @@ import ServicesSection from "../components/ServicesSection";
 import FeaturedHospitals from "../components/FeaturedHospitals";
 import DownloadAppSection from "../components/DownloadAppSection";
 import FeaturedHospitals2 from "../components/FeaturedHospitals2";
+import HealthScansSection from "../components/HealthScansSection"
+import ServicesSection2 from "../components/ServicesSection2";
 
 
 const Home = () => {
@@ -19,12 +21,12 @@ const Home = () => {
 <DoctorAddaHero/>
 <ScrollingNotice />
 <ServicesSection />
-
+<ServicesSection2/>
 <DoctorCategoryCards/>
 
 {/* <FeaturedHospitals /> */}
 <FeaturedHospitals2/>
-
+<HealthScansSection/>
       <DoctorAddaLanding />
       <DownloadAppSection/>
       

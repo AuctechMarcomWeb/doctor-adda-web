@@ -132,7 +132,7 @@ const FeaturedHospitals2 = () => {
   const resumeScrolling = () => setIsScrolling(true);
 
   return (
-    <div className="max-w-7xl mx-auto py-16 px-4 ">
+    <div className="max-w-7xl mx-auto py-12 px-4 ">
       <div className="text-center mb-16">
         <h2 className="text-4xl font-bold text-gray-800 mb-6 text-center mb-4">
           Featured <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Hospitals</span>
@@ -180,12 +180,12 @@ const FeaturedHospitals2 = () => {
                     {hospital.name}
                   </h3>
                   
-                  <p className="text-gray-600 text-sm mb-4  flex flex-wrap leading-relaxed "  style={{ minHeight: '69px' }}>
+                  <p className="text-gray-600 text-sm mb-4  flex flex-wrap leading-relaxed " >
                     {hospital.description}
                   </p>
 
                   {/* Hospital Stats */}
-                  <div className="grid grid-cols-2 gap-4 mb-4"  >
+                  {/* <div className="grid grid-cols-2 gap-4 mb-4"  >
                     <div className="flex items-center gap-2">
                       <MapPin className="w-4 h-4 text-gray-500" />
                       <span className="text-sm text-gray-600">{hospital.location}</span>
@@ -194,10 +194,10 @@ const FeaturedHospitals2 = () => {
                       <Users className="w-4 h-4 text-gray-500" />
                       <span className="text-sm text-gray-600">{hospital.beds} Beds</span>
                     </div>
-                  </div>
+                  </div> */}
 
                   {/* Specialties */}
-                  <div className="mb-4"  style={{ minHeight: '78px' }}>
+                  {/* <div className="mb-4"  style={{ minHeight: '78px' }}>
                     <h4 className="text-sm font-semibold text-gray-700 mb-2">Specialties</h4>
                     <div className="flex flex-wrap gap-1">
                       {hospital.specialties.map((specialty, idx) => (
@@ -209,10 +209,10 @@ const FeaturedHospitals2 = () => {
                         </span>
                       ))}
                     </div>
-                  </div>
+                  </div> */}
 
                   {/* Highlights */}
-                  <div className="mb-4" style={{ minHeight: '40px' }}>
+                  {/* <div className="mb-4" style={{ minHeight: '40px' }}>
                     <h4 className="text-sm font-semibold text-gray-700 mb-2">Key Highlights</h4>
                     <div className="space-y-1">
                       {hospital.highlights.map((highlight, idx) => (
@@ -222,7 +222,7 @@ const FeaturedHospitals2 = () => {
                         </div>
                       ))}
                     </div>
-                  </div>
+                  </div> */}
 
                   {/* Action Buttons */}
                   <div className="flex gap-2 pt-4 border-t border-gray-100">
