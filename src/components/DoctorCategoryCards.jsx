@@ -8,52 +8,101 @@ const DoctorCategoryCards = () => {
   const categories = [
     {
       id: 1,
-      name: "Ambulance",
+      name: "General Physician",
       icon: Heart,
       image: "https://images.unsplash.com/photo-1581056771107-24ca5f033842?w=400&h=300&fit=crop",
-      description: "Heart & Cardiovascular Care",
+      // description: "Heart & Cardiovascular Care",
       color: "from-red-500 to-pink-600"
     },
     {
       id: 2,
-      name: "Pharmacies",
+      name: "Skin & Hairs",
       icon: Brain,
       image: "https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=400&h=300&fit=crop",
-      description: "Brain & Nervous System",
+
       color: "from-purple-500 to-indigo-600"
     },
     {
       id: 3,
-      name: "Diagnostic",
+      name: "Dental Care",
       icon: Bone,
       image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=300&fit=crop",
-      description: "Bone & Joint Care",
+     
       color: "from-blue-500 to-cyan-600"
     },
     {
       id: 4,
-      name: "Doctor & Specialists",
+      name: "Child Specialist",
       icon: Eye,
       image: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=400&h=300&fit=crop",
-      description: "Eye Care & Vision",
+    
       color: "from-green-500 to-emerald-600"
     },
     {
       id: 5,
-      name: "Hospital & Clinics",
+      name: "Ear, Nose, Throat",
       icon: Baby,
       image: "https://images.unsplash.com/photo-1581056771107-24ca5f033842?w=400&h=300&fit=crop",
-      description: "Child Healthcare",
+   
+      color: "from-yellow-500 to-orange-600"
+    },
+     {
+      id: 6,
+      name: "Veterinary",
+      icon: Bone,
+      image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=300&fit=crop",
+     
+      color: "from-blue-500 to-cyan-600"
+    },
+    {
+      id: 7,
+      name: "Cardiologist(Heart)",
+      icon: Baby,
+      image: "https://images.unsplash.com/photo-1581056771107-24ca5f033842?w=400&h=300&fit=crop",
+   
       color: "from-yellow-500 to-orange-600"
     },
     {
-      id: 5,
-      name: "Hospital & Clinics",
-      icon: Baby,
+      id: 8,
+      name: " Neurologist(Brain)",
+      icon: Eye,
+      image: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=400&h=300&fit=crop",
+    
+      color: "from-green-500 to-emerald-600"
+    },
+    {
+      id: 9,
+      name: "Orthopedic(Bone & Joint)",
+      icon: Eye,
+      image: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=400&h=300&fit=crop",
+    
+      color: "from-green-500 to-emerald-600"
+    },
+    {
+      id: 10,
+      name: " Gynecologist(Women's Health)  ",
+      icon: Eye,
+      image: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=400&h=300&fit=crop",
+    
+      color: "from-green-500 to-emerald-600"
+    },
+    {
+      id: 11,
+      name: "Urologist(kidney & Urinary)  ",
+      icon: Heart,
       image: "https://images.unsplash.com/photo-1581056771107-24ca5f033842?w=400&h=300&fit=crop",
-      description: "Child Healthcare",
-      color: "from-yellow-500 to-orange-600"
-    }
+      // description: "Heart & Cardiovascular Care",
+      color: "from-red-500 to-pink-600"
+    },
+//    {
+//   id: 999,
+//   name: "8+ More",
+//   icon: Activity, // Or any suitable icon
+//   image: "", // Empty or placeholder
+//   color: "from-gray-500 to-gray-700",
+//   isMoreCard: true
+// }
+
     
   ];
 
@@ -71,7 +120,7 @@ const DoctorCategoryCards = () => {
         </div>
 
         {/* Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
           {categories.map((category) => {
             const IconComponent = category.icon;
             return (
@@ -107,18 +156,11 @@ const DoctorCategoryCards = () => {
                 </div>
 
                 {/* Content */}
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors duration-300">
+                <div className="px-2 py-2">
+                  <h3 className="text-lg text-center font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors duration-300">
                     {category.name}
                   </h3>
-                  <p className="text-gray-600 text-sm mb-4">
-                    {category.description}
-                  </p>
                   
-                  {/* Action Button */}
-                  <button className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold py-3 px-4 rounded-lg hover:from-blue-600 hover:to-blue-700 transform hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg">
-                    Find Doctors
-                  </button>
                 </div>
 
                 {/* Decorative Elements */}
@@ -128,21 +170,6 @@ const DoctorCategoryCards = () => {
             );
           })}
         </div>
-
-        {/* Bottom CTA */}
-        {/* <div className="text-center mt-16">
-          <div className="bg-white rounded-2xl shadow-lg p-8 max-w-4xl mx-auto">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">
-              Can't Find Your Specialty?
-            </h2>
-            <p className="text-gray-600 mb-6">
-              We have specialists in over 50+ medical fields. Contact us to find the right doctor for you.
-            </p>
-            <button className="bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold py-3 px-8 rounded-lg hover:from-green-600 hover:to-green-700 transform hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg">
-              Contact Support
-            </button>
-          </div>
-        </div> */}
       </div>
     </div>
   );
