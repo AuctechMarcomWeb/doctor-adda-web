@@ -3,6 +3,8 @@ import { Menu, X, Stethoscope, Bell } from "lucide-react";
 import { Link } from "react-router-dom";
 import logo from "../assets/doctor-adda-logo.png";
 import { FaMapMarkerAlt } from "react-icons/fa";
+import { FaUser, FaPhoneAlt } from "react-icons/fa";
+import NavBar2 from "./Navbar2";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -43,9 +45,9 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed w-full z-50 bg-white/90 backdrop-blur-md shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+      <nav className="fixed w-full z-50 bg-white shadow-lg">
+        <div className=" mx-auto px-4 sm:px-6 lg:px-8">
+          <div className=" max-w-7xl m-auto flex justify-between items-center h-16 py-10">
             {/* Logo */}
             <div className="flex items-center space-x-2">
               <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-lg flex items-center justify-center">
@@ -64,7 +66,7 @@ const Navbar = () => {
               </div>
               <div>
                 <div className="text-xs text-gray-500">Your Location</div>
-                <div className="text-sm text-black font-semibold flex items-center">
+                <div className="text-sm text-gray-900 font-semibold flex items-center">
                   Lucknow <span className="ml-1">▾</span>
                 </div>
               </div>
@@ -72,33 +74,60 @@ const Navbar = () => {
 
             {/* Main Nav Links */}
             <div className="hidden md:flex items-center space-x-8">
-              <Link to="/" className="text-gray-700 hover:text-blue-600 transition-colors">Home</Link>
+              {/* <Link to="/" className="text-gray-700 hover:text-blue-600 transition-colors">Home</Link>
               <Link to="/" className="text-gray-700 hover:text-blue-600 transition-colors">Categories</Link>
               <Link to="/" className="text-gray-700 hover:text-blue-600 transition-colors">Appointment</Link>
-              <Link to="/contact" className="text-gray-700 hover:text-blue-600 transition-colors">Contact</Link>
+              <Link to="/contact" className="text-gray-700 hover:text-blue-600 transition-colors">Contact</Link> */}
               {/* <button className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-2 rounded-full hover:shadow-lg transform hover:scale-105 transition-all">
                 Book Appointment
               </button> */}
             </div>
 
+
+
             {/* Notification + Profile */}
-            {/* Notification Icon */}
-            <div className="relative bg-gradient-to-r from-blue-600 to-cyan-600 text-white p-2 rounded-full">
-              <Bell className="w-6 h-6" />
-              <span className="absolute -top-1.5 -right-1.5 bg-white text-black text-xs font-semibold px-1.5 py-0.5 rounded-full">
-                8
-              </span>
+            
+       
+
+        {/* Vertical Divider */}
+        <div className="h-5 w-px bg-gray-300 hidden md:block" />
+
+        {/* Customer Support */}
+        <div className="flex items-center space-x-2 text-gray-600 hidden md:block">
+          
+          <div className="flex items-center gap-1">
+            <FaPhoneAlt className="text-gray-500 text-base" />
+            <div >
+                <span className="text-xs block text-gray-500 ">Customer Support</span>
+                <span className="text-sm font-semibold text-gray-900">
+                1800-572-0005 / 999-888-000-5
+                </span>
             </div>
+          </div>
+        </div>
+
+        {/* Vertical Divider */}
+        <div className="h-5 w-px bg-gray-300 hidden md:block" />
+
+        {/* Corporate Bookings */}
+        <div className="text-gray-600 hidden md:block ">
+          <span className="text-xs block text-gray-500">For Corporate Bookings/Enquiry</span>
+          <span className="text-sm font-semibold text-gray-900">931-125-387-5</span>
+        </div>
+
+
+         
+      
 
             {/* Profile Avatar & Dropdown */}
             <div ref={dropdownRef} className="relative">
-              <img
+              {/* <img
                 src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80
 "
                 alt="User Avatar"
                 className="w-8 h-8 rounded-full object-cover cursor-pointer"
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-              />
+              /> */}
 
               {/* Dropdown */}
               {dropdownOpen && (
@@ -113,11 +142,35 @@ const Navbar = () => {
               )}
             </div>
 
+            {/* Login/Signup */}
+            <div className="flex items-center space-x-1 text-gray-900 cursor-pointer hidden sm:block" onClick={() => setDropdownOpen(!dropdownOpen)}>
+                <img
+                        src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80"
+                        alt="User Avatar"
+                        className="w-8 h-8 rounded-full object-cover cursor-pointer"
+                        
+                    />
+                    <span className="font-medium ">Login/Signup</span>
+            </div>
+
+            {/* Notification Icon */}
+            <div className="relative bg-gradient-to-r from-blue-600 to-cyan-600 text-white p-2 rounded-full">
+              <Bell className="w-6 h-6" />
+              <span className="absolute -top-1.5 -right-1.5 bg-white text-black text-xs font-semibold px-1.5 py-0.5 rounded-full">
+                8
+              </span>
+            </div>
+            
+
 
             {/* Mobile Menu Toggle */}
             <button className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
+          </div>
+          <div >
+
+          <NavBar2/>
           </div>
         </div>
 
@@ -126,17 +179,22 @@ const Navbar = () => {
           <div className="md:hidden bg-white border-t">
             <div className="px-2 pt-2 pb-3 space-y-1">
               <Link to="/" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Home</Link>
-              <Link to="/" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Services</Link>
-              <Link to="#doctors" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Doctors</Link>
-              <Link to="/" className="block px-3 py-2 text-gray-700 hover:text-blue-600">About</Link>
+              <Link to="/" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Blood Bank <span className="ml-1">▾</span></Link>
+              <Link to="#doctors" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Ambulance <span className="ml-1">▾</span></Link>
+              <Link to="/" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Pharmacies <span className="ml-1">▾</span></Link>
+              <Link to="/" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Diagnostic <span className="ml-1">▾</span></Link>
+              <Link to="/" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Doctors & Specialists<span className="ml-1">▾</span></Link>
+              <Link to="/" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Hospitals & Clinics<span className="ml-1">▾</span></Link>
               <Link to="/contact" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Contact</Link>
               <button className="w-full mt-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-2 rounded-full">
-                Book Appointment
+                Login / SignUp
               </button>
             </div>
           </div>
         )}
+      
       </nav>
+
     </>
   );
 };
