@@ -8,17 +8,17 @@ const slides = [
   {
     title: "Your one-stop destination for affordable and reliable imaging services",
     image:
-      "https://img.freepik.com/free-photo/female-doctor-looking-x-ray-radiology-clinic_23-2150914650.jpg?w=500",
+      "https://images.unsplash.com/photo-1581056771107-24ca5f033842?w=400&h=300&fit=crop",
   },
   {
     title: "Advanced MRI, CT, X-Ray, and Ultrasound Scanning at Unbeatable Prices",
     image:
-      "https://img.freepik.com/free-photo/doctor-holding-x-ray_23-2147792198.jpg?w=500",
+      "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=400",
   },
   {
     title: "Trusted by 130+ Radiologists Across India – Get Tested with Confidence",
     image:
-      "https://img.freepik.com/free-photo/young-female-doctor-holding-radiograph_23-2148672554.jpg?w=500",
+      "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400",
   },
 ];
 

@@ -132,8 +132,8 @@ const FeaturedHospitals2 = () => {
   const resumeScrolling = () => setIsScrolling(true);
 
   return (
-    <div className="max-w-7xl mx-auto py-12 px-4 ">
-      <div className="text-center mb-16">
+    <div className="max-w-7xl mx-auto py-8 px-4 ">
+      <div className="text-center mb-8">
         <h2 className="text-4xl font-bold text-gray-800 mb-6 text-center mb-4">
           Featured <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Hospitals</span>
         </h2>
@@ -180,7 +180,7 @@ const FeaturedHospitals2 = () => {
                     {hospital.name}
                   </h3>
                   
-                  <p className="text-gray-600 text-sm mb-4  flex flex-wrap leading-relaxed " >
+                  <p className="text-gray-600 text-sm mb-4  flex flex-wrap leading-relaxed " style={{minHeight:68}}>
                     {hospital.description}
                   </p>
 
