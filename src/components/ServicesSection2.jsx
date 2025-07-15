@@ -127,11 +127,11 @@ const ServicesSection2 = () => {
   };
 
   return (
-    <div className="w-full bg-white py-12 px-4">
+    <div className="w-full bg-white py-8 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Our Services</h2>
+          <h2 className="text-4xl font-bold text-gray-800 mb-4 text-center">Our <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Services</span></h2>
           <p className="text-gray-600">Quality healthcare services at your fingertips</p>
         </div>
 
@@ -185,7 +185,7 @@ const ServicesSection2 = () => {
                 <div
                   key={service.id}
                   className={`group cursor-pointer transition-all duration-300 ${
-                    currentIndex === index ? 'ring-2 ring-blue-500 ring-opacity-50' : ''
+                    currentIndex === index ? '' : ''
                   }`}
                   onClick={() => scrollToIndex(index)}
                 >

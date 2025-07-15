@@ -9,7 +9,7 @@ import DownloadAppSection from "../components/DownloadAppSection";
 import FeaturedHospitals2 from "../components/FeaturedHospitals2";
 import HealthScansSection from "../components/HealthScansSection"
 import ServicesSection2 from "../components/ServicesSection2";
-
+import HeroSection from "../components/HeroSection";
 
 const Home = () => {
     useEffect(() => {
@@ -18,10 +18,12 @@ const Home = () => {
     }, []);
   return (
     <>
-<DoctorAddaHero/>
+<HeroSection/>
 <ScrollingNotice />
-<ServicesSection />
+
+{/* <ServicesSection /> */}
 <ServicesSection2/>
+
 <DoctorCategoryCards/>
 
 {/* <FeaturedHospitals /> */}
