@@ -8,6 +8,7 @@ import Navbar from "./components/Navbar";
 import Contact from "./pages/Contact";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import NavBar2 from "./components/Navbar2";
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       </Routes>
+      
     <Footer/>
     </Router>
     </>
