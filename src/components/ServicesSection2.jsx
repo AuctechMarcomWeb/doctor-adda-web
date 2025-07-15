@@ -33,51 +33,51 @@ const ServicesSection2 = () => {
       name: "Clinic",
       image: "https://images.unsplash.com/photo-1551076805-e1869033e561?w=400&h=300&fit=crop&crop=center"
     },{
-      id: 2,
+      id: 7,
       name: "Pharmacy",
       image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=150"
     },
     {
-      id: 3,
+      id: 8,
       name: "Diagnostics",
       image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop&crop=center"
     },
     {
-      id: 4,
+      id: 9,
       name: "Doctor",
       image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=300&fit=crop&crop=center"
     },
     {
-      id: 5,
+      id: 10,
       name: "Hospital",
       image: "https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=150"
     },
     {
-      id: 6,
+      id: 11,
       name: "Clinic",
       image: "https://images.unsplash.com/photo-1551076805-e1869033e561?w=400&h=300&fit=crop&crop=center"
     },{
-      id: 2,
+      id: 12,
       name: "Pharmacy",
       image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=150"
     },
     {
-      id: 3,
+      id: 13,
       name: "Diagnostics",
       image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop&crop=center"
     },
     {
-      id: 4,
+      id:14,
       name: "Doctor",
       image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=300&fit=crop&crop=center"
     },
     {
-      id: 5,
+      id: 15,
       name: "Hospital",
       image: "https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=150"
     },
     {
-      id: 6,
+      id: 16,
       name: "Clinic",
       image: "https://images.unsplash.com/photo-1551076805-e1869033e561?w=400&h=300&fit=crop&crop=center"
     }
@@ -160,7 +160,7 @@ const ServicesSection2 = () => {
           {/* Pause/Play Button */}
           <button
             onClick={() => setIsPaused(!isPaused)}
-            className="absolute top-4 right-4 z-20 bg-white bg-opacity-90 backdrop-blur-sm rounded-full p-2 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+            className="absolute top-4 right-4 z-20 bg-white bg-opacity-90 backdrop-blur-sm rounded-full p-2 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 invisible"
           >
             {isPaused ? (
               <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">

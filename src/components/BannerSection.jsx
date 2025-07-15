@@ -23,7 +23,7 @@ const BannerSection = () => {
             @<FaRupeeSign className="mr-1" />
             99
           </span>
-          <button className="bg-white text-black font-semibold px-4 py-2 rounded  hover:text-[#0074b2] transition">
+          <button className="bg-white text-[#0074b2] font-semibold px-4 py-2 rounded  hover:text-black transition">
             Book Now
           </button>
         </div>
@@ -55,7 +55,7 @@ const BannerSection = () => {
                     </select>
                   </div>
                   <div className="">
-                    <button className="w-full md:w-auto px-6 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition">
+                    <button className="w-full md:w-auto px-6 py-2 bg-[#297cff] text-white font-semibold rounded-md hover:bg-blue-700 transition">
                       SEARCH
                     </button>
                   </div>
@@ -98,7 +98,7 @@ const BannerSection = () => {
           <button className="bg-Blue-400 border border-white text-white font-semibold px-4 py-2 rounded hover:bg-white hover:text-[#0074b2] transition">
             Book Appointment
           </button>
-          <button className="bg-white text-black  font-semibold px-4 py-2 rounded  hover:text-[#0074b2] transition">
+          <button className="bg-white text-[#0074b2]  font-semibold px-4 py-2 rounded  hover:text-black transition">
             Download App Now
           </button>
         </div>
