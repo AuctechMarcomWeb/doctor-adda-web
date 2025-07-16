@@ -43,7 +43,7 @@ const Home = () => {
 {/* <HealthScansSection/> */}
       <DoctorAddaLanding />
       <AboutUsSection/>
-      <TestimonialsSection/>
+      {/* <TestimonialsSection/> */}
       <HealthBlogSection/>
       <DownloadAppSection/>
       
