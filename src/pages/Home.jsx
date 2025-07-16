@@ -12,6 +12,9 @@ import ServicesSection2 from "../components/ServicesSection2";
 import HeroSection from "../components/HeroSection";
 import MedicalHeroSection from "../components/MedicalHeroSection";
 import BannerSection from "../components/BannerSection";
+import TestimonialsSection from "../components/TestimonialsSection";
+import HealthBlogSection from "../components/HealthBlogSection";
+import AboutUsSection from "../components/AboutUsSection";
 
 
 const Home = () => {
@@ -39,6 +42,9 @@ const Home = () => {
 <FeaturedHospitals2/>
 {/* <HealthScansSection/> */}
       <DoctorAddaLanding />
+      <AboutUsSection/>
+      <TestimonialsSection/>
+      <HealthBlogSection/>
       <DownloadAppSection/>
       
       
