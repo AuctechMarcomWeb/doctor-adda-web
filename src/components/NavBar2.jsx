@@ -173,7 +173,7 @@ const NavBar2 = () => {
         </div>
 
         {/* Right - Subitems */}
-        <div className="w-3/4 pl-6 grid grid-cols-3 gap-4">
+        <div className="w-3/4 pl-6 flex gap-4">
           {data.right[active]?.map((subItem, i) => (
             <div
               key={i}
@@ -197,7 +197,7 @@ const NavBar2 = () => {
         }}
       >
         {/* Top nav area + dropdown hover wrapper */}
-        <div className="flex items-center gap-6 px-6 py-3 font-medium text-gray-800">
+        <div className="flex items-center gap-6 px-6  font-medium text-gray-800">
           <FaHome className="text-lg cursor-pointer hover:text-[#0074b2]" />
 
           {menuItems.map((menu) => (
