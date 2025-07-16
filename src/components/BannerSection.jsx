@@ -40,25 +40,27 @@ const BannerSection = () => {
           </button>
         </div> */}
 
-        <div className="bg-white mt-8 p-4 rounded-lg shadow-lg text-black w-full max-w-xl flex items-center  justify-between">
+        <div className=" mt-8 rounded-lg  text-black w-full max-w-xl flex items-center  justify-between">
                   <div className="flex flex-col md:flex-row gap-4 items-center">
                     <input
                       type="text"
                       placeholder="Search doctors, specialties, or locations"
-                      className="w-full md:w-2/3 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                      className="w-full md:w-2/3 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
                     />
-                    <select className="w-fit md:w-1/3 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"  style={{ width: "fit-content" }} >
+                    <select className="w-fit md:w-1/3 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"  style={{ width: "fit-content" }} >
                       <option>All Specialties</option>
                       <option>Radiology</option>
                       <option>Cardiology</option>
                       <option>Neurology</option>
                     </select>
-                  </div>
-                  <div className="">
+
+                    <div className="">
                     <button className="w-full md:w-auto px-6 py-2 bg-[#297cff] text-white font-semibold rounded-md hover:bg-blue-700 transition">
                       SEARCH
                     </button>
                   </div>
+                  </div>
+                  
                 </div>
 
 
