@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import logo from "../assets/doctor-adda-logo.png";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaUser, FaPhoneAlt } from "react-icons/fa";
-import NavBar2 from "./Navbar2";
+import NavBar2 from "./NavBar2";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
