@@ -4,152 +4,231 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 
 const NavBar2 = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [activeSubCategory, setActiveSubCategory] = useState(null);
 
-  const handleMouseEnter = (menu) => setOpenDropdown(menu);
-  const handleMouseLeave = () => setOpenDropdown(null);
+  const megaMenuData = {
+    blood: {
+      left: [
+        "Popular Packages",
+        "Popular Tests",
+        "Tests by Unhealthy Habits",
+        "Tests by Health Risks",
+        "Govt. Panel Health Test",
+      ],
+      right: {
+        "Popular Packages": [
+          "Healthians Comprehensive",
+          "Healthy India 2025 Full Body",
+          "Ayushman Package",
+        ],
+        "Popular Tests": ["Blood Sugar", "Liver Function", "Thyroid", "CBC"],
+        "Tests by Unhealthy Habits": [
+          "Alcoholism",
+          "Junk Food",
+          "Smoking",
+          "Sleeplessness",
+        ],
+        "Tests by Health Risks": ["Heart Risk", "Diabetes", "Bone Density"],
+        "Govt. Panel Health Test": ["ESIC", "CGHS", "PMJAY Scheme"],
+      },
+    },
+    ambulance: {
+      left: [
+        "Emergency Services",
+        "Ambulance Types",
+        "CSR Schemes",
+        "Booking",
+        "Other Services",
+      ],
+      right: {
+        "Emergency Services": [
+          "Book Ambulance",
+          "ICU Ambulance",
+          "24x7 Availability",
+        ],
+        "Ambulance Types": [
+          "Neonatal Ambulance",
+          "Freezer Box",
+          "Dead Body Carrier",
+        ],
+        "CSR Schemes": ["Govt. 108", "NGO Tie-ups", "Corporate Ambulance"],
+        "Booking": ["App Booking", "Web Booking", "Call Booking"],
+        "Other Services": ["Event Medical", "First Aid On-Site"],
+      },
+    },
+    pharmacy: {
+      left: [
+        "Order Online",
+        "Upload Prescription",
+        "Categories",
+        "Nearby Stores",
+        "Top Brands",
+      ],
+      right: {
+        "Order Online": ["Medicines", "Wellness", "Essentials"],
+        "Upload Prescription": ["Scan & Upload", "Chat Support"],
+        "Categories": [
+          "Diabetes Care",
+          "Heart Health",
+          "Sexual Wellness",
+          "Pain Relief",
+        ],
+        "Nearby Stores": ["Locate Pharmacy", "24x7 Open"],
+        "Top Brands": ["Himalaya", "Dabur", "Glenmark", "Zydus"],
+      },
+    },
+    doctor: {
+      left: [
+        "Find Doctor",
+        "Specialists",
+        "Consult Online",
+        "Health Packages",
+        "Ratings & Reviews",
+      ],
+      right: {
+        "Find Doctor": ["Search by Name", "Search by Area"],
+        "Specialists": [
+          "Cardiologist",
+          "Gynecologist",
+          "Orthopedic",
+          "ENT",
+        ],
+        "Consult Online": ["Chat", "Video Call", "Book Slot"],
+        "Health Packages": ["Senior Citizen", "Women Health"],
+        "Ratings & Reviews": ["Top Rated", "Verified Doctors"],
+      },
+    },
+    diagnostic: {
+      left: [
+        "Lab Tests",
+        "Body Checkups",
+        "Home Collection",
+        "Special Tests",
+        "Download Reports",
+      ],
+      right: {
+        "Lab Tests": [
+          "CBC",
+          "Blood Glucose",
+          "Lipid Profile",
+          "Thyroid",
+          "Vitamin D",
+        ],
+        "Body Checkups": [
+          "Full Body Basic",
+          "Advanced",
+          "Executive",
+          "Master",
+        ],
+        "Home Collection": ["Schedule Pickup", "Slot Availability"],
+        "Special Tests": ["COVID Test", "Cancer Marker", "Allergy Test"],
+        "Download Reports": ["Login", "Past Records"],
+      },
+    },
+    hospital: {
+      left: [
+        "Hospital Finder",
+        "Surgeries",
+        "Emergency",
+        "Book Appointment",
+        "Insurance & Panels",
+      ],
+      right: {
+        "Hospital Finder": ["By City", "By Specialty", "By Ratings"],
+        "Surgeries": ["Knee Replacement", "Bypass", "Gallbladder", "Hernia"],
+        "Emergency": ["ICU Beds", "Ambulance", "24x7 Helpdesk"],
+        "Book Appointment": ["Consult Now", "Scheduled Visit"],
+        "Insurance & Panels": ["Cashless", "TPA List", "Govt. Panels"],
+      },
+    },
+  };
 
-  const dropdownClass =
-    "absolute left-0 top-full mt-0 w-44 bg-white shadow-lg rounded-md z-50 transition-all duration-200";
+  const menuItems = [
+    { label: "Blood Bank", key: "blood" },
+    { label: "Ambulance", key: "ambulance" },
+    { label: "Pharmacies", key: "pharmacy" },
+    { label: "Doctor & Specialists", key: "doctor" },
+    { label: "Diagnostic", key: "diagnostic" },
+    { label: "Hospitals & Clinics", key: "hospital" },
+  ];
+
+  const renderMegaMenu = (menuKey) => {
+    const data = megaMenuData[menuKey];
+    if (!data) return null;
+
+    const active = activeSubCategory || data.left[0];
+
+    return (
+      <div className="absolute left-0 top-full w-[800px] bg-white shadow-2xl z-50 border-t border-gray-200 flex p-4 rounded-b-md">
+        {/* Left Side Navigation */}
+        <div className="w-1/4 max-w-[250px] border-r pr-4">
+          {data.left.map((item, idx) => (
+            <div
+              key={idx}
+              onMouseEnter={() => setActiveSubCategory(item)}
+              className={`px-4 py-2 text-sm cursor-pointer transition ${
+                active === item
+                  ? "bg-[#0074b2] text-white"
+                  : "text-gray-700 hover:bg-gray-100"
+              }`}
+            >
+              {item}
+            </div>
+          ))}
+        </div>
+
+        {/* Right Content Area */}
+        <div className="w-3/4 pl-6 grid grid-cols-3 gap-4">
+          {data.right[active]?.map((subItem, i) => (
+            <div
+              key={i}
+              className="py-2 px-2 text-sm text-gray-700 hover:text-[#0074b2] cursor-pointer"
+            >
+              {subItem}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
 
   return (
-    <div className="w-full border-t bg-white hidden sm:block">
-      <div className="flex max-w-7xl m-auto items-center gap-6  leading-[35px] font-medium text-gray-800 justify-between">
-        <FaHome className="text-lg" />
+    <div className="w-full bg-white border-t hidden sm:block relative z-50">
+      <div className="max-w-7xl mx-auto flex items-center gap-6 px-6 py-3 font-medium text-gray-800">
+        <FaHome className="text-lg cursor-pointer hover:text-[#0074b2]" />
 
-        {/* Blood Bank */}
-        <div
-          className="relative"
-          onMouseEnter={() => handleMouseEnter("blood")}
-          onMouseLeave={handleMouseLeave}
-        >
-          <div className="flex items-center gap-1 cursor-pointer px-2 py-1 hover:bg-[#0074b2] hover:text-white ">
-            Blood Bank
-            <MdKeyboardArrowDown
-              className={`transition-transform duration-200 ${
-                openDropdown === "blood" ? "rotate-180" : ""
+        {menuItems.map((menu) => (
+          <div
+            key={menu.key}
+            className="relative"
+            onMouseEnter={() => {
+              setOpenDropdown(menu.key);
+              setActiveSubCategory(null);
+            }}
+            onMouseLeave={() => {
+              setOpenDropdown(null);
+              setActiveSubCategory(null);
+            }}
+          >
+            <div
+              className={`flex items-center gap-1 px-3 py-2 rounded hover:bg-[#0074b2] hover:text-white transition cursor-pointer ${
+                openDropdown === menu.key ? "bg-[#0074b2] text-white" : ""
               }`}
-            />
-          </div>
-          {openDropdown === "blood" && (
-            <div className= {dropdownClass} >
-              <div className="px-4 py-2 hover:bg-gray-100 hover:text-[#0074b2] cursor-pointer">Find Donors</div>
-              <div className="px-4 py-2 hover:bg-gray-100 hover:text-[#0074b2] cursor-pointer">Donate Blood</div>
-              <div className="px-4 py-2 hover:bg-gray-100 hover:text-[#0074b2] cursor-pointer">Request Blood</div>
+            >
+              {menu.label}
+              <MdKeyboardArrowDown
+                className={`transition-transform duration-200 ${
+                  openDropdown === menu.key ? "rotate-180" : ""
+                }`}
+              />
             </div>
-          )}
-        </div>
-
-        {/* Ambulance */}
-        <div
-          className="relative"
-          onMouseEnter={() => handleMouseEnter("ambulance")}
-          onMouseLeave={handleMouseLeave}
-        >
-          <div className="flex items-center gap-1 cursor-pointer px-2 py-1 hover:bg-[#0074b2] hover:text-white">
-            Ambulance
-            <MdKeyboardArrowDown
-              className={`transition-transform duration-200 ${
-                openDropdown === "ambulance" ? "rotate-180" : ""
-              }`}
-            />
+            {openDropdown === menu.key && renderMegaMenu(menu.key)}
           </div>
-          {openDropdown === "ambulance" && (
-            <div className={dropdownClass}>
-              <div className="px-4 py-2 hover:bg-gray-100  hover:text-[#0074b2] cursor-pointer">Book Ambulance</div>
-              <div className="px-4 py-2 hover:bg-gray-100 hover:text-[#0074b2] cursor-pointer">Emergency Help</div>
-            </div>
-          )}
-        </div>
+        ))}
 
-        {/* Pharmacies */}
-        <div
-          className="relative"
-          onMouseEnter={() => handleMouseEnter("pharmacy")}
-          onMouseLeave={handleMouseLeave}
-        >
-          <div className="flex items-center gap-1 cursor-pointer px-2 py-1 hover:bg-[#0074b2] hover:text-white">
-            Pharmacies
-            <MdKeyboardArrowDown
-              className={`transition-transform duration-200 ${
-                openDropdown === "pharmacy" ? "rotate-180" : ""
-              }`}
-            />
-          </div>
-          {openDropdown === "pharmacy" && (
-            <div className={dropdownClass}>
-              <div className="px-4 py-2 hover:bg-gray-100  hover:text-[#0074b2] cursor-pointer">Order Medicines</div>
-              <div className="px-4 py-2 hover:bg-gray-100 hover:text-[#0074b2] cursor-pointer">Upload Prescription</div>
-            </div>
-          )}
-        </div>
-
-        {/* Doctor & Specialists */}
-        <div
-          className="relative"
-          onMouseEnter={() => handleMouseEnter("doctor")}
-          onMouseLeave={handleMouseLeave}
-        >
-          <div className="flex items-center gap-1 cursor-pointer px-2 py-1 hover:bg-[#0074b2] hover:text-white">
-            Doctor & Specialists
-            <MdKeyboardArrowDown
-              className={`transition-transform duration-200 ${
-                openDropdown === "doctor" ? "rotate-180" : ""
-              }`}
-            />
-          </div>
-          {openDropdown === "doctor" && (
-            <div className={dropdownClass}>
-              <div className="px-4 py-2 hover:bg-gray-100 hover:text-[#0074b2] cursor-pointer">Find Doctor</div>
-              <div className="px-4 py-2 hover:bg-gray-100 hover:text-[#0074b2] cursor-pointer">Book Appointment</div>
-            </div>
-          )}
-        </div>
-
-        {/* Diagnostic */}
-        <div
-          className="relative"
-          onMouseEnter={() => handleMouseEnter("diagnostic")}
-          onMouseLeave={handleMouseLeave}
-        >
-          <div className="flex items-center gap-1 cursor-pointer px-2 py-1 hover:bg-[#0074b2] hover:text-white">
-            Diagnostic
-            <MdKeyboardArrowDown
-              className={`transition-transform duration-200 ${
-                openDropdown === "diagnostic" ? "rotate-180" : ""
-              }`}
-            />
-          </div>
-          {openDropdown === "diagnostic" && (
-            <div className={dropdownClass}>
-              <div className="px-4 py-2 hover:bg-gray-100 hover:text-[#0074b2] cursor-pointer">Book Test</div>
-              <div className="px-4 py-2 hover:bg-gray-100 hover:text-[#0074b2] cursor-pointer">View Reports</div>
-            </div>
-          )}
-        </div>
-
-        {/* Hospitals & Clinics */}
-        <div
-          className="relative"
-          onMouseEnter={() => handleMouseEnter("hospital")}
-          onMouseLeave={handleMouseLeave}
-        >
-          <div className="flex items-center gap-1 cursor-pointer px-2 py-1 hover:bg-[#0074b2] hover:text-white">
-            Hospitals & Clinics
-            <MdKeyboardArrowDown
-              className={`transition-transform duration-200 ${
-                openDropdown === "hospital" ? "rotate-180" : ""
-              }`}
-            />
-          </div>
-          {openDropdown === "hospital" && (
-            <div className={dropdownClass}>
-              <div className="px-4 py-2 hover:bg-gray-100 hover:text-[#0074b2] cursor-pointer">Find Hospital</div>
-              <div className="px-4 py-2 hover:bg-gray-100 hover:text-[#0074b2] cursor-pointer">Book Appointment</div>
-            </div>
-          )}
-        </div>
-
-        <span className="cursor-pointer hover:bg-[#0074b2] hover:text-white">Offers</span>
+        <span className="cursor-pointer px-3 py-2 hover:bg-[#0074b2] hover:text-white rounded transition">
+          Offers
+        </span>
       </div>
     </div>
   );

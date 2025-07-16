@@ -143,18 +143,21 @@ const Navbar = () => {
             </div>
 
             {/* Login/Signup */}
-            <div className="flex items-center space-x-1 text-gray-900 cursor-pointer hidden sm:block" onClick={() => setDropdownOpen(!dropdownOpen)}>
-                <img
+            <div className="flex items-center space-x-1 text-gray-900 cursor-pointer hidden sm:block "  onClick={() => setDropdownOpen(!dropdownOpen)}>
+                <div className="flex gap-2">
+                    <img
                         src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80"
                         alt="User Avatar"
                         className="w-8 h-8 rounded-full object-cover cursor-pointer"
                         
                     />
                     <span className="font-medium ">Login/Signup</span>
+
+                </div>
             </div>
 
             {/* Notification Icon */}
-            <div className="relative bg-gradient-to-r from-blue-600 to-cyan-600 text-white p-2 rounded-full">
+            <div className="relative bg-gradient-to-r from-blue-600 to-cyan-600 text-white p-2 rounded-full " >
               <Bell className="w-6 h-6" />
               <span className="absolute -top-1.5 -right-1.5 bg-white text-black text-xs font-semibold px-1.5 py-0.5 rounded-full">
                 8
