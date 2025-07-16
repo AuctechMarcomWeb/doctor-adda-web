@@ -52,7 +52,7 @@ const NavBar2 = () => {
           "Dead Body Carrier",
         ],
         "CSR Schemes": ["Govt. 108", "NGO Tie-ups", "Corporate Ambulance"],
-        "Booking": ["App Booking", "Web Booking", "Call Booking"],
+        Booking: ["App Booking", "Web Booking", "Call Booking"],
         "Other Services": ["Event Medical", "First Aid On-Site"],
       },
     },
@@ -67,7 +67,7 @@ const NavBar2 = () => {
       right: {
         "Order Online": ["Medicines", "Wellness", "Essentials"],
         "Upload Prescription": ["Scan & Upload", "Chat Support"],
-        "Categories": [
+        Categories: [
           "Diabetes Care",
           "Heart Health",
           "Sexual Wellness",
@@ -87,12 +87,7 @@ const NavBar2 = () => {
       ],
       right: {
         "Find Doctor": ["Search by Name", "Search by Area"],
-        "Specialists": [
-          "Cardiologist",
-          "Gynecologist",
-          "Orthopedic",
-          "ENT",
-        ],
+        Specialists: ["Cardiologist", "Gynecologist", "Orthopedic", "ENT"],
         "Consult Online": ["Chat", "Video Call", "Book Slot"],
         "Health Packages": ["Senior Citizen", "Women Health"],
         "Ratings & Reviews": ["Top Rated", "Verified Doctors"],
@@ -135,8 +130,8 @@ const NavBar2 = () => {
       ],
       right: {
         "Hospital Finder": ["By City", "By Specialty", "By Ratings"],
-        "Surgeries": ["Knee Replacement", "Bypass", "Gallbladder", "Hernia"],
-        "Emergency": ["ICU Beds", "Ambulance", "24x7 Helpdesk"],
+        Surgeries: ["Knee Replacement", "Bypass", "Gallbladder", "Hernia"],
+        Emergency: ["ICU Beds", "Ambulance", "24x7 Helpdesk"],
         "Book Appointment": ["Consult Now", "Scheduled Visit"],
         "Insurance & Panels": ["Cashless", "TPA List", "Govt. Panels"],
       },
@@ -160,7 +155,7 @@ const NavBar2 = () => {
 
     return (
       <div className="absolute left-0 top-full w-[800px] bg-white shadow-2xl z-50 border-t border-gray-200 flex p-4 rounded-b-md">
-        {/* Left Side Navigation */}
+        {/* Left side - Subcategories */}
         <div className="w-1/4 max-w-[250px] border-r pr-4">
           {data.left.map((item, idx) => (
             <div
@@ -177,7 +172,7 @@ const NavBar2 = () => {
           ))}
         </div>
 
-        {/* Right Content Area */}
+        {/* Right side - Sub items */}
         <div className="w-3/4 pl-6 grid grid-cols-3 gap-4">
           {data.right[active]?.map((subItem, i) => (
             <div
@@ -195,8 +190,10 @@ const NavBar2 = () => {
   return (
     <div className="w-full bg-white border-t hidden sm:block relative z-50">
       <div className="max-w-7xl mx-auto flex items-center gap-6 px-6 py-3 font-medium text-gray-800">
+        {/* Home icon */}
         <FaHome className="text-lg cursor-pointer hover:text-[#0074b2]" />
 
+        {/* Menu Items */}
         {menuItems.map((menu) => (
           <div
             key={menu.key}
@@ -222,10 +219,13 @@ const NavBar2 = () => {
                 }`}
               />
             </div>
+
+            {/* Mega Menu Dropdown */}
             {openDropdown === menu.key && renderMegaMenu(menu.key)}
           </div>
         ))}
 
+        {/* Offers Button */}
         <span className="cursor-pointer px-3 py-2 hover:bg-[#0074b2] hover:text-white rounded transition">
           Offers
         </span>
