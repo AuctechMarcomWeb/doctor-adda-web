@@ -4,107 +4,187 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 
 const NavBar2 = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [activeSubCategory, setActiveSubCategory] = useState(null);
 
-  const handleMouseEnter = (menu) => setOpenDropdown(menu);
-  const handleMouseLeave = () => setOpenDropdown(null);
-
-  const dropdownData = {
+  const megaMenuData = {
     blood: {
-      left: ["Find Donors", "Donate Blood", "Request Blood"],
-      right: [
-        "Blood Bank Locations",
-        "Plasma Donation",
-        "Blood Groups Info",
-        "Donation Eligibility",
-        "Voluntary Donation",
-        "Camp Schedules",
+      left: [
+        "Popular Packages",
+        "Popular Tests",
+        "Tests by Unhealthy Habits",
+        "Tests by Health Risks",
+        "Govt. Panel Health Test",
       ],
+      right: {
+        "Popular Packages": [
+          "Healthians Comprehensive",
+          "Healthy India 2025 Full Body",
+          "Ayushman Package",
+        ],
+        "Popular Tests": ["Blood Sugar", "Liver Function", "Thyroid", "CBC"],
+        "Tests by Unhealthy Habits": [
+          "Alcoholism",
+          "Junk Food",
+          "Smoking",
+          "Sleeplessness",
+        ],
+        "Tests by Health Risks": ["Heart Risk", "Diabetes", "Bone Density"],
+        "Govt. Panel Health Test": ["ESIC", "CGHS", "PMJAY Scheme"],
+      },
     },
     ambulance: {
-      left: ["Book Ambulance", "Emergency Help", "ICU Ambulance"],
-      right: [
-        "Neonatal Ambulance",
-        "Freezer Box",
-        "CSR-Based Ambulance",
-        "Roadside Support",
-        "Mobile ICU",
-        "Dead Body Carrier",
-        "On-Demand Ambulance",
+      left: [
+        "Emergency Services",
+        "Ambulance Types",
+        "CSR Schemes",
+        "Booking",
+        "Other Services",
       ],
+      right: {
+        "Emergency Services": [
+          "Book Ambulance",
+          "ICU Ambulance",
+          "24x7 Availability",
+        ],
+        "Ambulance Types": [
+          "Neonatal Ambulance",
+          "Freezer Box",
+          "Dead Body Carrier",
+        ],
+        "CSR Schemes": ["Govt. 108", "NGO Tie-ups", "Corporate Ambulance"],
+        "Booking": ["App Booking", "Web Booking", "Call Booking"],
+        "Other Services": ["Event Medical", "First Aid On-Site"],
+      },
     },
     pharmacy: {
-      left: ["Order Medicines", "Upload Prescription", "Health Products"],
-      right: [
-        "Nearby Pharmacy",
-        "Refill Orders",
-        "Wellness Packages",
-        "Baby Care",
-        "Elderly Care",
-        "Covid Essentials",
+      left: [
+        "Order Online",
+        "Upload Prescription",
+        "Categories",
+        "Nearby Stores",
+        "Top Brands",
       ],
+      right: {
+        "Order Online": ["Medicines", "Wellness", "Essentials"],
+        "Upload Prescription": ["Scan & Upload", "Chat Support"],
+        "Categories": [
+          "Diabetes Care",
+          "Heart Health",
+          "Sexual Wellness",
+          "Pain Relief",
+        ],
+        "Nearby Stores": ["Locate Pharmacy", "24x7 Open"],
+        "Top Brands": ["Himalaya", "Dabur", "Glenmark", "Zydus"],
+      },
     },
     doctor: {
-      left: ["Find Doctor", "Specialists", "Online Consult"],
-      right: [
-        "Cardiologist",
-        "Dentist",
-        "Orthopedic",
-        "Gynecologist",
-        "Dermatologist",
-        "ENT Specialist",
-        "General Physician",
+      left: [
+        "Find Doctor",
+        "Specialists",
+        "Consult Online",
+        "Health Packages",
+        "Ratings & Reviews",
       ],
+      right: {
+        "Find Doctor": ["Search by Name", "Search by Area"],
+        "Specialists": [
+          "Cardiologist",
+          "Gynecologist",
+          "Orthopedic",
+          "ENT",
+        ],
+        "Consult Online": ["Chat", "Video Call", "Book Slot"],
+        "Health Packages": ["Senior Citizen", "Women Health"],
+        "Ratings & Reviews": ["Top Rated", "Verified Doctors"],
+      },
     },
     diagnostic: {
-      left: ["Book Test", "Full Body Checkup", "Covid Test"],
-      right: [
-        "Blood Test",
-        "Liver Function Test",
-        "Diabetes Check",
-        "Thyroid Test",
-        "Vitamin Profile",
-        "X-Ray / MRI",
+      left: [
+        "Lab Tests",
+        "Body Checkups",
+        "Home Collection",
+        "Special Tests",
+        "Download Reports",
       ],
+      right: {
+        "Lab Tests": [
+          "CBC",
+          "Blood Glucose",
+          "Lipid Profile",
+          "Thyroid",
+          "Vitamin D",
+        ],
+        "Body Checkups": [
+          "Full Body Basic",
+          "Advanced",
+          "Executive",
+          "Master",
+        ],
+        "Home Collection": ["Schedule Pickup", "Slot Availability"],
+        "Special Tests": ["COVID Test", "Cancer Marker", "Allergy Test"],
+        "Download Reports": ["Login", "Past Records"],
+      },
     },
     hospital: {
-      left: ["Nearby Hospital", "Clinics", "Multi-specialty"],
-      right: [
-        "Cashless Facility",
-        "Surgery Packages",
-        "Emergency Wards",
-        "Private Wards",
-        "ICU Availability",
-        "OPD Schedules",
+      left: [
+        "Hospital Finder",
+        "Surgeries",
+        "Emergency",
+        "Book Appointment",
+        "Insurance & Panels",
       ],
+      right: {
+        "Hospital Finder": ["By City", "By Specialty", "By Ratings"],
+        "Surgeries": ["Knee Replacement", "Bypass", "Gallbladder", "Hernia"],
+        "Emergency": ["ICU Beds", "Ambulance", "24x7 Helpdesk"],
+        "Book Appointment": ["Consult Now", "Scheduled Visit"],
+        "Insurance & Panels": ["Cashless", "TPA List", "Govt. Panels"],
+      },
     },
   };
 
-  const renderMegaMenu = (menu) => {
-    const data = dropdownData[menu];
+  const menuItems = [
+    { label: "Blood Bank", key: "blood" },
+    { label: "Ambulance", key: "ambulance" },
+    { label: "Pharmacies", key: "pharmacy" },
+    { label: "Doctor & Specialists", key: "doctor" },
+    { label: "Diagnostic", key: "diagnostic" },
+    { label: "Hospitals & Clinics", key: "hospital" },
+  ];
+
+  const renderMegaMenu = (menuKey) => {
+    const data = megaMenuData[menuKey];
     if (!data) return null;
 
+    const active = activeSubCategory || data.left[0];
+
     return (
-      <div className="absolute left-0 top-full mt-1 bg-white shadow-2xl rounded-md w-[800px] p-6 flex z-50 border-t border-gray-200">
-        {/* Left Column (3 items) */}
-        <div className="w-1/4 max-w-[250px] border-r pr-6">
+      <div className="absolute left-0 top-full w-[800px] bg-white shadow-2xl z-50 border-t border-gray-200 flex p-4 rounded-b-md">
+        {/* Left Side Navigation */}
+        <div className="w-1/4 max-w-[250px] border-r pr-4">
           {data.left.map((item, idx) => (
             <div
               key={idx}
-              className="py-2 px-2 hover:bg-gray-100 hover:text-[#0074b2] cursor-pointer text-sm"
+              onMouseEnter={() => setActiveSubCategory(item)}
+              className={`px-4 py-2 text-sm cursor-pointer transition ${
+                active === item
+                  ? "bg-[#0074b2] text-white"
+                  : "text-gray-700 hover:bg-gray-100"
+              }`}
             >
               {item}
             </div>
           ))}
         </div>
 
-        {/* Right Columns */}
+        {/* Right Content Area */}
         <div className="w-3/4 pl-6 grid grid-cols-3 gap-4">
-          {data.right.map((item, idx) => (
+          {data.right[active]?.map((subItem, i) => (
             <div
-              key={idx}
-              className="py-2 px-2 hover:bg-gray-100 hover:text-[#0074b2] cursor-pointer text-sm"
+              key={i}
+              className="py-2 px-2 text-sm text-gray-700 hover:text-[#0074b2] cursor-pointer"
             >
-              {item}
+              {subItem}
             </div>
           ))}
         </div>
@@ -113,26 +193,28 @@ const NavBar2 = () => {
   };
 
   return (
-    <div className="w-full border-t bg-white hidden sm:block relative z-50">
-      <div className="flex max-w-7xl mx-auto items-center gap-6 leading-[35px] font-medium text-gray-800 px-6 py-3 justify-between">
+    <div className="w-full bg-white border-t hidden sm:block relative z-50">
+      <div className="max-w-7xl mx-auto flex items-center gap-6 px-6 py-3 font-medium text-gray-800">
         <FaHome className="text-lg cursor-pointer hover:text-[#0074b2]" />
 
-        {/* Render Menu Items */}
-        {[
-          { label: "Blood Bank", key: "blood" },
-          { label: "Ambulance", key: "ambulance" },
-          { label: "Pharmacies", key: "pharmacy" },
-          { label: "Doctor & Specialists", key: "doctor" },
-          { label: "Diagnostic", key: "diagnostic" },
-          { label: "Hospitals & Clinics", key: "hospital" },
-        ].map((menu) => (
+        {menuItems.map((menu) => (
           <div
             key={menu.key}
             className="relative"
-            onMouseEnter={() => handleMouseEnter(menu.key)}
-            onMouseLeave={handleMouseLeave}
+            onMouseEnter={() => {
+              setOpenDropdown(menu.key);
+              setActiveSubCategory(null);
+            }}
+            onMouseLeave={() => {
+              setOpenDropdown(null);
+              setActiveSubCategory(null);
+            }}
           >
-            <div className="flex items-center gap-1 cursor-pointer px-2 py-1 hover:bg-[#0074b2] hover:text-white transition duration-200">
+            <div
+              className={`flex items-center gap-1 px-3 py-2 rounded hover:bg-[#0074b2] hover:text-white transition cursor-pointer ${
+                openDropdown === menu.key ? "bg-[#0074b2] text-white" : ""
+              }`}
+            >
               {menu.label}
               <MdKeyboardArrowDown
                 className={`transition-transform duration-200 ${
@@ -144,7 +226,7 @@ const NavBar2 = () => {
           </div>
         ))}
 
-        <span className="cursor-pointer hover:bg-[#0074b2] hover:text-white px-2 py-1 rounded transition duration-200">
+        <span className="cursor-pointer px-3 py-2 hover:bg-[#0074b2] hover:text-white rounded transition">
           Offers
         </span>
       </div>
