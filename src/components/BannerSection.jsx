@@ -40,7 +40,7 @@ const BannerSection = () => {
           </button>
         </div> */}
 
-        <div className=" mt-8 rounded-lg shadow-lg text-black w-full max-w-xl flex items-center  justify-between">
+        <div className=" mt-8 rounded-lg  text-black w-full max-w-xl flex items-center  justify-between">
                   <div className="flex flex-col md:flex-row gap-4 items-center">
                     <input
                       type="text"
@@ -53,12 +53,14 @@ const BannerSection = () => {
                       <option>Cardiology</option>
                       <option>Neurology</option>
                     </select>
-                  </div>
-                  <div className="">
+
+                    <div className="">
                     <button className="w-full md:w-auto px-6 py-2 bg-[#297cff] text-white font-semibold rounded-md hover:bg-blue-700 transition">
                       SEARCH
                     </button>
                   </div>
+                  </div>
+                  
                 </div>
 
 

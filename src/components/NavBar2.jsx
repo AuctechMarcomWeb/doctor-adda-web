@@ -154,8 +154,8 @@ const NavBar2 = () => {
     const active = activeSubCategory || data.left[0];
 
     return (
-      <div className="absolute left-0 top-full w-[800px] bg-white shadow-2xl z-50 border-t border-gray-200 flex p-4 rounded-b-md">
-        {/* Left side - Subcategories */}
+      <div className="absolute left-0 top-full w-full bg-white shadow-2xl z-50 border-t border-gray-200 flex p-4 rounded-b-md">
+        {/* Left - Subcategories */}
         <div className="w-1/4 max-w-[250px] border-r pr-4">
           {data.left.map((item, idx) => (
             <div
@@ -172,7 +172,7 @@ const NavBar2 = () => {
           ))}
         </div>
 
-        {/* Right side - Sub items */}
+        {/* Right - Subitems */}
         <div className="w-3/4 pl-6 grid grid-cols-3 gap-4">
           {data.right[active]?.map((subItem, i) => (
             <div
@@ -189,46 +189,48 @@ const NavBar2 = () => {
 
   return (
     <div className="w-full bg-white border-t hidden sm:block relative z-50">
-      <div className="max-w-7xl mx-auto flex items-center gap-6 px-6 py-3 font-medium text-gray-800">
-        {/* Home icon */}
-        <FaHome className="text-lg cursor-pointer hover:text-[#0074b2]" />
+      <div
+        className="max-w-7xl mx-auto relative"
+        onMouseLeave={() => {
+          setOpenDropdown(null);
+          setActiveSubCategory(null);
+        }}
+      >
+        {/* Top nav area + dropdown hover wrapper */}
+        <div className="flex items-center gap-6 px-6 py-3 font-medium text-gray-800">
+          <FaHome className="text-lg cursor-pointer hover:text-[#0074b2]" />
 
-        {/* Menu Items */}
-        {menuItems.map((menu) => (
-          <div
-            key={menu.key}
-            className="relative"
-            onMouseEnter={() => {
-              setOpenDropdown(menu.key);
-              setActiveSubCategory(null);
-            }}
-            onMouseLeave={() => {
-              setOpenDropdown(null);
-              setActiveSubCategory(null);
-            }}
-          >
+          {menuItems.map((menu) => (
             <div
-              className={`flex items-center gap-1 px-3 py-2 rounded hover:bg-[#0074b2] hover:text-white transition cursor-pointer ${
-                openDropdown === menu.key ? "bg-[#0074b2] text-white" : ""
-              }`}
+              key={menu.key}
+              className="relative"
+              onMouseEnter={() => {
+                setOpenDropdown(menu.key);
+                setActiveSubCategory(null);
+              }}
             >
-              {menu.label}
-              <MdKeyboardArrowDown
-                className={`transition-transform duration-200 ${
-                  openDropdown === menu.key ? "rotate-180" : ""
+              <div
+                className={`flex items-center gap-1 px-3 py-2 rounded hover:bg-[#0074b2] hover:text-white transition cursor-pointer ${
+                  openDropdown === menu.key ? "bg-[#0074b2] text-white" : ""
                 }`}
-              />
+              >
+                {menu.label}
+                <MdKeyboardArrowDown
+                  className={`transition-transform duration-200 ${
+                    openDropdown === menu.key ? "rotate-180" : ""
+                  }`}
+                />
+              </div>
             </div>
+          ))}
 
-            {/* Mega Menu Dropdown */}
-            {openDropdown === menu.key && renderMegaMenu(menu.key)}
-          </div>
-        ))}
+          <span className="cursor-pointer px-3 py-2 hover:bg-[#0074b2] hover:text-white rounded transition">
+            Offers
+          </span>
+        </div>
 
-        {/* Offers Button */}
-        <span className="cursor-pointer px-3 py-2 hover:bg-[#0074b2] hover:text-white rounded transition">
-          Offers
-        </span>
+        {/* Mega Menu dropdown — placed outside of loop, full area hoverable */}
+        {openDropdown && renderMegaMenu(openDropdown)}
       </div>
     </div>
   );
