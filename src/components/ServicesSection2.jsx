@@ -3,84 +3,37 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const ServicesSection2 = () => {
   const services = [
-    {
+     {
       id: 1,
-      name: "Ambulance",
-      image: "https://images.unsplash.com/photo-1584432810601-6c7f27d2362b?w=150"
+      name: "Blood Bank",
+      image: "https://plus.unsplash.com/premium_photo-1661779739047-c5c27cf8ebac?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Qmxvb2QlMjBCYW5rfGVufDB8fDB8fHww"
     },
     {
       id: 2,
-      name: "Pharmacy",
-      image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=150"
+      name: "Ambulance",
+      image: "https://plus.unsplash.com/premium_photo-1723708841860-5b00cc402a62?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YW1idWxhbmNlfGVufDB8fDB8fHww"
     },
     {
       id: 3,
-      name: "Diagnostics",
-      image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop&crop=center"
+      name: "Pharmacies",
+      image: "https://plus.unsplash.com/premium_photo-1661766456250-bbde7dd079de?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8cGhhcm1hY2llc3xlbnwwfHwwfHx8MA%3D%3D"
     },
     {
       id: 4,
-      name: "Doctor",
-      image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=300&fit=crop&crop=center"
+      name: "Diagnostic",
+      image: "https://plus.unsplash.com/premium_photo-1664301991683-83b39364ff04?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8RGlhZ25vc3RpY3xlbnwwfHwwfHx8MA%3D%3D"
     },
     {
       id: 5,
-      name: "Hospital",
-      image: "https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=150"
+      name: "Doctor & Specialists",
+      image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=300&fit=crop&crop=center"
     },
     {
       id: 6,
-      name: "Clinic",
+      name: "Hospitals & Clinics",
       image: "https://images.unsplash.com/photo-1551076805-e1869033e561?w=400&h=300&fit=crop&crop=center"
-    },{
-      id: 7,
-      name: "Pharmacy",
-      image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=150"
     },
-    {
-      id: 8,
-      name: "Diagnostics",
-      image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop&crop=center"
-    },
-    {
-      id: 9,
-      name: "Doctor",
-      image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=300&fit=crop&crop=center"
-    },
-    {
-      id: 10,
-      name: "Hospital",
-      image: "https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=150"
-    },
-    {
-      id: 11,
-      name: "Clinic",
-      image: "https://images.unsplash.com/photo-1551076805-e1869033e561?w=400&h=300&fit=crop&crop=center"
-    },{
-      id: 12,
-      name: "Pharmacy",
-      image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=150"
-    },
-    {
-      id: 13,
-      name: "Diagnostics",
-      image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop&crop=center"
-    },
-    {
-      id:14,
-      name: "Doctor",
-      image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=300&fit=crop&crop=center"
-    },
-    {
-      id: 15,
-      name: "Hospital",
-      image: "https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=150"
-    },
-    {
-      id: 16,
-      name: "Clinic",
-      image: "https://images.unsplash.com/photo-1551076805-e1869033e561?w=400&h=300&fit=crop&crop=center"
-    }
+     
   ];
 
   const scrollContainerRef = useRef(null);
@@ -131,7 +84,7 @@ const ServicesSection2 = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <h2 className="text-4xl font-bold text-gray-800 mb-4 text-center">Our <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Services</span></h2>
+          <h2 className="text-4xl font-bold text-gray-800 mb-4 text-center">Our <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Categories</span></h2>
           <p className="text-gray-600">Quality healthcare services at your fingertips</p>
         </div>
 
@@ -142,23 +95,23 @@ const ServicesSection2 = () => {
           <div className="absolute right-0 top-0 w-8 h-full bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
           
           {/* Previous Arrow */}
-          <button
+          {/* <button
             onClick={scrollPrevious}
             className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 bg-white bg-opacity-90 backdrop-blur-sm rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 hover:bg-opacity-100"
           >
             <ChevronLeft className="w-5 h-5 text-gray-700" />
-          </button>
+          </button> */}
 
           {/* Next Arrow */}
-          <button
+          {/* <button
             onClick={scrollNext}
             className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 bg-white bg-opacity-90 backdrop-blur-sm rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 hover:bg-opacity-100"
           >
             <ChevronRight className="w-5 h-5 text-gray-700" />
-          </button>
+          </button> */}
           
           {/* Pause/Play Button */}
-          <button
+          {/* <button
             onClick={() => setIsPaused(!isPaused)}
             className="absolute top-4 right-4 z-20 bg-white bg-opacity-90 backdrop-blur-sm rounded-full p-2 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 invisible"
           >
@@ -171,7 +124,7 @@ const ServicesSection2 = () => {
                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
               </svg>
             )}
-          </button>
+          </button> */}
           
           {/* Scrollable Container */}
           <div 
@@ -208,7 +161,7 @@ const ServicesSection2 = () => {
           </div>
 
           {/* Dots Indicator */}
-          <div className="flex justify-center mt-6 space-x-2">
+          {/* <div className="flex justify-center mt-6 space-x-2">
             {services.map((_, index) => (
               <button
                 key={index}
@@ -220,7 +173,7 @@ const ServicesSection2 = () => {
                 }`}
               />
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
 
