@@ -6,6 +6,8 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaUser, FaPhoneAlt } from "react-icons/fa";
 
 import NavBar2 from "./NavBar2";
+
+
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false); // added
@@ -49,18 +51,22 @@ const Navbar = () => {
         <div className=" mx-auto px-4 sm:px-6 lg:px-8">
           <div className=" max-w-7xl m-auto flex justify-between items-center h-16 py-10">
             {/* Logo */}
-            <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-lg flex items-center justify-center">
-                <Stethoscope className="w-6 h-6 text-white" />
-                <img src={logo} alt="" />
+            <Link to="/">
+              <div className="flex items-center space-x-2">
+                
+                <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-lg flex items-center justify-center">
+                  <Stethoscope className="w-6 h-6 text-white" />
+                  <img src={logo} alt="" />
+                </div>
+                <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+                  Doctor Adda
+                </span>
+                
               </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-                Doctor Adda
-              </span>
-            </div>
+            </Link> 
 
             {/* Location */}
-            <div className="hidden md:flex items-center gap-2 pl-4">
+            <div className="hidden md:flex items-center gap-2 pl-4 cursor-pointer">
               <div className="bg-gray-100 p-2 rounded-full">
                 <FaMapMarkerAlt className="text-gray-600 text-base" />
               </div>
@@ -116,48 +122,20 @@ const Navbar = () => {
         </div>
 
 
-         
-      
-
-            {/* Profile Avatar & Dropdown */}
-            <div ref={dropdownRef} className="relative">
-              {/* <img
-                src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80
-"
-                alt="User Avatar"
-                className="w-8 h-8 rounded-full object-cover cursor-pointer"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-              /> */}
-
-              {/* Dropdown */}
-              {dropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-gray-800 text-white rounded-md shadow-lg z-[99] py-2 space-y-1">
-                  <div className="flex justify-between items-center px-4 py-2 hover:bg-gray-700 cursor-pointer">
-                    <span>Profile</span>
-                    <span className="text-xs bg-gray-600 px-2 py-0.5 rounded-full">New</span>
-                  </div>
-                  <div className="px-4 py-2 hover:bg-gray-700 cursor-pointer">Settings</div>
-                  <div className="px-4 py-2 hover:bg-gray-700 cursor-pointer">Logout</div>
-                </div>
-              )}
-            </div>
-
             {/* Login/Signup */}
-            <div className="flex items-center space-x-1 text-gray-900 cursor-pointer hidden sm:block "  onClick={() => setDropdownOpen(!dropdownOpen)}>
-                <div className="flex gap-2">
-                    <img
-                        src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80"
-                        alt="User Avatar"
-                        className="w-8 h-8 rounded-full object-cover cursor-pointer"
-                        
-                    />
-                    <span className="font-medium ">Login/Signup</span>
-
-                </div>
-            </div>
+            <Link to="/login" className="flex items-center space-x-1 text-gray-900 cursor-pointer hidden sm:block">
+              <div className="flex gap-2">
+                <img
+                  src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80"
+                  alt="User Avatar"
+                  className="w-8 h-8 rounded-full object-cover cursor-pointer"
+                />
+                <span className="font-medium">Login/Signup</span>
+              </div>
+            </Link>
 
             {/* Notification Icon */}
-            <div className="relative bg-gradient-to-r from-blue-600 to-cyan-600 text-white p-2 rounded-full " >
+            <div className="relative bg-gradient-to-r from-blue-600 to-cyan-600 text-white p-2 rounded-full cursor-pointer " >
               <Bell className="w-6 h-6" />
               <span className="absolute -top-1.5 -right-1.5 bg-white text-black text-xs font-semibold px-1.5 py-0.5 rounded-full">
                 8
