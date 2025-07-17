@@ -131,7 +131,7 @@ const Navbar = () => {
 
               {/* Dropdown */}
               {dropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-gray-800 text-white rounded-md shadow-lg z-50 py-2 space-y-1">
+                <div className="absolute right-0 mt-2 w-48 bg-gray-800 text-white rounded-md shadow-lg z-[99] py-2 space-y-1">
                   <div className="flex justify-between items-center px-4 py-2 hover:bg-gray-700 cursor-pointer">
                     <span>Profile</span>
                     <span className="text-xs bg-gray-600 px-2 py-0.5 rounded-full">New</span>

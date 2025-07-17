@@ -15,7 +15,7 @@ import BannerSection from "../components/BannerSection";
 import TestimonialsSection from "../components/TestimonialsSection";
 import HealthBlogSection from "../components/HealthBlogSection";
 import AboutUsSection from "../components/AboutUsSection";
-
+import MedicalImagingBanner from "../components/MedicalImagingBanner"
 
 const Home = () => {
     useEffect(() => {
@@ -34,7 +34,7 @@ const Home = () => {
 {/* <ServicesSection /> */}
 <ServicesSection2/>
 {/* <HeroSection/> */}
-
+<MedicalImagingBanner/>
 <DoctorCategoryCards/>
 {/* <DoctorAddaHero/> */}
 

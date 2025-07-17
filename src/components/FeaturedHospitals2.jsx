@@ -212,7 +212,7 @@ const FeaturedHospitals2 = () => {
                   {hospital.description}
                 </p>
                 <div className="flex gap-2 pt-4 border-t border-gray-100">
-                  <button className="flex-1 bg-blue-600 text-white py-2  rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
+                  <button className="flex-1 bg-[#00669e] text-white py-2  rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
                     <Phone className="w-4 h-4" />
                     Book Appointment
                   </button>
