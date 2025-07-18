@@ -16,12 +16,19 @@ const slides = [
   },
 ];
 
-const OtpStep = ({ mobile = "9876543210", onVerifySuccess }) => {
+const OtpStep = ({ 
+  mobile = "9876543210", 
+  onVerifySuccess,
+  redirectTo = "/user-details",
+  authToken = null,
+  onAuthSuccess = null 
+}) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [otp, setOtp] = useState(["", "", "", ""]);
   const [isLoading, setIsLoading] = useState(false);
   const [resendTimer, setResendTimer] = useState(30);
   const [canResend, setCanResend] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
   const otpRefs = useRef([]);
 
   // Slider rotation
@@ -82,29 +89,118 @@ const OtpStep = ({ mobile = "9876543210", onVerifySuccess }) => {
     otpRefs.current[nextIndex].focus();
   };
 
+  // Navigation function
+  const navigateToNextScreen = () => {
+    // Check if we're in a React Router environment
+    if (typeof window !== 'undefined') {
+      // For React Router (if using useNavigate hook)
+      if (window.history && window.history.pushState) {
+        window.history.pushState(null, '', redirectTo);
+        
+        // Dispatch a custom event to trigger route change
+        window.dispatchEvent(new PopStateEvent('popstate'));
+      } else {
+        // Fallback to window.location
+        window.location.href = redirectTo;
+      }
+    }
+  };
+
+  // Store authentication data
+  const handleAuthSuccess = (token) => {
+    try {
+      // Store auth token (you can customize this based on your auth system)
+      if (token) {
+        // Note: In a real app, you might want to use httpOnly cookies or secure storage
+        sessionStorage.setItem('authToken', token);
+        sessionStorage.setItem('userMobile', mobile);
+        sessionStorage.setItem('loginTime', new Date().toISOString());
+      }
+      
+      // Set user as authenticated
+      sessionStorage.setItem('isAuthenticated', 'true');
+      
+      // Call custom auth success handler if provided
+      if (onAuthSuccess) {
+        onAuthSuccess({
+          token,
+          mobile,
+          isAuthenticated: true,
+          loginTime: new Date().toISOString()
+        });
+      }
+    } catch (error) {
+      console.error('Error storing auth data:', error);
+    }
+  };
+
   const handleVerifyOtp = async () => {
     if (otp.join("").length !== 4) return;
     
     setIsLoading(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
     
-    // Call the success callback if provided, otherwise show success message
-    if (onVerifySuccess) {
-      onVerifySuccess();
-    } else {
-      // Default behavior - you can replace this with your navigation logic
-      alert("OTP Verified Successfully! Please add navigation logic.");
-      console.log("OTP Verified - implement navigation to next screen");
+    try {
+      // Simulate API call for OTP verification
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Simulate API response (replace with actual API call)
+      const apiResponse = {
+        success: true,
+        token: authToken || `mock-jwt-token-${Date.now()}`,
+        user: {
+          mobile,
+          verified: true
+        }
+      };
+      
+      if (apiResponse.success) {
+        setIsVerified(true);
+        
+        // Handle authentication success
+        handleAuthSuccess(apiResponse.token);
+        
+        // Show success message briefly
+        setTimeout(() => {
+          // Call the success callback if provided
+          if (onVerifySuccess) {
+            onVerifySuccess({
+              token: apiResponse.token,
+              user: apiResponse.user,
+              mobile
+            });
+          } else {
+            // Default navigation behavior
+            navigateToNextScreen();
+          }
+        }, 1000);
+      } else {
+        throw new Error('OTP verification failed');
+      }
+    } catch (error) {
+      console.error('OTP verification error:', error);
+      alert('OTP verification failed. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
-  const handleResendOtp = () => {
+  const handleResendOtp = async () => {
     setResendTimer(30);
     setCanResend(false);
     setOtp(["", "", "", ""]);
     otpRefs.current[0].focus();
+    
+    try {
+      // Simulate API call to resend OTP
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      console.log('OTP resent to', mobile);
+      
+      // You can add a toast notification here
+      // toast.success('OTP sent successfully!');
+    } catch (error) {
+      console.error('Error resending OTP:', error);
+      alert('Failed to resend OTP. Please try again.');
+    }
   };
 
   const { image, heading, subtext, icon: Icon } = slides[currentSlide];
@@ -159,14 +255,30 @@ const OtpStep = ({ mobile = "9876543210", onVerifySuccess }) => {
           
           <div className="relative z-10 space-y-8">
             <div className="text-center space-y-4">
-              <div className="w-16 h-16 mx-auto bg-gradient-to-br from-emerald-500 to-blue-500 rounded-full flex items-center justify-center shadow-lg">
-                <Smartphone className="text-white" size={28} />
+              <div className={`w-16 h-16 mx-auto bg-gradient-to-br rounded-full flex items-center justify-center shadow-lg transition-all duration-300 ${
+                isVerified ? 'from-green-500 to-emerald-500' : 'from-emerald-500 to-blue-500'
+              }`}>
+                {isVerified ? (
+                  <CheckCircle className="text-white" size={28} />
+                ) : (
+                  <Smartphone className="text-white" size={28} />
+                )}
               </div>
               <div className="space-y-2">
-                <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Verify OTP</h2>
+                <h2 className="text-3xl font-bold text-gray-900 tracking-tight">
+                  {isVerified ? 'Verified!' : 'Verify OTP'}
+                </h2>
                 <p className="text-gray-600 text-lg">
-                  Enter the 4-digit code sent to{" "}
-                  <span className="font-semibold text-gray-900">+91-{mobile}</span>
+                  {isVerified ? (
+                    <span className="text-green-600 font-semibold">
+                      OTP verified successfully! Redirecting...
+                    </span>
+                  ) : (
+                    <>
+                      Enter the 4-digit code sent to{" "}
+                      <span className="font-semibold text-gray-900">+91-{mobile}</span>
+                    </>
+                  )}
                 </p>
               </div>
             </div>
@@ -180,7 +292,12 @@ const OtpStep = ({ mobile = "9876543210", onVerifySuccess }) => {
                       type="text"
                       maxLength="1"
                       value={otp[index]}
-                      className="w-14 h-14 text-2xl font-bold text-center border-2 border-gray-200 rounded-xl transition-all duration-300 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 hover:border-gray-300 bg-gray-50 focus:bg-white"
+                      disabled={isVerified}
+                      className={`w-14 h-14 text-2xl font-bold text-center border-2 rounded-xl transition-all duration-300 focus:outline-none focus:ring-4 hover:border-gray-300 ${
+                        isVerified 
+                          ? 'border-green-300 bg-green-50 text-green-700' 
+                          : 'border-gray-200 bg-gray-50 focus:bg-white focus:border-emerald-500 focus:ring-emerald-500/20'
+                      }`}
                       onChange={(e) => handleOtpChange(e, index)}
                       onKeyDown={(e) => handleKeyDown(e, index)}
                       onPaste={handlePaste}
@@ -189,24 +306,35 @@ const OtpStep = ({ mobile = "9876543210", onVerifySuccess }) => {
                   ))}
                 </div>
                 
-                <div className="text-center">
-                  <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
-                    <div className="w-8 h-0.5 bg-gray-200 rounded"></div>
-                    <span>Paste code here</span>
-                    <div className="w-8 h-0.5 bg-gray-200 rounded"></div>
+                {!isVerified && (
+                  <div className="text-center">
+                    <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
+                      <div className="w-8 h-0.5 bg-gray-200 rounded"></div>
+                      <span>Paste code here</span>
+                      <div className="w-8 h-0.5 bg-gray-200 rounded"></div>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
 
               <button
                 onClick={handleVerifyOtp}
-                disabled={!isOtpComplete || isLoading}
-                className="w-full py-4 bg-gradient-to-r from-emerald-600 to-blue-600 text-white font-semibold rounded-xl flex items-center justify-center gap-3 hover:from-emerald-700 hover:to-blue-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0"
+                disabled={!isOtpComplete || isLoading || isVerified}
+                className={`w-full py-4 font-semibold rounded-xl flex items-center justify-center gap-3 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 ${
+                  isVerified 
+                    ? 'bg-green-600 text-white' 
+                    : 'bg-gradient-to-r from-emerald-600 to-blue-600 text-white hover:from-emerald-700 hover:to-blue-700'
+                }`}
               >
                 {isLoading ? (
                   <>
                     <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
                     Verifying...
+                  </>
+                ) : isVerified ? (
+                  <>
+                    <CheckCircle size={20} />
+                    Verified Successfully!
                   </>
                 ) : (
                   <>
@@ -217,25 +345,27 @@ const OtpStep = ({ mobile = "9876543210", onVerifySuccess }) => {
               </button>
 
               {/* Resend Section */}
-              <div className="text-center space-y-3">
-                <p className="text-sm text-gray-500">
-                  Didn't receive the code?
-                </p>
-                {canResend ? (
-                  <button
-                    onClick={handleResendOtp}
-                    className="inline-flex items-center gap-2 text-emerald-600 font-semibold hover:text-emerald-700 transition-colors"
-                  >
-                    <RotateCcw size={16} />
-                    Resend OTP
-                  </button>
-                ) : (
-                  <div className="inline-flex items-center gap-2 text-gray-500">
-                    <div className="w-4 h-4 border-2 border-gray-300 border-t-emerald-500 rounded-full animate-spin"></div>
-                    Resend in {resendTimer}s
-                  </div>
-                )}
-              </div>
+              {!isVerified && (
+                <div className="text-center space-y-3">
+                  <p className="text-sm text-gray-500">
+                    Didn't receive the code?
+                  </p>
+                  {canResend ? (
+                    <button
+                      onClick={handleResendOtp}
+                      className="inline-flex items-center gap-2 text-emerald-600 font-semibold hover:text-emerald-700 transition-colors"
+                    >
+                      <RotateCcw size={16} />
+                      Resend OTP
+                    </button>
+                  ) : (
+                    <div className="inline-flex items-center gap-2 text-gray-500">
+                      <div className="w-4 h-4 border-2 border-gray-300 border-t-emerald-500 rounded-full animate-spin"></div>
+                      Resend in {resendTimer}s
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Security Note */}
