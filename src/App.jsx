@@ -12,6 +12,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Contact from "./pages/Contact";
 import LoginSignupFlow from "./pages/LoginSignupFlow";
 import UserDetails from "./pages/UserDetails";
+import AmbulancePage from "./pages/AmbulancePage";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -49,7 +50,7 @@ function App() {
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="/user-details" element={<UserDetails />} />
                 <Route path="/bloodbank" element={<UserDetails />} />
-                <Route path="/ambulance" element={<UserDetails />} />
+                <Route path="/ambulance" element={<AmbulancePage />} />
               </Routes>
               <Footer />
             </>
