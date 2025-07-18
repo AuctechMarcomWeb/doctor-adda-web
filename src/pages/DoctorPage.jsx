@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 
-import AmbulanceCard from "../components/AmbulanceCard"
+import DoctorCard from "../components/DoctorCard"
 
 
 
-const AmbulancePage = () => {
+const DoctorPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
 
-  const ambulanceData = [
+  const doctorData = [
     {
-      name: "MediCabs Ambulance",
-      type: "ICU Ambulance",
+      name: "MediCabs Doctor",
+      type: "ICU Doctor",
       capacity: 3,
       price: 350,
       location: "Hazratganj, Lucknow, UP",
@@ -38,10 +38,10 @@ const AmbulancePage = () => {
     },
   ];
 
-  const filteredData = ambulanceData.filter(ambulance => {
-    const matchesSearch = ambulance.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         ambulance.location.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = filterType === "all" || ambulance.type.toLowerCase().includes(filterType.toLowerCase());
+  const filteredData = doctorData.filter(doctor => {
+    const matchesSearch = doctor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         doctor.location.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesFilter = filterType === "all" || doctor.type.toLowerCase().includes(filterType.toLowerCase());
     return matchesSearch && matchesFilter;
   });
 
@@ -66,7 +66,7 @@ const AmbulancePage = () => {
               <span className="text-4xl"></span>
             </div>
             <h1 className="text-3xl md:text-4xl font-bold">
-          Emergency & Ambulance
+          Doctor & Specialists
         </h1>
             <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
               Fast, reliable, and professional medical transport when you need it most
@@ -177,7 +177,7 @@ const AmbulancePage = () => {
         {/* Results Header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-gray-800">
-            Available Ambulances
+            Available Doctors
             <span className="ml-2 text-lg text-gray-500">({filteredData.length})</span>
           </h2>
           <div className="flex items-center gap-2 text-sm text-gray-600">
@@ -186,18 +186,18 @@ const AmbulancePage = () => {
           </div>
         </div>
 
-        {/* Ambulance Cards */}
+        {/* Doctor Cards */}
         <div className="space-y-6">
           {filteredData.length > 0 ? (
             filteredData.map((data, index) => (
               <div key={index} className="animate-fadeIn" style={{ animationDelay: `${index * 0.1}s` }}>
-                <AmbulanceCard {...data} />
+                <DoctorCard {...data} />
               </div>
             ))
           ) : (
             <div className="text-center py-12">
               <div className="text-6xl mb-4">🔍</div>
-              <h3 className="text-xl font-semibold text-gray-700 mb-2">No ambulances found</h3>
+              <h3 className="text-xl font-semibold text-gray-700 mb-2">No doctor found</h3>
               <p className="text-gray-500">Try adjusting your search or filter criteria</p>
             </div>
           )}
@@ -226,4 +226,4 @@ const AmbulancePage = () => {
   );
 };
 
-export default AmbulancePage;
+export default DoctorPage;

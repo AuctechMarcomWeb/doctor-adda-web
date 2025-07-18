@@ -1,6 +1,6 @@
 import React from "react";
 
-const AmbulanceCard = ({ name, type, capacity, price, location, rating, image }) => {
+const PharmacyCard = ({ name, type, contact, storetiming, location, rating, image }) => {
   return (
     <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-blue-200 transform hover:-translate-y-1">
       {/* Background gradient overlay */}
@@ -48,7 +48,7 @@ const AmbulanceCard = ({ name, type, capacity, price, location, rating, image })
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
           <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl hover:bg-blue-50 transition-colors duration-200">
             <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-              <span className="text-blue-600 text-sm"><img src="https://i.pinimg.com/1200x/9d/d0/f2/9dd0f2f55fb40d05d3f8a10991dbde22.jpg"  alt=""  /></span>
+              <span className="text-blue-600 text-sm"><img src="https://i.pinimg.com/1200x/9d/d0/f2/9dd0f2f55fb40d05d3f8a10991dbde22.jpg" alt=""  /></span>
             </div>
             <div>
               <p className="text-xs text-gray-500 uppercase tracking-wide">Type</p>
@@ -58,11 +58,11 @@ const AmbulanceCard = ({ name, type, capacity, price, location, rating, image })
           
           <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl hover:bg-blue-50 transition-colors duration-200">
             <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-              <span className="text-green-600 text-sm"><img src="https://i.pinimg.com/736x/71/26/7e/71267e196665cb6a2e48310bcf87f2c7.jpg"  height={25} width={25} alt="" /></span>
+              <span className="text-green-600 text-sm"><img src="https://i.pinimg.com/736x/b0/10/64/b01064465d278ea8f2f0fc2b60ea9d6b.jpg" height={25} width={25} alt="" /></span>
             </div>
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-wide">Capacity</p>
-              <p className="text-sm font-semibold text-gray-800">{capacity} Unit</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide">Contact NUmber</p>
+              <p className="text-sm font-semibold text-gray-800">{contact}</p>
             </div>
           </div>
           
@@ -71,8 +71,8 @@ const AmbulanceCard = ({ name, type, capacity, price, location, rating, image })
               <span className="text-purple-600 text-sm">₹</span>
             </div>
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-wide">Price</p>
-              <p className="text-sm font-semibold text-gray-800">₹{price}</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide">store timing</p>
+              <p className="text-sm font-semibold text-gray-800">{storetiming}</p>
             </div>
           </div>
           
@@ -112,4 +112,4 @@ const AmbulanceCard = ({ name, type, capacity, price, location, rating, image })
   );
 };
 
-export default AmbulanceCard;
+export default PharmacyCard;

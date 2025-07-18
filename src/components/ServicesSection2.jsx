@@ -167,6 +167,18 @@ const ServicesSection2 = () => {
                     } else if(service?.name == "Ambulance"){
                       
                       navigation("/ambulance")
+                    }else if(service?.name == "Pharmacies"){
+                      
+                      navigation("/pharmacy")
+                    }else if(service?.name == "Diagnostic"){
+                      
+                      navigation("/diagnostic")
+                    }else if(service?.name == "Doctor & Specialists"){
+                      
+                      navigation("/doctor")
+                    }else if(service?.name == "Hospitals & Clinics"){
+                      
+                      navigation("/hospital")
                     } else {
                       console.log("sdfsdfsdf", service?.name);
                     }
