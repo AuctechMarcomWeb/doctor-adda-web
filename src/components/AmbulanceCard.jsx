@@ -96,12 +96,12 @@ const AmbulanceCard = ({ name, type, capacity, price, location, rating, image })
             </span>
           </button>
           
-          <button className="bg-white hover:bg-gray-50 text-gray-700 font-semibold py-3 px-6 rounded-xl border-2 border-gray-200 hover:border-blue-300 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+          {/* <button className="bg-white hover:bg-gray-50 text-gray-700 font-semibold py-3 px-6 rounded-xl border-2 border-gray-200 hover:border-blue-300 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
             <span className="flex items-center justify-center gap-2">
               <span>📞</span>
               <span>Call Now</span>
             </span>
-          </button>
+          </button> */}
         </div>
       </div>
       
