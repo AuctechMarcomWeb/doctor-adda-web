@@ -47,10 +47,12 @@ const UserDetails = () => {
   const { image, heading, subtext } = slides[currentSlide];
 
   return (
-    <div className="flex h-screen items-center justify-center bg-gray-100">
+    <div className="flex  items-center justify-center pt-40 py-8">
       <div className="flex w-full max-w-5xl bg-white shadow-lg rounded-lg overflow-hidden">
         {/* Left Slider */}
-        <div className="w-1/2 relative bg-blue-600 text-white flex flex-col justify-center items-center p-8">
+        <div className="w-1/2 relative  text-white flex flex-col justify-center items-center p-8" style={{
+    background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)" ,
+  }}>
           <img src={image} alt={heading} className="w-100 h-100 object-contain mb-6 rounded" />
           <h3 className="text-2xl font-bold">{heading}</h3>
           <p className="mt-2 text-center text-white/90 text-sm">{subtext}</p>

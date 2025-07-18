@@ -7,7 +7,7 @@ const LoginSignupFlow = () => {
   const [mobile, setMobile] = useState("");
 
   return (
-    <div className=" mx-auto mt-10 shadow-md rounded-lg bg-white p-6">
+    <div className=" mx-auto shadow-md rounded-lg bg-white py-8 px-4 pt-40">
       {step === 1 ? (
         <LoginStep setStep={setStep} setMobile={setMobile} />
       ) : (
