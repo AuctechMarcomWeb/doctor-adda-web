@@ -13,6 +13,10 @@ import Contact from "./pages/Contact";
 import LoginSignupFlow from "./pages/LoginSignupFlow";
 import UserDetails from "./pages/UserDetails";
 import AmbulancePage from "./pages/AmbulancePage";
+import PharmacyPage from "./pages/PharmacyPage";
+import DiagnosticPage from "./pages/DiagnosticPage";
+import DoctorPage from "./pages/DoctorPage";
+import HospitalPage from "./pages/HospitalPage";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -49,8 +53,12 @@ function App() {
                 <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="/user-details" element={<UserDetails />} />
-                <Route path="/bloodbank" element={<UserDetails />} />
+                <Route path="/bloodbank" element={<AmbulancePage />} />
                 <Route path="/ambulance" element={<AmbulancePage />} />
+                <Route path="/pharmacy" element={<PharmacyPage />} />
+                 <Route path="/diagnostic" element={<DiagnosticPage />} />
+                 <Route path="/doctor" element={<DoctorPage />} />
+                 <Route path="/hospital" element={<HospitalPage />} />
               </Routes>
               <Footer />
             </>
