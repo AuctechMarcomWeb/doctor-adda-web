@@ -190,7 +190,7 @@ const AmbulancePage = () => {
         <div className="space-y-6">
           {filteredData.length > 0 ? (
             filteredData.map((data, index) => (
-              <div key={index} className="animate-fadeIn" style={{ animationDelay: `${index * 0.1}s` }}>
+              <div   key={index} className="animate-fadeIn" style={{ animationDelay: `${index * 0.1}s` }}>
                 <AmbulanceCard {...data} />
               </div>
             ))

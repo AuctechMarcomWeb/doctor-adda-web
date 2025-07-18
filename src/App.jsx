@@ -21,6 +21,7 @@ import HospitalPage from "./pages/HospitalPage";
 // Components
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import AmbulanceDetailPage from "./pages/AmbulanceDetailPage";
 
 function App() {
   const [step, setStep] = useState(1);
@@ -55,6 +56,7 @@ function App() {
                 <Route path="/user-details" element={<UserDetails />} />
                 <Route path="/bloodbank" element={<AmbulancePage />} />
                 <Route path="/ambulance" element={<AmbulancePage />} />
+                <Route path="/ambulance/:id" element={<AmbulanceDetailPage />} />
                 <Route path="/pharmacy" element={<PharmacyPage />} />
                  <Route path="/diagnostic" element={<DiagnosticPage />} />
                  <Route path="/doctor" element={<DoctorPage />} />
