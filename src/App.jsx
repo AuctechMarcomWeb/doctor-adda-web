@@ -1,30 +1,60 @@
-import "./App.css";
+import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import TermsAndConditions from "./pages/TermsAndConditions";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import Footer from "./components/Footer";
-import Navbar from "./components/Navbar";
-import Contact from "./pages/Contact";
+
+import "./App.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+// Pages
+import Home from "./pages/Home";
+import TermsAndConditions from "./pages/TermsAndConditions";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Contact from "./pages/Contact";
+import LoginSignupFlow from "./pages/LoginSignupFlow";
+import UserDetails from "./pages/UserDetails";
+
+// Components
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 function App() {
+  const [step, setStep] = useState(1);
+  const [mobile, setMobile] = useState("");
+
   return (
-    <>
     <Router>
-      <Navbar/>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
-        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        {/* Login/Signup Flow - Fullscreen without Navbar/Footer */}
+        <Route
+            path="/login"
+            element={
+              <>
+                <Navbar />
+                <LoginSignupFlow setStep={setStep} setMobile={setMobile} />
+                <Footer />
+              </>
+            }
+          />
+
+        {/* All other routes wrapped with Navbar + Footer */}
+        <Route
+          path="*"
+          element={
+            <>
+              <Navbar />
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/user-details" element={<UserDetails />} />
+              </Routes>
+              <Footer />
+            </>
+          }
+        />
       </Routes>
-      
-    <Footer/>
     </Router>
-    </>
   );
 }
 
