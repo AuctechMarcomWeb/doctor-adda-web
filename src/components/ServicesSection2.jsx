@@ -1,39 +1,49 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useState, useEffect, useRef } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const ServicesSection2 = () => {
+
+  const navigation = useNavigate()
+
+
   const services = [
-     {
+    {
       id: 1,
       name: "Blood Bank",
-      image: "https://plus.unsplash.com/premium_photo-1661779739047-c5c27cf8ebac?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Qmxvb2QlMjBCYW5rfGVufDB8fDB8fHww"
+      image:
+        "https://plus.unsplash.com/premium_photo-1661779739047-c5c27cf8ebac?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Qmxvb2QlMjBCYW5rfGVufDB8fDB8fHww",
     },
     {
       id: 2,
       name: "Ambulance",
-      image: "https://plus.unsplash.com/premium_photo-1723708841860-5b00cc402a62?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YW1idWxhbmNlfGVufDB8fDB8fHww"
+      image:
+        "https://plus.unsplash.com/premium_photo-1723708841860-5b00cc402a62?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YW1idWxhbmNlfGVufDB8fDB8fHww",
     },
     {
       id: 3,
       name: "Pharmacies",
-      image: "https://plus.unsplash.com/premium_photo-1661766456250-bbde7dd079de?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8cGhhcm1hY2llc3xlbnwwfHwwfHx8MA%3D%3D"
+      image:
+        "https://plus.unsplash.com/premium_photo-1661766456250-bbde7dd079de?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8cGhhcm1hY2llc3xlbnwwfHwwfHx8MA%3D%3D",
     },
     {
       id: 4,
       name: "Diagnostic",
-      image: "https://plus.unsplash.com/premium_photo-1664301991683-83b39364ff04?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8RGlhZ25vc3RpY3xlbnwwfHwwfHx8MA%3D%3D"
+      image:
+        "https://plus.unsplash.com/premium_photo-1664301991683-83b39364ff04?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8RGlhZ25vc3RpY3xlbnwwfHwwfHx8MA%3D%3D",
     },
     {
       id: 5,
       name: "Doctor & Specialists",
-      image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=300&fit=crop&crop=center"
+      image:
+        "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=300&fit=crop&crop=center",
     },
     {
       id: 6,
       name: "Hospitals & Clinics",
-      image: "https://images.unsplash.com/photo-1551076805-e1869033e561?w=400&h=300&fit=crop&crop=center"
+      image:
+        "https://images.unsplash.com/photo-1551076805-e1869033e561?w=400&h=300&fit=crop&crop=center",
     },
-     
   ];
 
   const scrollContainerRef = useRef(null);
@@ -47,7 +57,7 @@ const ServicesSection2 = () => {
         const container = scrollContainerRef.current;
         const cardWidth = 216; // 192px (w-48) + 24px (gap)
         const maxScroll = container.scrollWidth - container.clientWidth;
-        
+
         if (container.scrollLeft >= maxScroll) {
           container.scrollLeft = 0;
           setCurrentIndex(0);
@@ -70,12 +80,14 @@ const ServicesSection2 = () => {
   };
 
   const scrollPrevious = () => {
-    const newIndex = currentIndex === 0 ? services.length - 1 : currentIndex - 1;
+    const newIndex =
+      currentIndex === 0 ? services.length - 1 : currentIndex - 1;
     scrollToIndex(newIndex);
   };
 
   const scrollNext = () => {
-    const newIndex = currentIndex === services.length - 1 ? 0 : currentIndex + 1;
+    const newIndex =
+      currentIndex === services.length - 1 ? 0 : currentIndex + 1;
     scrollToIndex(newIndex);
   };
 
@@ -84,8 +96,15 @@ const ServicesSection2 = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <h2 className="text-4xl font-bold text-gray-800 mb-4 text-center">Our <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Categories</span></h2>
-          <p className="text-gray-600">Quality healthcare services at your fingertips</p>
+          <h2 className="text-4xl font-bold text-gray-800 mb-4 text-center">
+            Our{" "}
+            <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+              Categories
+            </span>
+          </h2>
+          <p className="text-gray-600">
+            Quality healthcare services at your fingertips
+          </p>
         </div>
 
         {/* Services Container */}
@@ -93,7 +112,7 @@ const ServicesSection2 = () => {
           {/* Fade Effects */}
           <div className="absolute left-0 top-0 w-8 h-full bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
           <div className="absolute right-0 top-0 w-8 h-full bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
-          
+
           {/* Previous Arrow */}
           {/* <button
             onClick={scrollPrevious}
@@ -109,7 +128,7 @@ const ServicesSection2 = () => {
           >
             <ChevronRight className="w-5 h-5 text-gray-700" />
           </button> */}
-          
+
           {/* Pause/Play Button */}
           {/* <button
             onClick={() => setIsPaused(!isPaused)}
@@ -125,9 +144,9 @@ const ServicesSection2 = () => {
               </svg>
             )}
           </button> */}
-          
+
           {/* Scrollable Container */}
-          <div 
+          <div
             ref={scrollContainerRef}
             className="overflow-x-auto scrollbar-hide scroll-smooth"
             onMouseEnter={() => setIsPaused(true)}
@@ -138,9 +157,21 @@ const ServicesSection2 = () => {
                 <div
                   key={service.id}
                   className={`group cursor-pointer transition-all duration-300 ${
-                    currentIndex === index ? '' : ''
+                    currentIndex === index ? "" : ""
                   }`}
-                  onClick={() => scrollToIndex(index)}
+                  onClick={() => {
+                    if (service?.name == "Blood Bank") {
+                      console.log("Blood Bank", service?.name);
+                      navigation("/bloodbank")
+                    } else if(service?.name == "Ambulance"){
+                      
+                      navigation("/ambulance")
+                    } else {
+                      console.log("sdfsdfsdf", service?.name);
+                    }
+
+                    scrollToIndex(index);
+                  }}
                 >
                   {/* Image Container */}
                   <div className="w-48 h-36 rounded-2xl overflow-hidden shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-105">
@@ -150,7 +181,7 @@ const ServicesSection2 = () => {
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                   </div>
-                  
+
                   {/* Service Name */}
                   <h3 className="text-center mt-4 text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-300">
                     {service.name}

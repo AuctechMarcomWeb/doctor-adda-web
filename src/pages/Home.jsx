@@ -7,7 +7,7 @@ import ServicesSection from "../components/ServicesSection";
 import FeaturedHospitals from "../components/FeaturedHospitals";
 import DownloadAppSection from "../components/DownloadAppSection";
 import FeaturedHospitals2 from "../components/FeaturedHospitals2";
-import HealthScansSection from "../components/HealthScansSection"
+import HealthScansSection from "../components/HealthScansSection";
 import ServicesSection2 from "../components/ServicesSection2";
 import HeroSection from "../components/HeroSection";
 import MedicalHeroSection from "../components/MedicalHeroSection";
@@ -15,39 +15,35 @@ import BannerSection from "../components/BannerSection";
 import TestimonialsSection from "../components/TestimonialsSection";
 import HealthBlogSection from "../components/HealthBlogSection";
 import AboutUsSection from "../components/AboutUsSection";
-import MedicalImagingBanner from "../components/MedicalImagingBanner"
+import MedicalImagingBanner from "../components/MedicalImagingBanner";
 
 const Home = () => {
-    useEffect(() => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      
-    }, []);
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
   return (
     <>
- 
-    {/* <MedicalHeroSection/> */}
-    
-    <BannerSection/>
+      {/* <MedicalHeroSection/> */}
 
-{/* <ScrollingNotice /> */}
+      <BannerSection />
 
-{/* <ServicesSection /> */}
-<ServicesSection2/>
-{/* <HeroSection/> */}
-{/* <MedicalImagingBanner/> */}
-<DoctorCategoryCards/>
-{/* <DoctorAddaHero/> */}
+      {/* <ScrollingNotice /> */}
 
-{/* <FeaturedHospitals /> */}
-<FeaturedHospitals2/>
-{/* <HealthScansSection/> */}
+      {/* <ServicesSection /> */}
+      <ServicesSection2 />
+      {/* <HeroSection/> */}
+      {/* <MedicalImagingBanner/> */}
+      <DoctorCategoryCards />
+      {/* <DoctorAddaHero/> */}
+
+      {/* <FeaturedHospitals /> */}
+      <FeaturedHospitals2 />
+      {/* <HealthScansSection/> */}
       <DoctorAddaLanding />
-      <AboutUsSection/>
+      <AboutUsSection />
       {/* <TestimonialsSection/> */}
-      <HealthBlogSection/>
-      <DownloadAppSection/>
-      
-      
+      <HealthBlogSection />
+      <DownloadAppSection />
     </>
   );
 };
