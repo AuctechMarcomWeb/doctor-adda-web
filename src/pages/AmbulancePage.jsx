@@ -23,7 +23,7 @@ const AmbulancePage = () => {
       type: "ICU",
       capacity: 4,
       price: 700,
-      location: "1090 Chouraha, Manas Nagar Colony, Jiamau",
+      location: "1090 Chouraha, Gomti Nagar",
       rating: 4.0,
       image: "https://i.pinimg.com/1200x/3b/58/26/3b58264367ff25a10d419888fde59af7.jpg"
     },
@@ -187,21 +187,22 @@ const AmbulancePage = () => {
         </div>
 
         {/* Ambulance Cards */}
-        <div className="space-y-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {filteredData.length > 0 ? (
             filteredData.map((data, index) => (
-              <div   key={index} className="animate-fadeIn" style={{ animationDelay: `${index * 0.1}s` }}>
+              <div key={index} className="animate-fadeIn" style={{ animationDelay: `${index * 0.1}s` }}>
                 <AmbulanceCard {...data} />
               </div>
             ))
           ) : (
-            <div className="text-center py-12">
+            <div className="col-span-full text-center py-12">
               <div className="text-6xl mb-4">🔍</div>
               <h3 className="text-xl font-semibold text-gray-700 mb-2">No ambulances found</h3>
               <p className="text-gray-500">Try adjusting your search or filter criteria</p>
             </div>
           )}
         </div>
+
       </div>
 
       {/* Emergency Contact Banner */}
