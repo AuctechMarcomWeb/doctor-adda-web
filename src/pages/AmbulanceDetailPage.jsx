@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { Star, MapPin, Phone, Clock, User, BadgeCheck, PhoneCall, ClipboardSignature } from "lucide-react";
+import {
+  Star,
+  MapPin,
+  PhoneCall,
+  BadgeCheck,
+} from "lucide-react";
 
 const AmbulanceDetailPage = () => {
   const [activeTab, setActiveTab] = useState("about");
@@ -13,7 +18,7 @@ const AmbulanceDetailPage = () => {
           <img
             src="https://i.pinimg.com/1200x/68/f7/06/68f70659ffa1c253817619fcd559ea9d.jpg"
             alt="Ambulance"
-            className="w-full  object-cover"
+            className="w-full  object-cover object-center"
           />
         </div>
 
@@ -55,7 +60,7 @@ const AmbulanceDetailPage = () => {
           <nav className="flex gap-8">
             <button
               className={`pb-2 font-medium ${
-                activeTab === "about" ? "border-b-2 border-red-600 text-red-600" : "text-gray-600"
+                activeTab === "about" ? "border-b-2 border-[#00679f] text-[#00679f] " : "text-gray-600"
               }`}
               onClick={() => setActiveTab("about")}
             >
@@ -63,7 +68,7 @@ const AmbulanceDetailPage = () => {
             </button>
             <button
               className={`pb-2 font-medium ${
-                activeTab === "review" ? "border-b-2 border-red-600 text-red-600" : "text-gray-600"
+                activeTab === "review" ? "border-b-2 border-[#00679f] text-[#00679f]" : "text-gray-600"
               }`}
               onClick={() => setActiveTab("review")}
             >
@@ -71,51 +76,64 @@ const AmbulanceDetailPage = () => {
             </button>
           </nav>
         </div>
-
+                                    
+        {/* About Section */}
         {activeTab === "about" && (
-          <div className="space-y-6 text-sm text-gray-700">
+          <div className="space-y-4 text-sm text-gray-700 leading-relaxed">
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Description</h3>
-              <p>
-                FastCare Ambulance provides 24/7 emergency and non-emergency medical transportation services across the Delhi NCR region. Our ambulances are equipped with life-saving equipment, AC/non-AC options, and professional drivers trained in first response support.
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">About FastCare Ambulance</h3>
+              <p className="text-gray-700 text-justify">
+                FastCare Ambulance is a trusted emergency medical transportation provider serving the entire Delhi NCR region.
+                Our fleet is equipped with modern life-saving equipment and our drivers are trained first responders.
+                Whether it's a medical emergency or a planned patient transfer, we ensure timely and reliable service.
               </p>
-            </div>
-
-            <div>
-              <h4 className="text-md font-semibold text-gray-900 mb-1">Key Features</h4>
-              <ul className="list-disc list-inside space-y-1">
-                <li>Basic & Advanced Life Support</li>
-                <li>Trained Paramedics Onboard</li>
-                <li>Real-Time Tracking Available</li>
-                <li>Oxygen Supply and Emergency Medicines</li>
-              </ul>
+              <p className="mt-2 text-gray-700 text-justify">
+                We offer both AC and non-AC ambulances with GPS tracking, trained paramedics, and on-board emergency supplies like oxygen cylinders and medications.
+                With 24/7 availability, our mission is to deliver compassionate, efficient, and safe transport for every patient.
+              </p>
             </div>
           </div>
         )}
 
+        {/* Review Section */}
         {activeTab === "review" && (
-          <div className="space-y-4">
+          <div className="space-y-6">
             {[
               {
                 name: "Rahul Sharma",
-                comment: "Quick response and clean ambulance. Very satisfied with the service.",
+                comment: "Excellent service! The ambulance arrived quickly and was very clean. The driver was professional and courteous.",
                 rating: 5,
+                image: "https://randomuser.me/api/portraits/men/32.jpg",
               },
               {
                 name: "Neha Verma",
-                comment: "Booked during an emergency. Reached within 10 minutes. Highly recommend!",
+                comment: "Fast response during an emergency. The driver reached us in under 10 minutes and handled the situation calmly.",
                 rating: 4,
+                image: "https://randomuser.me/api/portraits/women/44.jpg",
               },
             ].map((review, index) => (
-              <div key={index} className="border rounded-lg p-4 flex flex-col md:flex-row justify-between items-start md:items-center shadow-sm">
-                <div>
-                  <p className="font-semibold">{review.name}</p>
-                  <p className="text-gray-600 text-sm">{review.comment}</p>
-                </div>
-                <div className="text-yellow-500 flex items-center mt-2 md:mt-0">
-                  {[...Array(review.rating)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-yellow-400" />
-                  ))}
+              <div
+                key={index}
+                className="border rounded-xl p-5 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-4"
+              >
+                <img
+                  src={review.image}
+                  alt={review.name}
+                  className="w-12 h-12 rounded-full object-cover border border-gray-300"
+                />
+                <div className="flex-1">
+                  <div className="flex justify-between items-center">
+                    <p className="font-semibold text-gray-900">{review.name}</p>
+                    <div className="flex text-yellow-500">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`w-4 h-4 ${i < review.rating ? "fill-yellow-400" : "text-gray-300"}`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-600 mt-1">{review.comment}</p>
                 </div>
               </div>
             ))}

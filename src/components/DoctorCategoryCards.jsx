@@ -80,10 +80,10 @@ const DoctorCategoryCards = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800">
+          <h2 className="text-4xl font-bold text-gray-800 mb-4 text-center">
             Doctors & <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Specialists</span>
-          </h1>
-          <p className="text-gray-600 mt-2 text-lg max-w-2xl mx-auto">
+          </h2>
+          <p className="text-gray-600  mx-auto">
             Choose from our comprehensive range of medical specialties and connect with expert doctors
           </p>
         </div>
@@ -133,7 +133,7 @@ const DoctorCategoryCards = () => {
                       </div>
                     </div>
                     <div className="p-6">
-                      <h3 className="text-xl font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors duration-300">
+                      <h3 className=" mb-2 text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-300">
                         {category.name}
                       </h3>
                       <p className="text-gray-600 text-sm mb-4">{category.description}</p>
