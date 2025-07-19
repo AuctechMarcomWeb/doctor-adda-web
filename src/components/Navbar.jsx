@@ -72,7 +72,7 @@ const Navbar = () => {
               </div>
               <div>
                 <div className="text-xs text-gray-500">Your Location</div>
-                <div className="text-sm text-gray-900 font-semibold flex items-center">
+                <div className="text-sm text-gray-800 font-semibold flex items-center">
                   Lucknow <span className="ml-1">▾</span>
                 </div>
               </div>
@@ -105,7 +105,7 @@ const Navbar = () => {
             <FaPhoneAlt className="text-gray-500 text-base" />
             <div >
                 <span className="text-xs block text-gray-500 ">Customer Support</span>
-                <span className="text-sm font-semibold text-gray-900">
+                <span className="text-sm font-semibold text-gray-800">
                 1800-572-0005 / 999-888-000-5
                 </span>
             </div>
@@ -118,19 +118,19 @@ const Navbar = () => {
         {/* Corporate Bookings */}
         <div className="text-gray-600 hidden md:block ">
           <span className="text-xs block text-gray-500">For Corporate Bookings/Enquiry</span>
-          <span className="text-sm font-semibold text-gray-900">931-125-387-5</span>
+          <span className="text-sm font-semibold text-gray-800">931-125-387-5</span>
         </div>
 
 
             {/* Login/Signup */}
-            <Link to="/login" className="flex items-center space-x-1 text-gray-900 cursor-pointer hidden sm:block">
+            <Link to="/login" className="flex items-center space-x-1 text-gray-800 cursor-pointer hidden sm:block">
               <div className="flex gap-2">
                 <img
                   src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80"
                   alt="User Avatar"
                   className="w-8 h-8 rounded-full object-cover cursor-pointer"
                 />
-                <span className="font-medium">Login/Signup</span>
+                <span className="text-sm font-semibold ">Login/Signup</span>
               </div>
             </Link>
 

@@ -14,9 +14,9 @@ const BannerSection = () => {
   }}>
       {/* Left Content */}
       <div className="max-w-7xl  py-20 ">
-        <h1 className="text-3xl md:text-4xl font-bold">
+        <h2 className="text-4xl font-bold ">
           Make India Healthy Package 2025
-        </h1>
+        </h2>
 
         <div className="flex items-center gap-4 mt-6">
           <span className="text-3xl text-xl flex items-center font-bold">
