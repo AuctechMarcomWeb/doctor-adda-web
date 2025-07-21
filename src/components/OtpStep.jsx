@@ -1,6 +1,7 @@
+/* eslint-disable no-unused-vars */
 import React, { useRef, useState, useEffect } from "react";
 import { Shield, Lock, CheckCircle, RotateCcw, Smartphone } from "lucide-react";
-
+import { postRequest } from "../Helpers";
 const slides = [
   {
     image: "https://plus.unsplash.com/premium_photo-1658506671316-0b293df7c72b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8ZG9jdG9yfGVufDB8fDB8fHww",
@@ -136,9 +137,7 @@ const OtpStep = ({
 
   const handleVerifyOtp = async () => {
     if (otp.join("").length !== 4) return;
-    
     setIsLoading(true);
-    
     try {
       // Simulate API call for OTP verification
       await new Promise(resolve => setTimeout(resolve, 1500));
