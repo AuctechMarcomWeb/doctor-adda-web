@@ -162,17 +162,17 @@ const PharmacyPage = () => {
           </div>
         </div>
 
-        <div className="space-y-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {filteredData.length > 0 ? (
-            filteredData.map((pharmacy, index) => (
-              <div key={index}>
-                <PharmacyCard {...pharmacy} />
+            filteredData.map((data, index) => (
+              <div key={index} className="animate-fadeIn" style={{ animationDelay: `${index * 0.1}s` }}>
+                <PharmacyCard {...data} />
               </div>
             ))
           ) : (
-            <div className="text-center py-12">
+            <div className="col-span-full text-center py-12">
               <div className="text-6xl mb-4">🔍</div>
-              <h3 className="text-xl font-semibold text-gray-700 mb-2">No pharmacies found</h3>
+              <h3 className="text-xl font-semibold text-gray-700 mb-2">No ambulances found</h3>
               <p className="text-gray-500">Try adjusting your search or filter criteria</p>
             </div>
           )}

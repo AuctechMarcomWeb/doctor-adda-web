@@ -1,6 +1,6 @@
 import React from "react";
 
-const HospitalCard = ({ name, type, capacity, price, location, rating, image }) => {
+const HospitalCard = ({ name, type,services, phone, location, rating, image }) => {
   return (
     <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-blue-200 transform hover:-translate-y-1">
       {/* Background gradient overlay */}
@@ -61,8 +61,8 @@ const HospitalCard = ({ name, type, capacity, price, location, rating, image }) 
               <span className="text-green-600 text-sm"><img src="https://i.pinimg.com/736x/71/26/7e/71267e196665cb6a2e48310bcf87f2c7.jpg"  height={25} width={25} alt="" /></span>
             </div>
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-wide">Capacity</p>
-              <p className="text-sm font-semibold text-gray-800">{capacity} Unit</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide">services</p>
+              <p className="text-sm font-semibold text-gray-800">{services} </p>
             </div>
           </div>
           
@@ -71,8 +71,8 @@ const HospitalCard = ({ name, type, capacity, price, location, rating, image }) 
               <span className="text-purple-600 text-sm">₹</span>
             </div>
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-wide">Price</p>
-              <p className="text-sm font-semibold text-gray-800">₹{price}</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide">phone</p>
+              <p className="text-sm font-semibold text-gray-800">{phone}</p>
             </div>
           </div>
           
