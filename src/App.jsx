@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -23,9 +24,16 @@ import PharmacyDetailPage from "./pages/PharmacyDetailPage";
 // Components
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+<<<<<<< Updated upstream
 
+=======
+import AmbulanceDetailPage from "./pages/AmbulanceDetailPage";
+import { useDispatch } from "react-redux";
+>>>>>>> Stashed changes
 
 function App() {
+  // const dispatch = useDispatch()
+  // dispatch(login())
   const [step, setStep] = useState(1);
   const [mobile, setMobile] = useState("");
 
