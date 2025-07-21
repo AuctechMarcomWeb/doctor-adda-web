@@ -58,7 +58,7 @@ const DoctorAddaLanding = () => {
         <div className=" max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className={`text-center mb-8 `}>
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Our <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent"> Services</span>
+              Why <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent"> Choose Us</span>
             </h2>
             <p className=" text-gray-600 max-w-3xl mx-auto">
               Comprehensive healthcare services designed to meet all your

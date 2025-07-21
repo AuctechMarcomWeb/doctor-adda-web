@@ -25,7 +25,7 @@ const AmbulanceDetailPage = () => {
         {/* Right Side - Basic Info */}
         <div className="w-full md:w-1/2 space-y-4">
           <div className="bg-white rounded-xl shadow-md p-5">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">FastCare Ambulance</h1>
+            <h1 className="text-2xl font-bold text-[#00679f] mb-2">FastCare Ambulance</h1>
             <p className="text-gray-600 flex items-center gap-2 text-sm">
               <MapPin className="w-4 h-4 text-red-500" /> Delhi NCR, Sector 45, Gurugram
             </p>

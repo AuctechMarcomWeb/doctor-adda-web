@@ -17,11 +17,13 @@ import PharmacyPage from "./pages/PharmacyPage";
 import DiagnosticPage from "./pages/DiagnosticPage";
 import DoctorPage from "./pages/DoctorPage";
 import HospitalPage from "./pages/HospitalPage";
+import AmbulanceDetailPage from "./pages/AmbulanceDetailPage";
+import PharmacyDetailPage from "./pages/PharmacyDetailPage";
 
 // Components
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import AmbulanceDetailPage from "./pages/AmbulanceDetailPage";
+
 
 function App() {
   const [step, setStep] = useState(1);
@@ -57,7 +59,9 @@ function App() {
                 <Route path="/bloodbank" element={<AmbulancePage />} />
                 <Route path="/ambulance" element={<AmbulancePage />} />
                 <Route path="/ambulance/:id" element={<AmbulanceDetailPage />} />
+                
                 <Route path="/pharmacy" element={<PharmacyPage />} />
+                <Route path="/pharmacy/:id" element={<PharmacyDetailPage />} />
                  <Route path="/diagnostic" element={<DiagnosticPage />} />
                  <Route path="/doctor" element={<DoctorPage />} />
                  <Route path="/hospital" element={<HospitalPage />} />

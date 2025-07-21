@@ -1,6 +1,11 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const PharmacyCard = ({ name, type, contact, storetiming, location, rating, image }) => {
+  const navigate = useNavigate();
+  const handleViewDetails = () => {
+    navigate(`/pharmacy/${name}`);
+  };
   return (
     <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-blue-200 transform hover:-translate-y-1">
       {/* Background gradient overlay */}
@@ -32,7 +37,7 @@ const PharmacyCard = ({ name, type, contact, storetiming, location, rating, imag
             </h2>
             <div className="flex items-center gap-2 mb-2">
               <div className="flex items-center  text-white text-xs px-3 py-1 rounded-full font-semibold shadow-sm" style={{
-    background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}}>
+                 background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}}>
                 <span className="mr-1">⭐</span>
                 <span className="font-semibold">{rating}</span>
               </div>
@@ -89,19 +94,22 @@ const PharmacyCard = ({ name, type, contact, storetiming, location, rating, imag
 
         {/* Action Buttons */}
         <div className="flex items-center justify-center">
-          <div className="flex flex-col sm:flex-row gap-3 w-80 ">
-          <button className="flex-1  hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" style={{
-    background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}}>
-            <span className="flex items-center justify-center gap-2">
-              <span>View Details</span>
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </span>
-          </button>
-          
-          
-        </div>
+          <div className="flex flex-col sm:flex-row gap-3 w-80">
+            <button
+              onClick={handleViewDetails}
+              className="flex-1 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              style={{
+                background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
+              }}
+            >
+              <span className="flex items-center justify-center gap-2">
+                <span>View Details</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </span>
+            </button>
+          </div>
         </div>
       </div>
       
