@@ -48,7 +48,7 @@ const LoginStep = ({ setStep, setMobile }) => {
 
     try {
       const res = await postRequest({ url: "auth/sendOtp", cred });
-      console.log("OTP API Response:", res);
+      console.log("OTP API Response:", res?.data?.data);
       if (res?.statusCode === 200 && res?.success) {
         toast.success(res?.message || "OTP sent successfully!");
         // setStep(2);

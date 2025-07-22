@@ -24,12 +24,6 @@ import PharmacyDetailPage from "./pages/PharmacyDetailPage";
 // Components
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-<<<<<<< Updated upstream
-
-=======
-import AmbulanceDetailPage from "./pages/AmbulanceDetailPage";
-import { useDispatch } from "react-redux";
->>>>>>> Stashed changes
 
 function App() {
   // const dispatch = useDispatch()
