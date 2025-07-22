@@ -1,29 +1,38 @@
+/* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 import React, { useRef, useState, useEffect } from "react";
 import { Shield, Lock, CheckCircle, RotateCcw, Smartphone } from "lucide-react";
 import { postRequest } from "../Helpers";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/slices/userSlice";
+
 const slides = [
   {
-    image: "https://plus.unsplash.com/premium_photo-1658506671316-0b293df7c72b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8ZG9jdG9yfGVufDB8fDB8fHww",
+    image:
+      "https://plus.unsplash.com/premium_photo-1658506671316-0b293df7c72b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8ZG9jdG9yfGVufDB8fDB8fHww",
     heading: "Secure & Fast",
     subtext: "Quick OTP Verification for Seamless Login",
     icon: Shield,
   },
   {
-    image: "https://images.unsplash.com/photo-1638202993928-7267aad84c31?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZG9jdG9yfGVufDB8fDB8fHww",
+    image:
+      "https://images.unsplash.com/photo-1638202993928-7267aad84c31?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZG9jdG9yfGVufDB8fDB8fHww",
     heading: "Your Data is Safe",
     subtext: "End-to-End Encryption of Sensitive Info",
     icon: Lock,
   },
 ];
 
-const OtpStep = ({ 
-  mobile = "9876543210", 
+const OtpStep = ({
+  mobile = "",
   onVerifySuccess,
   redirectTo = "/user-details",
   authToken = null,
-  onAuthSuccess = null 
+  onAuthSuccess = null,
 }) => {
+  const dispatch = useDispatch();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [otp, setOtp] = useState(["", "", "", ""]);
   const [isLoading, setIsLoading] = useState(false);
@@ -58,7 +67,7 @@ const OtpStep = ({
       const newOtp = [...otp];
       newOtp[index] = value;
       setOtp(newOtp);
-      
+
       if (index < otpRefs.current.length - 1) {
         otpRefs.current[index + 1].focus();
       }
@@ -77,14 +86,17 @@ const OtpStep = ({
   // Handle paste
   const handlePaste = (e) => {
     e.preventDefault();
-    const pastedData = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 4);
+    const pastedData = e.clipboardData
+      .getData("text")
+      .replace(/\D/g, "")
+      .slice(0, 4);
     const newOtp = [...otp];
-    
+
     for (let i = 0; i < pastedData.length; i++) {
       newOtp[i] = pastedData[i];
     }
     setOtp(newOtp);
-    
+
     // Focus on the next empty field or last field
     const nextIndex = Math.min(pastedData.length, 3);
     otpRefs.current[nextIndex].focus();
@@ -93,13 +105,13 @@ const OtpStep = ({
   // Navigation function
   const navigateToNextScreen = () => {
     // Check if we're in a React Router environment
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       // For React Router (if using useNavigate hook)
       if (window.history && window.history.pushState) {
-        window.history.pushState(null, '', redirectTo);
-        
+        window.history.pushState(null, "", redirectTo);
+
         // Dispatch a custom event to trigger route change
-        window.dispatchEvent(new PopStateEvent('popstate'));
+        window.dispatchEvent(new PopStateEvent("popstate"));
       } else {
         // Fallback to window.location
         window.location.href = redirectTo;
@@ -113,72 +125,84 @@ const OtpStep = ({
       // Store auth token (you can customize this based on your auth system)
       if (token) {
         // Note: In a real app, you might want to use httpOnly cookies or secure storage
-        sessionStorage.setItem('authToken', token);
-        sessionStorage.setItem('userMobile', mobile);
-        sessionStorage.setItem('loginTime', new Date().toISOString());
+        sessionStorage.setItem("authToken", token);
+        sessionStorage.setItem("userMobile", mobile);
+        sessionStorage.setItem("loginTime", new Date().toISOString());
       }
-      
+
       // Set user as authenticated
-      sessionStorage.setItem('isAuthenticated', 'true');
-      
+      sessionStorage.setItem("isAuthenticated", "true");
+
       // Call custom auth success handler if provided
       if (onAuthSuccess) {
         onAuthSuccess({
           token,
           mobile,
           isAuthenticated: true,
-          loginTime: new Date().toISOString()
+          loginTime: new Date().toISOString(),
         });
       }
     } catch (error) {
-      console.error('Error storing auth data:', error);
+      console.error("Error storing auth data:", error);
     }
   };
 
   const handleVerifyOtp = async () => {
-    if (otp.join("").length !== 4) return;
+    const otpCode = otp.join("");
+
+    // 1. Check OTP length
+    if (otpCode.length !== 4) {
+      toast.error("Please enter a 4-digit OTP");
+      return;
+    }
+
     setIsLoading(true);
+
     try {
-      // Simulate API call for OTP verification
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Simulate API response (replace with actual API call)
-      const apiResponse = {
-        success: true,
-        token: authToken || `mock-jwt-token-${Date.now()}`,
-        user: {
-          mobile,
-          verified: true
-        }
+      const cred = {
+        phone: mobile,
+        otp: otpCode,
       };
-      
-      if (apiResponse.success) {
+
+      console.log("Verifying OTP with payload:", cred);
+
+      // 2. API call
+      const response = await postRequest({ url: "auth/verifyOtp", cred });
+
+      console.log("OTP verification response:", response);
+
+
+      // 3. Handle success
+      if (response?.data?.success && response?.data?.statusCode === 200) {
+        const token = response?.data?.data?.authToken;
+        navigateToNextScreen(); // Save token (e.g., to localStorage or context)
+
+        if (!token) {
+          throw new Error("Token not found in response");
+        }
+        const userData = response?.data
+        dispatch(login(userData))
+
         setIsVerified(true);
-        
-        // Handle authentication success
-        handleAuthSuccess(apiResponse.token);
-        
-        // Show success message briefly
-        setTimeout(() => {
-          // Call the success callback if provided
-          if (onVerifySuccess) {
-            onVerifySuccess({
-              token: apiResponse.token,
-              user: apiResponse.user,
-              mobile
-            });
-          } else {
-            // Default navigation behavior
-            navigateToNextScreen();
-          }
-        }, 1000);
-      } else {
-        throw new Error('OTP verification failed');
+        handleAuthSuccess(token);
+      }
+      // 4. Handle API-level errors
+      else {
+        const errorMessage = response?.message || "OTP verification failed";
+        toast.error(errorMessage);
       }
     } catch (error) {
-      console.error('OTP verification error:', error);
-      alert('OTP verification failed. Please try again.');
+      console.error("OTP verification error:", error);
+
+      if (error?.response?.data?.message) {
+        // Backend returned a specific error message
+        toast.error(error.response.data.message);
+      } else {
+        // General or network error
+        toast.error(error.message || "Something went wrong. Please try again.");
+      }
     } finally {
+      // 5. Stop loading spinner
       setIsLoading(false);
     }
   };
@@ -188,22 +212,26 @@ const OtpStep = ({
     setCanResend(false);
     setOtp(["", "", "", ""]);
     otpRefs.current[0].focus();
-    
+
     try {
+      const cred = { phone: mobile };
       // Simulate API call to resend OTP
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log('OTP resent to', mobile);
-      
-      // You can add a toast notification here
-      // toast.success('OTP sent successfully!');
+      console.log("OTP resent to", cred);
+      const response = await postRequest({
+        url: "auth/resendOtp",
+        cred,
+      });
+      console.log("Resend OTP response:", response?.data?.data);
+
+      toast.success('OTP sent successfully!');
     } catch (error) {
-      console.error('Error resending OTP:', error);
-      alert('Failed to resend OTP. Please try again.');
+      console.error("Error resending OTP:", error);
+      alert("Failed to resend OTP. Please try again.");
     }
   };
 
   const { image, heading, subtext, icon: Icon } = slides[currentSlide];
-  const isOtpComplete = otp.every(digit => digit !== "");
+  const isOtpComplete = otp.every((digit) => digit !== "");
 
   return (
     <div className="flex items-center justify-center p-4">
@@ -212,7 +240,7 @@ const OtpStep = ({
         <div className="hidden lg:flex lg:w-1/2 relative text-white flex-col justify-center items-center p-12 transition-all duration-700 ease-in-out">
           <div className="absolute inset-0 bg-gradient-to-br from-emerald-600 via-blue-600 to-indigo-700"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
-          
+
           <div className="relative z-10 text-center space-y-6">
             <div className="w-32 h-32 mx-auto mb-8 relative">
               <div className="absolute inset-0 bg-white/10 rounded-full blur-xl"></div>
@@ -225,7 +253,7 @@ const OtpStep = ({
                 <Icon size={24} className="text-white" />
               </div>
             </div>
-            
+
             <div className="space-y-3">
               <h3 className="text-3xl font-bold tracking-tight">{heading}</h3>
               <p className="text-white/90 text-lg font-medium">{subtext}</p>
@@ -239,8 +267,8 @@ const OtpStep = ({
                 key={index}
                 onClick={() => setCurrentSlide(index)}
                 className={`transition-all duration-300 ${
-                  index === currentSlide 
-                    ? "w-8 h-3 bg-white rounded-full" 
+                  index === currentSlide
+                    ? "w-8 h-3 bg-white rounded-full"
                     : "w-3 h-3 bg-white/40 rounded-full hover:bg-white/60"
                 }`}
               />
@@ -251,12 +279,16 @@ const OtpStep = ({
         {/* Right OTP Form Section */}
         <div className="w-full lg:w-1/2 p-8 lg:p-12 bg-white relative">
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-100 to-blue-100 rounded-full -translate-y-16 translate-x-16 opacity-50"></div>
-          
+
           <div className="relative z-10 space-y-8">
             <div className="text-center space-y-4">
-              <div className={`w-16 h-16 mx-auto bg-gradient-to-br rounded-full flex items-center justify-center shadow-lg transition-all duration-300 ${
-                isVerified ? 'from-green-500 to-emerald-500' : 'from-emerald-500 to-blue-500'
-              }`}>
+              <div
+                className={`w-16 h-16 mx-auto bg-gradient-to-br rounded-full flex items-center justify-center shadow-lg transition-all duration-300 ${
+                  isVerified
+                    ? "from-green-500 to-emerald-500"
+                    : "from-emerald-500 to-blue-500"
+                }`}
+              >
                 {isVerified ? (
                   <CheckCircle className="text-white" size={28} />
                 ) : (
@@ -265,7 +297,7 @@ const OtpStep = ({
               </div>
               <div className="space-y-2">
                 <h2 className="text-3xl font-bold text-gray-900 tracking-tight">
-                  {isVerified ? 'Verified!' : 'Verify OTP'}
+                  {isVerified ? "Verified!" : "Verify OTP"}
                 </h2>
                 <p className="text-gray-600 text-lg">
                   {isVerified ? (
@@ -275,7 +307,9 @@ const OtpStep = ({
                   ) : (
                     <>
                       Enter the 4-digit code sent to{" "}
-                      <span className="font-semibold text-gray-900">+91-{mobile}</span>
+                      <span className="font-semibold text-gray-900">
+                        +91-{mobile}
+                      </span>
                     </>
                   )}
                 </p>
@@ -293,9 +327,9 @@ const OtpStep = ({
                       value={otp[index]}
                       disabled={isVerified}
                       className={`w-14 h-14 text-2xl font-bold text-center border-2 rounded-xl transition-all duration-300 focus:outline-none focus:ring-4 hover:border-gray-300 ${
-                        isVerified 
-                          ? 'border-green-300 bg-green-50 text-green-700' 
-                          : 'border-gray-200 bg-gray-50 focus:bg-white focus:border-emerald-500 focus:ring-emerald-500/20'
+                        isVerified
+                          ? "border-green-300 bg-green-50 text-green-700"
+                          : "border-gray-200 bg-gray-50 focus:bg-white focus:border-emerald-500 focus:ring-emerald-500/20"
                       }`}
                       onChange={(e) => handleOtpChange(e, index)}
                       onKeyDown={(e) => handleKeyDown(e, index)}
@@ -304,7 +338,7 @@ const OtpStep = ({
                     />
                   ))}
                 </div>
-                
+
                 {!isVerified && (
                   <div className="text-center">
                     <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
@@ -320,9 +354,9 @@ const OtpStep = ({
                 onClick={handleVerifyOtp}
                 disabled={!isOtpComplete || isLoading || isVerified}
                 className={`w-full py-4 font-semibold rounded-xl flex items-center justify-center gap-3 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 ${
-                  isVerified 
-                    ? 'bg-green-600 text-white' 
-                    : 'bg-gradient-to-r from-emerald-600 to-blue-600 text-white hover:from-emerald-700 hover:to-blue-700'
+                  isVerified
+                    ? "bg-green-600 text-white"
+                    : "bg-gradient-to-r from-emerald-600 to-blue-600 text-white hover:from-emerald-700 hover:to-blue-700"
                 }`}
               >
                 {isLoading ? (
@@ -375,7 +409,8 @@ const OtpStep = ({
                 </div>
                 <div>
                   <p className="text-sm text-gray-700">
-                    <span className="font-semibold">Secure:</span> Your OTP is encrypted and expires in 5 minutes
+                    <span className="font-semibold">Secure:</span> Your OTP is
+                    encrypted and expires in 5 minutes
                   </p>
                 </div>
               </div>
@@ -388,7 +423,11 @@ const OtpStep = ({
       <div className="lg:hidden fixed bottom-4 left-4 right-4 bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-white/20">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-full overflow-hidden">
-            <img src={image} alt={heading} className="w-full h-full object-cover" />
+            <img
+              src={image}
+              alt={heading}
+              className="w-full h-full object-cover"
+            />
           </div>
           <div className="flex-1">
             <h4 className="font-semibold text-gray-900 text-sm">{heading}</h4>
