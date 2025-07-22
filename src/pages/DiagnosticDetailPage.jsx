@@ -88,15 +88,15 @@ const DiagnosticDetailPage = () => {
       <div className="sticky top-0 z-40 bg-white/80 backdrop-blur-lg border-b border-gray-200/50 shadow-lg">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex flex-wrap gap-4 justify-center">
-            <button className="group bg-gradient-to-r from-red-500 to-red-600 text-white px-8 py-3 rounded-full hover:from-red-600 hover:to-red-700 transition-all duration-300 font-medium flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+            <button className="group bg-white from-red-500 to-red-600 text-[#00659d] px-8 py-3 rounded-full hover:bg-[#00659d] hover:text-white transition-all duration-300 font-medium flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
               <PhoneCall className="w-5 h-5 group-hover:animate-pulse" />
               Call Now
             </button>
-            <button className="group bg-gradient-to-r from-blue-500 to-blue-600 text-white px-8 py-3 rounded-full hover:from-blue-600 hover:to-blue-700 transition-all duration-300 font-medium flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+            <button className="group bg-white text-[#00659d] px-8 py-3 rounded-full hover:bg-[#00659d] hover:text-white transition-all duration-300 font-medium flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
               <Mail className="w-5 h-5 group-hover:animate-bounce" />
               Email Us
             </button>
-            <button className="group bg-gradient-to-r from-green-500 to-green-600 text-white px-8 py-3 rounded-full hover:from-green-600 hover:to-green-700 transition-all duration-300 font-medium flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+            <button className="group bg- text-[#00659d] px-8 py-3 rounded-full hover:bg-[#00659d] hover:text-white transition-all duration-300 font-medium flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
               <LocateFixed className="w-5 h-5 group-hover:animate-pulse" />
               Get Directions
             </button>
@@ -123,7 +123,7 @@ const DiagnosticDetailPage = () => {
               
               <div className="p-8 space-y-6">
                 <div className="space-y-4">
-                  <label className="group/item flex items-center gap-4 p-4 rounded-2xl jbg-blue-50 transition-colors cursor-pointer border border-transparent hover:border-blue-200">
+                  <label className="group/item flex items-center gap-4 p-4 rounded-2xl bg-blue-50 transition-colors cursor-pointer border border-transparent hover:border-blue-200">
                     <input type="checkbox" className="w-5 h-5 rounded border-2 border-blue-300 text-blue-600 focus:ring-blue-500 focus:ring-2" />
                     <div className="flex-1">
                       <div className="font-semibold text-gray-900">Lipid Profile</div>
@@ -132,7 +132,7 @@ const DiagnosticDetailPage = () => {
                     <CheckCircle className="w-5 h-5 text-green-500 opacity-0 group-hover/item:opacity-100 transition-opacity" />
                   </label>
                   
-                  <label className="group/item flex items-center gap-4 p-4 rounded-2xl hover:bg-blue-50 transition-colors cursor-pointer border border-transparent hover:border-blue-200">
+                  <label className="group/item flex items-center gap-4 p-4 rounded-2xl bg-blue-50 transition-colors cursor-pointer border border-transparent hover:border-blue-200">
                     <input type="checkbox" className="w-5 h-5 rounded border-2 border-blue-300 text-blue-600 focus:ring-blue-500 focus:ring-2" />
                     <div className="flex-1">
                       <div className="font-semibold text-gray-900">Liver Function Test</div>

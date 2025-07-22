@@ -20,6 +20,7 @@ import HospitalPage from "./pages/HospitalPage";
 import AmbulanceDetailPage from "./pages/AmbulanceDetailPage";
 import PharmacyDetailPage from "./pages/PharmacyDetailPage";
 import DiagnosticDetailPage from "./pages/DiagnosticDetailPage";
+import HospitalDetailPage from "./pages/HospitalDetailPage";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -67,6 +68,7 @@ function App() {
                  <Route path="/diagnostic/:id" element={<DiagnosticDetailPage />} />
                  <Route path="/doctor" element={<DoctorPage />} />
                  <Route path="/hospital" element={<HospitalPage />} />
+                 <Route path="/hospital/:id" element={<HospitalDetailPage />} />
               </Routes>
               <Footer />
             </>
