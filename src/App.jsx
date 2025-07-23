@@ -20,6 +20,8 @@ import DoctorPage from "./pages/DoctorPage";
 import HospitalPage from "./pages/HospitalPage";
 import AmbulanceDetailPage from "./pages/AmbulanceDetailPage";
 import PharmacyDetailPage from "./pages/PharmacyDetailPage";
+import DiagnosticDetailPage from "./pages/DiagnosticDetailPage";
+import HospitalDetailPage from "./pages/HospitalDetailPage";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -65,8 +67,10 @@ function App() {
                 <Route path="/pharmacy" element={<PharmacyPage />} />
                 <Route path="/pharmacy/:id" element={<PharmacyDetailPage />} />
                  <Route path="/diagnostic" element={<DiagnosticPage />} />
+                 <Route path="/diagnostic/:id" element={<DiagnosticDetailPage />} />
                  <Route path="/doctor" element={<DoctorPage />} />
                  <Route path="/hospital" element={<HospitalPage />} />
+                 <Route path="/hospital/:id" element={<HospitalDetailPage />} />
               </Routes>
               <Footer />
             </>
