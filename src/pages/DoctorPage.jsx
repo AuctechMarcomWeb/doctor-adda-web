@@ -132,7 +132,7 @@ const DoctorPage = () => {
               </svg>
             </div>
             <h1 className="text-3xl md:text-4xl font-bold mb-4">
-              Consult Doctor by Specialty
+               Doctor & Specialists
             </h1>
             <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
               Select specialty to find relevant doctors for your healthcare needs
@@ -275,13 +275,13 @@ const DoctorPage = () => {
       </div>
 
       {/* Features Section */}
-      <div className="max-w-6xl mx-auto px-4 py-12">
+      <div className="max-w-6xl mx-auto px-4 ">
         <div className="text-center mb-10">
           <h2 className="text-3xl font-bold text-gray-800 mb-4">Why Choose Our Platform</h2>
           <p className="text-gray-600 max-w-2xl mx-auto">Experience healthcare like never before with our comprehensive medical services</p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 ">
           <FeatureCard
             icon={<svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
