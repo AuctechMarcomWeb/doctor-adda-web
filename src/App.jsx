@@ -22,6 +22,7 @@ import AmbulanceDetailPage from "./pages/AmbulanceDetailPage";
 import PharmacyDetailPage from "./pages/PharmacyDetailPage";
 import DiagnosticDetailPage from "./pages/DiagnosticDetailPage";
 import HospitalDetailPage from "./pages/HospitalDetailPage";
+import DoctorList from "./pages/DoctorList";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -69,6 +70,7 @@ function App() {
                  <Route path="/diagnostic" element={<DiagnosticPage />} />
                  <Route path="/diagnostic/:id" element={<DiagnosticDetailPage />} />
                  <Route path="/doctor" element={<DoctorPage />} />
+                 <Route path="/doctorlist" element={<DoctorList />} />
                  <Route path="/hospital" element={<HospitalPage />} />
                  <Route path="/hospital/:id" element={<HospitalDetailPage />} />
               </Routes>

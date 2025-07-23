@@ -1,6 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Smartphone, Heart, Calendar, Video, Shield, Star, Download, Sparkles } from 'lucide-react';
+import DownloadAppSection from "../components/DownloadAppSection";
+import { useNavigate } from "react-router-dom";
+
 
 const SpecialtyCard = ({ specialty, image, description, doctorCount, rating, availability }) => {
+   const navigate = useNavigate();
+  const handleViewDetails = () => {
+    navigate(`/doctorlist/${name}`);
+  };
+ 
   return (
     <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-105 overflow-hidden border border-gray-100">
       <div className="relative h-48 overflow-hidden">
@@ -15,15 +24,10 @@ const SpecialtyCard = ({ specialty, image, description, doctorCount, rating, ava
         </div>
       </div>
       
-      <div className="p-6">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <span className="text-gray-400">•</span>
-            <span className="text-gray-600 text-sm">{doctorCount} doctors</span>
-          </div>
-        </div>
+      <div className="px-18 py-4">
         
-        <button className="w-full bg-[#00659d] hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300">
+        
+        <button onClick={handleViewDetails} className="w-full bg-[#00659d] hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300">
           View Doctors
         </button>
       </div>
@@ -44,62 +48,52 @@ const FeatureCard = ({ icon, title, description }) => (
 );
 
 const DoctorPage = () => {
+  
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
+
+  const [isVisible, setIsVisible] = useState(false);
+  const [hoveredButton, setHoveredButton] = useState(null);
+   useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
+  const features = [
+    { icon: Heart, text: "Top Doctors" },
+    { icon: Video, text: "Video Consults" },
+    { icon: Calendar, text: "Instant Booking" },
+    { icon: Shield, text: "Secure & Private" }
+  ];
 
   const specialtyData = [
     {
       specialty: "General Physician",
       image: "https://i.pinimg.com/736x/e7/b2/2c/e7b22c1f928c1d06d00dc1c887ef9918.jpg",
-      description: "Primary healthcare and general medical consultation",
-      doctorCount: 45,
-      rating: 4.8,
-      availability: "Available",
       type: "general"
     },
     {
       specialty: "Gynaecology",
       image: "https://i.pinimg.com/1200x/6c/59/95/6c599523460f54ddeba81f3cd689ae04.jpg",
-      description: "Women's health and reproductive system care",
-      doctorCount: 28,
-      rating: 4.9,
-      availability: "Available",
       type: "specialist"
     },
     {
       specialty: "Dermatology",
       image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-      description: "Skin, hair, and nail related treatments",
-      doctorCount: 22,
-      rating: 4.7,
-      availability: "Busy",
       type: "specialist"
     },
     {
       specialty: "Diabetology",
       image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80",
-      description: "Diabetes management and endocrine disorders",
-      doctorCount: 18,
-      rating: 4.6,
-      availability: "Available",
       type: "specialist"
     },
     {
       specialty: "Cardiology",
       image: "https://images.unsplash.com/photo-1628348068343-c6a848d2b6dd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-      description: "Heart and cardiovascular system care",
-      doctorCount: 32,
-      rating: 4.9,
-      availability: "Available",
       type: "specialist"
     },
     {
       specialty: "Psychiatry",
       image: "https://images.unsplash.com/photo-1527613426441-4da17471b66d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2085&q=80",
-      description: "Mental health and psychological wellbeing",
-      doctorCount: 25,
-      rating: 4.8,
-      availability: "Available",
       type: "specialist"
     }
   ];
@@ -117,7 +111,7 @@ const DoctorPage = () => {
       <div className="relative text-white overflow-hidden" style={{
         background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
       }}>
-        <div className="absolute inset-0 bg-black/20"></div>
+        {/* <div className="absolute inset-0 bg-black/20"></div>
         <div className="absolute inset-0">
           <div className="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full animate-pulse"></div>
           <div className="absolute top-20 right-20 w-16 h-16 bg-white/10 rounded-full animate-pulse delay-75"></div>
@@ -138,31 +132,144 @@ const DoctorPage = () => {
               Select specialty to find relevant doctors for your healthcare needs
             </p>
           </div>
-        </div>
+        </div> */}
       </div>
 
-      {/* Book Appointment Banner */}
-      <div className="max-w-6xl mx-auto px-4 -mt-8 relative z-10">
-        <div className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold text-gray-800">Book Your Appointment</h2>
-                <p className="text-gray-600">Schedule consultation with top specialists instantly</p>
-              </div>
-            </div>
-            <button className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
-              Book Now
-            </button>
+      {/* Download App Banner */}
+      <div className="max-w-6xl mx-auto px-4 mb-0 pt-36">
+      <div className={`relative overflow-hidden  text-white rounded-3xl shadow-2xl transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`} style={{
+        background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
+      }}>
+        
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full animate-pulse"></div>
+          <div className="absolute top-1/2 -left-8 w-16 h-16 bg-cyan-300/20 rounded-full animate-bounce" style={{ animationDelay: '0.5s' }}></div>
+          <div className="absolute bottom-4 right-1/4 w-12 h-12 bg-purple-300/20 rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
+          
+          {/* Floating Icons */}
+          <div className="absolute top-6 right-16 animate-float">
+            <Sparkles className="w-6 h-6 text-yellow-300 opacity-70" />
+          </div>
+          <div className="absolute bottom-8 left-20 animate-float" style={{ animationDelay: '1.5s' }}>
+            <Star className="w-5 h-5 text-pink-300 opacity-60" />
           </div>
         </div>
-      </div>
 
+        {/* Glassmorphism Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent backdrop-blur-sm"></div>
+        
+        <div className="relative z-10 p-8 md:p-12">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
+            
+            {/* Left Content */}
+            <div className="flex-1 text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6 transform hover:scale-105 transition-transform duration-300">
+                <Smartphone className="w-4 h-4" />
+                <span className="text-sm font-medium">New App Available</span>
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+              </div>
+              
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-white to-cyan-100 bg-clip-text text-transparent leading-tight">
+                Your Health,
+                
+                <span className="">
+                  One Tap Away
+                  <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-pink-400 rounded-full transform scale-x-0 animate-scale-x"></div>
+                </span>
+              </h2>
+              
+              <p className="text-white/90 text-lg mb-8 max-w-2xl leading-relaxed">
+                Experience healthcare reimagined. Connect with world-class doctors, book instant consultations, 
+                and manage your health journey with our award-winning mobile app.
+              </p>
+              
+              {/* Feature Pills */}
+              <div className="flex flex-wrap gap-3 mb-8 justify-center lg:justify-start">
+                {features.map((feature, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-full px-4 py-2 transform hover:scale-105 hover:bg-white/25 transition-all duration-300"
+                    style={{ animationDelay: `${index * 0.2}s` }}
+                  >
+                    <feature.icon className="w-4 h-4" />
+                    <span className="text-sm font-medium">{feature.text}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Right Content - Buttons */}
+            <div className="flex flex-col gap-4 min-w-fit">
+              <button
+                onMouseEnter={() => setHoveredButton('download')}
+                onMouseLeave={() => setHoveredButton(null)}
+                className="group relative bg-white text-gray-900 px-8 py-4 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="relative z-10 flex items-center gap-3 group-hover:text-white transition-colors duration-300">
+                  <Download className="w-5 h-5" />
+                  Download App
+                  {hoveredButton === 'download' && (
+                    <div className="absolute -right-2 -top-2 w-3 h-3 bg-green-400 rounded-full animate-ping"></div>
+                  )}
+                </div>
+              </button>
+              
+              <button
+                onMouseEnter={() => setHoveredButton('book')}
+                onMouseLeave={() => setHoveredButton(null)}
+                className="group relative bg-gradient-to-r from-pink-500 to-rose-400 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-rose-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="relative z-10 flex items-center gap-3">
+                  <Calendar className="w-5 h-5" />
+                  Book Now
+                  {hoveredButton === 'book' && (
+                    <div className="absolute -right-2 -top-2 w-3 h-3 bg-yellow-400 rounded-full animate-bounce"></div>
+                  )}
+                </div>
+              </button>
+              
+              {/* Stats */}
+              <div className="flex gap-6 mt-4 text-center">
+                <div className="flex-1">
+                  <div className="text-2xl font-bold text-white">4.9★</div>
+                  <div className="text-xs text-white/70">App Rating</div>
+                </div>
+                <div className="flex-1">
+                  <div className="text-2xl font-bold text-white">50K+</div>
+                  <div className="text-xs text-white/70">Downloads</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          
+          
+        </div>
+      </div>
+      
+      <style jsx>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-10px) rotate(180deg); }
+        }
+        
+        @keyframes scale-x {
+          0% { transform: scaleX(0); }
+          100% { transform: scaleX(1); }
+        }
+        
+        .animate-float {
+          animation: float 3s ease-in-out infinite;
+        }
+        
+        .animate-scale-x {
+          animation: scale-x 2s ease-in-out 0.5s forwards;
+        }
+      `}</style>
+    </div>
       
 
       {/* Search and Filter Section */}
@@ -203,50 +310,8 @@ const DoctorPage = () => {
           </div>
         </div>
 
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="text-white p-6 rounded-2xl shadow-lg" style={{
-            background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"
-          }}>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-blue-100 text-sm">Specialties</p>
-                <p className="text-2xl font-bold">{filteredData.length}</p>
-              </div>
-              <svg className="w-12 h-12 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-              </svg>
-            </div>
-          </div>
-          
-          <div className="text-white p-6 rounded-2xl shadow-lg" style={{
-            background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"
-          }}>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-blue-100 text-sm">Total Doctors</p>
-                <p className="text-2xl font-bold">{filteredData.reduce((sum, item) => sum + item.doctorCount, 0)}</p>
-              </div>
-              <svg className="w-12 h-12 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
-            </div>
-          </div>
-          
-          <div className="text-white p-6 rounded-2xl shadow-lg" style={{
-            background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"
-          }}>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-blue-100 text-sm">Avg Rating</p>
-                <p className="text-2xl font-bold">4.8★</p>
-              </div>
-              <svg className="w-12 h-12 text-white/80 fill-current" viewBox="0 0 20 20">
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-              </svg>
-            </div>
-          </div>
-        </div>
+      
+        
 
         {/* Results Header */}
         <div className="flex items-center justify-between mb-6">
@@ -273,6 +338,9 @@ const DoctorPage = () => {
           )}
         </div>
       </div>
+
+      
+
 
       {/* Features Section */}
       <div className="max-w-6xl mx-auto px-4 ">
@@ -345,29 +413,9 @@ const DoctorPage = () => {
       </div>
 
       {/* Emergency Contact Banner */}
-      <div className="text-white py-8"  style={{
-        background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
-      }}>
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <div className="flex items-center justify-center gap-4 mb-4">
-            <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
-              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <div>
-              <h3 className="text-2xl font-bold">Emergency?</h3>
-              <p className="text-blue-100">Call immediately for urgent medical assistance</p>
-            </div>
-          </div>
-          <a href="tel:108" className="inline-flex items-center gap-2 bg-white text-blue-600 font-bold py-3 px-12 rounded-full text-lg hover:bg-blue-50 transition-all duration-300 transform hover:scale-105">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-            </svg>
-            <span>Call 108</span>
-          </a>
-        </div>
-      </div>
+      
+
+      <DownloadAppSection />
 
       <style jsx>{`
         @keyframes fadeIn {
