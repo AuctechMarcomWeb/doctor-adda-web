@@ -11,7 +11,9 @@ const DoctorCard = ({ name, specialization, experience, fee, location, rating, m
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Card Header with Gradient */}
-      <div className="relative h-16 bg-gradient-to-r from-blue-600 via-purple-600 to-teal-500 overflow-hidden">
+      <div className="relative h-16 bg-gradient-to-r from-blue-600 via-purple-600 to-teal-500 overflow-hidden" style={{
+        background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
+      }} >
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="absolute top-2 right-4 flex gap-1">
           {mode.includes("video") && (
@@ -165,7 +167,9 @@ const DoctorList = () => {
 
       {/* Hero Banner */}
       <div className="relative text-white overflow-hidden pt-24">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-700 to-teal-600" ></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-700 to-teal-600" style={{
+        background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
+      }} ></div>
         <div className="absolute inset-0 bg-black/20"></div>
         
         {/* Animated Elements */}
