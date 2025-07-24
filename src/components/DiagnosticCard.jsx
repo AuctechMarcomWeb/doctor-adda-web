@@ -1,6 +1,12 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const DiagnosticCard = ({ name, type, capacity, price, location, rating, image }) => {
+const DiagnosticCard = ({ name, type, services, timming, location, rating, image }) => {
+  const navigate = useNavigate();
+
+  const handleViewDetails = () => {
+    navigate(`/diagnostic/${name}`);
+  };
   return (
     <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-blue-200 transform hover:-translate-y-1">
       {/* Background gradient overlay */}
@@ -61,8 +67,8 @@ const DiagnosticCard = ({ name, type, capacity, price, location, rating, image }
               <span className="text-green-600 text-sm"><img src="https://i.pinimg.com/736x/71/26/7e/71267e196665cb6a2e48310bcf87f2c7.jpg"  height={25} width={25} alt="" /></span>
             </div>
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-wide">Capacity</p>
-              <p className="text-sm font-semibold text-gray-800">{capacity} Unit</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide">services</p>
+              <p className="text-sm font-semibold text-gray-800">{services} </p>
             </div>
           </div>
           
@@ -71,8 +77,8 @@ const DiagnosticCard = ({ name, type, capacity, price, location, rating, image }
               <span className="text-purple-600 text-sm">₹</span>
             </div>
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-wide">Price</p>
-              <p className="text-sm font-semibold text-gray-800">₹{price}</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide">timming</p>
+              <p className="text-sm font-semibold text-gray-800">{timming}</p>
             </div>
           </div>
           
@@ -89,19 +95,22 @@ const DiagnosticCard = ({ name, type, capacity, price, location, rating, image }
 
         {/* Action Buttons */}
         <div className="flex items-center justify-center">
-          <div className="flex flex-col sm:flex-row gap-3 w-80 ">
-          <button className="flex-1  hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" style={{
-    background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}}>
-            <span className="flex items-center justify-center gap-2">
-              <span>View Details</span>
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </span>
-          </button>
-          
-          
-        </div>
+          <div className="flex flex-col sm:flex-row gap-3 w-80">
+            <button
+              onClick={handleViewDetails}
+              className="flex-1 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              style={{
+                background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
+              }}
+            >
+              <span className="flex items-center justify-center gap-2">
+                <span>View Details</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </span>
+            </button>
+          </div>
         </div>
       </div>
       

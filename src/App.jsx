@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -17,13 +18,20 @@ import PharmacyPage from "./pages/PharmacyPage";
 import DiagnosticPage from "./pages/DiagnosticPage";
 import DoctorPage from "./pages/DoctorPage";
 import HospitalPage from "./pages/HospitalPage";
+import AmbulanceDetailPage from "./pages/AmbulanceDetailPage";
+import PharmacyDetailPage from "./pages/PharmacyDetailPage";
+import DiagnosticDetailPage from "./pages/DiagnosticDetailPage";
+import HospitalDetailPage from "./pages/HospitalDetailPage";
+import DoctorList from "./pages/DoctorList";
+import DoctorDetailPage from "./pages/DoctorDetailPage";
 
 // Components
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import AmbulanceDetailPage from "./pages/AmbulanceDetailPage";
 
 function App() {
+  // const dispatch = useDispatch()
+  // dispatch(login())
   const [step, setStep] = useState(1);
   const [mobile, setMobile] = useState("");
 
@@ -57,10 +65,16 @@ function App() {
                 <Route path="/bloodbank" element={<AmbulancePage />} />
                 <Route path="/ambulance" element={<AmbulancePage />} />
                 <Route path="/ambulance/:id" element={<AmbulanceDetailPage />} />
+                
                 <Route path="/pharmacy" element={<PharmacyPage />} />
+                <Route path="/pharmacy/:id" element={<PharmacyDetailPage />} />
                  <Route path="/diagnostic" element={<DiagnosticPage />} />
+                 <Route path="/diagnostic/:id" element={<DiagnosticDetailPage />} />
                  <Route path="/doctor" element={<DoctorPage />} />
+                 <Route path="/doctorlist" element={<DoctorList />} />
+                 <Route path="/doctordetail/:id" element={<DoctorDetailPage />} />
                  <Route path="/hospital" element={<HospitalPage />} />
+                 <Route path="/hospital/:id" element={<HospitalDetailPage />} />
               </Routes>
               <Footer />
             </>

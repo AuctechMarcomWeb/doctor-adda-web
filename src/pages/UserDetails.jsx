@@ -1,6 +1,8 @@
+/* eslint-disable no-undef */
 import React, { useState, useEffect } from "react";
 import { User, Mail, Users, CheckCircle, ArrowRight, UserCheck, Settings } from "lucide-react";
-
+import { patchRequest } from "../Helpers";
+import { useSelector } from "react-redux";
 const slides = [
   {
     image: "https://plus.unsplash.com/premium_photo-1673953509975-576678fa6710?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fGRvY3RvcnxlbnwwfHwwfHx8MA%3D%3D",
@@ -17,6 +19,7 @@ const slides = [
 ];
 
 const UserDetails = ({ onSubmitSuccess }) => {
+  const userId = useSelector(state => state.user.userData.data._id)
   const [userData, setUserData] = useState({
     name: "",
     email: "",
@@ -26,6 +29,9 @@ const UserDetails = ({ onSubmitSuccess }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
+
+  console.log("user id fetched", userId);
+  
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -67,24 +73,35 @@ const UserDetails = ({ onSubmitSuccess }) => {
     }
   };
 
-  const handleSubmit = async () => {
-    if (!validateForm()) return;
-    
-    setIsLoading(true);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    console.log("User Data Submitted:", userData);
-    
+ const handleSubmit = async () => {
+  if (!validateForm()) return;
+
+  setIsLoading(true);
+
+  const cred = {
+    name: userData.name,
+    email: userData.email,
+    gender: userData.gender
+  };
+
+  console.log("User Data to Submit:", cred);
+
+  try {
+    const res = await patchRequest({ url: `auth/updateProfile/${userId}`, cred });
+    console.log("Response from updateProfile:", res?.data?.data);
+
     if (onSubmitSuccess) {
       onSubmitSuccess(userData);
     } else {
       alert("Profile completed successfully!");
     }
-    
+  } catch (err) {
+    console.error("Error in updateProfile API:", err);
+    toast.error("Failed to update profile. Please try again.");
+  } finally {
     setIsLoading(false);
-  };
+  }
+};
 
   const { image, heading, subtext, icon: Icon } = slides[currentSlide];
 

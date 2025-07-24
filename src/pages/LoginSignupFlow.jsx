@@ -5,6 +5,8 @@ import UserDetails from "./UserDetails";
 
 const LoginSignupFlow = () => {
   const [step, setStep] = useState(1);
+  console.log("step",step);
+  
   const [mobile, setMobile] = useState("");
 
   return (

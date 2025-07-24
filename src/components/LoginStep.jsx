@@ -1,21 +1,28 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect, useState } from "react";
 import { ArrowRight, Shield, Clock, Award, Phone, Gift } from "lucide-react";
-
+import toast, { Toaster } from "react-hot-toast";
+import { postRequest } from "../Helpers";
+import { useNavigate } from "react-router-dom";
 const slides = [
   {
-    image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8ZG9jdG9yfGVufDB8fDB8fHww",
+    image:
+      "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8ZG9jdG9yfGVufDB8fDB8fHww",
     heading: "Cost Effective",
     subtext: "Honest Price Guaranteed",
     icon: Shield,
   },
   {
-    image: "https://media.istockphoto.com/id/868644242/photo/close-up-of-stethoscope-and-doctor.webp?a=1&b=1&s=612x612&w=0&k=20&c=R7-U9IxWlMHKapHd0J9rM-bb9f3_xAVj5MEplpFpawo=",
+    image:
+      "https://media.istockphoto.com/id/868644242/photo/close-up-of-stethoscope-and-doctor.webp?a=1&b=1&s=612x612&w=0&k=20&c=R7-U9IxWlMHKapHd0J9rM-bb9f3_xAVj5MEplpFpawo=",
     heading: "Trusted Labs",
     subtext: "Verified and Certified Partners",
     icon: Award,
   },
   {
-    image: "https://media.istockphoto.com/id/1301595548/photo/female-doctor-stock-photo.webp?a=1&b=1&s=612x612&w=0&k=20&c=PW3Lbgi6F8DjYdKffpo6Uyo07ZBxw69utLcASzxX3b0=",
+    image:
+      "https://media.istockphoto.com/id/1301595548/photo/female-doctor-stock-photo.webp?a=1&b=1&s=612x612&w=0&k=20&c=PW3Lbgi6F8DjYdKffpo6Uyo07ZBxw69utLcASzxX3b0=",
     heading: "Home Sample Collection",
     subtext: "Safe & Convenient Testing",
     icon: Clock,
@@ -25,17 +32,39 @@ const slides = [
 const LoginStep = ({ setStep, setMobile }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [mobileNumber, setMobileNumber] = useState("");
+  console.log("mobileNumber", mobileNumber);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
     if (!mobileNumber || mobileNumber.length < 10) {
+      toast.error("Please enter a valid 10-digit mobile number");
+
       return;
     }
     setIsLoading(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setStep(2);
-    setIsLoading(false);
+    // Your login API call here
+    const cred = { phone: mobileNumber };
+    console.log("Sending OTP request payload:", cred);
+
+    try {
+      const res = await postRequest({ url: "auth/sendOtp", cred });
+      console.log("OTP API Response:", res?.data?.data);
+      if (res?.statusCode === 200 && res?.success) {
+        toast.success(res?.message || "OTP sent successfully!");
+        // setStep(2);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        setStep(2);
+        // setIsLoading(false);
+      } else {
+        toast.error(res?.message || "Failed to send OTP.");
+      }
+    } catch (err) {
+      console.error("OTP API Error:", err);
+      toast.error(err?.response?.data?.message || "Failed to send OTP.");
+    } finally {
+      setIsLoading(false);
+    }
+
   };
 
   useEffect(() => {
@@ -54,7 +83,7 @@ const LoginStep = ({ setStep, setMobile }) => {
         <div className="hidden lg:flex lg:w-1/2 relative text-white flex-col justify-center items-center p-12 transition-all duration-700 ease-in-out">
           <div className="absolute inset-0 bg-gradient-to-br from-emerald-600 via-blue-600 to-indigo-700"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
-          
+
           <div className="relative z-10 text-center space-y-6">
             <div className="w-32 h-32 mx-auto mb-8 relative">
               <div className="absolute inset-0 bg-white/10 rounded-full blur-xl"></div>
@@ -67,7 +96,7 @@ const LoginStep = ({ setStep, setMobile }) => {
                 <Icon size={24} className="text-white" />
               </div>
             </div>
-            
+
             <div className="space-y-3">
               <h3 className="text-3xl font-bold tracking-tight">{heading}</h3>
               <p className="text-white/90 text-lg font-medium">{subtext}</p>
@@ -81,8 +110,8 @@ const LoginStep = ({ setStep, setMobile }) => {
                 key={index}
                 onClick={() => setCurrentSlide(index)}
                 className={`transition-all duration-300 ${
-                  index === currentSlide 
-                    ? "w-8 h-3 bg-white rounded-full" 
+                  index === currentSlide
+                    ? "w-8 h-3 bg-white rounded-full"
                     : "w-3 h-3 bg-white/40 rounded-full hover:bg-white/60"
                 }`}
               />
@@ -93,11 +122,15 @@ const LoginStep = ({ setStep, setMobile }) => {
         {/* Right Login Form Section */}
         <div className="w-full lg:w-1/2 p-8 lg:p-12 bg-white relative">
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-100 to-blue-100 rounded-full -translate-y-16 translate-x-16 opacity-50"></div>
-          
+
           <div className="relative z-10 space-y-8">
             <div className="space-y-3">
-              <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Welcome Back</h2>
-              <p className="text-gray-600 text-lg">Enter your mobile number to continue</p>
+              <h2 className="text-3xl font-bold text-gray-900 tracking-tight">
+                Welcome To Doctor Adda
+              </h2>
+              <p className="text-gray-600 text-lg">
+                Enter your mobile number to continue
+              </p>
             </div>
 
             <div className="space-y-6">
@@ -117,7 +150,9 @@ const LoginStep = ({ setStep, setMobile }) => {
                       placeholder="Enter 10-digit mobile number"
                       value={mobileNumber}
                       onChange={(e) => {
-                        const value = e.target.value.replace(/\D/g, '').slice(0, 10);
+                        const value = e.target.value
+                          .replace(/\D/g, "")
+                          .slice(0, 10);
                         setMobileNumber(value);
                         setMobile(value);
                       }}
@@ -128,7 +163,10 @@ const LoginStep = ({ setStep, setMobile }) => {
               </div>
 
               <button
-                onClick={handleLogin}
+                onClick={() => {
+                  handleLogin()
+                  setStep(2)
+                }}
                 disabled={mobileNumber.length < 10 || isLoading}
                 className="w-full py-4 bg-gradient-to-r from-emerald-600 to-blue-600 text-white font-semibold rounded-xl flex items-center justify-center gap-3 hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0"
               >
@@ -151,7 +189,9 @@ const LoginStep = ({ setStep, setMobile }) => {
                 <div>
                   <p className="text-sm text-gray-700">
                     <span className="font-semibold">Welcome Bonus:</span> Get{" "}
-                    <span className="text-emerald-600 font-bold text-lg">₹1000</span>{" "}
+                    <span className="text-emerald-600 font-bold text-lg">
+                      ₹1000
+                    </span>{" "}
                     cash in your wallet
                   </p>
                 </div>
@@ -179,7 +219,11 @@ const LoginStep = ({ setStep, setMobile }) => {
       <div className="lg:hidden fixed bottom-4 left-4 right-4 bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-white/20">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-full overflow-hidden">
-            <img src={image} alt={heading} className="w-full h-full object-cover" />
+            <img
+              src={image}
+              alt={heading}
+              className="w-full h-full object-cover"
+            />
           </div>
           <div className="flex-1">
             <h4 className="font-semibold text-gray-900 text-sm">{heading}</h4>

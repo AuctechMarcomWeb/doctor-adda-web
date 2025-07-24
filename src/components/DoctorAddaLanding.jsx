@@ -38,7 +38,7 @@ const DoctorAddaLanding = () => {
               { number: "1000+", label: "Expert Doctors" },
               { number: "50,000+", label: "Happy Patients" },
               { number: "25+", label: "Specializations" },
-              { number: "99.9%", label: "Uptime" },
+              { number: "99.9%", label: "Ontime" },
             ].map((stat, index) => (
               <div
                 key={index}
@@ -56,11 +56,11 @@ const DoctorAddaLanding = () => {
         {/* Services Section */}
       <section id="services" className=" py-8 bg-white">
         <div className=" max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`text-center mb-16 `}>
+          <div className={`text-center mb-8 `}>
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Our <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent"> Services</span>
+              Why <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent"> Choose Us</span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className=" text-gray-600 max-w-3xl mx-auto">
               Comprehensive healthcare services designed to meet all your
               medical needs
             </p>
@@ -112,7 +112,7 @@ const DoctorAddaLanding = () => {
                 <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform">
                   {service.icon}
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                <h3 className="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-300  mb-4">
                   {service.title}
                 </h3>
                 <p className="text-gray-600 leading-relaxed">

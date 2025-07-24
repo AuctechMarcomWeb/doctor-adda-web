@@ -144,13 +144,13 @@ const FeaturedHospitals2 = () => {
   return (
     <div className="max-w-7xl mx-auto py-8 px-4 relative">
       <div className="text-center mb-8">
-        <h2 className="text-4xl font-bold text-gray-800 mb-6">
+        <h2 className="text-4xl font-bold text-gray-800 mb-4">
           Featured{" "}
           <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
             Hospitals
           </span>
         </h2>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+        <p className=" text-gray-600 max-w-3xl mx-auto">
           Discover India's leading healthcare institutions offering world-class
           medical care, cutting-edge technology, and compassionate treatment.
         </p>
@@ -202,7 +202,7 @@ const FeaturedHospitals2 = () => {
               </div>
 
               <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">
+                <h3 className=" mb-2 text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-300">
                   {hospital.name}
                 </h3>
                 <p

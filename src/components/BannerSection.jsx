@@ -14,14 +14,14 @@ const BannerSection = () => {
   }}>
       {/* Left Content */}
       <div className="max-w-7xl  py-20 ">
-        <h1 className="text-3xl md:text-4xl font-bold">
+        <h2 className="text-4xl font-bold ">
           Make India Healthy Package 2025
-        </h1>
+        </h2>
 
         <div className="flex items-center gap-4 mt-6">
           <span className="text-3xl text-xl flex items-center font-bold">
-            @<FaRupeeSign className="mr-1" />
-            99
+            @ 
+            Smart Healthcare Access – Anytime, Anywhere
           </span>
           <button className="bg-Blue-400 border border-white text-white font-semibold px-4 py-2 rounded hover:bg-white hover:text-[#0074b2] transition">
             Book Now

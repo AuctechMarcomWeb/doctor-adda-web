@@ -10,31 +10,31 @@ const DiagnosticPage = () => {
 
   const diagnosticData = [
     {
-      name: "MediCabs Pharmacy",
-      type: "ICU Pharmacy",
-      capacity: 3,
-      price: 350,
+      name: "Thyrocare",
+      type: "24/7",
+      services: "Lipid Profile",
+      timming: "8:00 am to 5:00 pm",
       location: "Hazratganj, Lucknow, UP",
       rating: 4.3,
-      image: "https://i.pinimg.com/736x/a3/7d/fa/a37dfa60e0a5c78f0cad5880ba8822dd.jpg"
+      image: "https://i.pinimg.com/1200x/5a/ef/97/5aef97f3a37d7733167ad69600c58688.jpg"
     },
     {
-      name: "Emergency Cab",
-      type: "ICU",
-      capacity: 4,
-      price: 700,
-      location: "1090 Chouraha, Manas Nagar Colony, Jiamau",
+      name: " Vijaya Diagnostic  ",
+      type: "Emergency",
+      services: "Neha Joshi",
+      timming: "8:00 am to 5:00 pm",
+      location: "1090 Chouraha, Gomti Nagar",
       rating: 4.0,
-      image: "https://i.pinimg.com/1200x/3b/58/26/3b58264367ff25a10d419888fde59af7.jpg"
+      image: "https://i.pinimg.com/1200x/77/ce/6f/77ce6ff077e2ef6e8e23837256141ba0.jpg"
     },
     {
-      name: "Adda24/7 Services",
+      name: "Suburban Diagnostic",
       type: "Non-Emergency",
-      capacity: 2,
-      price: 250,
+      services: "Sameer Patel",
+      timming: "8:00 am to 5:00 pm",
       location: "RWJF+P24, Lucknow",
       rating: 3.9,
-      image: "https://i.pinimg.com/736x/97/97/c1/9797c15e41f8dae3fa2ea67492afeb04.jpg"
+      image: "https://i.pinimg.com/1200x/27/d0/88/27d08852fb5052d6a24cf98ed2bac7d6.jpg"
     },
   ];
 
@@ -66,7 +66,7 @@ const DiagnosticPage = () => {
               <span className="text-4xl"></span>
             </div>
             <h1 className="text-3xl md:text-4xl font-bold">
-           Diagnotic Labs
+           Diagnotic & Labs
         </h1>
             <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
               Fast, reliable, and professional medical transport when you need it most
@@ -99,7 +99,7 @@ const DiagnosticPage = () => {
       </div>
 
       {/* Search and Filter Section */}
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-gray-100">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Search Bar */}
@@ -126,7 +126,7 @@ const DiagnosticPage = () => {
                 onChange={(e) => setFilterType(e.target.value)}
               >
                 <option value="all">All Types</option>
-                <option value="icu">ICU</option>
+                <option value="24/7">24/7</option>
                 <option value="non-emergency">Non-Emergency</option>
               </select>
               <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
@@ -187,7 +187,7 @@ const DiagnosticPage = () => {
         </div>
 
         {/* diagnostic Cards */}
-        <div className="space-y-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {filteredData.length > 0 ? (
             filteredData.map((data, index) => (
               <div key={index} className="animate-fadeIn" style={{ animationDelay: `${index * 0.1}s` }}>
@@ -195,9 +195,9 @@ const DiagnosticPage = () => {
               </div>
             ))
           ) : (
-            <div className="text-center py-12">
+            <div className="col-span-full text-center py-12">
               <div className="text-6xl mb-4">🔍</div>
-              <h3 className="text-xl font-semibold text-gray-700 mb-2">No diagnostic found</h3>
+              <h3 className="text-xl font-semibold text-gray-700 mb-2">No ambulances found</h3>
               <p className="text-gray-500">Try adjusting your search or filter criteria</p>
             </div>
           )}
