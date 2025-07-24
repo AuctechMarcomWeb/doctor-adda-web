@@ -217,9 +217,25 @@ const NavBar2 = () => {
                 if (menu?.label=="Blood Bank") {
                   navigation('/bloodbank')
                   
+                } else if (menu?.label=="Pharmacies") {
+                  navigation('/pharmacy')
+                  
+                }else if (menu?.label=="Doctor & Specialists") {
+                  navigation('/doctor')
+                  
+                }else if (menu?.label=="Diagnostic") {
+                  navigation('/diagnostic')
+                  
+                }else if (menu?.label=="Hospitals & Clinics") {
+                  navigation('/hospital')
+                  
+                }else if (menu?.label=="Ambulance") {
+                  navigation('/ambulance')
+                  
                 }
                 
               }}
+              
 
 
             >

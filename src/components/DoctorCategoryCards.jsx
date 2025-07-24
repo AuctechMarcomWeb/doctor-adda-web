@@ -4,10 +4,17 @@ import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import { useNavigate } from "react-router-dom";
 
 import { Stethoscope, Heart, Brain, Eye, Activity, User } from 'lucide-react';
 
 const DoctorCategoryCards = () => {
+  const navigate = useNavigate();
+
+  const handleViewDetails = () => {
+    navigate(`/doctor/${name}`);
+  };
+
   const categories = [
     {
       id: 1,
@@ -137,7 +144,12 @@ const DoctorCategoryCards = () => {
                         {category.name}
                       </h3>
                       <p className="text-gray-600 text-sm mb-4">{category.description}</p>
-                      <button className="w-full bg-[#00669e] text-white font-semibold py-3 px-4 rounded-lg hover:from-blue-600 hover:to-blue-700 transform hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg">
+                      <button  className="w-full bg-[#00669e] text-white font-semibold py-3 px-4 rounded-lg hover:from-blue-600 hover:to-blue-700 transform hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg" 
+              onClick={()=>{
+                console.log("View More");
+                 navigate('/doctorlist')
+                
+                }}>
                         View More
                       </button>
                     </div>
@@ -170,7 +182,7 @@ const DoctorCategoryCards = () => {
         <div className="swiper-pagination-custom mt-4 text-center" />
       </div>
       <div className='flex items-center justify-center'>
-        <button className="w-40 bg-[#00669e] text-white font-semibold py-3 px-4 rounded-lg hover:from-blue-600 hover:to-blue-700 transform hover:scale-105 transition-all       duration-300 shadow-md hover:shadow-lg">
+        <button onClick={handleViewDetails} className="w-40 bg-[#00669e] text-white font-semibold py-3 px-4 rounded-lg hover:from-blue-600 hover:to-blue-700 transform hover:scale-105 transition-all       duration-300 shadow-md hover:shadow-lg">
             View All
       </button>
       </div>
