@@ -111,11 +111,11 @@ const AmbulancePage = () => {
             {/* Right Side - Large Ambulance Image */}
             <div className="relative flex items-center justify-center">
               {/* Main Ambulance Image */}
-              <div className="relative z-10 animate-float">
+              <div className="relative z-10 animate-float ">
                 <img 
                   src="https://plus.unsplash.com/premium_photo-1723708841860-5b00cc402a62?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YW1idWxhbmNlfGVufDB8fDB8fHww" 
                   alt="Emergency Ambulance" 
-                  className="w-full max-w-lg h-auto transform hover:scale-105 transition-transform duration-500 drop-shadow-2xl"
+                  className="w-full max-w-lg h-auto transform hover:scale-105 transition-transform duration-500 drop-shadow-2xl rounded-2xl"
                 />
                 
                 {/* Glowing effect behind ambulance */}
