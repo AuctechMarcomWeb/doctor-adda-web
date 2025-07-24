@@ -23,7 +23,7 @@ const AmbulancePage = () => {
       type: "ICU",
       capacity: 4,
       price: 700,
-      location: "1090 Chouraha, Gomti Nagar",
+      location: "1090 , Gomti Nagar",
       rating: 4.0,
       image: "https://i.pinimg.com/1200x/3b/58/26/3b58264367ff25a10d419888fde59af7.jpg"
     },
@@ -96,11 +96,11 @@ const AmbulancePage = () => {
               
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 animate-fade-in-up delay-900">
-                <button className="group bg-white text-[#0074b2] font-bold py-4 px-6 rounded-full text-lg hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center gap-3">
+                <button className="group bg-white text-[#0074b2] font-bold py-4 px-6 rounded-full text-lg hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center gap-3  mb-4">
                   <span className="text-2xl group-hover:scale-110 transition-transform"><img width="30" height="30" src="https://img.icons8.com/ios/50/iphone14-pro.png" alt="iphone14-pro"/></span>
                   Download App
                 </button>
-                <button className="group bg-red-500 hover:bg-red-600 text-white border border-white font-bold py-4 px-6 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center gap-3 " style={{
+                <button className="group bg-red-500 hover:bg-red-600 text-white border border-white font-bold py-4 px-6 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center gap-3  mb-4 " style={{
         background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)" }} >
                   <span className="text-2xl  group-hover:scale-110 transition-transform"><img width="30" height="30" src="https://img.icons8.com/color/48/tear-off-calendar--v1.png" alt="tear-off-calendar--v1"/></span>
                   Book Appointment
