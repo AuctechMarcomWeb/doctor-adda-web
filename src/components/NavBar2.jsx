@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { FaHome } from "react-icons/fa";
 import { MdKeyboardArrowDown } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 const NavBar2 = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const [activeSubCategory, setActiveSubCategory] = useState(null);
+
+  const navigation = useNavigate()
 
   const megaMenuData = {
     blood: {
@@ -208,6 +211,17 @@ const NavBar2 = () => {
                 setOpenDropdown(menu.key);
                 setActiveSubCategory(null);
               }}
+
+              onClick={()=>{
+                console.log("menu",menu?.label);
+                if (menu?.label=="Blood Bank") {
+                  navigation('/bloodbank')
+                  
+                }
+                
+              }}
+
+
             >
               <div
                 className={`flex items-center gap-1 px-3 py-2 rounded hover:bg-[#0074b2] hover:text-white transition cursor-pointer ${
