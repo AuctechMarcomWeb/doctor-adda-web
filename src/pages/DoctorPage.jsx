@@ -170,7 +170,7 @@ const DoctorPage = () => {
                 <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
               </div>
               
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-white to-cyan-100 bg-clip-text text-transparent leading-tight">
+              <h2 className="text-4xl md:text-4xl  font-bold mb-4 bg-gradient-to-r from-white to-cyan-100 bg-clip-text text-transparent leading-tight">
                 Your Health,
                 
                 <span className="">

@@ -38,9 +38,9 @@ const DiagnosticDetailPage = () => {
             <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 rounded-full mb-6 backdrop-blur-sm">
               <span className="text-4xl"></span>
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold">
+            <h2 className="text-4xl md:text-4xl font-bold">
            Diagnotic & Labs
-        </h1>
+        </h2>
             <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
               Fast, reliable, and professional medical transport when you need it most
             </p>

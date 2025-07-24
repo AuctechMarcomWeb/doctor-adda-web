@@ -69,14 +69,14 @@ const DiagnosticPage = () => {
                 Certified & Trusted
               </div>
               
-              <h1 className="text-5xl lg:text-6xl font-bold leading-tight">
+              <h2 className="text-4xl md:text-4xl lg:text-5xl font-bold leading-tight">
                 Diagnostic
                 <span className="block text-transparent bg-gradient-to-r from-blue-200 to-cyan-200 bg-clip-text">
                   And Labs
                 </span>
-              </h1>
+              </h2>
               
-              <p className="text-xl text-blue-100 max-w-lg">
+              <p className="text-white/90 text-lg  max-w-lg">
                 Advanced diagnostic services with state-of-the-art technology and expert care in the heart of Delhi NCR.
               </p>
               

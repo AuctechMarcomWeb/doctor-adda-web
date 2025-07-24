@@ -68,13 +68,13 @@ const AmbulancePage = () => {
                 <span className="text-4xl"></span>
               </div>
               
-              <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+              <h2 className="text-4xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight">
                 <span className="block animate-slide-in-left">Emergency</span>
                 <span className="block text-red-200 animate-slide-in-left delay-200">Ambulance</span>
                 <span className="block text-2xl font-normal mt-2 animate-slide-in-left delay-400">Services</span>
-              </h1>
+              </h2>
               
-              <p className="text-blue-100 mb-8 text-xl max-w-lg animate-fade-in-up delay-500">
+              <p className="text-white/90 text-lg mb-8 max-w-2xl leading-relaxed">
                 Professional medical transport available 24/7 with trained paramedics and advanced life support equipment.
               </p>
               
@@ -97,12 +97,12 @@ const AmbulancePage = () => {
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 animate-fade-in-up delay-900">
                 <button className="group bg-white text-[#0074b2] font-bold py-4 px-6 rounded-full text-lg hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center gap-3  mb-4">
-                  <span className="text-2xl group-hover:scale-110 transition-transform"><img width="30" height="30" src="https://img.icons8.com/ios/50/iphone14-pro.png" alt="iphone14-pro"/></span>
+                  <span className="text-lg group-hover:scale-110 transition-transform"><img width="30" height="30" src="https://img.icons8.com/ios/50/iphone14-pro.png" alt="iphone14-pro"/></span>
                   Download App
                 </button>
                 <button className="group bg-red-500 hover:bg-red-600 text-white border border-white font-bold py-4 px-6 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center gap-3  mb-4 " style={{
         background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)" }} >
-                  <span className="text-2xl  group-hover:scale-110 transition-transform"><img width="30" height="30" src="https://img.icons8.com/color/48/tear-off-calendar--v1.png" alt="tear-off-calendar--v1"/></span>
+                  <span className="text-lg  group-hover:scale-110 transition-transform"><img width="30" height="30" src="https://img.icons8.com/color/48/tear-off-calendar--v1.png" alt="tear-off-calendar--v1"/></span>
                   Book Appointment
                 </button>
               </div>
@@ -124,17 +124,17 @@ const AmbulancePage = () => {
               
               {/* Floating Stats Cards */}
               <div className="absolute -top-8 -left-8 bg-white/95 backdrop-blur-sm rounded-2xl p-4 shadow-2xl animate-bounce z-20">
-                <div className="text-blue-600 font-bold text-3xl">24/7</div>
+                <div className="text-blue-600 text-2xl font-bold">24/7</div>
                 <div className="text-gray-600 text-sm font-medium">Available</div>
               </div>
               
               <div className="absolute -bottom-8 -right-8 bg-white/95 backdrop-blur-sm rounded-2xl p-4 shadow-2xl animate-pulse z-20">
-                <div className="text-green-600 font-bold text-3xl">&lt;8min</div>
+                <div className="text-green-600 text-2xl font-bold">&lt;8min</div>
                 <div className="text-gray-600 text-sm font-medium">Response</div>
               </div>
               
               <div className="absolute top-1/2 -right-12 bg-white/95 backdrop-blur-sm rounded-2xl p-4 shadow-2xl animate-bounce delay-500 z-20">
-                <div className="text-red-600 font-bold text-3xl">98%</div>
+                <div className="text-red-600 text-2xl font-bold">98%</div>
                 <div className="text-gray-600 text-sm font-medium">Success</div>
               </div>
               
