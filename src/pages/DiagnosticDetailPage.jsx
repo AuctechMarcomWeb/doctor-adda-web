@@ -33,7 +33,7 @@ const DiagnosticDetailPage = () => {
           <div className="absolute bottom-10 left-1/4 w-12 h-12 bg-white/10 rounded-full animate-pulse delay-150"></div>
         </div>
         
-        <div className="relative max-w-6xl mx-auto px-4 py-12 sm:py-16">
+        <div className="relative max-w-7xl mx-auto px-4 py-12 sm:py-16">
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 rounded-full mb-6 backdrop-blur-sm">
               <span className="text-4xl"></span>
@@ -92,7 +92,7 @@ const DiagnosticDetailPage = () => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 py-16 space-y-16">
+      <div className="max-w-7xl mx-auto  py-16 space-y-16">
         
         {/* Services Grid */}
         <div className="grid lg:grid-cols-2 gap-8">
@@ -320,7 +320,10 @@ const DiagnosticDetailPage = () => {
         </div>
 
         {/* CTA Section */}
-        <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-purple-900 rounded-3xl shadow-2xl overflow-hidden relative">
+        <div className=" rounded-3xl shadow-2xl overflow-hidden relative" style={{
+        background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
+        
+      }}>
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20"></div>
           <div className="relative p-12 text-center">
             <h2 className="text-4xl font-bold text-white mb-6">Ready to Book Your Diagnostic?</h2>

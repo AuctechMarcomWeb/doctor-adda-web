@@ -41,7 +41,7 @@ const BannerSection = () => {
         </div> */}
 
         <div className=" mt-8 rounded-lg  text-black w-full max-w-xl flex items-center  justify-between">
-                  <div className="flex flex-col md:flex-row gap-4 items-center">
+                  <div className="flex gap-4 items-center">
                     <input
                       type="text"
                       placeholder="Search doctors, specialties, or locations"
