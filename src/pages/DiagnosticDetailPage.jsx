@@ -19,68 +19,55 @@ const DiagnosticDetailPage = () => {
   const [activeTab, setActiveTab] = useState("about");
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 pt-18" >
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 " >
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900">
-        <div className="absolute inset-0 bg-black opacity-20"></div>
-        <div className="absolute inset-0 " style={{
-    background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)" }}></div>
+       <div className="relative  text-white overflow-hidden"style={{
+    background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
+  }}>
+        <div className="absolute inset-0 bg-black/20"></div>
         
-        <div className="relative max-w-7xl mx-auto px-6 py-20">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left Content */}
-            <div className="text-white space-y-6">
-              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 text-sm font-medium">
-                <BadgeCheck className="w-4 h-4 text-green-400" />
-                Certified & Trusted
-              </div>
-              
-              <h1 className="text-5xl lg:text-6xl font-bold leading-tight">
-                FastCare
-                <span className="block text-transparent bg-gradient-to-r from-blue-200 to-cyan-200 bg-clip-text">
-                  Diagnostic
-                </span>
-              </h1>
-              
-              <p className="text-xl text-blue-100 max-w-lg">
-                Advanced diagnostic services with state-of-the-art technology and expert care in the heart of Delhi NCR.
-              </p>
-              
-              <div className="flex items-center gap-2 text-blue-200">
-                <MapPin className="w-5 h-5 text-red-400" />
-                <span className="font-medium">Delhi NCR, Sector 45, Gurugram</span>
-              </div>
-
-              {/* Stats */}
-              <div className="grid grid-cols-3 gap-6 pt-6">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-white">10K+</div>
-                  <div className="text-sm text-blue-200">Happy Patients</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-white">50+</div>
-                  <div className="text-sm text-blue-200">Test Types</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-white">24/7</div>
-                  <div className="text-sm text-blue-200">Available</div>
-                </div>
-              </div>
+        {/* Animated background elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full animate-pulse"></div>
+          <div className="absolute top-20 right-20 w-16 h-16 bg-white/10 rounded-full animate-pulse delay-75"></div>
+          <div className="absolute bottom-10 left-1/4 w-12 h-12 bg-white/10 rounded-full animate-pulse delay-150"></div>
+        </div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 py-12 sm:py-16">
+          <div className="text-center">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 rounded-full mb-6 backdrop-blur-sm">
+              <span className="text-4xl"></span>
             </div>
-
-            {/* Right Image */}
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-3xl transform rotate-6"></div>
-              <div className="relative bg-white rounded-3xl shadow-2xl overflow-hidden transform hover:scale-105 transition-transform duration-300">
-                <img
-                  src="https://i.pinimg.com/1200x/77/ce/6f/77ce6ff077e2ef6e8e23837256141ba0.jpg"
-                  alt="diagnostic"
-                  className="w-full h-96 object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+            <h2 className="text-4xl md:text-4xl font-bold">
+           Diagnotic & Labs
+        </h2>
+            <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
+              Fast, reliable, and professional medical transport when you need it most
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+                <span className="text-green-400">✓</span>
+                <span className="text-sm font-medium">24/7 Available</span>
+              </div>
+              <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+                <span className="text-green-400">✓</span>
+                <span className="text-sm font-medium">Trained Professionals</span>
+              </div>
+              <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+                <span className="text-green-400">✓</span>
+                <span className="text-sm font-medium">Quick Response</span>
               </div>
             </div>
           </div>
+        </div>
+        
+        {/* Wave divider */}
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden">
+          <svg className="relative block w-full h-8" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" fill="currentColor"></path>
+            <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" fill="currentColor"></path>
+            <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" fill="currentColor"></path>
+          </svg>
         </div>
       </div>
 
@@ -105,7 +92,7 @@ const DiagnosticDetailPage = () => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 py-16 space-y-16">
+      <div className="max-w-7xl mx-auto  py-16 space-y-16">
         
         {/* Services Grid */}
         <div className="grid lg:grid-cols-2 gap-8">
@@ -333,7 +320,10 @@ const DiagnosticDetailPage = () => {
         </div>
 
         {/* CTA Section */}
-        <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-purple-900 rounded-3xl shadow-2xl overflow-hidden relative">
+        <div className=" rounded-3xl shadow-2xl overflow-hidden relative" style={{
+        background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
+        
+      }}>
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20"></div>
           <div className="relative p-12 text-center">
             <h2 className="text-4xl font-bold text-white mb-6">Ready to Book Your Diagnostic?</h2>

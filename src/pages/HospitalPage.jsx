@@ -99,7 +99,7 @@ const HospitalPage = () => {
       </div>
 
       {/* Search and Filter Section */}
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto  py-8">
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-gray-100">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Search Bar */}

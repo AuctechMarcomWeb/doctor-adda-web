@@ -193,7 +193,7 @@ const DoctorList = () => {
           </div>
           
           <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
-            Doctors & Specialists
+            General Physician
           </h1>
           <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
             Fast, genuine and accessible healthcare for you and your loved ones

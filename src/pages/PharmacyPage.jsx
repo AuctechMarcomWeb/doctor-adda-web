@@ -54,7 +54,7 @@ const PharmacyPage = () => {
           <div className="absolute bottom-10 left-1/4 w-12 h-12 bg-white/10 rounded-full animate-pulse delay-150"></div>
         </div>
 
-        <div className="relative max-w-6xl mx-auto px-4 py-12 sm:py-16">
+        <div className="relative max-w-7xl mx-auto px-4 py-12 sm:py-16">
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 rounded-full mb-6 backdrop-blur-sm">
               <span className="text-4xl"></span>
@@ -92,7 +92,7 @@ const PharmacyPage = () => {
       </div>
 
       {/* Search and Filters */}
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto  py-8">
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-gray-100">
           <div className="flex flex-col md:flex-row gap-4">
             <input

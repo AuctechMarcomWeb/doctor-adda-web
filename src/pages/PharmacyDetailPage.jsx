@@ -99,7 +99,7 @@ const PharmacyDetailPage = () => {
       {/* Hero Section */}
       <div className="relative">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-indigo-600/10 backdrop-blur-sm"></div>
-        <div className="relative max-w-7xl mx-auto px-4 py-8">
+        <div className="relative max-w-7xl mx-auto  py-8">
           {/* Header Actions */}
           <div className="flex justify-between items-center mb-8">
             <div className="flex items-center gap-2 text-sm text-gray-600">
@@ -226,7 +226,7 @@ const PharmacyDetailPage = () => {
       </div>
 
       {/* Main Content Tabs */}
-      <div className="max-w-7xl mx-auto px-4 py-12">
+      <div className="max-w-7xl mx-auto  py-12">
         <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
           {/* Tab Navigation */}
           <div className="border-b border-gray-100 bg-gray-50/50">
