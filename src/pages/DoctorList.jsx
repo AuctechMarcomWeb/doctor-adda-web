@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Search, MapPin, Star, Video, Calendar, Phone, Clock, Shield, Award, Users } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const DoctorCard = ({ name, specialization, experience, fee, location, rating, mode, image }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate();
+
+  const handleViewDetails = () => {
+    navigate(`/doctordetail/${name}`);
+  };
   
   return (
     <div 
@@ -93,12 +99,12 @@ const DoctorCard = ({ name, specialization, experience, fee, location, rating, m
 
         {/* Action Buttons */}
         <div className="flex gap-3">
-          <button className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-xl font-medium hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
-            Book Now
+          <button  onClick={handleViewDetails} className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-xl font-medium hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl" style={{
+        background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
+      }} >
+            View More
           </button>
-          <button className="w-12 h-12 bg-gray-100 hover:bg-blue-50 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110">
-            <Phone className="w-5 h-5 text-gray-600 hover:text-blue-600" />
-          </button>
+          
         </div>
       </div>
     </div>
