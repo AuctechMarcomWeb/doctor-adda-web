@@ -6,6 +6,7 @@ import {
   Heart, TrendingUp, Zap
 } from "lucide-react";
 
+
 // Constants
 const DOCTOR_DATA = {
   name: "Dr. Ananya Singh",
@@ -146,10 +147,17 @@ const ActionButton = ({ children, variant = "primary", className = "", ...props 
 };
 
 // Main Component
+
 const DoctorDetailPage = () => {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [reviewData, setReviewData] = useState({ name: '', comment: '', rating: 5 });
+
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
 
   const handleReviewSubmit = () => {
     console.log("Submitted Review:", reviewData);
@@ -409,6 +417,7 @@ const DoctorDetailPage = () => {
               </div>
             </GradientCard>
 
+
             {/* Emergency Contact */}
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 to-pink-500/10 rounded-3xl transform rotate-1"></div>
@@ -419,6 +428,7 @@ const DoctorDetailPage = () => {
                   </div>
                   <h3 className="font-bold text-red-900 text-xl mb-2">Emergency Care</h3>
                   <p className="text-red-700 mb-6">24/7 urgent medical assistance</p>
+
                   <ActionButton variant="danger" className="w-full py-4 rounded-2xl">
                     Emergency Call
                   </ActionButton>
@@ -427,7 +437,16 @@ const DoctorDetailPage = () => {
             </div>
           </aside>
         </div>
-      </main>
+
+                  <button className="w-full bg-gradient-to-r from-red-600 to-red-700 text-white py-4 rounded-2xl font-bold hover:shadow-xl transition-all duration-500 transform hover:scale-105">
+                    Emergency Call
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
