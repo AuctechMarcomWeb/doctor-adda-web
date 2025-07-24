@@ -75,6 +75,8 @@ function App() {
                  <Route path="/doctordetail/:id" element={<DoctorDetailPage />} />
                  <Route path="/hospital" element={<HospitalPage />} />
                  <Route path="/hospital/:id" element={<HospitalDetailPage />} />
+                 <Route path="/hospitaldetail" element={<HospitalDetailPage />} />
+
               </Routes>
               <Footer />
             </>
