@@ -139,7 +139,7 @@ const DoctorPage = () => {
       </div>
 
       {/* Download App Banner */}
-      <div className="max-w-6xl mx-auto px-4 mb-0 pt-36">
+      <div className="max-w-7xl mx-auto mb-0 pt-36">
       <div className={`relative overflow-hidden  text-white rounded-3xl shadow-2xl transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`} style={{
         background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
       }}>
@@ -276,7 +276,7 @@ const DoctorPage = () => {
       
 
       {/* Search and Filter Section */}
-      <div className="max-w-6xl mx-auto px-4 py-8 pb-8">
+      <div className="max-w-7xl mx-auto  py-8 pb-8">
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-gray-100">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
