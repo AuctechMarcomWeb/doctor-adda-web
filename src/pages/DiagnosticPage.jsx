@@ -56,18 +56,18 @@ const DiagnosticPage = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-red-50 pt-18">
+    <div className="min-h-screen  pt-18">
       {/* Hero Banner */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900">
-        <div className="absolute inset-0 bg-black opacity-20"></div>
-        <div className="absolute inset-0 " style={{
-    background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)" }}></div>
+      <div className="relative overflow-hidden ">
+        <div className="absolute inset-0 "></div>
+        <div className="absolute inset-0 "></div>
         
-        <div className="relative max-w-7xl mx-auto py-20">
+        <div className="relative max-w-7xl mx-auto rounded-3xl p-8 py-20"  style={{
+    background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)" }}>
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left Content */}
             <div className="text-white space-y-6">
-              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 text-sm font-medium">
+              <div className="inline-flex items-center gap-2  rounded-full px-4 py-2 text-sm font-medium">
                 <BadgeCheck className="w-4 h-4 text-green-400" />
                 Certified & Trusted
               </div>
