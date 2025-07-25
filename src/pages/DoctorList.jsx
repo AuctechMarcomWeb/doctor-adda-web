@@ -112,6 +112,9 @@ const DoctorCard = ({ name, specialization, experience, fee, location, rating, m
 };
 
 const DoctorList = () => {
+   useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
   const [modeFilter, setModeFilter] = useState("in-clinic");

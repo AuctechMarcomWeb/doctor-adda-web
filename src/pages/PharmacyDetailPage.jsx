@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState } from "react";
 import {
   MapPin,
   PhoneCall,
@@ -23,6 +23,9 @@ import {
 } from "lucide-react";
 
 const PharmacyDetailPage = () => {
+   useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
   const [activeTab, setActiveTab] = useState("about");
   const [prescription, setPrescription] = useState(null);
   const [description, setDescription] = useState("");

@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, {useEffect, useState } from "react";
 import PharmacyCard from "../components/PharmacyCard"; // Assuming you have a separate card component
 
 const PharmacyPage = () => {
+   useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
 

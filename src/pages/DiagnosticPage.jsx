@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import DiagnosticCard from "../components/DiagnosticCard" ;
 import {
@@ -12,6 +12,9 @@ import {
 
 
 const DiagnosticPage = () => {
+  useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
 
