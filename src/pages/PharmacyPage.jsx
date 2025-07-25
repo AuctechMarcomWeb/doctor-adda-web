@@ -47,52 +47,157 @@ const PharmacyPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
-      {/* Hero Banner */}
-      <div className="relative text-white overflow-hidden" style={{ background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)" }}>
-        <div className="absolute inset-0 bg-black/20"></div>
-
-        <div className="absolute inset-0">
-          <div className="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full animate-pulse"></div>
-          <div className="absolute top-20 right-20 w-16 h-16 bg-white/10 rounded-full animate-pulse delay-75"></div>
-          <div className="absolute bottom-10 left-1/4 w-12 h-12 bg-white/10 rounded-full animate-pulse delay-150"></div>
+      {/* Enhanced Hero Banner with Animations and Images */}
+      <div className="relative text-white overflow-hidden min-h-[600px]" style={{ background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)" }}>
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 bg-black/10"></div>
+        
+        {/* Floating Medical Icons */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-20 left-10 w-16 h-16 bg-white/10 rounded-full animate-bounce" style={{animationDelay: '0s', animationDuration: '3s'}}>
+            <div className="w-full h-full flex items-center justify-center text-2xl"></div>
+          </div>
+          <div className="absolute top-32 right-20 w-20 h-20 bg-white/10 rounded-full animate-bounce" style={{animationDelay: '1s', animationDuration: '4s'}}>
+            <div className="w-full h-full flex items-center justify-center text-3xl"></div>
+          </div>
+          <div className="absolute bottom-32 left-1/4 w-14 h-14 bg-white/10 rounded-full animate-bounce" style={{animationDelay: '2s', animationDuration: '3.5s'}}>
+            <div className="w-full h-full flex items-center justify-center text-xl"></div>
+          </div>
+          <div className="absolute top-40 left-1/2 w-12 h-12 bg-white/10 rounded-full animate-bounce" style={{animationDelay: '0.5s', animationDuration: '2.8s'}}>
+            <div className="w-full h-full flex items-center justify-center text-lg"></div>
+          </div>
+          <div className="absolute bottom-20 right-1/3 w-18 h-18 bg-white/10 rounded-full animate-bounce" style={{animationDelay: '1.5s', animationDuration: '3.2s'}}>
+            <div className="w-full h-full flex items-center justify-center text-2xl"></div>
+          </div>
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 py-12 sm:py-16">
-          <div className="text-center">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 rounded-full mb-6 backdrop-blur-sm">
-              <span className="text-4xl"></span>
+        {/* Animated Gradient Orbs */}
+        <div className="absolute inset-0">
+          <div className="absolute top-10 right-10 w-32 h-32 bg-gradient-to-r from-cyan-400/20 to-blue-400/20 rounded-full blur-xl animate-pulse"></div>
+          <div className="absolute bottom-20 left-10 w-40 h-40 bg-gradient-to-r from-green-400/20 to-teal-400/20 rounded-full blur-xl animate-pulse" style={{animationDelay: '1s'}}></div>
+          <div className="absolute top-1/2 left-1/2 w-24 h-24 bg-gradient-to-r from-purple-400/20 to-pink-400/20 rounded-full blur-xl animate-pulse" style={{animationDelay: '2s'}}></div>
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 py-16 sm:py-20">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left Content */}
+            <div className="text-center lg:text-left">
+              <div className="inline-flex items-center justify-center w-24 h-24 bg-white/20 rounded-full mb-8 backdrop-blur-sm animate-pulse">
+                <span className="text-5xl"></span>
+              </div>
+              
+              <h2 className="text-4xl md:text-4xl lg:text-5xl font-bold mb-6 animate-fadeIn">
+                <span className="block">Pharmacy &</span>
+                <span className="block bg-gradient-to-r from-cyan-200 to-green-200 bg-clip-text text-transparent">
+                  Medicine
+                </span>
+              </h2>
+              
+              <p className="text-white/90 text-lg mb-8 max-w-2xl animate-fadeIn" style={{animationDelay: '0.3s'}}>
+                Fast, genuine and accessible medication for you and your loved ones. 
+                <span className="block mt-2 text-cyan-200 font-medium">Available 24/7 with home delivery</span>
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center mb-8 animate-fadeIn" style={{animationDelay: '0.6s'}}>
+                <div className="flex items-center gap-3 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 transform hover:scale-105 transition-all duration-300">
+                  <span className="text-green-400 text-xl">✓</span>
+                  <span className="text-sm font-medium">Open 24/7</span>
+                </div>
+                <div className="flex items-center gap-3 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 transform hover:scale-105 transition-all duration-300">
+                  <span className="text-green-400 text-xl">✓</span>
+                  <span className="text-sm font-medium">Home Delivery</span>
+                </div>
+                <div className="flex items-center gap-3 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 transform hover:scale-105 transition-all duration-300">
+                  <span className="text-green-400 text-xl">✓</span>
+                  <span className="text-sm font-medium">Affordable Rates</span>
+                </div>
+              </div>
+
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fadeIn" style={{animationDelay: '0.9s'}}>
+                <button className="bg-white text-blue-600 font-bold py-4 px-6 rounded-full text-lg hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                  Find Pharmacy Now
+                </button>
+                <button className="border-2 border-white text-white font-bold py-4 px-6 rounded-full text-lg hover:bg-white hover:text-blue-600 transition-all duration-300 transform hover:scale-105">
+                  Emergency: Call 108
+                </button>
+              </div>
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold">
-          Pharmacy & Medicine
-        </h1>
-            <p className=" text-blue-100 mb-6 max-w-2xl mx-auto">
-              Fast, genuine and accessible medication for you and your loved ones
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-                <span className="text-green-400">✓</span>
-                <span className="text-sm font-medium">Open 24/7</span>
+
+            {/* Right Image Section */}
+            <div className="relative animate-fadeIn" style={{animationDelay: '1.2s'}}>
+              {/* Main Pharmacy Image */}
+              <div className="relative  transform hover:scale-105 transition-all duration-500">
+                <img 
+                  src="https://i.pinimg.com/1200x/22/5f/72/225f7235a14637546d64444531eafee2.jpg" 
+                  alt="Modern Pharmacy" 
+                  className="w-full h-80 object-cover rounded-3xl shadow-2xl"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-3xl"></div>
               </div>
-              <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-                <span className="text-green-400">✓</span>
-                <span className="text-sm font-medium">Home Delivery</span>
+
+              {/* Floating Medicine Cards */}
+              <div className="absolute -top-6 -left-6 bg-white rounded-2xl p-4 shadow-xl animate-bounce" style={{animationDelay: '1s', animationDuration: '3s'}}>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                    <span className="text-2xl">💊</span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-gray-800">Quick Delivery</p>
+                    <p className="text-xs text-gray-600">30 mins</p>
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-                <span className="text-green-400">✓</span>
-                <span className="text-sm font-medium">Affordable Rates</span>
+
+              <div className="absolute -bottom-6 -right-6 bg-white rounded-2xl p-4 shadow-xl animate-bounce" style={{animationDelay: '2s', animationDuration: '2.5s'}}>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                    <span className="text-2xl">🏥</span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-gray-800">24/7 Available</p>
+                    <p className="text-xs text-gray-600">Always Open</p>
+                  </div>
+                </div>
               </div>
+
+              <div className="absolute top-1/2 -left-8 bg-white rounded-2xl p-3 shadow-xl animate-bounce" style={{animationDelay: '0.5s', animationDuration: '4s'}}>
+                <div className="text-center">
+                  <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <span className="text-lg">⚕️</span>
+                  </div>
+                  <p className="text-xs font-bold text-gray-800">Verified</p>
+                </div>
+              </div>
+
+              {/* Background Decoration */}
+              <div className="absolute -top-8 -right-8 w-32 h-32 bg-gradient-to-r from-cyan-400/30 to-blue-400/30 rounded-full blur-2xl animate-pulse"></div>
+              <div className="absolute -bottom-8 -left-8 w-28 h-28 bg-gradient-to-r from-green-400/30 to-teal-400/30 rounded-full blur-2xl animate-pulse" style={{animationDelay: '1s'}}></div>
             </div>
           </div>
         </div>
-         {/* Wave divider */}
+
+        {/* Enhanced Wave divider with animation */}
         <div className="absolute bottom-0 left-0 w-full overflow-hidden">
-          <svg className="relative block w-full h-8" viewBox="0 0 1200 120" preserveAspectRatio="none">
+          <svg className="relative block w-full h-12 animate-pulse" viewBox="0 0 1200 120" preserveAspectRatio="none">
             <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" fill="currentColor"></path>
             <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" fill="currentColor"></path>
             <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" fill="currentColor"></path>
           </svg>
         </div>
       </div>
+
+      {/* Add custom CSS animations */}
+      <style jsx>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.8s ease-out forwards;
+          opacity: 0;
+        }
+      `}</style>
 
       {/* Search and Filters */}
       <div className="max-w-7xl mx-auto  py-8">
