@@ -134,7 +134,7 @@ const HospitalPage = () => {
                   alt="Modern Hospital Building" 
                   className="rounded-3xl shadow-2xl w-full h-96 object-cover transform hover:scale-105 transition-transform duration-500"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-blue-900/30 to-transparent rounded-3xl"></div>
+                <div className=""></div>
               </div>
               
               {/* Floating stats cards */}

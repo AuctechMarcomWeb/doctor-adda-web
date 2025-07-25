@@ -140,7 +140,7 @@ const PharmacyPage = () => {
               <div className="absolute -top-6 -left-6 bg-white rounded-2xl p-4 shadow-xl animate-bounce" style={{animationDelay: '1s', animationDuration: '3s'}}>
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="text-2xl">💊</span>
+                    <span className="text-2xl"><img width="25" height="25" src="https://img.icons8.com/emoji/48/pill-emoji.png" alt="pill-emoji"/></span>
                   </div>
                   <div>
                     <p className="text-sm font-bold text-gray-800">Quick Delivery</p>
@@ -152,7 +152,7 @@ const PharmacyPage = () => {
               <div className="absolute -bottom-6 -right-6 bg-white rounded-2xl p-4 shadow-xl animate-bounce" style={{animationDelay: '2s', animationDuration: '2.5s'}}>
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                    <span className="text-2xl">🏥</span>
+                    <span className="text-2xl"><img width="25" height="25" src="https://img.icons8.com/emoji/48/hospital-emoji.png" alt="hospital-emoji"/></span>
                   </div>
                   <div>
                     <p className="text-sm font-bold text-gray-800">24/7 Available</p>
@@ -164,7 +164,7 @@ const PharmacyPage = () => {
               <div className="absolute top-1/2 -left-8 bg-white rounded-2xl p-3 shadow-xl animate-bounce" style={{animationDelay: '0.5s', animationDuration: '4s'}}>
                 <div className="text-center">
                   <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <span className="text-lg">⚕️</span>
+                    <span className="text-lg"><img width="25" height="25" src="https://img.icons8.com/fluency/48/verified-badge--v1.png" alt="verified-badge--v1"/></span>
                   </div>
                   <p className="text-xs font-bold text-gray-800">Verified</p>
                 </div>
