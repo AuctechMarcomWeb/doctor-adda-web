@@ -89,14 +89,14 @@ const HospitalPage = () => {
               </div>
               
               <div className="space-y-4">
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight animate-fadeInUp">
+                <h2 className="text-4xl md:text-5xl font-bold leading-tight animate-fadeInUp">
                   Find Trusted
                   <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-300 animate-pulse">
                     Hospitals & Clinics
                   </span>
                 </h2>
                 
-                <p className="text-blue-100 text-lg md:text-xl mb-8 max-w-xl animate-fadeInUp animation-delay-300">
+                <p className="text-blue-100 text-white/90 text-lg mb-8 max-w-xl animate-fadeInUp animation-delay-300">
                   Discover quality healthcare facilities near you with 24/7 emergency services and specialized medical care
                 </p>
               </div>
