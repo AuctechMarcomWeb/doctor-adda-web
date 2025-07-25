@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import AmbulanceCard from "../components/AmbulanceCard"
 
 
 
 const AmbulancePage = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
 

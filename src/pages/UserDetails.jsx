@@ -31,6 +31,10 @@ const UserDetails = ({ onSubmitSuccess }) => {
   const [errors, setErrors] = useState({});
 
   console.log("user id fetched", userId);
+
+   useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
   
 
   useEffect(() => {

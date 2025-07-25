@@ -48,6 +48,9 @@ const FeatureCard = ({ icon, title, description }) => (
 );
 
 const DoctorPage = () => {
+   useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
   
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");

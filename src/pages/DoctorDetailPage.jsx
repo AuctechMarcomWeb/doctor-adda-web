@@ -147,6 +147,9 @@ const ActionButton = ({ children, variant = "primary", className = "", ...props 
 
 // Main Component
 const DoctorDetailPage = () => {
+   useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [reviewData, setReviewData] = useState({ name: '', comment: '', rating: 5 });

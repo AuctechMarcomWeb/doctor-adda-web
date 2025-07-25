@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Star,
   MapPin,
@@ -7,6 +7,9 @@ import {
 } from "lucide-react";
 
 const AmbulanceDetailPage = () => {
+   useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []);
   const [activeTab, setActiveTab] = useState("about");
 
   return (
