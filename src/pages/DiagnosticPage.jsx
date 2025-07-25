@@ -60,10 +60,10 @@ const DiagnosticPage = () => {
       {/* Hero Banner */}
       <div className="relative overflow-hidden ">
         <div className="absolute inset-0 "></div>
-        <div className="absolute inset-0 "></div>
+        <div className="absolute inset-0 " style={{
+    background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)" }}></div>
         
-        <div className="relative max-w-7xl mx-auto rounded-3xl p-8 py-20"  style={{
-    background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)" }}>
+        <div className="relative max-w-7xl mx-auto rounded-3xl p-8 py-20"  >
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left Content */}
             <div className="text-white space-y-6">
