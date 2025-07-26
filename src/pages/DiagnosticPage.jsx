@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { MapPin, BadgeCheck, Clock, Shield, Award, Stethoscope, Heart, Users } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 // Mock DiagnosticCard component for demonstration
 
 
-const DiagnosticCard = ({ name, services, timming, location, rating, image }) => (
-  <div className="bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
+const DiagnosticCard = ({ name, services, timming, location, rating, image }) => {
+  const navigate = useNavigate();
+    const handleViewDetails = () => {
+      navigate(`/diagnostic/${name}`);
+    };
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
     <div className="flex flex-col md:flex-row gap-4 p-4">
       {/* Thumbnail */}
       <img
@@ -45,7 +51,7 @@ const DiagnosticCard = ({ name, services, timming, location, rating, image }) =>
 
         {/* Buttons */}
         <div className="flex flex-col sm:flex-row md:flex-col gap-2">
-          <button className="h-9 px-4 text-sm text-[#00659d] bg-white hover:bg-[#00659d] hover:text-white border border-[#00659d] font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300">
+          <button onClick={handleViewDetails} className="h-9 px-4 text-sm text-[#00659d] bg-white hover:bg-[#00659d] hover:text-white border border-[#00659d] font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300">
             View More
           </button>
           <button className="h-9 px-4 text-sm bg-[#00659d] hover:bg-blue-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300">
@@ -55,7 +61,9 @@ const DiagnosticCard = ({ name, services, timming, location, rating, image }) =>
       </div>
     </div>
   </div>
-);
+  )
+
+};
 
 
 
@@ -63,6 +71,7 @@ const DiagnosticPage = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
@@ -103,6 +112,7 @@ const DiagnosticPage = () => {
     const matchesFilter = filterType === "all" || diagnostic.type.toLowerCase().includes(filterType.toLowerCase());
     return matchesSearch && matchesFilter;
   });
+  
 
   return (
     <div className="min-h-screen pt-18">
@@ -257,13 +267,13 @@ const DiagnosticPage = () => {
                 </div>
 
                 {/* Floating Medical Equipment Images */}
-                <div className="absolute -top-8 -left-8 w-24 h-24 bg-white rounded-2xl shadow-2xl p-4 animate-float">
+                {/* <div className="absolute -top-8 -left-8 w-24 h-24 bg-white rounded-2xl shadow-2xl p-4 animate-float">
                   <img 
                     src="https://i.pinimg.com/736x/8d/56/07/8d56074f643dd94119cf773c6f74356e.jpg" 
                     alt="Medical Equipment" 
                     className="w-full h-full object-cover rounded-lg"
                   />
-                </div>
+                </div> */}
                 
                 <div className="absolute -bottom-6 -right-6 w-20 h-20 bg-gradient-to-br from-green-400 to-cyan-500 rounded-2xl shadow-2xl flex items-center justify-center animate-float" style={{animationDelay: '3s'}}>
                   <Heart className="w-10 h-10 text-white" />
