@@ -16,6 +16,7 @@ import TestimonialsSection from "../components/TestimonialsSection";
 import HealthBlogSection from "../components/HealthBlogSection";
 import AboutUsSection from "../components/AboutUsSection";
 import MedicalImagingBanner from "../components/MedicalImagingBanner";
+import WhyChooseUs from "../components/WhyChooseUs";
 
 const Home = () => {
   useEffect(() => {
@@ -40,6 +41,7 @@ const Home = () => {
       <FeaturedHospitals2 />
       {/* <HealthScansSection/> */}
       <DoctorAddaLanding />
+      <WhyChooseUs />
       <AboutUsSection />
       {/* <TestimonialsSection/> */}
       <HealthBlogSection />
