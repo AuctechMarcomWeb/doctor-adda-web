@@ -199,40 +199,7 @@ const AmbulancePage = () => {
         </div>
 
         {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className=" text-white p-6 rounded-2xl shadow-lg" style={{
-    background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}}>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-blue-100 text-sm">Available Now</p>
-                <p className="text-2xl font-bold">{filteredData.length}</p>
-              </div>
-              <div className="text-3xl "><img src="src/assets/ambulance.png" height={50} width={50} alt="" /></div>
-            </div>
-          </div>
-          
-          <div className=" text-white p-6 rounded-2xl shadow-lg" style={{
-    background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}}>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-green-100 text-sm">Avg Response</p>
-                <p className="text-2xl font-bold">8 min</p>
-              </div>
-              <div className="text-3xl opacity-80"><img src="src/assets/thunder-new.png" height={50} width={50} alt="" /></div>
-            </div>
-          </div>
-          
-          <div className=" text-white p-6 rounded-2xl shadow-lg" style={{
-    background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}}>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-purple-100 text-sm">Success Rate</p>
-                <p className="text-2xl font-bold">98%</p>
-              </div>
-              <div className="text-3xl opacity-80"><img src="src/assets/100-new.png" height={40} width={40} alt="" /></div>
-            </div>
-          </div>
-        </div>
+       
 
         {/* Results Header */}
         <div className="flex items-center justify-between mb-6">

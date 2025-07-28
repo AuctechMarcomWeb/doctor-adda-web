@@ -1,27 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { MapPin, BadgeCheck, Clock, Shield, Award, Stethoscope, Heart, Users } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 // Mock DiagnosticCard component for demonstration
 
-const DiagnosticCard = ({ name, services, timming, location, rating, image }) => (
-  <div className="bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
-    <div className="flex gap-4 p-4">
+
+const DiagnosticCard = ({ name, services, timming, location, rating, image }) => {
+  const navigate = useNavigate();
+    const handleViewDetails = () => {
+      navigate(`/diagnostic/${name}`);
+    };
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
+    <div className="flex flex-col md:flex-row gap-4 p-4">
       {/* Thumbnail */}
       <img
         src={image}
         alt={name}
-        className="w-20 h-28 rounded-xl object-cover border border-gray-200"
+        className="w-full md:w-20 h-40 md:h-28 rounded-xl object-cover border border-gray-200"
       />
 
       {/* Content */}
       <div className="flex-1 flex flex-col justify-between">
         <div>
-          <h3 className="text-base font-semibold text-gray-800">{name}</h3>
-          <p className="text-sm text-gray-600 mt-1 line-clamp-1">{services}</p>
+          <h3 className="text-base sm:text-lg font-semibold text-gray-800">{name}</h3>
+          <p className="text-sm sm:text-base text-gray-600 mt-1 line-clamp-1">{services}</p>
         </div>
 
         {/* Meta Info */}
-        <div className="mt-3 text-xs text-gray-500 space-y-1">
+        <div className="mt-3 text-sm text-gray-500 space-y-1">
           <div className="flex items-center gap-2">
             <Clock className="w-4 h-4 text-gray-400" />
             <span>{timming}</span>
@@ -34,7 +41,7 @@ const DiagnosticCard = ({ name, services, timming, location, rating, image }) =>
       </div>
 
       {/* Right Side: Rating + Buttons */}
-      <div className="flex flex-col justify-between items-center">
+      <div className="flex md:flex-col justify-between items-center md:items-end mt-4 md:mt-0 gap-2 md:gap-4">
         {/* Rating */}
         <div className="flex items-center gap-1 text-yellow-400 text-sm font-medium">
           {"★".repeat(Math.floor(rating))}
@@ -43,8 +50,8 @@ const DiagnosticCard = ({ name, services, timming, location, rating, image }) =>
         </div>
 
         {/* Buttons */}
-        <div className="flex flex-col gap-2 mt-2">
-          <button className="h-9 px-4 text-sm text-[#00659d] bg-white hover:bg-[#00659d] hover:text-white border border-[#00659d] font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300">
+        <div className="flex flex-col sm:flex-row md:flex-col gap-2">
+          <button onClick={handleViewDetails} className="h-9 px-4 text-sm text-[#00659d] bg-white hover:bg-[#00659d] hover:text-white border border-[#00659d] font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300">
             View More
           </button>
           <button className="h-9 px-4 text-sm bg-[#00659d] hover:bg-blue-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300">
@@ -54,7 +61,9 @@ const DiagnosticCard = ({ name, services, timming, location, rating, image }) =>
       </div>
     </div>
   </div>
-);
+  )
+
+};
 
 
 
@@ -62,6 +71,7 @@ const DiagnosticPage = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
@@ -102,6 +112,7 @@ const DiagnosticPage = () => {
     const matchesFilter = filterType === "all" || diagnostic.type.toLowerCase().includes(filterType.toLowerCase());
     return matchesSearch && matchesFilter;
   });
+  
 
   return (
     <div className="min-h-screen pt-18">
@@ -256,13 +267,13 @@ const DiagnosticPage = () => {
                 </div>
 
                 {/* Floating Medical Equipment Images */}
-                <div className="absolute -top-8 -left-8 w-24 h-24 bg-white rounded-2xl shadow-2xl p-4 animate-float">
+                {/* <div className="absolute -top-8 -left-8 w-24 h-24 bg-white rounded-2xl shadow-2xl p-4 animate-float">
                   <img 
                     src="https://i.pinimg.com/736x/8d/56/07/8d56074f643dd94119cf773c6f74356e.jpg" 
                     alt="Medical Equipment" 
                     className="w-full h-full object-cover rounded-lg"
                   />
-                </div>
+                </div> */}
                 
                 <div className="absolute -bottom-6 -right-6 w-20 h-20 bg-gradient-to-br from-green-400 to-cyan-500 rounded-2xl shadow-2xl flex items-center justify-center animate-float" style={{animationDelay: '3s'}}>
                   <Heart className="w-10 h-10 text-white" />
