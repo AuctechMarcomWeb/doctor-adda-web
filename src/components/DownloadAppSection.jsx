@@ -14,8 +14,8 @@ const DownloadAppSection = () => {
           <div className="flex gap-4 flex-wrap">
             {/* Play Store Button */}
             <a
-              href="#"
-              className="flex items-center gap-3 bg-white text-blue-700 px-5 py-3 rounded-xl shadow-md hover:bg-gray-100 transition"
+              href="https://play.google.com/store/apps/details?id=com.doctors.adda"
+              className="flex items-center gap-3 bg-white text-blue-700 px-5 py-3 rounded-xl shadow-md hover:bg-gray-100 transition cursor-pointer"
             >
               <FaGooglePlay size={24} />
               <span className="text-base font-semibold">Google Play</span>
@@ -24,7 +24,7 @@ const DownloadAppSection = () => {
             {/* App Store Button */}
             <a
               href="#"
-              className="flex items-center gap-3 bg-white text-blue-700 px-5 py-3 rounded-xl shadow-md hover:bg-gray-100 transition"
+              className="flex items-center gap-3 bg-white text-blue-700 px-5 py-3 rounded-xl shadow-md hover:bg-gray-100 transition cursor-pointer"
             >
               <FaApple size={24} />
               <span className="text-base font-semibold">App Store</span>

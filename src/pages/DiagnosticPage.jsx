@@ -51,10 +51,10 @@ const DiagnosticCard = ({ name, services, timming, location, rating, image }) =>
 
         {/* Buttons */}
         <div className="flex flex-col sm:flex-row md:flex-col gap-2">
-          <button onClick={handleViewDetails} className="h-9 px-4 text-sm text-[#00659d] bg-white hover:bg-[#00659d] hover:text-white border border-[#00659d] font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300">
+          <button onClick={handleViewDetails} className="h-9 px-4 text-sm text-[#00659d] bg-white hover:bg-[#00659d] hover:text-white border border-[#00659d] font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 cursor-pointer">
             View More
           </button>
-          <button className="h-9 px-4 text-sm bg-[#00659d] hover:bg-blue-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300">
+          <button className="h-9 px-4 text-sm bg-[#00659d] hover:bg-blue-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 cursor-pointer">
             Book Appointment
           </button>
         </div>
@@ -208,12 +208,14 @@ const DiagnosticPage = () => {
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 pt-6 animate-fade-up" style={{animationDelay: '1.6s'}}>
-                <button className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 animate-pulse-glow">
-                  Book Test Now
+                <button className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 animate-pulse-glow cursor-pointer">
+                  Book Appointment
                 </button>
-                <button className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-full text-lg transition-all duration-300 border border-white/20">
-                  View Services
+                <a href="https://play.google.com/store/apps/details?id=com.doctors.adda">
+                  <button className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-full text-lg transition-all duration-300 border border-white/20 cursor-pointer">
+                  Download App Now
                 </button>
+                </a>
               </div>
             </div>
 

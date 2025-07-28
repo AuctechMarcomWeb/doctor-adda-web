@@ -27,7 +27,7 @@ const SpecialtyCard = ({ specialty, image, description, doctorCount, rating, ava
       <div className="px-18 py-4">
         
         
-        <button onClick={handleViewDetails} className="w-full bg-[#00659d] hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300">
+        <button onClick={handleViewDetails} className="w-full bg-[#00659d] hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 cursor-pointer">
           View Doctors
         </button>
       </div>
@@ -192,10 +192,10 @@ const DoctorPage = () => {
 
         {/* Enhanced Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
-          <button
+          <a href="https://play.google.com/store/apps/details?id=com.doctors.adda"><button
             onMouseEnter={() => setHoveredButton('download')}
             onMouseLeave={() => setHoveredButton(null)}
-            className="group relative bg-white text-gray-900 px-8 py-4 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105 transition-all duration-300 overflow-hidden animate-slide-in-left"
+            className="group relative bg-white text-gray-900 px-8 py-4 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105 transition-all duration-300 overflow-hidden animate-slide-in-left cursor-pointer"
             style={{ animationDelay: '1s' }}
           >
             <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -208,11 +208,12 @@ const DoctorPage = () => {
               )}
             </div>
           </button>
+          </a>
           
           <button
             onMouseEnter={() => setHoveredButton('book')}
             onMouseLeave={() => setHoveredButton(null)}
-            className="group relative bg-gradient-to-r from-pink-500 to-rose-400 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105 transition-all duration-300 overflow-hidden animate-slide-in-right"
+            className="group relative bg-gradient-to-r from-pink-500 to-rose-400 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105 transition-all duration-300 overflow-hidden animate-slide-in-right cursor-pointer"
             style={{ animationDelay: '1.2s' }}
           >
             <div className="absolute inset-0 bg-gradient-to-r from-rose-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>

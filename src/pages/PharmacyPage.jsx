@@ -115,11 +115,13 @@ const PharmacyPage = () => {
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fadeIn" style={{animationDelay: '0.9s'}}>
-                <button className="bg-white text-blue-600 font-bold py-4 px-6 rounded-full text-lg hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 shadow-lg">
-                  Find Pharmacy Now
+                <a href="https://play.google.com/store/apps/details?id=com.doctors.adda">
+                  <button className="bg-white text-blue-600 font-bold py-4 px-6 rounded-full text-lg hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 shadow-lg cursor-pointer">
+                  Download App Now
                 </button>
-                <button className="border-2 border-white text-white font-bold py-4 px-6 rounded-full text-lg hover:bg-white hover:text-blue-600 transition-all duration-300 transform hover:scale-105">
-                  Emergency: Call 108
+                </a>
+                <button className="border-2 border-white text-white font-bold py-4 px-6 rounded-full text-lg hover:bg-white hover:text-blue-600 transition-all duration-300 transform hover:scale-105 cursor-pointer">
+                  Book Appointment
                 </button>
               </div>
             </div>

@@ -62,10 +62,12 @@ const AboutUsSection = () => {
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="bg-white text-[#00659c] hover:bg-gray-50 font-semibold px-8 py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center group">
+                <a href="https://play.google.com/store/apps/details?id=com.doctors.adda">
+                  <button className="bg-white text-[#00659c] hover:bg-gray-50 font-semibold px-8 py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center group cursor-pointer">
                   <span>Download App Now</span>
                   <Heart size={18} className="ml-2 group-hover:text-red-500 transition-colors" />
                 </button>
+                </a>
                 <button className="border-2 border-white/30 text-white hover:bg-white/10 font-semibold px-8 py-4 rounded-full transition-all duration-300 backdrop-blur-sm">
                   Book Appointment
                 </button>
