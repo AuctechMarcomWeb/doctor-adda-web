@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Search, MapPin, Star, Video, Calendar, Phone, Clock, Shield, Award, Users } from "lucide-react";
+import { Search, MapPin, Star, Video, Calendar, Phone, Clock, Shield, Award, Users, Smartphone, Download } from "lucide-react";
+
 import { useNavigate } from "react-router-dom";
 
 const DoctorCard = ({ name, specialization, experience, fee, location, rating, mode, image }) => {
@@ -9,6 +10,8 @@ const DoctorCard = ({ name, specialization, experience, fee, location, rating, m
   const handleViewDetails = () => {
     navigate(`/doctordetail/${name}`);
   };
+
+ 
   
   return (
     <div 
@@ -16,26 +19,7 @@ const DoctorCard = ({ name, specialization, experience, fee, location, rating, m
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Card Header with Gradient */}
-      <div className="relative h-16 bg-gradient-to-r from-blue-600 via-purple-600 to-teal-500 overflow-hidden" style={{
-        background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
-      }} >
-        <div className="absolute inset-0 bg-black/10"></div>
-        <div className="absolute top-2 right-4 flex gap-1">
-          {mode.includes("video") && (
-            <div className="bg-white/20 backdrop-blur-sm rounded-full p-1.5">
-              <Video className="w-4 h-4 text-white" />
-            </div>
-          )}
-          {mode.includes("in-clinic") && (
-            <div className="bg-white/20 backdrop-blur-sm rounded-full p-1.5">
-              <Calendar className="w-4 h-4 text-white" />
-            </div>
-          )}
-        </div>
-        <div className="absolute -bottom-8 -right-8 w-16 h-16 bg-white/10 rounded-full animate-pulse"></div>
-      </div>
-
+      
       <div className="p-6 relative">
         {/* Doctor Image with Animation */}
         <div className="flex items-start gap-4 mb-4">
@@ -136,7 +120,7 @@ const DoctorList = () => {
       image: "https://i.pinimg.com/1200x/98/bd/9d/98bd9d77300e729168cb542f5d891bda.jpg"
     },
     {
-      name: "DR. Priya Mehta",
+      name: "Dr. Priya Mehta",
       specialization: "General Physician",
       experience: "12 years",
       fee: "500",
@@ -176,31 +160,27 @@ const DoctorList = () => {
 
       {/* Hero Banner */}
       <div className="relative text-white overflow-hidden pt-24">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-700 to-teal-600" style={{
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-700 to-teal-600" style={{
         background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
-      }} ></div>
-        <div className="absolute inset-0 bg-black/20"></div>
-        
-        {/* Animated Elements */}
-        <div className="absolute inset-0">
-          <div className="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full animate-pulse blur-sm"></div>
-          <div className="absolute top-20 right-20 w-16 h-16 bg-white/15 rounded-full animate-pulse delay-75 blur-sm"></div>
-          <div className="absolute bottom-10 left-1/4 w-12 h-12 bg-white/10 rounded-full animate-pulse delay-150 blur-sm"></div>
-          <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-white/5 rounded-full blur-3xl animate-pulse"></div>
-        </div>
+      }}></div>
+      <div className="absolute inset-0 bg-black/20"></div>
+      
+      {/* Animated Elements */}
+      <div className="absolute inset-0">
+        <div className="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full animate-pulse blur-sm"></div>
+        <div className="absolute top-20 right-20 w-16 h-16 bg-white/15 rounded-full animate-pulse delay-75 blur-sm"></div>
+        <div className="absolute bottom-10 left-1/4 w-12 h-12 bg-white/10 rounded-full animate-pulse delay-150 blur-sm"></div>
+        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-white/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-24 h-24 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full animate-bounce"></div>
+      </div>
 
-        <div className={`relative max-w-6xl mx-auto px-4 py-16 text-center transition-all duration-1000 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6 animate-bounce">
-            <Shield className="w-5 h-5 text-green-400" />
-            <span className="text-sm font-medium">Trusted Healthcare Platform</span>
-          </div>
-          
-          <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
+      <div className={`relative max-w-7xl flex items-center mx-auto  py-16 text-center transition-all duration-1000 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+        
+        <div>
+            <h2 className="text-5xl font-bold mb-4 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
             General Physician
-          </h1>
-          <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
-            Fast, genuine and accessible healthcare for you and your loved ones
-          </p>
+          </h2>
+          
 
           {/* Search Bar */}
           <div className="max-w-md mx-auto mb-8">
@@ -216,7 +196,7 @@ const DoctorList = () => {
             </div>
           </div>
           
-          <div className="flex flex-wrap gap-4 justify-center items-center">
+          <div className="flex flex-wrap gap-4 justify-center items-center mb-12">
             {[
               { icon: Clock, text: "24/7 Available", color: "green" },
               { icon: Shield, text: "Verified Doctors", color: "blue" },
@@ -225,16 +205,66 @@ const DoctorList = () => {
             ].map((item, index) => (
               <div 
                 key={index}
-                className={`flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 hover:bg-white/30 transition-all duration-300 cursor-pointer transform hover:scale-105 animate-fadeInUp`}
-                style={{ animationDelay: `${index * 0.1}s` }}
+                className={`flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 hover:bg-white/30 transition-all duration-300 cursor-pointer transform hover:scale-105`}
               >
-                <item.icon className={`w-5 h-5 text-${item.color}-400`} />
+                <item.icon className="w-5 h-5 text-white" />
                 <span className="text-sm font-medium">{item.text}</span>
               </div>
             ))}
           </div>
         </div>
+
+        {/* App Download Section */}
+        <div className="max-w-2xl mx-auto">
+          <div className="bg-gradient-to-r from-white/15 to-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20 shadow-2xl">
+            <div className="flex flex-col md:flex-row items-center gap-6">
+              {/* Phone Mockup */}
+              <div className="relative">
+                <div className="w-32 h-56 bg-gradient-to-b from-gray-900 to-black rounded-3xl p-2 shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                  <div className="w-full h-full bg-gradient-to-b from-blue-500 to-purple-600 rounded-2xl flex flex-col items-center justify-center relative overflow-hidden">
+                    <div className="absolute top-0 left-0 right-0 h-8 bg-black/20 rounded-t-2xl flex items-center justify-center">
+                      <div className="w-12 h-1 bg-white/30 rounded-full"></div>
+                    </div>
+                    <Smartphone className="w-8 h-8 text-white mb-2" />
+                    <div className="text-white text-xs font-bold">Doctors Adda</div>
+                    <div className="absolute bottom-2 left-2 right-2 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+                      <div className="w-6 h-1 bg-white/50 rounded-full"></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-400 rounded-full flex items-center justify-center animate-pulse">
+                  <div className="w-2 h-2 bg-white rounded-full"></div>
+                </div>
+              </div>
+
+              {/* Download Content */}
+              <div className="text-center md:text-left flex-1">
+                <h3 className="text-2xl font-bold mb-2 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
+                  Download Our App
+                </h3>
+                <p className="text-blue-100 mb-4 text-sm">
+                  Book appointments, chat with doctors, and manage your health on the go
+                </p>
+                
+                <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
+                  <button className="flex items-center gap-2 bg-white text-blue-600 px-6 py-3 rounded-2xl font-semibold hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                    <Download className="w-5 h-5" />
+                    <span>App Store</span>
+                  </button>
+                  <button className="flex items-center gap-2 bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-2xl font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                    <Download className="w-5 h-5" />
+                    <span>Play Store</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+       
+       
+          </div>
+        </div>
       </div>
+    </div>
 
       {/* Main Content */}
       <div className="max-w-6xl mx-auto px-4 py-12">
