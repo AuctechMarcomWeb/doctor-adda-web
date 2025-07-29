@@ -17,6 +17,7 @@ import HealthBlogSection from "../components/HealthBlogSection";
 import AboutUsSection from "../components/AboutUsSection";
 import MedicalImagingBanner from "../components/MedicalImagingBanner";
 import WhyChooseUs from "../components/WhyChooseUs";
+import Carousel from "../components/Carousel";
 
 const Home = () => {
   useEffect(() => {
@@ -37,7 +38,7 @@ const Home = () => {
       <DoctorCategoryCards />
       {/* <DoctorAddaHero/> */}
 
-      
+      <Carousel />
 
       {/* <FeaturedHospitals /> */}
       <FeaturedHospitals2 />
