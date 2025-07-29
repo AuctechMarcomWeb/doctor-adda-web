@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const images = [
-  "https://i.pinimg.com/736x/e3/e9/c8/e3e9c89572ed78a8172ea954618946eb.jpg", // Add your images in public folder
-  "https://i.pinimg.com/736x/9d/6b/af/9d6baf6d9fbc4aa810f9f78b8f42616a.jpg",
-  "https://i.pinimg.com/736x/e2/6d/35/e26d352c8710bab40b472bca96997506.jpg",
+  "https://i.pinimg.com/1200x/04/0a/f4/040af4ba6c4c22d9a4dbcd344b91dbb7.jpg",
+  "https://i.pinimg.com/1200x/9f/2b/7f/9f2b7f668891019dd64df290ec669c8d.jpg",
+  "https://i.pinimg.com/1200x/5c/7e/b9/5c7eb9dc64eb953cc142f6f0dacb8a7c.jpg",
 ];
 
 const MedicalImagingBanner = () => {
@@ -22,6 +22,15 @@ const MedicalImagingBanner = () => {
     return (index + images.length) % images.length;
   };
 
+  // 🔁 Auto-scroll logic
+  useEffect(() => {
+    const interval = setInterval(() => {
+      nextSlide();
+    }, 3000); // Change slide every 3 seconds
+
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, [current]); // run effect when 'current' changes
+
   return (
     <div className="relative w-full max-w-7xl mx-auto flex items-center justify-center h-[300px]">
       {/* Slides container */}
@@ -30,7 +39,7 @@ const MedicalImagingBanner = () => {
         <img
           src={images[getIndex(current - 1)]}
           alt="prev"
-          className="w-[500px] h-[260px] object-cover rounded-2xl opacity-50 scale-90 transition-all duration-300"
+          className="w-[700px] h-[260px] object-cover rounded-2xl opacity-50 scale-90 transition-all duration-300 bg-linear-gradient(90deg, rgba(255, 255, 255, 1) 52%, rgba(0, 160, 168, 0) 100%);"
         />
 
         {/* Active (centered) image */}
