@@ -255,7 +255,7 @@ const NavBar2 = () => {
           ))}
 
           <span className="cursor-pointer px-3 py-2 hover:bg-[#0074b2] hover:text-white rounded transition">
-            Offers
+            More
           </span>
         </div>
 

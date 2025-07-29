@@ -223,7 +223,7 @@ const FeaturedHospitals2 = () => {
                     <Phone className="w-4 h-4" />
                     Book Appointment
                   </button>
-                  <button  onClick={handleViewDetails} className="px-1 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                  <button  onClick={handleViewDetails} className="px-1 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors cursor-pointer">
                     View Details
                   </button>
                 </div>

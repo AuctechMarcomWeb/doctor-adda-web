@@ -174,7 +174,7 @@ const DoctorList = () => {
         <div className="absolute bottom-20 right-10 w-24 h-24 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full animate-bounce"></div>
       </div>
 
-      <div className={`relative max-w-7xl flex items-center mx-auto  py-16 text-center transition-all duration-1000 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+      <div className={`relative max-w-7xl flex items-center mx-auto py-8 pb-2 text-center transition-all duration-1000 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
         
         <div>
             <h2 className="text-5xl font-bold mb-4 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
@@ -183,7 +183,7 @@ const DoctorList = () => {
           
 
           {/* Search Bar */}
-          <div className="max-w-md mx-auto mb-8">
+          {/* <div className="max-w-md mx-auto mb-8">
             <div className="relative">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
@@ -194,7 +194,7 @@ const DoctorList = () => {
                 className="w-full pl-12 pr-4 py-4 rounded-2xl bg-white/90 backdrop-blur-sm border-0 focus:bg-white focus:ring-4 focus:ring-blue-200/50 transition-all duration-300 text-gray-700 placeholder-gray-400"
               />
             </div>
-          </div>
+          </div> */}
           
           <div className="flex flex-wrap gap-4 justify-center items-center mb-12">
             {[
@@ -216,7 +216,7 @@ const DoctorList = () => {
 
         {/* App Download Section */}
         <div className="max-w-2xl mx-auto">
-          <div className="bg-gradient-to-r from-white/15 to-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20 shadow-2xl">
+          <div className="bg-gradient-to-r from-white/15 to-white/10 backdrop-blur-md rounded-3xl p-4 border border-white/20 shadow-2xl">
             <div className="flex flex-col md:flex-row items-center gap-6">
               {/* Phone Mockup */}
               <div className="relative">
@@ -247,14 +247,16 @@ const DoctorList = () => {
                 </p>
                 
                 <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
-                  <button className="flex items-center gap-2 bg-white text-blue-600 px-6 py-3 rounded-2xl font-semibold hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                  <button className="flex items-center gap-2 bg-white text-blue-600 px-6 py-3 rounded-2xl font-semibold hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 shadow-lg cursor-pointer">
                     <Download className="w-5 h-5" />
                     <span>App Store</span>
                   </button>
-                  <button className="flex items-center gap-2 bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-2xl font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                  <a href="https://play.google.com/store/apps/details?id=com.doctors.adda">
+                    <button className="flex items-center gap-2 bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-2xl font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 shadow-lg cursor-pointer">
                     <Download className="w-5 h-5" />
                     <span>Play Store</span>
                   </button>
+                  </a>
                 </div>
               </div>
             </div>

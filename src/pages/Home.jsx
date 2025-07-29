@@ -33,9 +33,11 @@ const Home = () => {
       {/* <ServicesSection /> */}
       <ServicesSection2 />
       {/* <HeroSection/> */}
-      {/* <MedicalImagingBanner/> */}
+      <MedicalImagingBanner/>
       <DoctorCategoryCards />
       {/* <DoctorAddaHero/> */}
+
+      
 
       {/* <FeaturedHospitals /> */}
       <FeaturedHospitals2 />
