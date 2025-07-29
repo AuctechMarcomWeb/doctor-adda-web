@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { MapPin, IndianRupee,  Clock} from "lucide-react";
 
-const AmbulanceCard = ({ name, services,type, timming, price, location, rating, image }) => {
+const AmbulanceCard = ({ name, services,type, timming, price, capacity, location, rating, image }) => {
   const navigate = useNavigate();
     const handleViewDetails = () => {
       navigate(`/ambulance/${name}`);
@@ -26,9 +26,14 @@ const AmbulanceCard = ({ name, services,type, timming, price, location, rating, 
 
         {/* Meta Info */}
         <div className="mt-3 text-sm text-gray-500 space-y-1">
-          <div className="flex items-center gap-2">
-            <IndianRupee className="w-4 h-4 text-gray-400" />
-            <span>{price}</span>
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2">
+              <IndianRupee className="w-4 h-4 text-gray-400" />
+            <span className="line-clamp-1">{price}</span>
+            </div>
+              <div className="flex items-center gap-2">
+                <span className="line-clamp-1">Capacity: {capacity}</span>
+              </div>
           </div>
           <div className="flex items-center gap-2">
             <MapPin className="w-4 h-4 text-gray-400" />
@@ -48,12 +53,12 @@ const AmbulanceCard = ({ name, services,type, timming, price, location, rating, 
 
         {/* Buttons */}
         <div className="flex flex-col sm:flex-row md:flex-col gap-2">
-          <button onClick={handleViewDetails} className="h-9 px-4 text-sm text-[#00659d] bg-white hover:bg-[#00659d] hover:text-white border border-[#00659d] font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 cursor-pointer">
+          <button onClick={handleViewDetails} className="h-9 px-4 text-sm bg-[#00659d] hover:bg-white text-white hover:text-[#00659d] hover:border border-[#00659d] font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 cursor-pointer">
             View More
           </button>
-          <button className="h-9 px-4 text-sm bg-[#00659d] hover:bg-blue-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 cursor-pointer">
+          {/* <button className="h-9 px-4 text-sm bg-[#00659d] hover:bg-blue-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 cursor-pointer">
             Book Appointment
-          </button>
+          </button> */}
         </div>
       </div>
     </div>

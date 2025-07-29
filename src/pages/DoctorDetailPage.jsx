@@ -20,6 +20,10 @@ const DOCTOR_DATA = {
   about: "Dr. Ananya Singh is a highly experienced Internal Medicine specialist with over 12 years of clinical practice. She combines evidence-based medicine with compassionate care, focusing on preventive healthcare and patient wellness."
 };
 
+const DATE_SLOTS = [
+  "Today", "Tomorrow", "Wed, Jul 31", "Thu, Aug 1"
+];
+
 const TIME_SLOTS = [
   { time: "10:00 AM", available: true }, { time: "10:30 AM", available: false },
   { time: "11:00 AM", available: true }, { time: "11:30 AM", available: true },
@@ -153,6 +157,9 @@ const DoctorDetailPage = () => {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [reviewData, setReviewData] = useState({ name: '', comment: '', rating: 5 });
+  
+  const [selectedDate, setSelectedDate] = useState(DATE_SLOTS[0]);
+
 
   const handleReviewSubmit = () => {
     console.log("Submitted Review:", reviewData);
@@ -344,21 +351,45 @@ const DoctorDetailPage = () => {
                   </div>
                   
                   <div>
-                    <div className="flex items-center gap-3 mb-4">
-                      <Clock className="w-5 h-5 text-blue-600" />
-                      <span className="font-bold text-gray-900">Available Today</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      {TIME_SLOTS.map((slot, index) => (
-                        <TimeSlotButton 
-                          key={index} 
-                          slot={slot}
-                          isSelected={selectedSlot === slot.time}
-                          onSelect={setSelectedSlot}
-                        />
-                      ))}
-                    </div>
-                  </div>
+  {/* Date Slots */}
+  <div className="mb-6">
+    <h4 className="text-sm font-semibold text-gray-900 mb-2">Select Date</h4>
+    <div className="flex flex-wrap gap-3">
+      {DATE_SLOTS.map((date, index) => (
+        <button
+          key={index}
+          onClick={() => setSelectedDate(date)}
+          className={`px-4 py-2 rounded-xl font-medium transition-all duration-300 text-sm ${
+            selectedDate === date
+              ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md'
+              : 'bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-600'
+          }`}
+        >
+          {date}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  {/* Time Slots */}
+  <div>
+    <div className="flex items-center gap-3 mb-4">
+      <Clock className="w-5 h-5 text-blue-600" />
+      <span className="font-bold text-gray-900">Available {selectedDate}</span>
+    </div>
+    <div className="grid grid-cols-2 gap-3">
+      {TIME_SLOTS.map((slot, index) => (
+        <TimeSlotButton 
+          key={index} 
+          slot={slot}
+          isSelected={selectedSlot === slot.time}
+          onSelect={setSelectedSlot}
+        />
+      ))}
+    </div>
+  </div>
+</div>
+
 
                   <div className="space-y-3">
                     <ActionButton className="w-full py-4 rounded-2xl" style={{

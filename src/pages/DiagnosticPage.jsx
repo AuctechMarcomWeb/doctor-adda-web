@@ -366,6 +366,71 @@ const DiagnosticPage = () => {
         </div>
       </div>
 
+      {/* WHY CHOOSE US */}
+      {/* Why Choose Us Section */}
+      <div className="max-w-7xl mx-auto px-6 py-16">
+        <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12 animate-fade-up">
+          Why Choose <span className="gradient-text">Our Diagnostics</span>?
+        </h2>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Feature 1 */}
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 text-center transition-transform transform hover:scale-105 animate-fade-up">
+            <Shield className="mx-auto w-10 h-10 text-blue-500 mb-4 animate-rotate-in" />
+            <h4 className="text-lg font-semibold text-gray-800 mb-2">Trusted & Certified Labs</h4>
+            <p className="text-gray-600 text-sm">
+              All our labs are NABL/ISO certified to maintain highest safety and accuracy standards.
+            </p>
+          </div>
+
+          {/* Feature 2 */}
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 text-center transition-transform transform hover:scale-105 animate-fade-up" style={{ animationDelay: '0.1s' }}>
+            <Clock className="mx-auto w-10 h-10 text-indigo-500 mb-4 animate-rotate-in" />
+            <h4 className="text-lg font-semibold text-gray-800 mb-2">Fast & Timely Reports</h4>
+            <p className="text-gray-600 text-sm">
+              Get your reports delivered on time via email, app, or doorstep – hassle-free.
+            </p>
+          </div>
+
+          {/* Feature 3 */}
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 text-center transition-transform transform hover:scale-105 animate-fade-up" style={{ animationDelay: '0.2s' }}>
+            <Award className="mx-auto w-10 h-10 text-yellow-500 mb-4 animate-rotate-in" />
+            <h4 className="text-lg font-semibold text-gray-800 mb-2">Award-Winning Services</h4>
+            <p className="text-gray-600 text-sm">
+              Recognized for exceptional patient care and diagnostic innovation across regions.
+            </p>
+          </div>
+
+          {/* Feature 4 */}
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 text-center transition-transform transform hover:scale-105 animate-fade-up" style={{ animationDelay: '0.3s' }}>
+            <Heart className="mx-auto w-10 h-10 text-red-500 mb-4 animate-rotate-in" />
+            <h4 className="text-lg font-semibold text-gray-800 mb-2">Patient-Centric Approach</h4>
+            <p className="text-gray-600 text-sm">
+              Your comfort and health are our top priorities—always.
+            </p>
+          </div>
+
+          {/* Feature 5 */}
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 text-center transition-transform transform hover:scale-105 animate-fade-up" style={{ animationDelay: '0.4s' }}>
+            <Users className="mx-auto w-10 h-10 text-purple-500 mb-4 animate-rotate-in" />
+            <h4 className="text-lg font-semibold text-gray-800 mb-2">Expert Medical Team</h4>
+            <p className="text-gray-600 text-sm">
+              Our professionals ensure precise diagnostics and reliable reporting.
+            </p>
+          </div>
+
+          {/* Feature 6 */}
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 text-center transition-transform transform hover:scale-105 animate-fade-up" style={{ animationDelay: '0.5s' }}>
+            <MapPin className="mx-auto w-10 h-10 text-green-500 mb-4 animate-rotate-in" />
+            <h4 className="text-lg font-semibold text-gray-800 mb-2">Pan-India Presence</h4>
+            <p className="text-gray-600 text-sm">
+              Locate diagnostic centers near you with seamless booking via app or web.
+            </p>
+          </div>
+        </div>
+      </div>
+
+
       {/* Emergency Contact Banner */}
       <div className=" text-white py-8 mt-12"  style={{
     background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"
