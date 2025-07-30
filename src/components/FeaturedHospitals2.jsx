@@ -7,15 +7,14 @@ import { useNavigate } from "react-router-dom";
 const FeaturedHospitals2 = () => {
   const navigate = useNavigate();
 
-  const handleViewDetails = () => {
-    navigate(`/hospitaldetail/${name}`);
+  const handleViewDetails = (id) => {
+    navigate(`/hospitaldetail/${id}`);
   };
 
   const scrollRef = useRef(null);
   const animationRef = useRef(null);
   const [isScrolling, setIsScrolling] = useState(true);
   const [hospitalList, setHospitalList] = useState([]);
-  console.log("hospitalslist", hospitalList);
 
   // const hospitalList = [...hospitals, ...hospitals];
   // ✅ Fetch hospitals from API
@@ -48,7 +47,7 @@ const FeaturedHospitals2 = () => {
     fetchHospitals();
     scroll();
     return () => cancelAnimationFrame(animationRef.current);
-  }, [isScrolling]);
+  }, []);
 
   const stopScrolling = () => setIsScrolling(false);
   const resumeScrolling = () => setIsScrolling(true);
@@ -128,7 +127,7 @@ const FeaturedHospitals2 = () => {
 
               <div className="p-6">
                 <h3 className=" mb-2 text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-300">
-  {hospital.name?.split(" ").slice(0, 3).join(" ")}
+                  {hospital.name?.split(" ").slice(0, 3).join(" ")}
                 </h3>
                 <p
                   className="text-gray-600 text-sm mb-4 leading-relaxed"
@@ -143,7 +142,10 @@ const FeaturedHospitals2 = () => {
                     <Phone className="w-4 h-4" />
                     Book Appointment
                   </button>
-                  <button  onClick={handleViewDetails} className="px-1 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors cursor-pointer">
+                  <button
+onClick={() => handleViewDetails(hospital._id)}
+                    className="px-1 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors cursor-pointer"
+                  >
                     View Details
                   </button>
                 </div>

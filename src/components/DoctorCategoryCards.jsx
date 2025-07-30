@@ -17,7 +17,6 @@ const DoctorCategoryCards = () => {
   };
 
   const [categories, setCategories] = useState([]);
-  console.log("categories is ::", categories);
 
   const fetchCategories = async () => {
     try {
