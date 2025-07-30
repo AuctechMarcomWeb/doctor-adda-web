@@ -181,8 +181,9 @@ const PharmacyDetailPage = () => {
                   {/* Quick Info */}
                   <div className="space-y-4">
                     <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
-                      <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                      <span className="text-sm font-medium text-green-700">Open Now - 24/7</span>
+                     
+                      <Clock className="w-4 h-4 text-green-700" />
+                      <span className="text-sm font-medium text-green-700">Open - 9:00 AM to 8:00 PM</span>
                     </div>
 
                     <div className="space-y-3">
@@ -203,10 +204,10 @@ const PharmacyDetailPage = () => {
                       <PhoneCall className="w-5 h-5" />
                       Call Now
                     </button>
-                    <button className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all duration-300 font-semibold flex items-center justify-center gap-2 shadow-lg hover:shadow-xl">
+                    {/* <button className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all duration-300 font-semibold flex items-center justify-center gap-2 shadow-lg hover:shadow-xl">
                       <MessageCircle className="w-5 h-5" />
                       Chat with Pharmacist
-                    </button>
+                    </button> */}
                   </div>
 
                   {/* Services Preview */}
@@ -286,7 +287,7 @@ const PharmacyDetailPage = () => {
                   <div className="grid md:grid-cols-2 gap-8">
                     {/* Upload Area */}
                     <div>
-                      <label className="block mb-3 font-medium text-gray-700">Upload Prescription</label>
+                      <label className="block mb-3 font-medium text-gray-700">Upload Your Prescription</label>
                       <div className="relative group">
                         <div className="border-2 border-dashed border-blue-300 rounded-xl p-8 text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50/50 transition-all duration-300">
                           <input
@@ -299,7 +300,7 @@ const PharmacyDetailPage = () => {
                             <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4 group-hover:bg-blue-200 transition-colors duration-300">
                               <Upload className="w-8 h-8 text-blue-600" />
                             </div>
-                            <span className="font-medium text-gray-700 mb-1">Click to Upload</span>
+                            <span className="font-medium text-gray-700 mb-1">Click to Upload Prescription </span>
                             <span className="text-sm text-gray-500">JPG, PNG, PDF (Max 5MB)</span>
                           </label>
                         </div>
@@ -319,12 +320,12 @@ const PharmacyDetailPage = () => {
                     {/* Form Fields */}
                     <div className="space-y-6">
                       <div>
-                        <label className="block mb-2 font-medium text-gray-700">Medicine Description</label>
+                        <label className="block mb-2 font-medium text-gray-700">Add Description</label>
                         <input
                           type="text"
                           value={description}
                           onChange={(e) => setDescription(e.target.value)}
-                          placeholder="Enter medicine details or requirements"
+                          placeholder="Enter prescription details"
                           className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                         />
                       </div>
@@ -334,12 +335,12 @@ const PharmacyDetailPage = () => {
                           type="text"
                           value={duration}
                           onChange={(e) => setDuration(e.target.value)}
-                          placeholder="e.g., 7 days, 1 month"
+                          placeholder="Enter Number of days"
                           className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                         />
                       </div>
                       <button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl">
-                        Get Quote & Continue
+                       Continue
                       </button>
                     </div>
                   </div>
@@ -388,7 +389,7 @@ const PharmacyDetailPage = () => {
                     className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl"
                   >
                     <PlusCircle className="w-5 h-5" />
-                    Write Review
+                    Add Review
                   </button>
                 </div>
 

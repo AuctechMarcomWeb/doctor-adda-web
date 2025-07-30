@@ -115,14 +115,14 @@ const PharmacyPage = () => {
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fadeIn" style={{animationDelay: '0.9s'}}>
-                <a href="https://play.google.com/store/apps/details?id=com.doctors.adda">
-                  <button className="bg-white text-blue-600 font-bold py-4 px-6 rounded-full text-lg hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 shadow-lg cursor-pointer">
+                <a href="https://play.google.com/store/apps/details?id=com.doctors.adda" target="_blank">
+                  <button className="bg-white text-[#0074b2] font-bold py-4 px-6 rounded-full text-lg hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 shadow-lg cursor-pointer">
                   Download App Now
                 </button>
                 </a>
-                <button className="border-2 border-white text-white font-bold py-4 px-6 rounded-full text-lg hover:bg-white hover:text-blue-600 transition-all duration-300 transform hover:scale-105 cursor-pointer">
+                {/* <button className="border-2 border-white text-white font-bold py-4 px-6 rounded-full text-lg hover:bg-white hover:text-blue-600 transition-all duration-300 transform hover:scale-105 cursor-pointer">
                   Book Appointment
-                </button>
+                </button> */}
               </div>
             </div>
 
@@ -227,9 +227,8 @@ const PharmacyPage = () => {
 
         {/* Results */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-800">
-            Available Pharmacies
-            <span className="ml-2 text-lg text-gray-500">({filteredData.length})</span>
+          <h2 className="text-3xl font-bold text-gray-800 text-center text-gray-800 mb-10">
+            Available <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Pharmacies </span>
           </h2>
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <span className="w-3 h-3 bg-green-500 rounded-full"></span>
@@ -255,6 +254,83 @@ const PharmacyPage = () => {
           )}
         </div>
       </div>
+
+      {/* why choose us */}
+      {/* Why Choose Section */}
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <h2 className="text-3xl font-bold text-gray-800 text-center text-gray-800 mb-10">
+            Why Choose <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Our Pharmacy Services?</span>
+          </h2>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Card 1 */}
+            <div className="bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition-all duration-300 animate-fadeIn">
+              <div className="w-14 h-14 bg-green-100 text-green-600 flex items-center justify-center rounded-full mb-4">
+                <img src="https://img.icons8.com/emoji/48/pill-emoji.png" alt="pill" width={28} />
+              </div>
+              <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">24/7 Availability</h4>
+              <p className="text-gray-600 text-sm">
+                We’re always open — day or night — ensuring you get essential medicines without delays.
+              </p>
+            </div>
+
+            {/* Card 2 */}
+            <div className="bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition-all duration-300 animate-fadeIn" style={{ animationDelay: '0.2s' }}>
+              <div className="w-14 h-14 bg-blue-100 text-blue-600 flex items-center justify-center rounded-full mb-4">
+                <img src="https://img.icons8.com/color/48/motorcycle-delivery-single-box.png" alt="delivery" width={28} />
+              </div>
+              <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">Home Delivery</h4>
+              <p className="text-gray-600 text-sm">
+                Hassle-free doorstep delivery of your medicines, saving your time and travel.
+              </p>
+            </div>
+
+            {/* Card 3 */}
+            <div className="bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition-all duration-300 animate-fadeIn" style={{ animationDelay: '0.4s' }}>
+              <div className="w-14 h-14 bg-yellow-100 text-yellow-600 flex items-center justify-center rounded-full mb-4">
+                <img src="https://img.icons8.com/emoji/48/money-mouth-face.png" alt="affordable" width={28} />
+              </div>
+              <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">Affordable Rates</h4>
+              <p className="text-gray-600 text-sm">
+                Best prices on genuine medicines, with discounts on generic alternatives.
+              </p>
+            </div>
+
+            {/* Card 4 */}
+            <div className="bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition-all duration-300 animate-fadeIn" style={{ animationDelay: '0.6s' }}>
+              <div className="w-14 h-14 bg-purple-100 text-purple-600 flex items-center justify-center rounded-full mb-4">
+                <img src="https://img.icons8.com/emoji/48/clipboard-emoji.png" alt="verified" width={28} />
+              </div>
+              <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">Verified Pharmacies</h4>
+              <p className="text-gray-600 text-sm">
+                All listed pharmacies are verified for authenticity, quality, and compliance.
+              </p>
+            </div>
+
+            {/* Card 5 */}
+            <div className="bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition-all duration-300 animate-fadeIn" style={{ animationDelay: '0.8s' }}>
+              <div className="w-14 h-14 bg-red-100 text-red-600 flex items-center justify-center rounded-full mb-4">
+                <img src="https://img.icons8.com/emoji/48/syringe-emoji.png" alt="stocked" width={28} />
+              </div>
+              <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">Wide Medicine Range</h4>
+              <p className="text-gray-600 text-sm">
+                From regular prescriptions to rare generics — we ensure maximum availability.
+              </p>
+            </div>
+
+            {/* Card 6 */}
+            <div className="bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition-all duration-300 animate-fadeIn" style={{ animationDelay: '1s' }}>
+              <div className="w-14 h-14 bg-cyan-100 text-cyan-600 flex items-center justify-center rounded-full mb-4">
+                <img src="https://img.icons8.com/ultraviolet/50/phone.png" alt="support" width={28} />
+              </div>
+              <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">Supportive Staff</h4>
+              <p className="text-gray-600 text-sm">
+                Trained professionals to help you with your medicine queries and refills.
+              </p>
+            </div>
+          </div>
+        </div>
+
 
       {/* Emergency Call Banner */}
       <div className=" text-white py-8 mt-12" style={{

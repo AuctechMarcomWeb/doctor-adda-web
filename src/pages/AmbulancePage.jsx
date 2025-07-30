@@ -96,20 +96,22 @@ const AmbulancePage = () => {
                   <span className="text-sm font-medium">Quick Response</span>
                 </div>
               </div>
-              
+
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 animate-fade-in-up delay-900">
-                <a href="https://play.google.com/store/apps/details?id=com.doctors.adda">
+                <a href="https://play.google.com/store/apps/details?id=com.doctors.adda" target="_blank">
                   <button className="group bg-white text-[#0074b2] font-bold py-4 px-6 rounded-full text-lg hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center gap-3  mb-4 cursor-pointer">
                     <span className="text-lg group-hover:scale-110 transition-transform"><img width="30" height="30" src="https://img.icons8.com/ios/50/iphone14-pro.png" alt="iphone14-pro"/></span>
                     Download App
                   </button>
                 </a>
-                <button className="group bg-red-500 hover:bg-red-600 text-white border border-white font-bold py-4 px-6 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center gap-3  mb-4 cursor-pointer" style={{
+               <a href="#emergency">
+                 <button className="group bg-red-500 hover:bg-red-600 text-white border border-white font-bold py-4 px-6 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center gap-3  mb-4 cursor-pointer" style={{
         background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)" }} >
-                  <span className="text-lg  group-hover:scale-110 transition-transform"><img width="30" height="30" src="https://img.icons8.com/color/48/tear-off-calendar--v1.png" alt="tear-off-calendar--v1"/></span>
-                  Book Appointment
+                  <span className="text-lg  group-hover:scale-110 transition-transform"><img width="25" height="25" src="https://img.icons8.com/fluency-systems-regular/50/FFFFFF/phone.png" alt="phone"/></span>
+                 Emergency Call 
                 </button>
+               </a>
               </div>
             </div>
             
@@ -205,8 +207,8 @@ const AmbulancePage = () => {
 
         {/* Results Header */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-800">
-            Available Ambulances
+          <h2 className="text-3xl font-bold text-gray-800">
+            Available  <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Ambulances</span> 
             <span className="ml-2 text-lg text-gray-500">({filteredData.length})</span>
           </h2>
           <div className="flex items-center gap-2 text-sm text-gray-600">
@@ -234,15 +236,59 @@ const AmbulancePage = () => {
 
       </div>
 
+      {/* why choose us */}
+              <section className="max-w-7xl mx-auto px-4 py-8">
+                <h2 className="text-3xl font-bold text-gray-800 mb-4 text-center">
+            Why Choose {" "}
+            <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+              Our Ambulance Services
+            </span>
+          </h2>
+                <div className="grid md:grid-cols-3 gap-8 text-center">
+                  <div className="p-6 bg-white shadow-xl rounded-2xl hover:shadow-2xl transition-all duration-300">
+                    <img src="https://img.icons8.com/ios-filled/50/0074b2/alarm.png" alt="24/7" className="mx-auto mb-4" />
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">24/7 Availability</h3>
+                    <p className="text-sm text-gray-600">We’re ready round the clock to respond to your emergencies instantly.</p>
+                  </div>
+                  <div className="p-6 bg-white shadow-xl rounded-2xl hover:shadow-2xl transition-all duration-300">
+                    <img src="https://img.icons8.com/ios-filled/50/0074b2/heart-monitor.png" alt="ICU" className="mx-auto mb-4" />
+                    <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">ICU-Equipped Fleet</h4>
+                    <p className="text-sm text-gray-600">Advanced Life Support ambulances with ventilators, monitors, and trained staff.</p>
+                  </div>
+                  <div className="p-6 bg-white shadow-xl rounded-2xl hover:shadow-2xl transition-all duration-300">
+                    <img src="https://img.icons8.com/ios-filled/50/0074b2/route.png" alt="Fast" className="mx-auto mb-4" />
+                    <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">Fastest Response Time</h4>
+                    <p className="text-sm text-gray-600">Our tech-enabled dispatch ensures vehicles reach you in under 8 minutes.</p>
+                  </div>
+                  <div className="p-6 bg-white shadow-xl rounded-2xl hover:shadow-2xl transition-all duration-300">
+                    <img src="https://img.icons8.com/ios-filled/50/0074b2/wallet.png" alt="Affordable" className="mx-auto mb-4" />
+                    <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">Affordable Pricing</h4>
+                    <p className="text-sm text-gray-600">Transparent and budget-friendly ambulance services with no hidden charges.</p>
+                  </div>
+                  <div className="p-6 bg-white shadow-xl rounded-2xl hover:shadow-2xl transition-all duration-300">
+                    <img src="https://img.icons8.com/ios-filled/50/0074b2/marker.png" alt="Location" className="mx-auto mb-4" />
+                    <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">Location Based Matching</h4>
+                    <p className="text-sm text-gray-600">Get matched with ambulances closest to your current location.</p>
+                  </div>
+                  <div className="p-6 bg-white shadow-xl rounded-2xl hover:shadow-2xl transition-all duration-300">
+                    <img src="https://img.icons8.com/ios-filled/50/0074b2/android-os.png" alt="App" className="mx-auto mb-4" />
+                    <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">One-Tap Booking</h4>
+                    <p className="text-sm text-gray-600">Book instantly using our mobile app with live updates and tracking.</p>
+                  </div>
+                </div>
+              </section>
+
+              
+
       {/* Emergency Contact Banner */}
-      <div className=" text-white py-8 mt-12" style={{
+      <div id="emergency" className=" text-white py-8 mt-12" style={{
     background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}}>
         <div className="max-w-4xl mx-auto px-4 text-center">
           <div className="flex items-center justify-center gap-4 mb-4">
             <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
               <span className="text-2xl"><img src="src/assets/alert.png" height={50} width={50} alt="" /></span>
             </div>
-            <div>
+            <div >
               <h3 className="text-2xl font-bold">Emergency?</h3>
               <p className="text-red-100">Call immediately for urgent medical assistance</p>
             </div>
