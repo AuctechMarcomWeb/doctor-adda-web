@@ -70,7 +70,7 @@ function App() {
                  <Route path="/diagnostic" element={<DiagnosticPage />} />
                  <Route path="/diagnostic/:id" element={<DiagnosticDetailPage />} />
                  <Route path="/doctor" element={<DoctorPage />} />
-                 <Route path="/doctorlist" element={<DoctorList />} />
+                 <Route path="/doctorlist/:id" element={<DoctorList />} />
                  <Route path="/doctordetail/:id" element={<DoctorDetailPage />} />
                  <Route path="/hospital" element={<HospitalPage />} />
                  <Route path="/hospital/:id" element={<HospitalDetailPage />} />
