@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect, useState } from "react";
 import { ArrowRight, Shield, Clock, Award, Phone, Gift } from "lucide-react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { postRequest } from "../Helpers";
 import { useNavigate } from "react-router-dom";
 const slides = [
@@ -29,28 +29,25 @@ const slides = [
   },
 ];
 
-const LoginStep = ({ setStep, setMobile, setMode }) => {
+const SignUpStep = ({ setStep, setMobile, setMode }) => {
 
   const [currentSlide, setCurrentSlide] = useState(0);
   const [mobileNumber, setMobileNumber] = useState("");
-  console.log("mobileNumber", mobileNumber);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = async () => {
+  const handleSignUp = async () =>  {
     setIsLoading(true);
     // Your login API call here
     const cred = { phone: mobileNumber };
     try {
-      const res = await postRequest({ url: "auth/login", cred });
+      const res = await postRequest({ url: "auth/sendOtp", cred });
       console.log("OTP Response:", res?.data?.data.otp)
 
       if (res?.data?.statusCode === 200 && res?.data?.success) {
         toast.success("OTP sent successfully!")
-        //await new Promise(resolve => setTimeout(resolve, 1000))
         setStep(2)
-        // setIsLoading(false);
       } else {
-        toast.error(res?.message || "Failed to send OTP.");
+        toast.error(res?.data?.message || "Failed to send OTP.");
       }
     } catch (err) {
       console.error("OTP API Error:", err);
@@ -123,7 +120,7 @@ const LoginStep = ({ setStep, setMobile, setMode }) => {
           <div className="relative z-10 space-y-8">
             <div className="space-y-3">
               <h2 className="text-3xl font-bold text-gray-900 tracking-tight">
-                Welcome Back To Doctor Adda
+                Welcome To Doctor Adda
               </h2>
               <p className="text-gray-600 text-lg">
                 Enter your mobile number to continue
@@ -161,7 +158,7 @@ const LoginStep = ({ setStep, setMobile, setMode }) => {
 
               <button
                 onClick={() => {
-                  handleLogin()
+                  handleSignUp()
                 }}
                 disabled={mobileNumber.length < 10 || isLoading}
                 className="w-full py-4 bg-gradient-to-r from-emerald-600 to-blue-600 text-white font-semibold rounded-xl flex items-center justify-center gap-3 hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0"
@@ -196,12 +193,14 @@ const LoginStep = ({ setStep, setMobile, setMode }) => {
             </div>
 
             <div className="flex items-center gap-3 text-gray-500 text-sm">
-              <p>Don't have an account? <button 
-                onClick={() => setMode && setMode('signup')} 
+              <p>already have an account?
+                <button 
+                onClick={() => setMode && setMode('login')} 
                 className="text-blue-500 hover:text-blue-700 transition-colors cursor-pointer" 
               >
-                SignUp
-              </button></p>
+                SignIn
+              </button>
+             </p>
             </div>
 
             {/* Terms */}
@@ -251,4 +250,4 @@ const LoginStep = ({ setStep, setMobile, setMode }) => {
   );
 };
 
-export default LoginStep;
+export default SignUpStep;
