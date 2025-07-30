@@ -1,26 +1,61 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 // BannerSection.jsx
-import React from "react";
+import React, { useState } from "react";
 import {
   FaRupeeSign,
   FaMotorcycle,
   FaClipboardCheck,
   FaUserMd,
 } from "react-icons/fa";
+import { useEffect } from "react";
+import { getRequest } from "../Helpers/index";
 
 const BannerSection = () => {
+  const [searchResults, setSearchResults] = useState([]);
+  const [location, setLocation] = useState({
+    latitude: "26.8469033",
+    longitude: "80.9659383",
+    query: "general",
+    radius: "5000",
+  });
+
+  const fetchData = async () => {
+    const url = `global-search?longitude=${location?.longitude}&latitude=${location?.latitude}&query=${location?.query}&radius=${location?.radius}`;
+
+    try {
+      const response = await getRequest(url);
+
+      if (response) {
+        console.log("Global Search Response:", response?.data?.data);
+        setSearchResults(response?.data?.data || []);
+      }
+    } catch (error) {
+      console.error("Error in Global Search:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
-    <div className="max-w-7xl mx-auto text-white p-6 md:p-12 rounded-3xl flex flex-col md:flex-row items-center justify-between" style={{
-    background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)" , paddingBottom: "0px" ,paddingTop:"100px",
-  }}>
+    <div
+      className="max-w-7xl mx-auto text-white p-6 md:p-12 rounded-3xl flex flex-col md:flex-row items-center justify-between"
+      style={{
+        background:
+          "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
+        paddingBottom: "0px",
+        paddingTop: "100px",
+      }}
+    >
       {/* Left Content */}
       <div className="max-w-7xl  py-20 ">
-        <h2 className="text-4xl font-bold ">
-          Your Health,One Tap Away
-        </h2>
+        <h2 className="text-4xl font-bold ">Your Health,One Tap Away</h2>
 
         <div className="flex items-center gap-4 mt-6">
           <span className="text-3xl text-xl flex items-center font-bold">
-            
             Smart Healthcare Access – Anytime, Anywhere
           </span>
           <button className="bg-Blue-400 border border-white text-white font-semibold px-4 py-2 rounded-lg hover:bg-white hover:text-[#0074b2] transition cursor-pointer">
@@ -41,31 +76,29 @@ const BannerSection = () => {
         </div> */}
 
         <div className=" mt-8 rounded-lg  text-black w-full max-w-xl flex items-center  justify-between ">
-                  <div className="flex gap-4 items-center">
-                    <input
-                      type="text"
-                      placeholder="Search doctors, specialties, or locations"
-                      className="w-full md:w-2/3 px-4 py-2  rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white cursor-pointer"
-                    />
-                    <select className="w-fit md:w-1/3 px-4 py-2  rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"  style={{ width: "fit-content" }} >
-                      <option>All Specialties</option>
-                      <option>Radiology</option>
-                      <option>Cardiology</option>
-                      <option>Neurology</option>
-                    </select>
+          <div className="flex gap-4 items-center">
+            <input
+              type="text"
+              placeholder="Search doctors, specialties, or locations"
+              className="w-full md:w-2/3 px-4 py-2  rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white cursor-pointer"
+            />
+            <select
+              className="w-fit md:w-1/3 px-4 py-2  rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
+              style={{ width: "fit-content" }}
+            >
+              <option>All Specialties</option>
+              <option>Radiology</option>
+              <option>Cardiology</option>
+              <option>Neurology</option>
+            </select>
 
-                    <div className="">
-                    <button className="w-full md:w-auto px-6 py-2 bg-[#297cff] text-white font-semibold rounded-md hover:bg-blue-700 transition cursor-pointer">
-                      SEARCH
-                    </button>
-                  </div>
-                  </div>
-                  
-                </div>
-
-
-
-                
+            <div className="">
+              <button className="w-full md:w-auto px-6 py-2 bg-[#297cff] text-white font-semibold rounded-md hover:bg-blue-700 transition cursor-pointer">
+                SEARCH
+              </button>
+            </div>
+          </div>
+        </div>
 
         {/* Features */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6 text-sm">
@@ -74,7 +107,10 @@ const BannerSection = () => {
             <span>
               <span className="font-semibold">Free Sample Collection</span>
               <br />
-              within <span className="text-yellow-300 font-bold">60 Mins</span> of Booking*
+              within <span className="text-yellow-300 font-bold">
+                60 Mins
+              </span>{" "}
+              of Booking*
             </span>
           </div>
           <div className="flex items-start gap-2">
@@ -96,17 +132,15 @@ const BannerSection = () => {
         </div>
 
         <div className="flex items-center gap-4 mt-6">
-          
           <button className="bg-Blue-400 border border-white text-white font-semibold px-4 py-2 rounded-lg hover:bg-white hover:text-[#0074b2] transition cursor-pointer">
             Book Appointment
           </button>
           <a href="https://play.google.com/store/apps/details?id=com.doctors.adda">
             <button className="bg-white text-[#0074b2]  font-semibold px-4 py-2 rounded-lg  hover:text-black transition cursor-pointer">
-            Download App Now
-          </button>
+              Download App Now
+            </button>
           </a>
         </div>
-
       </div>
 
       {/* Right Image */}

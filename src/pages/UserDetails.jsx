@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import { User, Mail, Users, CheckCircle, ArrowRight, UserCheck, Settings } from "lucide-react";
 import { patchRequest } from "../Helpers";
 import { useSelector } from "react-redux";
+// import { useNavigate } from 'react-router-dom';
+import toast from "react-hot-toast";
 const slides = [
   {
     image: "https://plus.unsplash.com/premium_photo-1673953509975-576678fa6710?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fGRvY3RvcnxlbnwwfHwwfHx8MA%3D%3D",
@@ -29,6 +31,7 @@ const UserDetails = ({ onSubmitSuccess }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
+
 
   console.log("user id fetched", userId);
 
@@ -99,6 +102,8 @@ const UserDetails = ({ onSubmitSuccess }) => {
     } else {
       alert("Profile completed successfully!");
     }
+   
+navigate('/');
   } catch (err) {
     console.error("Error in updateProfile API:", err);
     toast.error("Failed to update profile. Please try again.");
