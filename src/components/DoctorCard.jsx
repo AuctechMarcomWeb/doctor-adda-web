@@ -1,6 +1,6 @@
 import React from "react";
 
-const DoctorCard = ({ name, type, capacity, price, location, rating, image }) => {
+const DoctorCard = ({ experience, type, specialization, fee, location, rating, image }) => {
   return (
     <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-blue-200 transform hover:-translate-y-1">
       {/* Background gradient overlay */}
@@ -51,8 +51,8 @@ const DoctorCard = ({ name, type, capacity, price, location, rating, image }) =>
               <span className="text-blue-600 text-sm"><img src="https://i.pinimg.com/1200x/9d/d0/f2/9dd0f2f55fb40d05d3f8a10991dbde22.jpg"  alt=""  /></span>
             </div>
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-wide">Type</p>
-              <p className="text-sm font-semibold text-gray-800">{type}</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide">Specialization</p>
+              <p className="text-sm font-semibold text-gray-800">{specialization}</p>
             </div>
           </div>
           
@@ -61,8 +61,8 @@ const DoctorCard = ({ name, type, capacity, price, location, rating, image }) =>
               <span className="text-green-600 text-sm"><img src="https://i.pinimg.com/736x/71/26/7e/71267e196665cb6a2e48310bcf87f2c7.jpg"  height={25} width={25} alt="" /></span>
             </div>
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-wide">Capacity</p>
-              <p className="text-sm font-semibold text-gray-800">{capacity} Unit</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide">Experience</p>
+              <p className="text-sm font-semibold text-gray-800">{experience} </p>
             </div>
           </div>
           
@@ -71,8 +71,8 @@ const DoctorCard = ({ name, type, capacity, price, location, rating, image }) =>
               <span className="text-purple-600 text-sm">₹</span>
             </div>
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-wide">Price</p>
-              <p className="text-sm font-semibold text-gray-800">₹{price}</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide">Fee</p>
+              <p className="text-sm font-semibold text-gray-800">₹{fee}</p>
             </div>
           </div>
           

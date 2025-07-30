@@ -160,20 +160,20 @@ const Navbar = () => {
           <div className="md:hidden bg-white border-t">
             <div className="px-2 pt-2 pb-3 space-y-1">
               <Link to="/" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Home</Link>
-              <Link to="/" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Blood Bank <span className="ml-1">▾</span></Link>
-              <Link to="#doctors" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Ambulance <span className="ml-1">▾</span></Link>
-              <Link to="/" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Pharmacies <span className="ml-1">▾</span></Link>
-              <Link to="/" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Diagnostic <span className="ml-1">▾</span></Link>
-              <Link to="/" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Doctors & Specialists<span className="ml-1">▾</span></Link>
-              <Link to="/" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Hospitals & Clinics<span className="ml-1">▾</span></Link>
-              <Link to="/contact" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Contact</Link>
-              <button className="w-full mt-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-2 rounded-full">
+              <Link to="/ambulance" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Blood Bank </Link>
+              <Link to="/ambulance" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Ambulance </Link>
+              <Link to="/pharmacy" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Pharmacies </Link>
+              <Link to="/diagnostic" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Diagnostic </Link>
+              <Link to="/doctor" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Doctors & Specialists</Link>
+              <Link to="/hospital" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Hospitals & Clinics</Link>
+              
+              <Link to="/login"><button className="w-full mt-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-2 rounded-full">
                 Login / SignUp
-              </button>
+              </button></Link>
             </div>
           </div>
         )}
-      
+      {/* <span className="ml-1">▾</span> */}
       </nav>
 
     </>

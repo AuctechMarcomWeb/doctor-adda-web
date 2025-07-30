@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { User, Mail, Users, CheckCircle, ArrowRight, UserCheck, Settings } from "lucide-react";
 import { patchRequest } from "../Helpers";
 import { useSelector } from "react-redux";
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import toast from "react-hot-toast";
 const slides = [
   {
@@ -34,7 +34,11 @@ const UserDetails = ({ onSubmitSuccess }) => {
 
 
   console.log("user id fetched", userId);
-   const navigate = useNavigate();
+
+   useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
+  
 
   useEffect(() => {
     const interval = setInterval(() => {

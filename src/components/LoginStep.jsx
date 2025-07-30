@@ -30,6 +30,9 @@ const slides = [
 ];
 
 const LoginStep = ({ setStep, setMobile }) => {
+   useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [mobileNumber, setMobileNumber] = useState("");
   console.log("mobileNumber", mobileNumber);

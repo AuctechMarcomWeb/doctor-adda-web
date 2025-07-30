@@ -16,6 +16,8 @@ import TestimonialsSection from "../components/TestimonialsSection";
 import HealthBlogSection from "../components/HealthBlogSection";
 import AboutUsSection from "../components/AboutUsSection";
 import MedicalImagingBanner from "../components/MedicalImagingBanner";
+import WhyChooseUs from "../components/WhyChooseUs";
+import Carousel from "../components/Carousel";
 
 const Home = () => {
   useEffect(() => {
@@ -32,14 +34,17 @@ const Home = () => {
       {/* <ServicesSection /> */}
       <ServicesSection2 />
       {/* <HeroSection/> */}
-      {/* <MedicalImagingBanner/> */}
+      <MedicalImagingBanner/>
       <DoctorCategoryCards />
       {/* <DoctorAddaHero/> */}
+
+      <Carousel />
 
       {/* <FeaturedHospitals /> */}
       <FeaturedHospitals2 />
       {/* <HealthScansSection/> */}
       <DoctorAddaLanding />
+      <WhyChooseUs />
       <AboutUsSection />
       {/* <TestimonialsSection/> */}
       <HealthBlogSection />

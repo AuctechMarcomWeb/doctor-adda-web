@@ -2,8 +2,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Star, Phone, ChevronLeft, ChevronRight } from "lucide-react";
 import { getRequest } from "../Helpers";
+import { useNavigate } from "react-router-dom";
 
 const FeaturedHospitals2 = () => {
+  const navigate = useNavigate();
+
+  const handleViewDetails = () => {
+    navigate(`/hospitaldetail/${name}`);
+  };
+
   const scrollRef = useRef(null);
   const animationRef = useRef(null);
   const [isScrolling, setIsScrolling] = useState(true);
@@ -136,7 +143,7 @@ const FeaturedHospitals2 = () => {
                     <Phone className="w-4 h-4" />
                     Book Appointment
                   </button>
-                  <button className="px-1 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                  <button  onClick={handleViewDetails} className="px-1 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors cursor-pointer">
                     View Details
                   </button>
                 </div>

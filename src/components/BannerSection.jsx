@@ -17,8 +17,8 @@ const BannerSection = () => {
   const [location, setLocation] = useState({
     latitude: "26.8469033",
     longitude: "80.9659383",
-    query:"general",
-    radius:"5000",
+    query: "general",
+    radius: "5000",
   });
 
   const fetchData = async () => {
@@ -42,7 +42,7 @@ const BannerSection = () => {
 
   return (
     <div
-      className="max-w-7xl mx-auto text-white p-6 md:p-12 rounded-xl flex flex-col md:flex-row items-center justify-between"
+      className="max-w-7xl mx-auto text-white p-6 md:p-12 rounded-3xl flex flex-col md:flex-row items-center justify-between"
       style={{
         background:
           "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
@@ -52,14 +52,13 @@ const BannerSection = () => {
     >
       {/* Left Content */}
       <div className="max-w-7xl  py-20 ">
-        <h2 className="text-4xl font-bold ">Make India Healthy Package 2025</h2>
+        <h2 className="text-4xl font-bold ">Your Health,One Tap Away</h2>
 
         <div className="flex items-center gap-4 mt-6">
           <span className="text-3xl text-xl flex items-center font-bold">
-            @<FaRupeeSign className="mr-1" />
-            99
+            Smart Healthcare Access – Anytime, Anywhere
           </span>
-          <button className="bg-Blue-400 border border-white text-white font-semibold px-4 py-2 rounded hover:bg-white hover:text-[#0074b2] transition">
+          <button className="bg-Blue-400 border border-white text-white font-semibold px-4 py-2 rounded-lg hover:bg-white hover:text-[#0074b2] transition cursor-pointer">
             Book Now
           </button>
         </div>
@@ -76,12 +75,12 @@ const BannerSection = () => {
           </button>
         </div> */}
 
-        <div className=" mt-8 rounded-lg  text-black w-full max-w-xl flex items-center  justify-between">
-          <div className="flex flex-col md:flex-row gap-4 items-center">
+        <div className=" mt-8 rounded-lg  text-black w-full max-w-xl flex items-center  justify-between ">
+          <div className="flex gap-4 items-center">
             <input
               type="text"
               placeholder="Search doctors, specialties, or locations"
-              className="w-full md:w-2/3 px-4 py-2  rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
+              className="w-full md:w-2/3 px-4 py-2  rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white cursor-pointer"
             />
             <select
               className="w-fit md:w-1/3 px-4 py-2  rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
@@ -94,7 +93,7 @@ const BannerSection = () => {
             </select>
 
             <div className="">
-              <button className="w-full md:w-auto px-6 py-2 bg-[#297cff] text-white font-semibold rounded-md hover:bg-blue-700 transition">
+              <button className="w-full md:w-auto px-6 py-2 bg-[#297cff] text-white font-semibold rounded-md hover:bg-blue-700 transition cursor-pointer">
                 SEARCH
               </button>
             </div>
@@ -133,12 +132,14 @@ const BannerSection = () => {
         </div>
 
         <div className="flex items-center gap-4 mt-6">
-          <button className="bg-Blue-400 border border-white text-white font-semibold px-4 py-2 rounded hover:bg-white hover:text-[#0074b2] transition">
+          <button className="bg-Blue-400 border border-white text-white font-semibold px-4 py-2 rounded-lg hover:bg-white hover:text-[#0074b2] transition cursor-pointer">
             Book Appointment
           </button>
-          <button className="bg-white text-[#0074b2]  font-semibold px-4 py-2 rounded  hover:text-black transition">
-            Download App Now
-          </button>
+          <a href="https://play.google.com/store/apps/details?id=com.doctors.adda">
+            <button className="bg-white text-[#0074b2]  font-semibold px-4 py-2 rounded-lg  hover:text-black transition cursor-pointer">
+              Download App Now
+            </button>
+          </a>
         </div>
       </div>
 
@@ -147,7 +148,7 @@ const BannerSection = () => {
         <img
           src="https://images.unsplash.com/photo-1581056771107-24ca5f033842?w=400&h=300&fit=crop"
           alt="Health Package Promotion"
-          className="w-full max-h-80 object-contain rounded-lg shadow-lg"
+          className="w-full max-h-80 object-contain rounded-2xl shadow-lg"
         />
       </div>
     </div>

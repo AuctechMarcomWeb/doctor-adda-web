@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Star,
   MapPin,
@@ -7,10 +7,13 @@ import {
 } from "lucide-react";
 
 const AmbulanceDetailPage = () => {
+   useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []);
   const [activeTab, setActiveTab] = useState("about");
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-10 space-y-8 pt-40">
+    <div className="max-w-7xl mx-auto  py-10 space-y-8 pt-40">
       {/* Heading */}
       <div className="flex flex-col md:flex-row gap-6">
         {/* Left Side - Image */}

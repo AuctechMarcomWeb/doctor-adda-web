@@ -25,6 +25,7 @@ const slides = [
 ];
 
 const OtpStep = ({
+  
   mobile = "",
   onVerifySuccess,
   redirectTo = "/user-details",
@@ -39,6 +40,9 @@ const OtpStep = ({
   const [canResend, setCanResend] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const otpRefs = useRef([]);
+   useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
 
   // Slider rotation
   useEffect(() => {

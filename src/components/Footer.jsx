@@ -109,7 +109,7 @@ const Footer = () => {
 
           <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
             <p>
-              &copy; 2024 Doctor Adda. All rights reserved. Made with Auctech It Solutions
+              &copy; 2025 Doctor Adda. All rights reserved. Designed by Auctech MarCom
             </p>
             <div className="mt-4 flex justify-center items-center gap-4 text-sm">
               <Link

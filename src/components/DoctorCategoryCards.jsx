@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -9,35 +9,35 @@ import { Stethoscope, Heart, Brain, Eye, Activity, User } from "lucide-react";
 import { getRequest } from "../Helpers/index";
 
 const DoctorCategoryCards = () => {
- const [categories, setCategories] = useState([])
- console.log("categories is ::",categories);
- 
- const fetchCategories = async () =>{
-  try{
-    const response = await getRequest('category')
-    console.log("fetched category",response);
-    setCategories(response?.data?.data?.categories || []);
-  }
-  catch(error){
-    console.error(error);
- }
-}
- useEffect(() =>{
-  fetchCategories();
- },[])
+  const [categories, setCategories] = useState([]);
+  console.log("categories is ::", categories);
 
- const getIconByCategory = (name ="") => {
-  if (
-    name.includes("General Physician") ||
-    name.includes("Dental Care") ||
-    name.includes("Cardiologist")
-  ) return Heart;
-  if (name.includes("Neurologist"))return Brain;
-  if (name.includes("Child Specialist")) return Stethoscope;
-  if (name.includes("Ear,Nose,Throat")) return Eye;
-  if (name.includes("Physio")) return Activity;
-  return User;
-};
+  const fetchCategories = async () => {
+    try {
+      const response = await getRequest("category");
+      console.log("fetched category", response);
+      setCategories(response?.data?.data?.categories || []);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const getIconByCategory = (name = "") => {
+    if (
+      name.includes("General Physician") ||
+      name.includes("Dental Care") ||
+      name.includes("Cardiologist")
+    )
+      return Heart;
+    if (name.includes("Neurologist")) return Brain;
+    if (name.includes("Child Specialist")) return Stethoscope;
+    if (name.includes("Ear,Nose,Throat")) return Eye;
+    if (name.includes("Physio")) return Activity;
+    return User;
+  };
 
   return (
     <div className="bg-gradient-to-br from-slate-50 to-blue-50 py-8 px-4 relative">
@@ -79,8 +79,7 @@ const DoctorCategoryCards = () => {
             }}
           >
             {categories.map((category, index) => {
-const IconComponent = getIconByCategory(category.name);
-
+              const IconComponent = getIconByCategory(category.name);
 
               return (
                 <>

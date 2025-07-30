@@ -3,11 +3,13 @@ import React, { useState, useEffect } from "react";
 import AmbulanceCard from "../components/AmbulanceCard";
 import { getRequest } from "../Helpers"; // Adjust this path if needed
 
-
 const AmbulancePage = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
-const [ambulanceData, setAmbulanceData] = useState([]);
+  const [ambulanceData, setAmbulanceData] = useState([]);
 
   useEffect(() => {
     const fetchAmbulances = async () => {
@@ -67,83 +69,173 @@ const [ambulanceData, setAmbulanceData] = useState([]);
   });
 
   return (
-
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-red-50">
       {/* Hero Banner */}
       <div
-        className="relative  text-white overflow-hidden"
+        className="relative overflow-hidden"
         style={{
           background:
             "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
+          minHeight: "600px",
         }}
       >
-        <div className="absolute inset-0 bg-black/20"></div>
-
-        {/* Animated background elements */}
+        {/* Animated Background Elements */}
         <div className="absolute inset-0">
-          <div className="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full animate-pulse"></div>
-          <div className="absolute top-20 right-20 w-16 h-16 bg-white/10 rounded-full animate-pulse delay-75"></div>
-          <div className="absolute bottom-10 left-1/4 w-12 h-12 bg-white/10 rounded-full animate-pulse delay-150"></div>
+          <div className="absolute top-20 left-10 w-32 h-32 bg-white/10 rounded-full animate-bounce"></div>
+          <div className="absolute top-40 right-20 w-24 h-24 bg-white/15 rounded-full animate-pulse"></div>
+          <div className="absolute bottom-32 left-1/4 w-28 h-28 bg-white/10 rounded-full animate-ping"></div>
+          <div className="absolute top-60 right-1/3 w-20 h-20 bg-white/10 rounded-full animate-bounce delay-300"></div>
         </div>
 
-        <div className="relative max-w-6xl mx-auto px-4 py-12 sm:py-16">
-          <div className="text-center">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 rounded-full mb-6 backdrop-blur-sm">
-              <span className="text-4xl"></span>
-            </div>
-            <h1 className="text-3xl md:text-4xl font-bold">
-              Emergency & Ambulance
-            </h1>
-            <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
-              Fast, reliable, and professional medical transport when you need
-              it most
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-                <span className="text-green-400">✓</span>
-                <span className="text-sm font-medium">24/7 Available</span>
+        <div className="relative max-w-7xl mx-auto px-4 py-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-[500px]">
+            {/* Left Content */}
+            <div className="text-white z-10 relative">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 rounded-full mb-6 backdrop-blur-sm animate-pulse">
+                <span className="text-4xl"></span>
               </div>
-              <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-                <span className="text-green-400">✓</span>
-                <span className="text-sm font-medium">
-                  Trained Professionals
+
+              <h2 className="text-4xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight">
+                <span className="block animate-slide-in-left">Emergency</span>
+                <span className="block text-red-200 animate-slide-in-left delay-200">
+                  Ambulance
                 </span>
+                <span className="block text-2xl font-normal mt-2 animate-slide-in-left delay-400">
+                  Services
+                </span>
+              </h2>
+
+              <p className="text-white/90 text-lg mb-8 max-w-2xl leading-relaxed">
+                Professional medical transport available 24/7 with trained
+                paramedics and advanced life support equipment.
+              </p>
+
+              {/* Feature Badges */}
+              <div className="flex flex-wrap gap-3 mb-8 animate-fade-in-up delay-700">
+                <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 hover:bg-white/30 transition-all duration-300">
+                  <span className="text-green-400 text-lg">✓</span>
+                  <span className="text-sm font-medium">24/7 Available</span>
+                </div>
+                <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 hover:bg-white/30 transition-all duration-300">
+                  <span className="text-green-400 text-lg">✓</span>
+                  <span className="text-sm font-medium">ICU Equipment</span>
+                </div>
+                <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 hover:bg-white/30 transition-all duration-300">
+                  <span className="text-green-400 text-lg">✓</span>
+                  <span className="text-sm font-medium">Quick Response</span>
+                </div>
               </div>
-              <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-                <span className="text-green-400">✓</span>
-                <span className="text-sm font-medium">Quick Response</span>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 animate-fade-in-up delay-900">
+                <a
+                  href="https://play.google.com/store/apps/details?id=com.doctors.adda"
+                  target="_blank"
+                >
+                  <button className="group bg-white text-[#0074b2] font-bold py-4 px-6 rounded-full text-lg hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center gap-3  mb-4 cursor-pointer">
+                    <span className="text-lg group-hover:scale-110 transition-transform">
+                      <img
+                        width="30"
+                        height="30"
+                        src="https://img.icons8.com/ios/50/iphone14-pro.png"
+                        alt="iphone14-pro"
+                      />
+                    </span>
+                    Download App
+                  </button>
+                </a>
+                <a href="#emergency">
+                  <button
+                    className="group bg-red-500 hover:bg-red-600 text-white border border-white font-bold py-4 px-6 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center gap-3  mb-4 cursor-pointer"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
+                    }}
+                  >
+                    <span className="text-lg  group-hover:scale-110 transition-transform">
+                      <img
+                        width="25"
+                        height="25"
+                        src="https://img.icons8.com/fluency-systems-regular/50/FFFFFF/phone.png"
+                        alt="phone"
+                      />
+                    </span>
+                    Emergency Call
+                  </button>
+                </a>
               </div>
+            </div>
+
+            {/* Right Side - Large Ambulance Image */}
+            <div className="relative flex items-center justify-center">
+              {/* Main Ambulance Image */}
+              <div className="relative z-10 animate-float ">
+                <img
+                  src="https://plus.unsplash.com/premium_photo-1723708841860-5b00cc402a62?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YW1idWxhbmNlfGVufDB8fDB8fHww"
+                  alt="Emergency Ambulance"
+                  className="w-full max-w-lg h-auto transform hover:scale-105 transition-transform duration-500 drop-shadow-2xl rounded-2xl"
+                />
+
+                {/* Glowing effect behind ambulance */}
+                <div className="absolute inset-0 bg-white/20 rounded-full blur-3xl scale-110 animate-pulse"></div>
+              </div>
+
+              {/* Floating Stats Cards */}
+              <div className="absolute -top-8 -left-8 bg-white/95 backdrop-blur-sm rounded-2xl p-4 shadow-2xl animate-bounce z-20">
+                <div className="text-blue-600 text-2xl font-bold">24/7</div>
+                <div className="text-gray-600 text-sm font-medium">
+                  Available
+                </div>
+              </div>
+
+              <div className="absolute -bottom-8 -right-8 bg-white/95 backdrop-blur-sm rounded-2xl p-4 shadow-2xl animate-pulse z-20">
+                <div className="text-green-600 text-2xl font-bold">
+                  &lt;8min
+                </div>
+                <div className="text-gray-600 text-sm font-medium">
+                  Response
+                </div>
+              </div>
+
+              <div className="absolute top-1/2 -right-12 bg-white/95 backdrop-blur-sm rounded-2xl p-4 shadow-2xl animate-bounce delay-500 z-20">
+                <div className="text-red-600 text-2xl font-bold">98%</div>
+                <div className="text-gray-600 text-sm font-medium">Success</div>
+              </div>
+
+              {/* Background decoration circles */}
+              <div className="absolute top-1/4 right-1/4 w-40 h-40 bg-white/10 rounded-full blur-xl animate-spin-slow"></div>
+              <div className="absolute bottom-1/4 left-1/4 w-32 h-32 bg-red-400/20 rounded-full blur-xl animate-pulse"></div>
             </div>
           </div>
         </div>
 
-        {/* Wave divider */}
+        {/* Enhanced Wave Divider */}
         <div className="absolute bottom-0 left-0 w-full overflow-hidden">
           <svg
-            className="relative block w-full h-8"
+            className="relative block w-full h-16"
             viewBox="0 0 1200 120"
             preserveAspectRatio="none"
           >
             <path
               d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z"
               opacity=".25"
-              fill="currentColor"
+              fill="white"
             ></path>
             <path
               d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z"
               opacity=".5"
-              fill="currentColor"
+              fill="white"
             ></path>
             <path
               d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z"
-              fill="currentColor"
+              fill="white"
             ></path>
           </svg>
         </div>
       </div>
 
       {/* Search and Filter Section */}
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-gray-100">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Search Bar */}
@@ -203,81 +295,14 @@ const [ambulanceData, setAmbulanceData] = useState([]);
         </div>
 
         {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div
-            className=" text-white p-6 rounded-2xl shadow-lg"
-            style={{
-              background:
-                "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
-            }}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-blue-100 text-sm">Available Now</p>
-                <p className="text-2xl font-bold">{filteredData.length}</p>
-              </div>
-              <div className="text-3xl ">
-                <img
-                  src="src/assets/ambulance.png"
-                  height={50}
-                  width={50}
-                  alt=""
-                />
-              </div>
-            </div>
-          </div>
-
-          <div
-            className=" text-white p-6 rounded-2xl shadow-lg"
-            style={{
-              background:
-                "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
-            }}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-green-100 text-sm">Avg Response</p>
-                <p className="text-2xl font-bold">8 min</p>
-              </div>
-              <div className="text-3xl opacity-80">
-                <img
-                  src="src/assets/thunder-new.png"
-                  height={50}
-                  width={50}
-                  alt=""
-                />
-              </div>
-            </div>
-          </div>
-
-          <div
-            className=" text-white p-6 rounded-2xl shadow-lg"
-            style={{
-              background:
-                "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
-            }}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-purple-100 text-sm">Success Rate</p>
-                <p className="text-2xl font-bold">98%</p>
-              </div>
-              <div className="text-3xl opacity-80">
-                <img
-                  src="src/assets/100-new.png"
-                  height={40}
-                  width={40}
-                  alt=""
-                />
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* Results Header */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-800">
-            Available Ambulances
+          <h2 className="text-3xl font-bold text-gray-800">
+            Available{" "}
+            <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+              Ambulances
+            </span>
             <span className="ml-2 text-lg text-gray-500">
               ({filteredData.length})
             </span>
@@ -314,8 +339,104 @@ const [ambulanceData, setAmbulanceData] = useState([]);
         </div>
       </div>
 
+      {/* why choose us */}
+      <section className="max-w-7xl mx-auto px-4 py-8">
+        <h2 className="text-3xl font-bold text-gray-800 mb-4 text-center">
+          Why Choose{" "}
+          <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+            Our Ambulance Services
+          </span>
+        </h2>
+        <div className="grid md:grid-cols-3 gap-8 text-center">
+          <div className="p-6 bg-white shadow-xl rounded-2xl hover:shadow-2xl transition-all duration-300">
+            <img
+              src="https://img.icons8.com/ios-filled/50/0074b2/alarm.png"
+              alt="24/7"
+              className="mx-auto mb-4"
+            />
+            <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">
+              24/7 Availability
+            </h3>
+            <p className="text-sm text-gray-600">
+              We’re ready round the clock to respond to your emergencies
+              instantly.
+            </p>
+          </div>
+          <div className="p-6 bg-white shadow-xl rounded-2xl hover:shadow-2xl transition-all duration-300">
+            <img
+              src="https://img.icons8.com/ios-filled/50/0074b2/heart-monitor.png"
+              alt="ICU"
+              className="mx-auto mb-4"
+            />
+            <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">
+              ICU-Equipped Fleet
+            </h4>
+            <p className="text-sm text-gray-600">
+              Advanced Life Support ambulances with ventilators, monitors, and
+              trained staff.
+            </p>
+          </div>
+          <div className="p-6 bg-white shadow-xl rounded-2xl hover:shadow-2xl transition-all duration-300">
+            <img
+              src="https://img.icons8.com/ios-filled/50/0074b2/route.png"
+              alt="Fast"
+              className="mx-auto mb-4"
+            />
+            <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">
+              Fastest Response Time
+            </h4>
+            <p className="text-sm text-gray-600">
+              Our tech-enabled dispatch ensures vehicles reach you in under 8
+              minutes.
+            </p>
+          </div>
+          <div className="p-6 bg-white shadow-xl rounded-2xl hover:shadow-2xl transition-all duration-300">
+            <img
+              src="https://img.icons8.com/ios-filled/50/0074b2/wallet.png"
+              alt="Affordable"
+              className="mx-auto mb-4"
+            />
+            <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">
+              Affordable Pricing
+            </h4>
+            <p className="text-sm text-gray-600">
+              Transparent and budget-friendly ambulance services with no hidden
+              charges.
+            </p>
+          </div>
+          <div className="p-6 bg-white shadow-xl rounded-2xl hover:shadow-2xl transition-all duration-300">
+            <img
+              src="https://img.icons8.com/ios-filled/50/0074b2/marker.png"
+              alt="Location"
+              className="mx-auto mb-4"
+            />
+            <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">
+              Location Based Matching
+            </h4>
+            <p className="text-sm text-gray-600">
+              Get matched with ambulances closest to your current location.
+            </p>
+          </div>
+          <div className="p-6 bg-white shadow-xl rounded-2xl hover:shadow-2xl transition-all duration-300">
+            <img
+              src="https://img.icons8.com/ios-filled/50/0074b2/android-os.png"
+              alt="App"
+              className="mx-auto mb-4"
+            />
+            <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">
+              One-Tap Booking
+            </h4>
+            <p className="text-sm text-gray-600">
+              Book instantly using our mobile app with live updates and
+              tracking.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Emergency Contact Banner */}
       <div
+        id="emergency"
         className=" text-white py-8 mt-12"
         style={{
           background:
