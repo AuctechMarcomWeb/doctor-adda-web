@@ -1,55 +1,40 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
+import { getRequest } from "../Helpers";
 const ServicesSection2 = () => {
 
   const navigation = useNavigate()
+const [services, setServices] = useState([]);
 
-
-  const services = [
-    {
-      id: 1,
-      name: "Blood Bank",
-      image:
-        "https://plus.unsplash.com/premium_photo-1661779739047-c5c27cf8ebac?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Qmxvb2QlMjBCYW5rfGVufDB8fDB8fHww",
-    },
-    { 
-      
-      id: 2,
-      name: "Ambulance",
-      image:
-        "https://plus.unsplash.com/premium_photo-1723708841860-5b00cc402a62?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YW1idWxhbmNlfGVufDB8fDB8fHww",
-    },
-    {
-      id: 3,
-      name: "Pharmacies",
-      image:
-        "https://plus.unsplash.com/premium_photo-1661766456250-bbde7dd079de?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8cGhhcm1hY2llc3xlbnwwfHwwfHx8MA%3D%3D",
-    },
-    {
-      id: 4,
-      name: "Diagnostic",
-      image:
-        "https://plus.unsplash.com/premium_photo-1664301991683-83b39364ff04?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8RGlhZ25vc3RpY3xlbnwwfHwwfHx8MA%3D%3D",
-    },
-    {
-      id: 5,
-      name: "Doctor & Specialists",
-      image:
-        "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=300&fit=crop&crop=center",
-    },
-    {
-      id: 6,
-      name: "Hospitals & Clinics",
-      image:
-        "https://images.unsplash.com/photo-1551076805-e1869033e561?w=400&h=300&fit=crop&crop=center",
-    },
-  ];
+  // const services = [
+  //   {
+  //     id: 1,
+  //     name: "Blood Bank",
+  //     image:
+  //       "https://plus.unsplash.com/premium_photo-1661779739047-c5c27cf8ebac?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Qmxvb2QlMjBCYW5rfGVufDB8fDB8fHww",
+  //   },
+  // ];
 
   const scrollContainerRef = useRef(null);
   const [isPaused, setIsPaused] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+useEffect(() => {
+  const fetchServices = async () => {
+    try {
+      const res = await getRequest("services?page=1&limit=10"); // 👈 API call
+      console.log("Services fetched:", res?.data?.data?.services);
+      setServices(res?.data?.data?.services || []); // 🔁 adjust if response shape is different
+      
+    } catch (error) {
+      console.error("Error fetching services:", error);
+    }
+  };
+
+  fetchServices();
+}, []);
+
 
   // Auto-scroll effect
   useEffect(() => {
@@ -189,7 +174,7 @@ const ServicesSection2 = () => {
                   {/* Image Container */}
                   <div className="w-48 h-36 rounded-2xl overflow-hidden shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-105">
                     <img
-                      src={service.image}
+                      src={service.imageUrl}
                       alt={service.name}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />

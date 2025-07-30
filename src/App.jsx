@@ -40,7 +40,7 @@ function App() {
             element={
               <>
                 <Navbar />
-                <LoginSignupFlow setStep={setStep} setMobile={setMobile} />
+                <LoginSignupFlow />
                 <Footer />
               </>
             }
@@ -60,8 +60,7 @@ function App() {
                 <Route path="/user-details" element={<UserDetails />} />
                 <Route path="/bloodbank" element={<AmbulancePage />} />
                 <Route path="/ambulance" element={<AmbulancePage />} />
-                <Route path="/ambulance/:id" element={<AmbulanceDetailPage />} />
-                
+                <Route path="/ambulance/:id" element={<AmbulanceDetailPage />} />               
                 <Route path="/pharmacy" element={<PharmacyPage />} />
                 <Route path="/pharmacy/:id" element={<PharmacyDetailPage />} />
                  <Route path="/diagnostic" element={<DiagnosticPage />} />

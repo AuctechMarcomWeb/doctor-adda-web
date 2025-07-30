@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 import React, { useRef, useState, useEffect } from "react";
 import { Shield, Lock, CheckCircle, RotateCcw, Smartphone } from "lucide-react";
