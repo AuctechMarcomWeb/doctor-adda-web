@@ -33,7 +33,7 @@ const DoctorCard = (data) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="p-6 relative">
+      <div  className="p-6 relative">
         {/* Doctor Image with Animation */}
         <div className="flex items-start gap-4 mb-4">
           <div className="relative">
@@ -336,7 +336,7 @@ const DoctorList = () => {
             ))
           ) : (
             <div className="col-span-full text-center py-16">
-              <div className="text-8xl mb-6 animate-bounce">🔍</div>
+              <div className="text-8xl mb-6 animate-bounce flex justify-center"><img width="100" height="100" src="https://img.icons8.com/pin/100/search.png" alt="search"/></div>
               <h3 className="text-2xl font-bold text-gray-700 mb-3">
                 No doctors found
               </h3>
