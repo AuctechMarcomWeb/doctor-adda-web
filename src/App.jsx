@@ -103,9 +103,9 @@ function App() {
                 />
                 <Route path="/doctor" element={<DoctorPage />} />
                 <Route path="/doctorlist/:id" element={<DoctorList />} />
+                 <Route path="/doctorlist/:id" element={<DoctorList />} />
                 <Route
-                  path="/doctordetail/:id"
-                  element={<DoctorDetailPage />}
+                  path="/doctordetail/:id" element={<DoctorDetailPage />}
                 />
                 <Route path="/hospital" element={<HospitalPage />} />
                 <Route path="/hospital/:id" element={<HospitalDetailPage />} />

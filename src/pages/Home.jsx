@@ -38,15 +38,17 @@ const Home = () => {
       <DoctorCategoryCards />
       {/* <DoctorAddaHero/> */}
 
-      <Carousel />
+      
 
       {/* <FeaturedHospitals /> */}
       <FeaturedHospitals2 />
       {/* <HealthScansSection/> */}
       <DoctorAddaLanding />
       <WhyChooseUs />
+      <Carousel />
       <AboutUsSection />
       {/* <TestimonialsSection/> */}
+      
       <HealthBlogSection />
       <DownloadAppSection />
     </>

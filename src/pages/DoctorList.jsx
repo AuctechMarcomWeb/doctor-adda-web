@@ -21,21 +21,27 @@ const DoctorCard = (data) => {
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
 
-  const handleViewDetails = () => {
-    navigate(`/doctordetail/${name}`);
+  const handleViewDetails = (id) => {
+
+    console.log("id",id);
+    
+
+
+    navigate(`/doctordetail/${id?._id}`);
   };
 
   return (
     <div
+
       className={`bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden group ${
         isHovered ? "scale-105" : ""
       }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="p-6 relative">
+      <div onClick={()=>handleViewDetails(data)}  className="p-6 relative">
         {/* Doctor Image with Animation */}
-        <div className="flex items-start gap-4 mb-4">
+        <div  className="flex items-start gap-4 mb-4">
           <div className="relative">
             <div className="w-16 h-16 rounded-full overflow-hidden ring-4 ring-white shadow-lg group-hover:ring-blue-200 transition-all duration-300">
               <img
@@ -107,7 +113,7 @@ const DoctorCard = (data) => {
         {/* Action Buttons */}
         <div className="flex gap-3">
           <button
-            onClick={handleViewDetails}
+            
             className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-xl font-medium hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
             style={{
               background:
@@ -133,24 +139,39 @@ const DoctorList = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
-  const [modeFilter, setModeFilter] = useState("in-clinic");
+  const [modeFilter, setModeFilter] = useState("In-clinic");
   const [isLoaded, setIsLoaded] = useState(false);
 
   const [doctors, setDoctors] = useState([]);
 
   console.log("res doctors ===========>", doctors);
 
-  useEffect(() => {
-    getRequest(`doctor/doctors?category=${id}`)
-      .then((res) => {
-        setDoctors(res?.data?.data?.doctors);
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });
+  // useEffect(() => {
+  //   getRequest(`doctor/doctors?category=${id}&serviceType=In-clinic`)
+  //     .then((res) => {
+  //       setDoctors(res?.data?.data?.doctors);
+  //     })
+  //     .catch((error) => {
+  //       console.log("error", error);
+  //     });
 
-    setIsLoaded(true);
-  }, []);
+  //   setIsLoaded(true);
+  // }, []);
+
+
+  useEffect(() => {
+  if (!id || !modeFilter) return;
+
+  getRequest(`doctor/doctors?category=${id}&serviceType=${modeFilter}`)
+    .then((res) => {
+      setDoctors(res?.data?.data?.doctors || []);
+    })
+    .catch((error) => {
+      console.log("error", error);
+    });
+
+  setIsLoaded(true);
+}, [id, modeFilter]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 relative overflow-hidden">
@@ -270,11 +291,11 @@ const DoctorList = () => {
         <div className="flex justify-center gap-2 mb-12">
           {[
             {
-              key: "in-clinic",
+              key: "In-clinic",
               label: "In-Clinic Appointment",
               icon: Calendar,
             },
-            { key: "video", label: "Video Consultation", icon: Video },
+            { key: "Video Consultation", label: "Video Consultation", icon: Video },
           ].map((tab) => (
             <button
               key={tab.key}
