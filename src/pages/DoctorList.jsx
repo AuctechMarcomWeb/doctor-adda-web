@@ -21,8 +21,8 @@ const DoctorCard = (data) => {
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
 
-  const handleViewDetails = () => {
-    navigate(`/doctordetail/${name}`);
+  const handleViewDetails = (id) => {
+    navigate(`/doctordetail/${id}`);
   };
 
   return (
@@ -133,24 +133,39 @@ const DoctorList = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
-  const [modeFilter, setModeFilter] = useState("in-clinic");
+  const [modeFilter, setModeFilter] = useState("In-clinic");
   const [isLoaded, setIsLoaded] = useState(false);
 
   const [doctors, setDoctors] = useState([]);
 
   console.log("res doctors ===========>", doctors);
 
-  useEffect(() => {
-    getRequest(`doctor/doctors?category=${id}`)
-      .then((res) => {
-        setDoctors(res?.data?.data?.doctors);
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });
+  // useEffect(() => {
+  //   getRequest(`doctor/doctors?category=${id}&serviceType=In-clinic`)
+  //     .then((res) => {
+  //       setDoctors(res?.data?.data?.doctors);
+  //     })
+  //     .catch((error) => {
+  //       console.log("error", error);
+  //     });
 
-    setIsLoaded(true);
-  }, []);
+  //   setIsLoaded(true);
+  // }, []);
+
+
+  useEffect(() => {
+  if (!id || !modeFilter) return;
+
+  getRequest(`doctor/doctors?category=${id}&serviceType=${modeFilter}`)
+    .then((res) => {
+      setDoctors(res?.data?.data?.doctors || []);
+    })
+    .catch((error) => {
+      console.log("error", error);
+    });
+
+  setIsLoaded(true);
+}, [id, modeFilter]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 relative overflow-hidden">
@@ -270,11 +285,11 @@ const DoctorList = () => {
         <div className="flex justify-center gap-2 mb-12">
           {[
             {
-              key: "in-clinic",
+              key: "In-clinic",
               label: "In-Clinic Appointment",
               icon: Calendar,
             },
-            { key: "video", label: "Video Consultation", icon: Video },
+            { key: "Video Consultation", label: "Video Consultation", icon: Video },
           ].map((tab) => (
             <button
               key={tab.key}

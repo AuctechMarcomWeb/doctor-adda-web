@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { Stethoscope, Heart, Brain, Eye, Activity, User } from "lucide-react";
 import { getRequest } from "../Helpers/index";
 
-const DoctorCategoryCards = () => {
+const      DoctorCategoryCards = () => {
   const navigate = useNavigate();
 
   const handleViewDetails = () => {
