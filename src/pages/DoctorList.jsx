@@ -22,20 +22,28 @@ const DoctorCard = (data) => {
   const navigate = useNavigate();
 
   const handleViewDetails = (id) => {
-    navigate(`/doctordetail/${id}`);
+
+    console.log("id",id);
+    
+
+
+    navigate(`/doctordetail/${id?._id}`);
   };
 
   return (
     <div
+
       className={`bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden group ${
         isHovered ? "scale-105" : ""
       }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div  className="p-6 relative">
+
+      <div onClick={()=>handleViewDetails(data)}  className="p-6 relative cursor-pointer">
+
         {/* Doctor Image with Animation */}
-        <div className="flex items-start gap-4 mb-4">
+        <div  className="flex items-start gap-4 mb-4">
           <div className="relative">
             <div className="w-16 h-16 rounded-full overflow-hidden ring-4 ring-white shadow-lg group-hover:ring-blue-200 transition-all duration-300">
               <img
@@ -107,8 +115,8 @@ const DoctorCard = (data) => {
         {/* Action Buttons */}
         <div className="flex gap-3">
           <button
-            onClick={handleViewDetails}
-            className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-xl font-medium hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+            
+            className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-xl font-medium hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer"
             style={{
               background:
                 "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",

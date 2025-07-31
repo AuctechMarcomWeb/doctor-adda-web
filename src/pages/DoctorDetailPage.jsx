@@ -5,6 +5,8 @@ import {
   Users, CheckCircle, Video, PlusCircle, Crown, Activity, Clock, Globe,
   Heart, TrendingUp, Zap
 } from "lucide-react";
+import { useParams } from "react-router-dom";
+import { getRequest } from "../Helpers";
 
 // Constants
 const DOCTOR_DATA = {
@@ -151,9 +153,31 @@ const ActionButton = ({ children, variant = "primary", className = "", ...props 
 
 // Main Component
 const DoctorDetailPage = () => {
+  const [doctor, setDoctor] = useState(null);
+  console.log("gdfg",doctor);
    useEffect(() => {
         window.scrollTo(0, 0);
+
+        getRequest(`doctor/${id}`).then((res)=>{
+          setDoctor(res?.data?.data)
+          
+        }).catch((error)=>{
+          console.log("error",error);
+        })
+
+
       }, []);
+
+       const { id } = useParams();
+
+
+       console.log("fgdfgdfg id",id);
+       
+
+
+
+
+
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [reviewData, setReviewData] = useState({ name: '', comment: '', rating: 5 });
@@ -176,8 +200,8 @@ const DoctorDetailPage = () => {
           <div className="lg:col-span-2">
             <div className="rounded-3xl overflow-hidden shadow-2xl border border-gray-200">
               <img
-                src={DOCTOR_DATA.image}
-                alt={DOCTOR_DATA.name}
+                src={doctor?.profilepic}
+                alt={doctor?.fullName}
                 className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-700"
               />
             </div>
@@ -198,30 +222,38 @@ const DoctorDetailPage = () => {
           {/* Doctor Info Card */}
           <div className="bg-white shadow-2xl rounded-3xl p-6 border border-gray-200 space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-800">{DOCTOR_DATA.name}</h2>
+              <h2 className="text-2xl font-bold text-gray-800">{doctor?.fullName}</h2>
               <CheckCircle className="text-blue-500" />
             </div>
             
-            <p className="text-sm text-gray-600">{DOCTOR_DATA.specialty}</p>
-            <StarRating rating={DOCTOR_DATA.rating} />
+            <p className="text-sm text-gray-600">{doctor?.category?.name}</p>
+            <StarRating rating={doctor?.averageRating} />
 
             <div className="bg-green-50 text-green-700 px-4 py-2 rounded-xl text-sm font-semibold inline-block">
-              Experience: {DOCTOR_DATA.experience} Years
+              Experience: {doctor?.experience} Years
             </div>
 
             <div className="text-sm text-gray-700 space-y-1">
               <p className="flex items-center gap-2">
                 <Phone className="w-4 h-4" />
-                {DOCTOR_DATA.phone}
+                {doctor?.phone}
               </p>
-              <p className="flex items-center gap-2">
+              {/* <p className="flex items-center gap-2">
                 <MapPin className="w-4 h-4" />
-                {DOCTOR_DATA.address}
-              </p>
+                {doctor?.clinics?.clinicAddress}
+              </p> */}
+
+              {doctor?.clinics?.map((clinic, index) => (
+                <p key={index} className="flex items-center gap-2 text-sm">
+                  <MapPin className="w-8 h-8" />
+                  {clinic.clinicAddress}
+                </p>
+              ))}
+
             </div>
 
             <div className="space-y-3 pt-2">
-              <ActionButton className="w-full" style={{
+              <ActionButton  className="w-full" style={{
     background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}}>
                 <Phone className="w-4 h-4"  />
                 Call Now
@@ -245,11 +277,11 @@ const DoctorDetailPage = () => {
             <GradientCard className="p-10">
               <SectionHeader 
                 icon={Stethoscope} 
-                title={`About ${DOCTOR_DATA.name}`}
-                subtitle={DOCTOR_DATA.specialty}
+                title={`About ${doctor?.fullName}`}
+                subtitle={doctor?.category?.name}
               />
               <p className="text-gray-700 leading-relaxed">
-                {DOCTOR_DATA.about}
+                {doctor?.about}
               </p>
             </GradientCard>
 
@@ -261,15 +293,17 @@ const DoctorDetailPage = () => {
                 gradient="from-green-500 to-emerald-500"
               />
               <div className="space-y-6">
-                {EDUCATION.map((edu, index) => (
+                {/* {EDUCATION.map((edu, index) => (
                   <EducationItem key={index} education={edu} />
-                ))}
+                ))} */}
+
+                {doctor?.education}
               </div>
             </GradientCard>
 
             {/* Reviews Section */}
             <GradientCard gradient="from-purple-500/5 to-pink-500/5" rotation="-rotate-1" className="p-10" style={{
-    background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}}>
+              background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}}>
               <div className="flex justify-between items-center mb-8">
                 <SectionHeader 
                   icon={MessageCircle} 
@@ -280,7 +314,7 @@ const DoctorDetailPage = () => {
                 <ActionButton 
                   variant="tertiary" 
                   onClick={() => setShowReviewForm(true)} style={{
-    background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}}
+                  background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}}
                 >
                   <PlusCircle className="w-5 h-5" />
                   Write Review
@@ -304,7 +338,7 @@ const DoctorDetailPage = () => {
                       value={reviewData.name} 
                       onChange={(e) => setReviewData({ ...reviewData, name: e.target.value })} 
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-4 focus:ring-purple-500/25 focus:border-purple-500 transition-all duration-300" style={{
-    background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}} 
+                      background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}} 
                     />
                     <textarea 
                       placeholder="Your Review" 
@@ -335,20 +369,28 @@ const DoctorDetailPage = () => {
             {/* Appointment Booking */}
             <div className="sticky top-8">
               <GradientCard gradient="from-blue-500/10 to-indigo-500/10" rotation="rotate-2" className="p-8 border-blue-100" >
+               {doctor?.clinics?.map((clinic, index) => (
                 <div className="text-center mb-6">
                   <div className="inline-flex items-center gap-3  text-white px-6 py-3 rounded-full font-bold text-lg shadow-lg" style={{
     background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}}>
-                    <Calendar className="w-6 h-6" />
-                    Ananya Clinic
+                    <Calendar className="w-8 h-8" />   
+                    {/* {doctor?.clinics?.clinicName} */}
+                       
+                       {clinic.clinicName}   
+                      
                   </div>
                 </div>
+                ))}
+                
                 
                 <div className="space-y-6">
+                    {doctor?.clinics?.map((clinic, index) => (
                   <div className="text-center p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl border border-green-200">
-                    <IndianRupee className="w-8 h-8 text-green-600 mx-auto mb-2" />
-                    <div className="text-3xl font-bold text-gray-900">₹{DOCTOR_DATA.consultationFee}</div>
+                    
+                    <div className="text-3xl font-bold text-gray-900"><IndianRupee className="w-8 h-8 text-green-600 mx-auto mb-2" />{clinic.consultationFee}</div>
                     <p className="text-green-700 font-medium">Consultation Fee</p>
                   </div>
+                   ))}
                   
                   <div>
   {/* Date Slots */}
