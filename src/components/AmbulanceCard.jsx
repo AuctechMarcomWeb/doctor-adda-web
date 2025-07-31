@@ -1,8 +1,10 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { MapPin, IndianRupee,  Clock} from "lucide-react";
 
-const AmbulanceCard = ({ name, services,type, timming, price, capacity, location, rating, image }) => {
+const AmbulanceCard = ({ name, ambulanceVehicles, ambulanceType , operatingHours, price, capacity, address, averageRating 
+, profilepic }) => {
   const navigate = useNavigate();
     const handleViewDetails = () => {
       navigate(`/ambulance/${name}`);
@@ -12,7 +14,7 @@ const AmbulanceCard = ({ name, services,type, timming, price, capacity, location
     <div className="flex flex-col md:flex-row gap-4 p-4">
       {/* Thumbnail */}
       <img
-        src={image}
+        src={profilepic}
         alt={name}
         className="w-full md:w-20 h-40 md:h-28 rounded-xl object-cover border border-gray-200"
       />
@@ -21,7 +23,7 @@ const AmbulanceCard = ({ name, services,type, timming, price, capacity, location
       <div className="flex-1 flex flex-col justify-between">
         <div>
           <h3 className="text-base sm:text-lg font-semibold text-gray-800">{name}</h3>
-          <p className="text-sm sm:text-base text-gray-600 mt-1 line-clamp-1">{type}</p>
+          <p className="text-sm sm:text-base text-gray-600 mt-1 line-clamp-1">{ambulanceType}</p>
         </div>
 
         {/* Meta Info */}
@@ -37,7 +39,7 @@ const AmbulanceCard = ({ name, services,type, timming, price, capacity, location
           </div>
           <div className="flex items-center gap-2">
             <MapPin className="w-4 h-4 text-gray-400" />
-            <span className="line-clamp-1">{location}</span>
+            <span className="line-clamp-1">{address}</span>
           </div>
         </div>
       </div>
@@ -46,9 +48,9 @@ const AmbulanceCard = ({ name, services,type, timming, price, capacity, location
       <div className="flex md:flex-col justify-between items-center md:items-end mt-4 md:mt-0 gap-2 md:gap-4">
         {/* Rating */}
         <div className="flex items-center gap-1 text-yellow-400 text-sm font-medium">
-          {"★".repeat(Math.floor(rating))}
-          {rating % 1 !== 0 ? "½" : ""}
-          <span className="ml-1 text-gray-700">{rating.toFixed(1)}</span>
+          {"★".repeat(Math.floor(averageRating))}
+          {averageRating % 1 !== 0 ? "½" : ""}
+  <span className="ml-1 text-gray-700">{(averageRating ?? 0).toFixed(1)}</span>
         </div>
 
         {/* Buttons */}
@@ -56,9 +58,9 @@ const AmbulanceCard = ({ name, services,type, timming, price, capacity, location
           <button onClick={handleViewDetails} className="h-9 px-4 text-sm bg-[#00659d] hover:bg-white text-white hover:text-[#00659d] hover:border border-[#00659d] font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 cursor-pointer">
             View More
           </button>
-          {/* <button className="h-9 px-4 text-sm bg-[#00659d] hover:bg-blue-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 cursor-pointer">
+          <button className="h-9 px-4 text-sm bg-[#00659d] hover:bg-blue-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 cursor-pointer">
             Book Appointment
-          </button> */}
+          </button> 
         </div>
       </div>
     </div>

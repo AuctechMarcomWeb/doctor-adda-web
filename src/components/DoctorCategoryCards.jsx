@@ -4,13 +4,19 @@ import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { useNavigate } from "react-router-dom";
 
 import { Stethoscope, Heart, Brain, Eye, Activity, User } from "lucide-react";
 import { getRequest } from "../Helpers/index";
 
 const DoctorCategoryCards = () => {
+  const navigate = useNavigate();
+
+  const handleViewDetails = () => {
+    navigate(`/doctor/${name}`);
+  };
+
   const [categories, setCategories] = useState([]);
-  console.log("categories is ::", categories);
 
   const fetchCategories = async () => {
     try {
@@ -40,8 +46,8 @@ const DoctorCategoryCards = () => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-slate-50 to-blue-50 py-8 px-4 relative">
-      <div className="max-w-7xl mx-auto">
+    <div  className="bg-gradient-to-br from-slate-50 to-blue-50 py-8 px-4 relative">
+      <div className=" max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
           <h2 className="text-4xl font-bold text-gray-800 mb-4 text-center">
@@ -75,16 +81,26 @@ const DoctorCategoryCards = () => {
               640: { slidesPerView: 1 },
               768: { slidesPerView: 2 },
               1024: { slidesPerView: 3 },
-              1280: { slidesPerView: 4 },
+              1280: { slidesPerView: 5 },
+              // 1580: { slidesPerView: 5 },
+              // 1880: { slidesPerView: 6 },
+              // 2180: { slidesPerView: 7 },
             }}
           >
             {categories.map((category, index) => {
               const IconComponent = getIconByCategory(category.name);
 
+              console.log("category",category);
+              
+
+
               return (
                 <>
                   <SwiperSlide key={index}>
-                    <div className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 cursor-pointer overflow-hidden">
+                    <div  onClick={() => {
+                            console.log("View More");
+                            navigate(`/doctorlist/${category?._id}`);
+                          }} className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 cursor-pointer overflow-hidden">
                       <div className="relative h-48 overflow-hidden">
                         <img
                           src={category.imageUrl}
@@ -113,7 +129,10 @@ const DoctorCategoryCards = () => {
                         <p className="text-gray-600 text-sm mb-4">
                           {category.description}
                         </p>
-                        <button className="w-full bg-[#00669e] text-white font-semibold py-3 px-4 rounded-lg hover:from-blue-600 hover:to-blue-700 transform hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg">
+                        <button
+                          className="w-full bg-[#00669e] text-white font-semibold py-3 px-4 rounded-lg hover:from-blue-600 hover:to-blue-700 transform hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer"
+                         
+                        >
                           View More
                         </button>
                       </div>
@@ -159,7 +178,10 @@ const DoctorCategoryCards = () => {
         <div className="swiper-pagination-custom mt-4 text-center" />
       </div>
       <div className="flex items-center justify-center">
-        <button className="w-40 bg-[#00669e] text-white font-semibold py-3 px-4 rounded-lg hover:from-blue-600 hover:to-blue-700 transform hover:scale-105 transition-all       duration-300 shadow-md hover:shadow-lg">
+        <button
+          onClick={handleViewDetails}
+          className="w-40 bg-[#00669e] text-white font-semibold py-3 px-4 rounded-lg hover:from-blue-600 hover:to-blue-700 transform hover:scale-105 transition-all       duration-300 shadow-md hover:shadow-lg"
+        >
           View All
         </button>
       </div>

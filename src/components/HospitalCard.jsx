@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const HospitalCard = ({ name, services, timming, contact, storetiming, phone, location, rating, image }) => {
   const navigate = useNavigate();
     const handleViewDetails = () => {
-      navigate(`/hospital/${name}`);
+      navigate(`/hospital/${name}`,);
     };
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
