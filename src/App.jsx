@@ -38,24 +38,24 @@ function App() {
 
   return (
     <Router>
-      <Toaster 
+      <Toaster
         position="top-right"
         toastOptions={{
           duration: 4000,
           style: {
-            background: '#363636',
-            color: '#fff',
+            background: "#363636",
+            color: "#fff",
           },
           success: {
             duration: 3000,
             style: {
-              background: '#10B981',
+              background: "#10B981",
             },
           },
           error: {
             duration: 4000,
             style: {
-              background: '#EF4444',
+              background: "#EF4444",
             },
           },
         }}
@@ -102,7 +102,7 @@ function App() {
                   element={<DiagnosticDetailPage />}
                 />
                 <Route path="/doctor" element={<DoctorPage />} />
-                <Route path="/doctorlist" element={<DoctorList />} />
+                <Route path="/doctorlist/:id" element={<DoctorList />} />
                 <Route
                   path="/doctordetail/:id"
                   element={<DoctorDetailPage />}

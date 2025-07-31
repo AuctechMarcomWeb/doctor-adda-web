@@ -81,7 +81,7 @@ const DoctorCategoryCards = () => {
               640: { slidesPerView: 1 },
               768: { slidesPerView: 2 },
               1024: { slidesPerView: 3 },
-              1280: { slidesPerView: 5 },
+              1280: { slidesPerView: 4 },
               // 1580: { slidesPerView: 5 },
               // 1880: { slidesPerView: 6 },
               // 2180: { slidesPerView: 7 },
