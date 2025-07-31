@@ -117,7 +117,7 @@ const FeaturedHospitals2 = () => {
                 <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-1">
                   <Star className="w-4 h-4 text-yellow-500 fill-current" />
                   <span className="text-sm font-semibold text-gray-700">
-                    {hospital.rating}
+                    {hospital.averageRating}
                   </span>
                 </div>
                 {/* <div className="absolute bottom-4 left-4 bg-blue-600/90 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-medium">
@@ -133,8 +133,8 @@ const FeaturedHospitals2 = () => {
                   className="text-gray-600 text-sm mb-4 leading-relaxed"
                   style={{ minHeight: 68 }}
                 >
-                  {hospital.description?.length > 200
-                    ? `${hospital.description.substring(0, 120)}...`
+                  {hospital.description?.length > 100
+                    ? `${hospital.description.substring(0, 100)}...`
                     : hospital.description}
                 </p>
                 <div className="flex gap-2 pt-4 border-t border-gray-100">
