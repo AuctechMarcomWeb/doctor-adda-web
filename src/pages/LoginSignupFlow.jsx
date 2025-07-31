@@ -9,7 +9,6 @@ const LoginSignupFlow = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [mode, setMode] = useState('signup'); // 'signup' or 'login'
-  console.log("step", step, "mode", mode);
   
   const [mobile, setMobile] = useState("");
 

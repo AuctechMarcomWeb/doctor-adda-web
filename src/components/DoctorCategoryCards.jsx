@@ -21,10 +21,10 @@ const DoctorCategoryCards = () => {
   const fetchCategories = async () => {
     try {
       const response = await getRequest("category");
-      console.log("fetched category", response);
+      //console.log("fetched category", response);
       setCategories(response?.data?.data?.categories || []);
     } catch (error) {
-      console.error(error);
+     // console.error(error);
     }
   };
   useEffect(() => {
@@ -90,7 +90,7 @@ const DoctorCategoryCards = () => {
             {categories.map((category, index) => {
               const IconComponent = getIconByCategory(category.name);
 
-              console.log("category",category);
+             /// console.log("category",category);
               
 
 
@@ -98,7 +98,7 @@ const DoctorCategoryCards = () => {
                 <>
                   <SwiperSlide key={index}>
                     <div  onClick={() => {
-                            console.log("View More");
+                           // console.log("View More");
                             navigate(`/doctorlist/${category?._id}`);
                           }} className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 cursor-pointer overflow-hidden">
                       <div className="relative h-48 overflow-hidden">

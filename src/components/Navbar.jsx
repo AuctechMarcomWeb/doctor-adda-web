@@ -7,7 +7,6 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaUser, FaPhoneAlt } from "react-icons/fa";
 import { logout } from "../redux/slices/userSlice";
 import { deleteCookie } from "../Hooks/cookie";
-
 import NavBar2 from "./NavBar2";
 
 
@@ -21,7 +20,7 @@ const Navbar = () => {
   // Get user profile data from Redux
   const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
 
-  console.log("user profile data from redux", userProfileData);
+  console.log("user profile data from redux in navbar", userProfileData);
   console.log("isLoggedIn from redux", isLoggedIn);
 
   useEffect(() => {
@@ -157,6 +156,7 @@ const Navbar = () => {
 
             {/* User Profile */}
             {isLoggedIn && userProfileData ? (
+              console.log("userProfileData navbar", userProfileData.name),
               <div className="relative" ref={dropdownRef}>
                 <div 
                   className="flex items-center gap-2 cursor-pointer"
@@ -168,7 +168,7 @@ const Navbar = () => {
                     className="w-8 h-8 rounded-full object-cover"
                   />
                   <span className="text-sm font-semibold text-gray-800 hidden lg:block">
-                    {userProfileData.name || userProfileData.firstName || "User"}
+                    {userProfileData?.name ||  "User"}
                   </span>
                   <span className="text-gray-500">▾</span>
                 </div>

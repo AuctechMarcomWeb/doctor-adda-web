@@ -5,7 +5,7 @@ import { postRequest } from "../Helpers";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { login } from "../redux/slices/userSlice";
+import { login, updateUserProfile } from "../redux/slices/userSlice";
 const slides = [
   {
     image:
@@ -190,6 +190,12 @@ const OtpStep = ({
         const userData = response?.data
         console.log("userData", userData)
         dispatch(login(userData))
+        console.log("userData?.data?.isNew", userData?.data?.isNew)
+
+        // Update user profile for both new and existing users
+        if (userData?.data?.isNew === false) {
+          dispatch(updateUserProfile(userData.data));
+        }                                                                 
 
         setIsVerified(true);
         handleAuthSuccess(token);
