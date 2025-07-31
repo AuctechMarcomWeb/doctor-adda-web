@@ -5,6 +5,8 @@ import {
   Users, CheckCircle, Video, PlusCircle, Crown, Activity, Clock, Globe,
   Heart, TrendingUp, Zap
 } from "lucide-react";
+import { useParams } from "react-router-dom";
+import { getRequest } from "../Helpers";
 
 // Constants
 const DOCTOR_DATA = {
@@ -151,9 +153,31 @@ const ActionButton = ({ children, variant = "primary", className = "", ...props 
 
 // Main Component
 const DoctorDetailPage = () => {
+  const [doctor, setDoctor] = useState(null);
+  console.log("gdfg",doctor);
    useEffect(() => {
         window.scrollTo(0, 0);
+
+        getRequest(`doctor/${id}`).then((res)=>{
+          setDoctor(res?.data?.data)
+          
+        }).catch((error)=>{
+          console.log("error",error);
+        })
+
+
       }, []);
+
+       const { id } = useParams();
+
+
+       console.log("fgdfgdfg id",id);
+       
+
+
+
+
+
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [reviewData, setReviewData] = useState({ name: '', comment: '', rating: 5 });
@@ -176,8 +200,8 @@ const DoctorDetailPage = () => {
           <div className="lg:col-span-2">
             <div className="rounded-3xl overflow-hidden shadow-2xl border border-gray-200">
               <img
-                src={DOCTOR_DATA.image}
-                alt={DOCTOR_DATA.name}
+                src={doctor?.profilepic}
+                alt={doctor?.fullName}
                 className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-700"
               />
             </div>
@@ -198,15 +222,15 @@ const DoctorDetailPage = () => {
           {/* Doctor Info Card */}
           <div className="bg-white shadow-2xl rounded-3xl p-6 border border-gray-200 space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-800">{DOCTOR_DATA.name}</h2>
+              <h2 className="text-2xl font-bold text-gray-800">{doctor?.fullName}</h2>
               <CheckCircle className="text-blue-500" />
             </div>
             
-            <p className="text-sm text-gray-600">{DOCTOR_DATA.specialty}</p>
-            <StarRating rating={DOCTOR_DATA.rating} />
+            <p className="text-sm text-gray-600">{doctor?.category?.name}</p>
+            <StarRating rating={doctor?.averageRating} />
 
             <div className="bg-green-50 text-green-700 px-4 py-2 rounded-xl text-sm font-semibold inline-block">
-              Experience: {DOCTOR_DATA.experience} Years
+              Experience: {doctor?.experience} Years
             </div>
 
             <div className="text-sm text-gray-700 space-y-1">
