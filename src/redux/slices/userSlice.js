@@ -13,7 +13,7 @@ const userSlice = createSlice({
     login(state, action) {
       state.isLoggedIn = true;
       state.userData = action.payload;
-      console.log("user data from redux", state.userData);
+      console.log("login data from redux", state.userData);
     },
     logout(state) {
       state.isLoggedIn = false;

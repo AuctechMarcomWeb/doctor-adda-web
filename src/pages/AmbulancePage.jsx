@@ -15,7 +15,7 @@ const AmbulancePage = () => {
    });
   
 
-   useEffect(() => {
+useEffect(() => {
   const fetchAmbulances = async () => {
     try {
       const res = await getRequest(`ambulance?radius=${location?.radius}`);
