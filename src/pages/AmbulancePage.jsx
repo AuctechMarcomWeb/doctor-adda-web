@@ -1,7 +1,7 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
-
 import AmbulanceCard from "../components/AmbulanceCard";
-import { getRequest } from "../Helpers"; // Adjust this path if needed
+import { getRequest } from "../Helpers"; 
 
 const AmbulancePage = () => {
   useEffect(() => {
@@ -10,61 +10,33 @@ const AmbulancePage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
   const [ambulanceData, setAmbulanceData] = useState([]);
+  const [location, setLocation] = useState({
+   radius:'8000',
+   });
+  
 
-  useEffect(() => {
-    const fetchAmbulances = async () => {
-      try {
-        const res = await getRequest("/ambulance?radius=8000");
-        console.log("🚑API Response:", res);
-        setAmbulanceData(res?.data || []);
-      } catch (error) {
-        console.error("Error fetching ambulances:", error);
-      }
-    };
+   useEffect(() => {
+  const fetchAmbulances = async () => {
+    try {
+      const res = await getRequest(`ambulance?radius=${location?.radius}`);
+      console.log(" Ambulance Lists:", res?.data?.data?.ambulances || []);
+      setAmbulanceData(res?.data?.data?.ambulances || []);
+    } catch (error) {
+      console.error(" Error fetching ambulances:", error);
+      setAmbulanceData([]);
+    }
+  };
 
-    fetchAmbulances();
-  }, []);
-
-  // const ambulanceData = [
-  //   {
-  //     name: "MediCabs Ambulance",
-  //     type: "ICU Ambulance",
-  //     capacity: 3,
-  //     price: 350,
-  //     location: "Hazratganj, Lucknow, UP",
-  //     rating: 4.3,
-  //     image:
-  //       "https://i.pinimg.com/736x/a3/7d/fa/a37dfa60e0a5c78f0cad5880ba8822dd.jpg",
-  //   },
-  //   {
-  //     name: "Emergency Cab",
-  //     type: "ICU",
-  //     capacity: 4,
-  //     price: 700,
-  //     location: "1090 Chouraha, Gomti Nagar",
-  //     rating: 4.0,
-  //     image:
-  //       "https://i.pinimg.com/1200x/3b/58/26/3b58264367ff25a10d419888fde59af7.jpg",
-  //   },
-  //   {
-  //     name: "Adda24/7 Services",
-  //     type: "Non-Emergency",
-  //     capacity: 2,
-  //     price: 250,
-  //     location: "RWJF+P24, Lucknow",
-  //     rating: 3.9,
-  //     image:
-  //       "https://i.pinimg.com/736x/97/97/c1/9797c15e41f8dae3fa2ea67492afeb04.jpg",
-  //   },
-  // ];
+  fetchAmbulances();
+}, [location?.radius]); 
 
   const filteredData = ambulanceData.filter((ambulance) => {
     const matchesSearch =
       ambulance.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      ambulance.location.toLowerCase().includes(searchTerm.toLowerCase());
+      ambulance.address.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter =
       filterType === "all" ||
-      ambulance.type.toLowerCase().includes(filterType.toLowerCase());
+      ambulance.ambulanceType.toLowerCase().includes(filterType.toLowerCase());
     return matchesSearch && matchesFilter;
   });
 

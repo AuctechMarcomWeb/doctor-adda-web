@@ -63,15 +63,15 @@ function App() {
       <Routes>
         {/* Login/Signup Flow - Fullscreen without Navbar/Footer */}
         <Route
-            path="/login"
-            element={
-              <>
-                <Navbar />
-                <LoginSignupFlow />
-                <Footer />
-              </>
-            }
-          />
+          path="/login"
+          element={
+            <>
+              <Navbar />
+              <LoginSignupFlow />
+              <Footer />
+            </>
+          }
+        />
 
         {/* All other routes wrapped with Navbar + Footer */}
         <Route
@@ -82,14 +82,21 @@ function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/contact" element={<Contact />} />
-                <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+                <Route
+                  path="/terms-and-conditions"
+                  element={<TermsAndConditions />}
+                />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="/user-details" element={<UserDetails />} />
                 <Route path="/bloodbank" element={<AmbulancePage />} />
                 <Route path="/ambulance" element={<AmbulancePage />} />
-                <Route path="/ambulance/:id" element={<AmbulanceDetailPage />} />               
+                <Route
+                  path="/ambulance/:id"
+                  element={<AmbulanceDetailPage />}
+                />
                 <Route path="/pharmacy" element={<PharmacyPage />} />
                 <Route path="/pharmacy/:id" element={<PharmacyDetailPage />} />
+<<<<<<< Updated upstream
                  <Route path="/diagnostic" element={<DiagnosticPage />} />
                  <Route path="/diagnostic/:id" element={<DiagnosticDetailPage />} />
                  <Route path="/doctor" element={<DoctorPage />} />
@@ -99,6 +106,25 @@ function App() {
                  <Route path="/hospital/:id" element={<HospitalDetailPage />} />
                  <Route path="/hospitaldetail" element={<HospitalDetailPage />} />
 
+=======
+                <Route path="/diagnostic" element={<DiagnosticPage />} />
+                <Route
+                  path="/diagnostic/:id"
+                  element={<DiagnosticDetailPage />}
+                />
+                <Route path="/doctor" element={<DoctorPage />} />
+                <Route path="/doctorlist" element={<DoctorList />} />
+                <Route
+                  path="/doctordetail/:id"
+                  element={<DoctorDetailPage />}
+                />
+                <Route path="/hospital" element={<HospitalPage />} />
+                <Route path="/hospital/:id" element={<HospitalDetailPage />} />
+                <Route
+                  path="/hospitaldetail/:id"
+                  element={<HospitalDetailPage />}
+                />
+>>>>>>> Stashed changes
               </Routes>
               <Footer />
             </>
