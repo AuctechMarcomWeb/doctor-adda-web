@@ -131,7 +131,7 @@ const FeaturedHospitals2 = () => {
                 </h3>
                 <p
                   className="text-gray-600 text-sm mb-4 leading-relaxed"
-                  style={{ minHeight: 68 }}
+                  style={{ minHeight: 100 }}
                 >
                   {hospital.description?.length > 100
                     ? `${hospital.description.substring(0, 100)}...`
