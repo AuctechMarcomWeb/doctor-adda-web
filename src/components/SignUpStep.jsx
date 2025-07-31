@@ -192,15 +192,14 @@ const SignUpStep = ({ setStep, setMobile, setMode }) => {
               </div>
             </div>
 
-            <div className="flex items-center gap-3 text-gray-500 text-sm">
-              <p>already have an account?
-                <button 
+            <div className="flex items-center justify-center gap-1 text-gray-500 text-sm">
+              <p>Already have an account? </p>
+             <button 
                 onClick={() => setMode && setMode('login')} 
-                className="text-blue-500 hover:text-blue-700 transition-colors cursor-pointer" 
+                className="text-blue-600 font-semibold hover:text-blue-700 transition-colors cursor-pointer" 
               >
-                SignIn
+                Sign In
               </button>
-             </p>
             </div>
 
             {/* Terms */}

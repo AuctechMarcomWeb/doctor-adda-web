@@ -96,17 +96,6 @@ function App() {
                 />
                 <Route path="/pharmacy" element={<PharmacyPage />} />
                 <Route path="/pharmacy/:id" element={<PharmacyDetailPage />} />
-<<<<<<< Updated upstream
-                 <Route path="/diagnostic" element={<DiagnosticPage />} />
-                 <Route path="/diagnostic/:id" element={<DiagnosticDetailPage />} />
-                 <Route path="/doctor" element={<DoctorPage />} />
-                 <Route path="/doctorlist/:id" element={<DoctorList />} />
-                 <Route path="/doctordetail/:id" element={<DoctorDetailPage />} />
-                 <Route path="/hospital" element={<HospitalPage />} />
-                 <Route path="/hospital/:id" element={<HospitalDetailPage />} />
-                 <Route path="/hospitaldetail" element={<HospitalDetailPage />} />
-
-=======
                 <Route path="/diagnostic" element={<DiagnosticPage />} />
                 <Route
                   path="/diagnostic/:id"
@@ -124,7 +113,6 @@ function App() {
                   path="/hospitaldetail/:id"
                   element={<HospitalDetailPage />}
                 />
->>>>>>> Stashed changes
               </Routes>
               <Footer />
             </>

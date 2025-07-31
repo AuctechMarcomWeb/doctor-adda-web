@@ -33,7 +33,6 @@ const LoginStep = ({ setStep, setMobile, setMode }) => {
 
   const [currentSlide, setCurrentSlide] = useState(0);
   const [mobileNumber, setMobileNumber] = useState("");
-  console.log("mobileNumber", mobileNumber);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
@@ -53,8 +52,7 @@ const LoginStep = ({ setStep, setMobile, setMode }) => {
         toast.error(res?.message || "Failed to send OTP.");
       }
     } catch (err) {
-      console.error("OTP API Error:", err);
-      toast.error(err?.response?.data?.message || "Failed to send OTP.");
+      toast.error(err?.response?.data?.message +". "+ "Signup first!");
     } finally {
       setIsLoading(false);
     }
@@ -118,12 +116,14 @@ const LoginStep = ({ setStep, setMobile, setMode }) => {
 
         {/* Right Login Form Section */}
         <div className="w-full lg:w-1/2 p-8 lg:p-12 bg-white relative">
+        
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-100 to-blue-100 rounded-full -translate-y-16 translate-x-16 opacity-50"></div>
 
           <div className="relative z-10 space-y-8">
+
             <div className="space-y-3">
               <h2 className="text-3xl font-bold text-gray-900 tracking-tight">
-                Welcome Back To Doctor Adda
+                Welcome <span className="text-blue-600">Back</span> To Doctor Adda
               </h2>
               <p className="text-gray-600 text-lg">
                 Enter your mobile number to continue
@@ -195,13 +195,14 @@ const LoginStep = ({ setStep, setMobile, setMode }) => {
               </div>
             </div>
 
-            <div className="flex items-center gap-3 text-gray-500 text-sm">
-              <p>Don't have an account? <button 
+            <div className="flex items-center justify-center gap-1 text-gray-500 text-sm">
+              <p>Don't have an account?</p>
+              <button 
                 onClick={() => setMode && setMode('signup')} 
-                className="text-blue-500 hover:text-blue-700 transition-colors cursor-pointer" 
+                className="text-blue-600 font-semibold hover:text-blue-700 transition-colors cursor-pointer" 
               >
                 SignUp
-              </button></p>
+              </button>
             </div>
 
             {/* Terms */}
@@ -217,6 +218,7 @@ const LoginStep = ({ setStep, setMobile, setMode }) => {
                 </button>
               </p>
             </div>
+
           </div>
         </div>
       </div>
