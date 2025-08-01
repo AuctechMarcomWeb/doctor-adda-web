@@ -44,7 +44,7 @@ const LoginStep = ({ setStep, setMobile, setMode }) => {
       console.log("OTP Response:", res?.data?.data.otp)
 
       if (res?.data?.statusCode === 200 && res?.data?.success) {
-        toast.success("OTP sent successfully!")
+        toast.success("OTP sent successfully! " + res?.data?.data?.otp)
         //await new Promise(resolve => setTimeout(resolve, 1000))
         setStep(2)
         // setIsLoading(false);
