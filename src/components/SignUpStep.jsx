@@ -44,7 +44,7 @@ const SignUpStep = ({ setStep, setMobile, setMode }) => {
       console.log("OTP Response:", res?.data?.data.otp)
 
       if (res?.data?.statusCode === 200 && res?.data?.success) {
-        toast.success("OTP sent successfully!")
+        toast.success("OTP sent successfully! " + res?.data?.data?.otp)
         setStep(2)
       } else {
         toast.error(res?.data?.message || "Failed to send OTP.");

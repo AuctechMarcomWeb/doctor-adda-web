@@ -27,11 +27,15 @@ const slides = [
 
 const UserDetails = ({ onSubmitSuccess }) => {
   const userId = useSelector(state => state.user.userData.data._id)
+  const locationData = useSelector(state => state.user.locationData)
+
   const dispatch = useDispatch();
   const [userData, setUserData] = useState({
     name: "",
     email: "",
     gender: "",
+    latitude: "",
+    longitude: "",
   });
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -51,6 +55,17 @@ const UserDetails = ({ onSubmitSuccess }) => {
     }, 4000);
     return () => clearInterval(interval);
   }, []);
+
+  // Add this useEffect to populate location data when available
+  useEffect(() => {
+    if (locationData) {
+      setUserData(prev => ({
+        ...prev,
+        latitude: locationData.latitude,
+        longitude: locationData.longitude,
+      }));
+    }
+  }, [locationData]);
 
   const validateForm = () => {
     const newErrors = {};
@@ -93,10 +108,12 @@ const UserDetails = ({ onSubmitSuccess }) => {
   const cred = {
     name: userData.name,
     email: userData.email,
-    gender: userData.gender
+    gender: userData.gender,
+    latitude: userData.latitude,
+    longitude: userData.longitude,
   };
 
-  console.log("User Data to Submit:", cred);
+  console.log("User Data to Submit: cred", cred);
 
   try {
     const res = await patchRequest({ url: `auth/updateProfile/${userId}`, cred });
@@ -110,7 +127,7 @@ const UserDetails = ({ onSubmitSuccess }) => {
     } else {
       toast.success("Profile completed!");
     }
-   navigate('/');
+   navigate('/location');
   } catch (err) {
     console.error("Error in updateProfile API:", err);
     toast.error("Failed to update profile. Please try again.");

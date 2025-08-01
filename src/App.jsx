@@ -29,6 +29,7 @@ import DoctorDetailPage from "./pages/DoctorDetailPage";
 // Components
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import Location from "./pages/Location";
 
 function App() {
   // const dispatch = useDispatch()
@@ -60,20 +61,15 @@ function App() {
           },
         }}
       />
-      <Routes>
-        {/* Login/Signup Flow - Fullscreen without Navbar/Footer */}
-        <Route
-          path="/login"
-          element={
-            <>
-              <Navbar />
-              <LoginSignupFlow />
-              <Footer />
-            </>
-          }
-        />
 
-        {/* All other routes wrapped with Navbar + Footer */}
+               
+      <Routes>
+        
+          <Route path="/location" element={<Location />} />
+
+
+          
+        {/* All routes wrapped with Navbar + Footer */}
         <Route
           path="*"
           element={
@@ -81,6 +77,7 @@ function App() {
               <Navbar />
               <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path="/login" element={<LoginSignupFlow />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route
                   path="/terms-and-conditions"
@@ -113,6 +110,8 @@ function App() {
                   path="/hospitaldetail/:id"
                   element={<HospitalDetailPage />}
                 />
+                
+               
               </Routes>
               <Footer />
             </>
