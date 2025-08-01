@@ -8,31 +8,6 @@ import {
 import { useParams } from "react-router-dom";
 import { getRequest } from "../Helpers";
 
-// Constants
-const DOCTOR_DATA = {
-  name: "Dr. Ananya Singh",
-  specialty: "General Physician",
-  rating: 4.9,
-  reviewCount: 156,
-  experience: 12,
-  phone: "+91 98765 43210",
-  address: "Shop No. 12, 1090 Chauraha, Gomti Nagar, Lucknow",
-  consultationFee: 800,
-  image: "https://i.pinimg.com/736x/94/82/a3/9482a323103052c74462f90cd8c1e87b.jpg",
-  about: "Dr. Ananya Singh is a highly experienced Internal Medicine specialist with over 12 years of clinical practice. She combines evidence-based medicine with compassionate care, focusing on preventive healthcare and patient wellness."
-};
-
-const DATE_SLOTS = [
-  "Today", "Tomorrow", "Wed, Jul 31", "Thu, Aug 1"
-];
-
-const TIME_SLOTS = [
-  { time: "10:00 AM", available: true }, { time: "10:30 AM", available: false },
-  { time: "11:00 AM", available: true }, { time: "11:30 AM", available: true },
-  { time: "12:00 PM", available: false }, { time: "12:30 PM", available: true },
-  { time: "5:00 PM", available: true }, { time: "5:30 PM", available: true }
-];
-
 const HIGHLIGHTS = [
   { icon: Shield, text: "100% Trusted", color: "text-green-600" },
   { icon: Clock, text: "24/7 Available", color: "text-blue-600" },
@@ -40,19 +15,6 @@ const HIGHLIGHTS = [
   { icon: CheckCircle, text: "Licensed Doctor", color: "text-orange-500" }
 ];
 
-const EDUCATION = [
-  { degree: "MBBS", institution: "AIIMS, Delhi", year: "2013" },
-  { degree: "MD - Internal Medicine", institution: "PGI, Chandigarh", year: "2017" },
-  { degree: "Fellowship in Diabetology", institution: "Medanta Institute", year: "2018" }
-];
-
-const REVIEWS = [
-  { name: "Priya Gupta", rating: 5, comment: "Excellent doctor! Very thorough examination and clear explanations.", date: "2 weeks ago", verified: true },
-  { name: "Rohit Kumar", rating: 5, comment: "Dr. Singh is compassionate and professional. Highly recommend!", date: "1 month ago", verified: true },
-  { name: "Anjali Mehta", rating: 4, comment: "Good experience overall. The clinic is well-maintained.", date: "3 weeks ago", verified: false }
-];
-
-// Components
 const GradientCard = ({ children, className = "", gradient = "from-blue-500/5 to-purple-500/5", rotation = "rotate-1" }) => (
   <div className="relative">
     <div className={`absolute inset-0 bg-gradient-to-r ${gradient} rounded-3xl transform ${rotation}`}></div>
@@ -79,57 +41,7 @@ const StarRating = ({ rating }) => (
     {Array.from({ length: 5 }).map((_, i) => (
       <Star key={i} className="w-4 h-4 fill-yellow-400" />
     ))}
-    <span className="text-gray-700 text-sm font-medium ml-1">{rating} ({DOCTOR_DATA.reviewCount} reviews)</span>
-  </div>
-);
-
-const TimeSlotButton = ({ slot, isSelected, onSelect }) => (
-  <button
-    onClick={() => slot.available && onSelect(slot.time)}
-    className={`text-sm py-3 px-3 rounded-xl font-bold transition-all duration-300 ${
-      slot.available 
-        ? isSelected 
-          ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg transform scale-105' 
-          : 'bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-600'
-        : 'bg-gray-50 text-gray-400 cursor-not-allowed'
-    }`}
-    disabled={!slot.available}
-  >
-    {slot.time}
-  </button>
-);
-
-const ReviewCard = ({ review }) => (
-  <div className="bg-gradient-to-r from-gray-50 to-transparent p-6 rounded-2xl border border-gray-200 hover:shadow-lg transition-all duration-500">
-    <div className="flex items-start gap-4">
-      <div className="w-12 h-12  rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0" style={{
-    background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}}>
-        {review.name.split(' ').map(n => n[0]).join('')}
-      </div>
-      <div className="flex-1">
-        <div className="flex items-center justify-between mb-2">
-          <h4 className="font-bold text-gray-900">{review.name}</h4>
-          <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">{review.date}</span>
-        </div>
-        <div className="flex items-center gap-1 mb-3">
-          {[...Array(5)].map((_, i) => (
-            <Star key={i} className={`w-4 h-4 ${i < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} />
-          ))}
-        </div>
-        <p className="text-gray-700 leading-relaxed">{review.comment}</p>
-      </div>
-    </div>
-  </div>
-);
-
-const EducationItem = ({ education }) => (
-  <div className="relative pl-6">
-    <div className="absolute left-0 top-2 w-3 h-3 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full" ></div>
-    <div className="bg-gray-50 p-4 rounded-xl">
-      <h4 className="font-bold text-gray-900">{education.degree}</h4>
-      <p className="text-gray-600">{education.institution}</p>
-      <span className="text-sm text-green-600 font-medium">{education.year}</span>
-    </div>
+    <span className="text-gray-700 text-sm font-medium ml-1">{rating}</span>
   </div>
 );
 
@@ -140,7 +52,7 @@ const ActionButton = ({ children, variant = "primary", className = "", ...props 
     tertiary: "bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:shadow-lg",
     danger: "bg-gradient-to-r from-red-600 to-red-700 text-white hover:shadow-xl transform hover:scale-105"
   };
-  
+
   return (
     <button 
       className={`py-3 px-6 rounded-xl font-bold transition-all duration-500 flex items-center justify-center gap-2 ${variants[variant]} ${className}`}
@@ -151,45 +63,65 @@ const ActionButton = ({ children, variant = "primary", className = "", ...props 
   );
 };
 
-// Main Component
 const DoctorDetailPage = () => {
   const [doctor, setDoctor] = useState(null);
-  console.log("gdfg",doctor);
-   useEffect(() => {
-        window.scrollTo(0, 0);
-
-        getRequest(`doctor/${id}`).then((res)=>{
-          setDoctor(res?.data?.data)
-          
-        }).catch((error)=>{
-          console.log("error",error);
-        })
-
-
-      }, []);
-
-       const { id } = useParams();
-
-
-       console.log("fgdfgdfg id",id);
-       
-
-
-
-
-
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [reviewData, setReviewData] = useState({ name: '', comment: '', rating: 5 });
+  const [selectedDate, setSelectedDate] = useState(null);
   
-  const [selectedDate, setSelectedDate] = useState(DATE_SLOTS[0]);
+   const [selectedClinicIndex, setSelectedClinicIndex] = useState(0);
 
+
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    getRequest(`doctor/${id}`).then((res) => {
+      setDoctor(res?.data?.data);
+    }).catch((error) => {
+      console.log("error", error);
+    });
+  }, [id]);
+
+  
 
   const handleReviewSubmit = () => {
     console.log("Submitted Review:", reviewData);
     setShowReviewForm(false);
     setReviewData({ name: '', comment: '', rating: 5 });
   };
+
+
+
+    const formatDateLabel = (isoDate) => {
+    const options = { month: "short", day: "numeric" };
+    return new Date(isoDate).toLocaleDateString("en-US", options);
+  };
+
+  const areDatesEqual = (date1, date2) =>
+    new Date(date1).toDateString() === new Date(date2).toDateString();
+
+  const selectedClinic = doctor?.clinics?.[selectedClinicIndex] || {};
+  const availability = selectedClinic.availability || [];
+
+  const availableDates = availability
+    .filter(item => item.isAvailable)
+    .map(item => ({
+      date: item.date,
+      label: formatDateLabel(item.date),
+      slots: item.slots.filter(slot => !slot.isBooked),
+    }));
+
+  const selectedDateSlots =
+    availableDates.find(d => areDatesEqual(d.date, selectedDate))?.slots || [];
+
+  useEffect(() => {
+    if (availableDates.length > 0 && !selectedDate) {
+      setSelectedDate(availableDates[0].date);
+    }
+  }, [selectedClinicIndex, availableDates, selectedDate]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
@@ -236,16 +168,21 @@ const DoctorDetailPage = () => {
             <div className="text-sm text-gray-700 space-y-1">
               <p className="flex items-center gap-2">
                 <Phone className="w-4 h-4" />
-                {DOCTOR_DATA.phone}
+                {doctor?.phone}
               </p>
-              <p className="flex items-center gap-2">
-                <MapPin className="w-4 h-4" />
-                {DOCTOR_DATA.address}
-              </p>
+         
+
+              {doctor?.clinics?.map((clinic, index) => (
+                <p key={index} className="flex items-center gap-2 text-sm">
+                  <MapPin className="w-8 h-8" />
+                  {clinic.clinicAddress}
+                </p>
+              ))}
+
             </div>
 
             <div className="space-y-3 pt-2">
-              <ActionButton className="w-full" style={{
+              <ActionButton  className="w-full" style={{
     background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}}>
                 <Phone className="w-4 h-4"  />
                 Call Now
@@ -269,11 +206,11 @@ const DoctorDetailPage = () => {
             <GradientCard className="p-10">
               <SectionHeader 
                 icon={Stethoscope} 
-                title={`About ${DOCTOR_DATA.name}`}
-                subtitle={DOCTOR_DATA.specialty}
+                title={`About ${doctor?.fullName}`}
+                subtitle={doctor?.category?.name}
               />
               <p className="text-gray-700 leading-relaxed">
-                {DOCTOR_DATA.about}
+                {doctor?.about}
               </p>
             </GradientCard>
 
@@ -285,15 +222,14 @@ const DoctorDetailPage = () => {
                 gradient="from-green-500 to-emerald-500"
               />
               <div className="space-y-6">
-                {EDUCATION.map((edu, index) => (
-                  <EducationItem key={index} education={edu} />
-                ))}
+        
+                {doctor?.education}
               </div>
             </GradientCard>
 
             {/* Reviews Section */}
             <GradientCard gradient="from-purple-500/5 to-pink-500/5" rotation="-rotate-1" className="p-10" style={{
-    background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}}>
+              background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}}>
               <div className="flex justify-between items-center mb-8">
                 <SectionHeader 
                   icon={MessageCircle} 
@@ -304,7 +240,7 @@ const DoctorDetailPage = () => {
                 <ActionButton 
                   variant="tertiary" 
                   onClick={() => setShowReviewForm(true)} style={{
-    background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}}
+                  background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}}
                 >
                   <PlusCircle className="w-5 h-5" />
                   Write Review
@@ -312,8 +248,16 @@ const DoctorDetailPage = () => {
               </div>
 
               <div className="grid gap-6">
-                {REVIEWS.map((review, index) => (
-                  <ReviewCard key={index} review={review} />
+                 {doctor?.reviews?.map((review, index) => (
+               
+                  <div className="flex-1">
+        <div className="flex items-center justify-between mb-2">
+          <h4 className="font-bold text-gray-900">{review?.user?.name}</h4>
+          <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">{review.date}</span>
+        </div>
+       
+        <p className="text-gray-700 leading-relaxed">{review.comment}</p>
+      </div>
                 ))}
               </div>
 
@@ -321,6 +265,7 @@ const DoctorDetailPage = () => {
               {showReviewForm && (
                 <div className="mt-8 p-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl border border-purple-200">
                   <h3 className="font-bold mb-4 text-xl">Share Your Experience</h3>
+                  
                   <div className="space-y-4">
                     <input 
                       type="text" 
@@ -328,7 +273,7 @@ const DoctorDetailPage = () => {
                       value={reviewData.name} 
                       onChange={(e) => setReviewData({ ...reviewData, name: e.target.value })} 
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-4 focus:ring-purple-500/25 focus:border-purple-500 transition-all duration-300" style={{
-    background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}} 
+                      background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}} 
                     />
                     <textarea 
                       placeholder="Your Review" 
@@ -357,82 +302,89 @@ const DoctorDetailPage = () => {
           {/* Right Sidebar */}
           <aside className="lg:col-span-1 space-y-8">
             {/* Appointment Booking */}
-            <div className="sticky top-8">
+            <div className=" top-8">
               <GradientCard gradient="from-blue-500/10 to-indigo-500/10" rotation="rotate-2" className="p-8 border-blue-100" >
-                <div className="text-center mb-6">
-                  <div className="inline-flex items-center gap-3  text-white px-6 py-3 rounded-full font-bold text-lg shadow-lg" style={{
-    background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}}>
-                    <Calendar className="w-6 h-6" />
-                    Ananya Clinic
-                  </div>
-                </div>
-                
-                <div className="space-y-6">
-                  <div className="text-center p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl border border-green-200">
+                      {doctor?.clinics?.map((clinic, index) => (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        setSelectedClinicIndex(index);
+                        setSelectedDate(null);
+                        setSelectedSlot(null);
+                      }}
+                      className={`px-4 py-2 rounded-xl font-bold transition-all duration-300 text-sm mr-2 ${
+                        index === selectedClinicIndex
+                          ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow"
+                          : "bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                      }`}
+                    >
+                      {clinic.clinicName}
+                    </button>
+                  ))}
+             
+
+                {/* Consultation Fee */}
+                <div className="text-center p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl border border-green-200 mb-6 mt-4">
+                  <div className="text-3xl font-bold text-gray-900">
                     <IndianRupee className="w-8 h-8 text-green-600 mx-auto mb-2" />
-                    <div className="text-3xl font-bold text-gray-900">₹{DOCTOR_DATA.consultationFee}</div>
-                    <p className="text-green-700 font-medium">Consultation Fee</p>
+                    {selectedClinic.consultationFee}
                   </div>
-                  
-                  <div>
-  {/* Date Slots */}
-  <div className="mb-6">
-    <h4 className="text-sm font-semibold text-gray-900 mb-2">Select Date</h4>
-    <div className="flex flex-wrap gap-3">
-      {DATE_SLOTS.map((date, index) => (
-        <button
-          key={index}
-          onClick={() => setSelectedDate(date)}
-          className={`px-4 py-2 rounded-xl font-medium transition-all duration-300 text-sm ${
-            selectedDate === date
-              ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md'
-              : 'bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-600'
-          }`}
-        >
-          {date}
-        </button>
-      ))}
-    </div>
-  </div>
+                  <p className="text-green-700 font-medium">Consultation Fee</p>
+                </div>
 
-  {/* Time Slots */}
-  <div>
-    <div className="flex items-center gap-3 mb-4">
-      <Clock className="w-5 h-5 text-blue-600" />
-      <span className="font-bold text-gray-900">Available {selectedDate}</span>
-    </div>
-    <div className="grid grid-cols-2 gap-3">
-      {TIME_SLOTS.map((slot, index) => (
-        <TimeSlotButton 
-          key={index} 
-          slot={slot}
-          isSelected={selectedSlot === slot.time}
-          onSelect={setSelectedSlot}
-        />
-      ))}
-    </div>
-  </div>
-</div>
-
-
-                  <div className="space-y-3">
-                    <ActionButton className="w-full py-4 rounded-2xl" style={{
-    background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}}>
-                      <Calendar className="w-5 h-5" />
-                      Confirm Booking
-                    </ActionButton>
-                    <div className="grid grid-cols-2 gap-3">
-                      <ActionButton variant="secondary">
-                        <Phone className="w-4 h-4" />
-                        Call
-                      </ActionButton>
-                      <ActionButton variant="tertiary">
-                        <Video className="w-4 h-4" />
-                        Video
-                      </ActionButton>
-                    </div>
+                {/* Date Selector */}
+                <div className="mb-6">
+                  <h4 className="text-sm font-semibold text-gray-900 mb-2">Select Date</h4>
+                  <div className="flex flex-wrap gap-3">
+                    {availableDates.map((dateObj, index) => (
+                      <button
+                        key={index}
+                        onClick={() => {
+                          setSelectedDate(dateObj.date);
+                          setSelectedSlot(null);
+                        }}
+                        className={`px-4 py-2 rounded-xl font-medium transition-all duration-300 text-sm ${
+                          areDatesEqual(selectedDate, dateObj.date)
+                            ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow"
+                            : "bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                        }`}
+                      >
+                        {dateObj.label}
+                      </button>
+                    ))}
                   </div>
                 </div>
+
+                {/* Time Slots */}
+                <div>
+                  <div className="flex items-center gap-3 mb-4">
+                    <Clock className="w-5 h-5 text-blue-600" />
+                    <span className="font-bold text-gray-900">
+                      Available {selectedDate ? formatDateLabel(selectedDate) : ""}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                    {selectedDateSlots.length > 0 ? (
+                      selectedDateSlots.map((slot, index) => (
+                        <button
+                          key={slot._id || index}
+                          onClick={() => setSelectedSlot(slot.startTime)}
+                          className={`w-full px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                            selectedSlot === slot.startTime
+                              ? "bg-blue-600 text-white shadow"
+                              : "bg-gray-100 text-gray-700 hover:bg-blue-50"
+                          }`}
+                        >
+                          {slot.startTime} - {slot.endTime}
+                        </button>
+                      ))
+                    ) : (
+                      <p className="text-gray-500 col-span-full">No slots available</p>
+                    )}
+                  </div>
+                  </div>
+                    
               </GradientCard>
             </div>
 
@@ -446,29 +398,31 @@ const DoctorDetailPage = () => {
               </div>
               
               <div className="space-y-4">
-                <div className="p-4 bg-gradient-to-r from-gray-50 to-indigo-50 rounded-xl">
-                  <h4 className="font-bold text-gray-900 mb-1">Vijaya Medical Center</h4>
-                  <p className="text-gray-600 text-sm flex items-center gap-2">
-                    <MapPin className="w-4 h-4" />
-                    Sector 45, Gurugram, Haryana
-                  </p>
-                </div>
+                 {doctor?.clinics?.map((clinic, index) => (
+                  <div className="p-4 bg-gradient-to-r from-gray-50 to-indigo-50 rounded-xl">
+                    <h4 className="font-bold text-gray-900 mb-1"> {clinic.clinicName}   </h4>
+                    <p className="text-gray-600 text-sm flex items-center gap-2">
+                      <MapPin className="w-4 h-4" />
+                      {clinic.clinicAddress}
+                    </p>
+                  </div>
+                 ))}
                 
                 <div className="p-4 bg-gradient-to-r from-gray-50 to-green-50 rounded-xl">
                   <p className="text-gray-700 text-sm flex items-center gap-2 mb-2">
                     <Phone className="w-4 h-4" />
-                    +91 9876543210
+                    {doctor?.phone}
                   </p>
                   <p className="text-gray-700 text-sm flex items-center gap-2">
                     <Globe className="w-4 h-4" />
-                    ananya.singh@clinic.com
+                   {doctor?.email}
                   </p>
                 </div>
               </div>
             </GradientCard>
 
             {/* Emergency Contact */}
-            <div className="relative">
+            {/* <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 to-pink-500/10 rounded-3xl transform rotate-1"></div>
               <div className="relative bg-gradient-to-br from-red-50 to-pink-50 rounded-3xl border-2 border-red-200 p-8 shadow-2xl">
                 <div className="text-center">
@@ -482,7 +436,7 @@ const DoctorDetailPage = () => {
                   </ActionButton>
                 </div>
               </div>
-            </div>
+            </div> */}
           </aside>
         </div>
       </main>

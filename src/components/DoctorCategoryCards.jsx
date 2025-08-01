@@ -12,8 +12,8 @@ import { getRequest } from "../Helpers/index";
 const      DoctorCategoryCards = () => {
   const navigate = useNavigate();
 
-  const handleViewDetails = () => {
-    navigate(`/doctor/${name}`);
+  const handleViewDetails = (id) => {
+    navigate(`/doctor/${id}`);
   };
 
   const [categories, setCategories] = useState([]);
