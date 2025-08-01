@@ -1,25 +1,26 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+import { useDispatch } from 'react-redux';
+import { updateLocationData } from '../redux/slices/userSlice';
 
-const Location = ({ onLocationGranted, onLocationDenied, isVisible = true }) => {
+const Location = () => {
   const [permissionStatus, setPermissionStatus] = useState('pending');
   const [isLoading, setIsLoading] = useState(false);
   const [location, setLocation] = useState(null);
-  console.log("location",location);
-  console.log("permissionStatus",permissionStatus);
-
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const requestLocationPermission = async () => {
-
     setIsLoading(true);
-    
+
     try {
-      // Check if geolocation is supported
       if (!navigator.geolocation) {
         setPermissionStatus('unsupported');
         setIsLoading(false);
         return;
       }
 
-      // Request location permission
       const position = await new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject, {
           enableHighAccuracy: true,
@@ -31,12 +32,10 @@ const Location = ({ onLocationGranted, onLocationDenied, isVisible = true }) => 
       const { latitude, longitude } = position.coords;
       setLocation({ latitude, longitude });
       setPermissionStatus('granted');
-      onLocationGranted?.({ latitude, longitude });
-      
+      dispatch(updateLocationData({ latitude, longitude }));
     } catch (error) {
       console.error('Location permission error:', error);
       setPermissionStatus('denied');
-      onLocationDenied?.(error);
     } finally {
       setIsLoading(false);
     }
@@ -48,44 +47,32 @@ const Location = ({ onLocationGranted, onLocationDenied, isVisible = true }) => 
 
   const handleDenyLocation = () => {
     setPermissionStatus('denied');
-    onLocationDenied?.('User denied location permission');
   };
 
-  if (!isVisible) return null;
-
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full transform transition-all duration-300 animate-in slide-in-from-bottom-4">
-        {/* Header with location icon */}
+    <div className="bg-gray-50 min-h-screen flex flex-col">
+      
+
+    <Navbar />
+   
+  
+    <div className="flex-grow flex items-center justify-center p-4 my-20 mt-46">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-xl w-full transform transition-all duration-300">
+  
+        {/* Header */}
         <div className="relative p-6 pb-4">
           <div className="flex justify-center mb-4">
             <div className="relative">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-                <svg 
-                  className="w-8 h-8 text-blue-600" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth={2} 
-                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" 
-                  />
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth={2} 
-                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" 
-                  />
+                <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
               </div>
-              {/* Animated pulse effect */}
               <div className="absolute inset-0 w-16 h-16 bg-blue-400 rounded-full animate-ping opacity-20"></div>
             </div>
           </div>
-          
+  
           <h2 className="text-2xl font-bold text-gray-900 text-center mb-2">
             Enable Location Access
           </h2>
@@ -93,8 +80,8 @@ const Location = ({ onLocationGranted, onLocationDenied, isVisible = true }) => 
             We need your location to provide you with the best healthcare services nearby, including doctors, hospitals, and pharmacies in your area.
           </p>
         </div>
-
-        {/* Status messages */}
+  
+        {/* Location Granted */}
         {permissionStatus === 'granted' && (
           <div className="px-6 pb-4">
             <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
@@ -112,7 +99,8 @@ const Location = ({ onLocationGranted, onLocationDenied, isVisible = true }) => 
             </div>
           </div>
         )}
-
+  
+        {/* Location Denied */}
         {permissionStatus === 'denied' && (
           <div className="px-6 pb-4">
             <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
@@ -123,12 +111,13 @@ const Location = ({ onLocationGranted, onLocationDenied, isVisible = true }) => 
                 <span className="text-red-800 font-medium">Location access denied</span>
               </div>
               <p className="text-red-700 text-sm mt-1">
-                You can still use the app, but some features may be limited.
+                You can't use the app without location access
               </p>
             </div>
           </div>
         )}
-
+  
+        {/* Location Unsupported */}
         {permissionStatus === 'unsupported' && (
           <div className="px-6 pb-4">
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
@@ -144,57 +133,46 @@ const Location = ({ onLocationGranted, onLocationDenied, isVisible = true }) => 
             </div>
           </div>
         )}
-
-        {/* Action buttons */}
+  
+        {/* Pending State (Button + Spinner) */}
         {permissionStatus === 'pending' && (
           <div className="px-6 pb-6">
-            <div className="space-y-3">
-              <button
-                onClick={handleAllowLocation}
-                disabled={isLoading}
-                className={`w-full py-3 px-4 rounded-xl font-semibold text-white transition-all duration-200 transform hover:scale-105 active:scale-95 ${
-                  isLoading 
-                    ? 'bg-gray-400 cursor-not-allowed' 
-                    : 'bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl'
-                }`}
-              >
-                {isLoading ? (
-                  <div className="flex items-center justify-center">
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Getting location...
-                  </div>
-                ) : (
-                  'Allow Location Access'
-                )}
-              </button>
-              
-              <button
-                onClick={handleDenyLocation}
-                className="w-full py-3 px-4 rounded-xl font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 transition-all duration-200 transform hover:scale-105 active:scale-95"
-              >
-                Maybe Later
-              </button>
-            </div>
-            
+            <button
+              onClick={handleAllowLocation}
+              disabled={isLoading}
+              className={`w-full py-3 px-4 rounded-xl font-semibold text-white transition-all duration-200 transform hover:scale-105 active:scale-95 ${
+                isLoading
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl'
+              }`}
+            >
+              {isLoading ? (
+                <div className="flex items-center justify-center">
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Getting location...
+                </div>
+              ) : (
+                'Allow Location Access'
+              )}
+            </button>
+  
             <p className="text-xs text-gray-500 text-center mt-4 leading-relaxed">
               Your location data is used only to find nearby healthcare services and is never shared with third parties.
             </p>
           </div>
         )}
-
-        {/* Success/Denied state buttons */}
+  
+        {/* Continue or Try Again Button */}
         {(permissionStatus === 'granted' || permissionStatus === 'denied') && (
           <div className="px-6 pb-6">
             <button
               onClick={() => {
                 if (permissionStatus === 'granted') {
-                  // Close modal or continue with app
-                  console.log('Location granted, continuing...');
+                  navigate("/");
                 } else {
-                  // Try again or close
                   setPermissionStatus('pending');
                 }
               }}
@@ -206,7 +184,12 @@ const Location = ({ onLocationGranted, onLocationDenied, isVisible = true }) => 
         )}
       </div>
     </div>
+  
+    <Footer />
+  </div>
+  
+  
   );
 };
 
-export default Location;
+export default Location; 

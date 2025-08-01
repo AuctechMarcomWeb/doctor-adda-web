@@ -8,7 +8,7 @@ import UserDetails from "./UserDetails";
 const LoginSignupFlow = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
-  const [mode, setMode] = useState('signup'); // 'signup' or 'login'
+  const [mode, setMode] = useState('login'); // 'signup' or 'login'
   
   const [mobile, setMobile] = useState("");
 

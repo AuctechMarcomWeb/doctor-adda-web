@@ -6,8 +6,9 @@ import logo from "../assets/doctor-adda-logo.png";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaUser, FaPhoneAlt } from "react-icons/fa";
 import { logout } from "../redux/slices/userSlice";
-import { deleteCookie } from "../Hooks/cookie";
+import { deleteCookie, clearAuthCookies } from "../Hooks/cookie";
 import NavBar2 from "./NavBar2";
+import { toast } from "react-hot-toast";
 
 
 const Navbar = () => {
@@ -61,16 +62,11 @@ const Navbar = () => {
     
     // Clear cookies
     deleteCookie("DoctorAddaPanel");
-    
-    // Clear sessionStorage
-    sessionStorage.removeItem("authToken");
-    sessionStorage.removeItem("userMobile");
-    sessionStorage.removeItem("loginTime");
-    sessionStorage.removeItem("isAuthenticated");
-    
+    clearAuthCookies();
     
     // Close dropdown
     setDropdownOpen(false);
+    toast.success("Logged out successfully");
     
     console.log("All sessions cleared successfully");
   };
