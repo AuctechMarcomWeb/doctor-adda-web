@@ -39,7 +39,9 @@ const DoctorCard = (data) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div onClick={()=>handleViewDetails(data)}  className="p-6 relative">
+
+      <div onClick={()=>handleViewDetails(data)}  className="p-6 relative cursor-pointer">
+
         {/* Doctor Image with Animation */}
         <div  className="flex items-start gap-4 mb-4">
           <div className="relative">
@@ -114,7 +116,7 @@ const DoctorCard = (data) => {
         <div className="flex gap-3">
           <button
             
-            className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-xl font-medium hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+            className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-xl font-medium hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer"
             style={{
               background:
                 "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
@@ -342,7 +344,7 @@ const DoctorList = () => {
             ))
           ) : (
             <div className="col-span-full text-center py-16">
-              <div className="text-8xl mb-6 animate-bounce">🔍</div>
+              <div className="text-8xl mb-6 animate-bounce flex justify-center"><img width="100" height="100" src="https://img.icons8.com/pin/100/search.png" alt="search"/></div>
               <h3 className="text-2xl font-bold text-gray-700 mb-3">
                 No doctors found
               </h3>
