@@ -4,13 +4,15 @@ import { useNavigate } from "react-router-dom";
 import { MapPin, IndianRupee,  Clock} from "lucide-react";
 
 const AmbulanceCard = ({ name, ambulanceVehicles, ambulanceType , operatingHours, price, capacity, address, averageRating 
-, profilepic }) => {
+, profilepic, _id }) => {
   const navigate = useNavigate();
     const handleViewDetails = () => {
-      navigate(`/ambulance/${name}`);
+          console.log("id",_id);
+
+      navigate(`/ambulance/${_id}`);
     };
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
+    <div onClick={()=>handleViewDetails()}className="bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
     <div className="flex flex-col md:flex-row gap-4 p-4">
       {/* Thumbnail */}
       <img
