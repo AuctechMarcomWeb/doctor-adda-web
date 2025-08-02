@@ -82,7 +82,7 @@ const Footer = () => {
                 <div className="text-gray-400">Online Consultation</div>
                 <div className="text-gray-400">Emergency Care</div>
                 <div className="text-gray-400">Health Monitoring</div>
-                <div className="text-gray-400">Family Care</div>
+                <div className="text-gray-400">Family CAre</div>
               </div>
             </div>
 
