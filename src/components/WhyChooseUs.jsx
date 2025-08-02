@@ -30,7 +30,7 @@ const features = [
 
 const WhyChooseUs = () => {
   return (
-    <div className="max-w-6xl mx-auto py-12 px-6 md:px-20 bg-white text-center">
+    <div className="max-w-6xl mx-auto py-12 px-6 md:px-20 bg-white text-center max-w-[85%]">
      <h2 className="text-4xl font-bold text-gray-800 mb-8">
           Why {" "}
           <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">

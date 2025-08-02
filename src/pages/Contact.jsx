@@ -62,7 +62,7 @@ const Contact = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white text-gray-800 py-16 px-4">
+    <div className="min-h-screen bg-white text-gray-800 py-28 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div
