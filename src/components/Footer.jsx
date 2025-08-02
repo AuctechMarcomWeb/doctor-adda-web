@@ -64,7 +64,7 @@ const Footer = () => {
                   to="/"
                   className="block text-gray-400 hover:text-white transition-colors"
                 >
-                  Services
+                  Login
                 </Link>
                
                 <Link
@@ -79,10 +79,10 @@ const Footer = () => {
             <div>
               <h3 className="text-lg font-semibold mb-4">Services</h3>
               <div className="space-y-2">
-                <div className="text-gray-400">Online Consultation</div>
-                <div className="text-gray-400">Emergency Care</div>
-                <div className="text-gray-400">Health Monitoring</div>
-                <div className="text-gray-400">Family CAre</div>
+                <div className="text-gray-400">Doctor & Specialists</div>
+                <div className="text-gray-400">Ambulance  </div>
+                <div className="text-gray-400">Diagnostics</div>
+                <div className="text-gray-400">Hospitals</div>
               </div>
             </div>
 

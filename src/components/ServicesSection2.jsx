@@ -78,117 +78,92 @@ useEffect(() => {
   };
 
   return (
-    <div className="w-full bg-white py-8 ">
-      <div className="max-w-7xl mx-auto max-w-[85%]">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h2 className="text-4xl font-bold text-gray-800 mb-4 text-center">
-            Our{" "}
-            <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-              Categories
-            </span>
-          </h2>
-          <p className="text-gray-600">
-            Quality healthcare services at your fingertips
-          </p>
-        </div>
-
-        {/* Services Container */}
-        <div className="relative">
-          {/* Fade Effects */}
-          <div className="absolute left-0 top-0 w-8 h-full bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 w-8 h-full bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
-
-          {/* Scrollable Container */}
-          <div
-            ref={scrollContainerRef}
-            className="overflow-x-auto scrollbar-hide scroll-smooth"
-            onMouseEnter={() => setIsPaused(true)}
-            onMouseLeave={() => setIsPaused(false)}
-          >
-            <div className="flex space-x-6 w-max pb-4">
-              {services.map((service, index) => (
-                <div
-                  key={service.id}
-                  className={`group cursor-pointer transition-all duration-300 ${
-                    currentIndex === index ? "" : ""
-                  }`}
-                  onClick={() => {
-                    if (service?.name == "Blood Bank") {
-                      console.log("Blood Bank", service?.name);
-                      navigation("/bloodbank")
-                    } else if(service?.name == "Ambulance"){
-                      
-                      navigation("/ambulance")
-                    }else if(service?.name == "Pharmacies"){
-                      
-                      navigation("/pharmacy")
-                    }else if(service?.name == "Diagnostic"){
-                      
-                      navigation("/diagnostic")
-                    }else if(service?.name == "Doctor & Specialists"){
-                      
-                      navigation("/doctor")
-                    }else if(service?.name == "Hospitals & Clinics"){
-                      
-                      navigation("/hospital")
-                    } else {
-                      console.log("sdfsdfsdf", service?.name);
-                    }
-
-                    scrollToIndex(index);
-                  }}
-                >
-                  {/* Image Container */}
-                  <div className="w-48 h-36 rounded-2xl overflow-hidden shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-105">
-                    <img
-                      src={service.imageUrl}
-                      alt={service.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                  </div>
-
-                  {/* Service Name */}
-                  <h3 className="text-center mt-4 text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-300">
-                    {service.name}
-                  </h3>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Dots Indicator */}
-          {/* <div className="flex justify-center mt-6 space-x-2">
-            {services.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => scrollToIndex(index)}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  currentIndex === index 
-                    ? 'bg-blue-600 w-6' 
-                    : 'bg-gray-300 hover:bg-gray-400'
-                }`}
-              />
-            ))}
-          </div> */}
-        </div>
+  <div className="w-full bg-white py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 max-w-[85%]">
+      {/* Header */}
+      <div className="text-center mb-8">
+        <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">
+          Our{" "}
+          <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+            Categories
+          </span>
+        </h2>
+        <p className="text-gray-600 text-sm sm:text-base">
+          Quality healthcare services at your fingertips
+        </p>
       </div>
 
-      {/* Custom Scrollbar Styles */}
-      <style jsx>{`
-        .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-        .scroll-smooth {
-          scroll-behavior: smooth;
-        }
-      `}</style>
+      {/* Services Container */}
+      <div className="relative">
+        {/* Fade Effects */}
+        <div className="absolute left-0 top-0 w-8 h-full bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 w-8 h-full bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+
+        {/* Scrollable Container */}
+        <div
+          ref={scrollContainerRef}
+          className="overflow-x-auto scrollbar-hide scroll-smooth"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          <div className="flex space-x-4 sm:space-x-6 w-max pb-4">
+            {services.map((service, index) => (
+              <div
+                key={service.id}
+                className="group cursor-pointer transition-all duration-300 flex-shrink-0"
+                onClick={() => {
+                  if (service?.name === "Blood Bank") {
+                    navigation("/bloodbank");
+                  } else if (service?.name === "Ambulance") {
+                    navigation("/ambulance");
+                  } else if (service?.name === "Pharmacies") {
+                    navigation("/pharmacy");
+                  } else if (service?.name === "Diagnostic") {
+                    navigation("/diagnostic");
+                  } else if (service?.name === "Doctor & Specialists") {
+                    navigation("/doctor");
+                  } else if (service?.name === "Hospitals & Clinics") {
+                    navigation("/hospital");
+                  }
+                  scrollToIndex(index);
+                }}
+              >
+                {/* Image Container */}
+                <div className="w-40 sm:w-44 md:w-48 lg:w-56 h-32 sm:h-36 lg:h-40 rounded-2xl overflow-hidden shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-105">
+                  <img
+                    src={service.imageUrl}
+                    alt={service.name}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                </div>
+
+                {/* Service Name */}
+                <h3 className="text-center mt-3 text-sm sm:text-base font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-300 min-h-[3rem]">
+                  {service.name}
+                </h3>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
-  );
+
+    {/* Custom Scrollbar Styles */}
+    <style jsx>{`
+      .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
+      .scroll-smooth {
+        scroll-behavior: smooth;
+      }
+    `}</style>
+  </div>
+);
+
 };
 
 export default ServicesSection2;
