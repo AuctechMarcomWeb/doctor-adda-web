@@ -78,8 +78,8 @@ useEffect(() => {
   };
 
   return (
-    <div className="w-full bg-white py-8 px-4">
-      <div className="max-w-7xl mx-auto">
+    <div className="w-full bg-white py-8 ">
+      <div className="max-w-7xl mx-auto max-w-[85%]">
         {/* Header */}
         <div className="text-center mb-8">
           <h2 className="text-4xl font-bold text-gray-800 mb-4 text-center">
@@ -98,38 +98,6 @@ useEffect(() => {
           {/* Fade Effects */}
           <div className="absolute left-0 top-0 w-8 h-full bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
           <div className="absolute right-0 top-0 w-8 h-full bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
-
-          {/* Previous Arrow */}
-          {/* <button
-            onClick={scrollPrevious}
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 bg-white bg-opacity-90 backdrop-blur-sm rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 hover:bg-opacity-100"
-          >
-            <ChevronLeft className="w-5 h-5 text-gray-700" />
-          </button> */}
-
-          {/* Next Arrow */}
-          {/* <button
-            onClick={scrollNext}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 bg-white bg-opacity-90 backdrop-blur-sm rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 hover:bg-opacity-100"
-          >
-            <ChevronRight className="w-5 h-5 text-gray-700" />
-          </button> */}
-
-          {/* Pause/Play Button */}
-          {/* <button
-            onClick={() => setIsPaused(!isPaused)}
-            className="absolute top-4 right-4 z-20 bg-white bg-opacity-90 backdrop-blur-sm rounded-full p-2 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 invisible"
-          >
-            {isPaused ? (
-              <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
-              </svg>
-            ) : (
-              <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-              </svg>
-            )}
-          </button> */}
 
           {/* Scrollable Container */}
           <div

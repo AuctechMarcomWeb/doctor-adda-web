@@ -72,7 +72,7 @@ const HealthBlogSection = () => {
 
   return (
     <div className="bg-gray-50 py-8 px-4">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto max-w-[85%]">
         {/* Header */}
         <div className="text-center mb-4">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">

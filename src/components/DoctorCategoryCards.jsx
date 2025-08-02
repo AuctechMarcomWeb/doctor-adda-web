@@ -46,8 +46,8 @@ const      DoctorCategoryCards = () => {
   };
 
   return (
-    <div  className="bg-gradient-to-br from-slate-50 to-blue-50 py-8 px-4 relative">
-      <div className=" max-w-7xl mx-auto">
+    <div  className="bg-gradient-to-br from-slate-50 to-blue-50 py-8  relative">
+      <div className=" max-w-7xl mx-auto max-w-[85%]">
         {/* Header */}
         <div className="text-center mb-8">
           <h2 className="text-4xl font-bold text-gray-800 mb-4 text-center">

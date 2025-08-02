@@ -42,7 +42,7 @@ const Carousel = () => {
   };
 
   return (
-    <div className="relative w-full max-w-7xl mx-auto rounded-3xl p-8 backdrop-blur-sm">
+    <div className="relative w-full max-w-7xl mx-auto rounded-3xl p-8 backdrop-blur-sm max-w-[85%]">
       <div className="relative flex items-center justify-center h-[260px] perspective-1000">
         
         <div className="absolute left-0 transform -translate-x-16 rotate-y-45 transition-all duration-700 ease-out">
