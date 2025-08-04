@@ -21,81 +21,95 @@ import {
   Users,
   Globe
 } from "lucide-react";
+import ReviewPopup from "../components/ReviewPopup";
+import Cookies from "js-cookie";
+import { getRequest } from "../Helpers";
+import { useParams } from "react-router-dom";
+
 
 const PharmacyDetailPage = () => {
-   useEffect(() => {
-      window.scrollTo(0, 0);
-    }, []);
+  const [pharmacy, setPharmacy] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("about");
   const [prescription, setPrescription] = useState(null);
   const [description, setDescription] = useState("");
   const [duration, setDuration] = useState("");
   const [isLiked, setIsLiked] = useState(false);
-  const [reviews, setReviews] = useState([
-    {
-      name: "Amit Chauhan",
-      comment: "Exceptional service! The pharmacist was very knowledgeable and helped me understand my medication. Quick delivery and genuine products.",
-      rating: 5,
-      image: "https://randomuser.me/api/portraits/men/11.jpg",
-      date: "2 days ago",
-      verified: true
-    },
-    {
-      name: "Priya Sinha",
-      comment: "Best pharmacy in the area. Always stock fresh medicines and the staff is very courteous. Highly recommended!",
-      rating: 5,
-      image: "https://randomuser.me/api/portraits/women/22.jpg",
-      date: "1 week ago",
-      verified: true
-    },
-    {
-      name: "Rahul Sharma",
-      comment: "Great experience with their home delivery service. Medicine arrived within 20 minutes!",
-      rating: 4,
-      image: "https://randomuser.me/api/portraits/men/33.jpg",
-      date: "2 weeks ago",
-      verified: false
-    }
-  ]);
+  const [reviews, setReviews] = useState([]);
+  const [showReviewPopup, setShowReviewPopup] = useState(false);
+
+  const { id } = useParams();
+
+  console.log("pharmacyId in detail page",id);
+
+
+  //console.log("token",token);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+
+
+
+
+  useEffect(() => {
+    const fetchPharmacy = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await getRequest(`pharmacy/${id}`);
+        const data = res.data;
+        if (data.success) {
+          setPharmacy(data.data);
+          setReviews(data.data.reviews || []);
+        } else {
+          setError(data.message || 'Failed to fetch pharmacy');
+        }
+      } catch (err) {
+        setError('Failed to fetch pharmacy');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPharmacy();
+  }, []);
 
   const handleFileChange = (e) => {
     setPrescription(e.target.files[0]);
   };
 
-  const handleAddReview = () => {
-    const name = prompt("Enter your name:");
-    const comment = prompt("Enter your review:");
-    const rating = parseInt(prompt("Enter rating (1-5):"));
-    if (name && comment && rating) {
-      setReviews([
-        ...reviews,
-        {
-          name,
-          comment,
-          rating,
-          image: "https://randomuser.me/api/portraits/lego/1.jpg",
-          date: "Just now",
-          verified: false
-        },
-      ]);
-    }
-  };
-
+  // Features can remain static or be enhanced with API data if available
   const features = [
     { icon: Shield, text: "100% Genuine Products", color: "text-green-600" },
     { icon: Truck, text: "Express Delivery", color: "text-blue-600" },
     { icon: Clock, text: "24/7 Available", color: "text-purple-600" },
     { icon: Award, text: "Licensed Pharmacy", color: "text-amber-600" }
-  ];
+  ]
 
-  const services = [
-    { name: "Prescription Medicines", icon: "💊" },
-    { name: "Health Supplements", icon: "🌿" },
-    { name: "Personal Care", icon: "🧴" },
-    { name: "Baby Care", icon: "👶" },
-    { name: "Online Consultation", icon: "👨‍⚕️" },
-    { name: "Health Checkup", icon: "🩺" }
-  ];
+  // Loading and error states
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
+  if (error) {
+    return <div className="min-h-screen flex items-center justify-center text-red-500">{error}</div>;
+  }
+  if (!pharmacy) {
+    return null;
+  }
+
+  // Services from API
+  const services = pharmacy.services && pharmacy.services.length > 0
+    ? pharmacy.services.map(s => ({ name: s.name, icon: "💊" }))
+    : [
+        { name: "Prescription Medicines", icon: "💊" },
+        { name: "Health Supplements", icon: "🌿" },
+        { name: "Personal Care", icon: "🧴" },
+        { name: "Baby Care", icon: "👶" },
+        { name: "Online Consultation", icon: "👨‍⚕️" },
+        { name: "Health Checkup", icon: "🩺" }
+      ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 pt-28" >
@@ -110,7 +124,7 @@ const PharmacyDetailPage = () => {
               <ChevronRight className="w-4 h-4" />
               <span>Pharmacies</span>
               <ChevronRight className="w-4 h-4" />
-              <span className="text-blue-600 font-medium">HealthPlus Pharmacy</span>
+              <span className="text-blue-600 font-medium">{pharmacy.name}</span>
             </div>
             <div className="flex items-center gap-3">
               <button 
@@ -132,7 +146,7 @@ const PharmacyDetailPage = () => {
               <div className="relative group">
                 <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
                   <img
-                    src="https://i.pinimg.com/1200x/72/59/6e/72596e499f868bdfce8220559315fcf5.jpg"
+                    src={pharmacy.profileImage || "https://i.pinimg.com/1200x/72/59/6e/72596e499f868bdfce8220559315fcf5.jpg"}
                     alt="Pharmacy"
                     className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-700"
                   />
@@ -161,67 +175,49 @@ const PharmacyDetailPage = () => {
                   {/* Header */}
                   <div className="text-center pb-4 border-b border-gray-100">
                     <div className="flex items-center justify-center gap-2 mb-2">
-                      <h1 className="text-2xl font-bold text-gray-900">HealthPlus Pharmacy</h1>
+                      <h1 className="text-2xl font-bold text-gray-900">{pharmacy.name}</h1>
                       <BadgeCheck className="w-6 h-6 text-blue-600" />
                     </div>
                     <div className="flex items-center justify-center gap-1 text-sm text-gray-600">
                       <MapPin className="w-4 h-4 text-red-500" />
-                      <span>Gomti Nagar, Lucknow</span>
+                      <span>{pharmacy.address}</span>
                     </div>
                     <div className="flex items-center justify-center gap-2 mt-2">
                       <div className="flex items-center">
                         {[...Array(5)].map((_, i) => (
-                          <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                          <Star key={i} className={`w-4 h-4 ${i < (pharmacy.averageRating || 0) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} />
                         ))}
                       </div>
-                      <span className="text-sm font-medium text-gray-700">4.9 (156 reviews)</span>
+                      <span className="text-sm font-medium text-gray-700">{pharmacy.averageRating || 0} ({reviews.length} reviews)</span>
                     </div>
                   </div>
 
                   {/* Quick Info */}
                   <div className="space-y-4">
                     <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
-                     
                       <Clock className="w-4 h-4 text-green-700" />
-                      <span className="text-sm font-medium text-green-700">Open - 9:00 AM to 8:00 PM</span>
+                      <span className="text-sm font-medium text-green-700">Open - {pharmacy.storeTiming}</span>
                     </div>
 
                     <div className="space-y-3">
                       <div className="flex items-center gap-3 text-sm text-gray-600">
                         <Phone className="w-4 h-4 text-blue-600" />
-                        <span>+91 98765 43210</span>
+                        <span>{pharmacy.phone}</span>
                       </div>
                       <div className="flex items-start gap-3 text-sm text-gray-600">
                         <MapPin className="w-4 h-4 text-red-500 mt-0.5" />
-                        <span>Shop No. 12, 1090 Chauraha, Gomti Nagar, Lucknow</span>
+                        <span>{pharmacy.address}</span>
                       </div>
                     </div>
                   </div>
 
                   {/* Action Buttons */}
                   <div className="space-y-3">
-                    <button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold flex items-center justify-center gap-2 shadow-lg hover:shadow-xl">
+                    <a href={`tel:${pharmacy.phone}`} className="w-full block bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold flex items-center justify-center gap-2 shadow-lg hover:shadow-xl">
                       <PhoneCall className="w-5 h-5" />
                       Call Now
-                    </button>
-                    {/* <button className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all duration-300 font-semibold flex items-center justify-center gap-2 shadow-lg hover:shadow-xl">
-                      <MessageCircle className="w-5 h-5" />
-                      Chat with Pharmacist
-                    </button> */}
+                    </a>
                   </div>
-
-                  {/* Services Preview */}
-                  {/* <div className="pt-4 border-t border-gray-100">
-                    <h3 className="font-semibold text-gray-900 mb-3">Available Services</h3>
-                    <div className="grid grid-cols-3 gap-2">
-                      {services.slice(0, 6).map((service, index) => (
-                        <div key={index} className="text-center p-2 hover:bg-gray-50 rounded-lg transition-colors duration-200">
-                          <div className="text-lg mb-1">{service.icon}</div>
-                          <div className="text-xs text-gray-600 leading-tight">{service.name}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div> */}
                 </div>
               </div>
             </div>
@@ -271,9 +267,9 @@ const PharmacyDetailPage = () => {
               <div className="space-y-8">
                 {/* Description */}
                 <div className="prose max-w-none">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">About HealthPlus Pharmacy</h2>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4">About {pharmacy.name}</h2>
                   <p className="text-gray-600 leading-relaxed">
-                    HealthPlus Pharmacy is committed to providing high-quality medicines, wellness products, and health services through its extensive network of stores and prompt delivery system. We pride ourselves on being your trusted healthcare partner, offering genuine medications and expert pharmaceutical advice.
+                    {pharmacy.description}
                   </p>
                 </div>
 
@@ -283,7 +279,6 @@ const PharmacyDetailPage = () => {
                     <Zap className="w-6 h-6 text-blue-600" />
                     Quick Prescription Upload
                   </h3>
-                  
                   <div className="grid md:grid-cols-2 gap-8">
                     {/* Upload Area */}
                     <div>
@@ -340,7 +335,7 @@ const PharmacyDetailPage = () => {
                         />
                       </div>
                       <button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl">
-                       Continue
+                        Continue
                       </button>
                     </div>
                   </div>
@@ -372,20 +367,20 @@ const PharmacyDetailPage = () => {
                       <div className="flex items-center gap-2">
                         <div className="flex items-center">
                           {[...Array(5)].map((_, i) => (
-                            <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                            <Star key={i} className={`w-5 h-5 ${i < (pharmacy.averageRating || 0) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} />
                           ))}
                         </div>
-                        <span className="text-lg font-semibold text-gray-900">4.9</span>
+                        <span className="text-lg font-semibold text-gray-900">{pharmacy.averageRating || 0}</span>
                         <span className="text-gray-600">out of 5</span>
                       </div>
                       <div className="flex items-center gap-2 text-sm text-gray-600">
                         <Users className="w-4 h-4" />
-                        <span>156 reviews</span>
+                        <span>{reviews.length} reviews</span>
                       </div>
                     </div>
                   </div>
                   <button
-                    onClick={handleAddReview}
+                    onClick={() => setShowReviewPopup(true)}
                     className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl"
                   >
                     <PlusCircle className="w-5 h-5" />
@@ -395,6 +390,9 @@ const PharmacyDetailPage = () => {
 
                 {/* Reviews List */}
                 <div className="space-y-6">
+                  {reviews.length === 0 && (
+                    <div className="text-gray-500">No reviews yet.</div>
+                  )}
                   {reviews.map((review, index) => (
                     <div
                       key={index}
@@ -403,8 +401,8 @@ const PharmacyDetailPage = () => {
                       <div className="flex items-start gap-4">
                         <div className="relative">
                           <img
-                            src={review.image}
-                            alt={review.name}
+                            src={review.image || "https://randomuser.me/api/portraits/lego/1.jpg"}
+                            alt={review.name || "User"}
                             className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-lg"
                           />
                           {review.verified && (
@@ -416,23 +414,21 @@ const PharmacyDetailPage = () => {
                         <div className="flex-1">
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-3">
-                              <h4 className="font-semibold text-gray-900">{review.name}</h4>
+                              <h4 className="font-semibold text-gray-900">{review?.user?.name || "Anonymous"}</h4>
                               {review.verified && (
                                 <span className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-medium">
                                   Verified Purchase
                                 </span>
                               )}
                             </div>
-                            <span className="text-sm text-gray-500">{review.date}</span>
+                            <span className="text-sm text-gray-500">{review.date || (review.createdAt ? new Date(review.createdAt).toLocaleDateString() : "")}</span>
                           </div>
                           <div className="flex items-center gap-2 mb-3">
                             <div className="flex text-yellow-500">
                               {[...Array(5)].map((_, i) => (
                                 <Star
                                   key={i}
-                                  className={`w-4 h-4 ${
-                                    i < review.rating ? "fill-yellow-400" : "text-gray-300"
-                                  }`}
+                                  className={`w-4 h-4 ${i < review.rating ? "fill-yellow-400" : "text-gray-300"}`}
                                 />
                               ))}
                             </div>
@@ -449,6 +445,13 @@ const PharmacyDetailPage = () => {
           </div>
         </div>
       </div>
+      <ReviewPopup
+        open={showReviewPopup}
+        onClose={() => setShowReviewPopup(false)}
+        pharmacyId={pharmacy._id}
+        onReviewAdded={review => setReviews([...reviews, review])}
+       
+      />
     </div>
   );
 };
