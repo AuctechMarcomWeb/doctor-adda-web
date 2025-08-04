@@ -142,7 +142,7 @@ const OtpStep = ({
     try {
       // Store auth token using cookies
       if (token) {
-        setCookieItem("authToken", token, 30);
+        setCookieItem("DoctorAddaPanel", token, 30);
         setCookieItem("userMobile", mobile, 30);
         setCookieItem("loginTime", new Date().toISOString(), 30);
       }
