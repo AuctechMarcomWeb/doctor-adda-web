@@ -2,10 +2,10 @@ import React from "react";
 import { MapPin, BadgeCheck, Clock, Shield, Award, Stethoscope, Heart, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const PharmacyCard = ({ name, phoneNumber, storeTiming, address, averageRating, profileImage }) => {
+const PharmacyCard = ({_id  , name, phoneNumber, storeTiming, address, averageRating, profileImage }) => {
   const navigate = useNavigate();
     const handleViewDetails = () => {
-      navigate(`/pharmacy/${name}`);
+      navigate(`/pharmacy/${_id}`);
     };
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
