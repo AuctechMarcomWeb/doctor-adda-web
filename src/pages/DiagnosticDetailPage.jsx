@@ -14,12 +14,28 @@ import {
   CheckCircle,
   Heart
 } from "lucide-react";
-
+import {useParams} from "react-router-dom";
+import { getRequest } from "../Helpers";
 const DiagnosticDetailPage = () => {
+    const [activeTab, setActiveTab] = useState("about");
+    const [diagnostics, setDiagnostics] = useState(null);
+
+    const { id } = useParams();
+
+    useEffect(() => {
+      window.scrollTo(0, 0);
+      getRequest(`diagnostics/${id}`)
+        .then((res) => {
+          console.log("diagnostic ===", res?.data?.data);
+          setDiagnostics(res?.data?.data);
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+    }, [id]);
    useEffect(() => {
       window.scrollTo(0, 0);
-    }, []);
-  const [activeTab, setActiveTab] = useState("about");
+    }, [id]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 " >
@@ -113,23 +129,24 @@ const DiagnosticDetailPage = () => {
               
               <div className="p-8 space-y-6">
                 <div className="space-y-4">
-                  <label className="group/item flex items-center gap-4 p-4 rounded-2xl bg-blue-50 transition-colors cursor-pointer border border-transparent hover:border-blue-200">
-                    <input type="checkbox" className="w-5 h-5 rounded border-2 border-blue-300 text-blue-600 focus:ring-blue-500 focus:ring-2" />
-                    <div className="flex-1">
-                      <div className="font-semibold text-gray-900">Lipid Profile</div>
-                      <div className="text-blue-600 font-bold text-lg">₹600</div>
-                    </div>
-                    <CheckCircle className="w-5 h-5 text-green-500 opacity-0 group-hover/item:opacity-100 transition-opacity" />
-                  </label>
+                  {diagnostics?.services?.map((service) => (
+  <label
+    key={service._id}
+    className="group/item flex items-center gap-4 p-4 rounded-2xl bg-blue-50 transition-colors cursor-pointer border border-transparent hover:border-blue-200"
+  >
+    <input
+      type="checkbox"
+      className="w-5 h-5 rounded border-2 border-blue-300 text-blue-600 focus:ring-blue-500 focus:ring-2"
+    />
+    <div className="flex-1">
+      <div className="font-semibold text-gray-900">{service.name}</div>
+      <div className="text-blue-600 font-bold text-lg">₹{service.price}</div>
+    </div>
+    <CheckCircle className="w-5 h-5 text-green-500 opacity-0 group-hover/item:opacity-100 transition-opacity" />
+  </label>
+))}
+
                   
-                  <label className="group/item flex items-center gap-4 p-4 rounded-2xl bg-blue-50 transition-colors cursor-pointer border border-transparent hover:border-blue-200">
-                    <input type="checkbox" className="w-5 h-5 rounded border-2 border-blue-300 text-blue-600 focus:ring-blue-500 focus:ring-2" />
-                    <div className="flex-1">
-                      <div className="font-semibold text-gray-900">Liver Function Test</div>
-                      <div className="text-blue-600 font-bold text-lg">₹1,500</div>
-                    </div>
-                    <CheckCircle className="w-5 h-5 text-green-500 opacity-0 group-hover/item:opacity-100 transition-opacity" />
-                  </label>
                 </div>
               </div>
             </div>
@@ -149,14 +166,26 @@ const DiagnosticDetailPage = () => {
               
               <div className="p-8 space-y-6">
                 <div className="space-y-4">
-                  <label className="group/item flex items-center gap-4 p-4 rounded-2xl bg-emerald-50 transition-colors cursor-pointer border border-transparent hover:border-emerald-200">
-                    <input type="checkbox" className="w-5 h-5 rounded border-2 border-emerald-300 text-emerald-600 focus:ring-emerald-500 focus:ring-2" />
-                    <div className="flex-1">
-                      <div className="font-semibold text-gray-900">Basic Health Checkup</div>
-                      <div className="text-emerald-600 font-bold text-lg">₹900</div>
-                    </div>
-                    <CheckCircle className="w-5 h-5 text-green-500 opacity-0 group-hover/item:opacity-100 transition-opacity" />
-                  </label>
+                  {diagnostics?.packages?.map((pkg) => (
+  <label
+    key={pkg._id}
+    className="group/item flex items-center gap-4 p-4 rounded-2xl bg-emerald-50 transition-colors cursor-pointer border border-transparent hover:border-emerald-200"
+  >
+    <input
+      type="checkbox"
+      className="w-5 h-5 rounded border-2 border-emerald-300 text-emerald-600 focus:ring-emerald-500 focus:ring-2"
+    />
+    <div className="flex-1">
+      <div className="font-semibold text-gray-900">{pkg.name}</div>
+      <div className="text-emerald-600 font-bold text-lg">₹{pkg.price}</div>
+      {pkg.details && (
+        <div className="text-sm text-emerald-700">{pkg.details}</div>
+      )}
+    </div>
+    <CheckCircle className="w-5 h-5 text-green-500 opacity-0 group-hover/item:opacity-100 transition-opacity" />
+  </label>
+))}
+
                 </div>
                 
                 <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl p-6 border border-emerald-100">
@@ -224,22 +253,19 @@ const DiagnosticDetailPage = () => {
                 <div className="prose prose-lg max-w-none">
                   <h3 className="text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                     <div className="w-1 h-8 bg-gradient-to-b from-blue-500 to-indigo-600 rounded-full"></div>
-                    About Vijaya Diagnostics
+                    About {diagnostics?.name}
                   </h3>
                   
                   <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-100 mb-6">
                     <p className="text-lg leading-relaxed">
-                      Vijaya Diagnostics is a trusted emergency medical transportation provider serving the entire Delhi NCR region.
-                      Our fleet is equipped with modern life-saving equipment and our drivers are trained first responders.
-                      Whether it's a medical emergency or a planned patient transfer, we ensure timely and reliable service.
+                      {diagnostics?.description}
                     </p>
                   </div>
                   
                   <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl p-8 border border-emerald-100">
                     <p className="text-lg leading-relaxed">
-                      We offer both AC and non-AC Diagnostic with GPS tracking, trained paramedics, and on-board emergency supplies like oxygen cylinders and medications.
-                      With 24/7 availability, our mission is to deliver compassionate, efficient, and safe transport for every patient.
-                    </p>
+                      {diagnostics?.description}                    
+                      </p>
                   </div>
                 </div>
               </div>
@@ -262,29 +288,16 @@ const DiagnosticDetailPage = () => {
                 </div>
 
                 <div className="grid gap-6">
-                  {[
-                    {
-                      name: "Rahul Sharma",
-                      comment: "Excellent service! The Vijaya diagnostic arrived quickly and was very clean. The driver was professional and courteous.",
-                      rating: 5,
-                      image: "https://randomuser.me/api/portraits/men/32.jpg",
-                    },
-                    {
-                      name: "Neha Verma", 
-                      comment: "Fast response during an emergency. The driver reached us in under 10 minutes and handled the situation calmly.",
-                      rating: 4,
-                      image: "https://randomuser.me/api/portraits/women/44.jpg",
-                    },
-                  ].map((review, index) => (
+{diagnostics?.reviews?.map((review) => (
                     <div
-                      key={index}
+                      key={review._id}
                       className="bg-gradient-to-r from-white to-gray-50 border border-gray-200 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
                     >
                       <div className="flex items-start gap-6">
                         <div className="relative">
                           <img
-                            src={review.image}
-                            alt={review.name}
+                            src={review?.user?.profilepic || "https://ui-avatars.com/api/?name=Anonymous&background=random"}
+                            alt={review?.user?.name}
                             className="w-16 h-16 rounded-full object-cover border-4 border-white shadow-lg"
                           />
                           <div className="absolute -bottom-1 -right-1 bg-blue-500 rounded-full p-1">
@@ -294,7 +307,7 @@ const DiagnosticDetailPage = () => {
                         
                         <div className="flex-1">
                           <div className="flex items-center justify-between mb-3">
-                            <h4 className="font-bold text-gray-900 text-lg">{review.name}</h4>
+                            <h4 className="font-bold text-gray-900 text-lg">{review?.user?.name}</h4>
                             <div className="flex text-yellow-400">
                               {[...Array(5)].map((_, i) => (
                                 <Star
@@ -304,7 +317,7 @@ const DiagnosticDetailPage = () => {
                               ))}
                             </div>
                           </div>
-                          <p className="text-gray-700 leading-relaxed italic">"{review.comment}"</p>
+                          <p className="text-gray-700 leading-relaxed italic">"{review?.comment}"</p>
                         </div>
                       </div>
                     </div>
