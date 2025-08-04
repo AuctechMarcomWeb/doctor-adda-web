@@ -35,7 +35,7 @@ const Footer = () => {
     <>
       {/* Footer */}
       <footer id="contact" className="bg-gray-900 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 max-w-[85%]">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center space-x-2 mb-6">
@@ -64,7 +64,7 @@ const Footer = () => {
                   to="/"
                   className="block text-gray-400 hover:text-white transition-colors"
                 >
-                  Services
+                  Login
                 </Link>
                
                 <Link
@@ -79,10 +79,10 @@ const Footer = () => {
             <div>
               <h3 className="text-lg font-semibold mb-4">Services</h3>
               <div className="space-y-2">
-                <div className="text-gray-400">Online Consultation</div>
-                <div className="text-gray-400">Emergency Care</div>
-                <div className="text-gray-400">Health Monitoring</div>
-                <div className="text-gray-400">Family Care</div>
+                <div className="text-gray-400">Doctor & Specialists</div>
+                <div className="text-gray-400">Ambulance  </div>
+                <div className="text-gray-400">Diagnostics</div>
+                <div className="text-gray-400">Hospitals</div>
               </div>
             </div>
 
