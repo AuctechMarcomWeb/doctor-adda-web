@@ -30,6 +30,7 @@ const userSlice = createSlice({
       state.locationData = action.payload;
       console.log("action.payload",action.payload);
       console.log("location data updated in redux", state.locationData);
+
     },
   },
   extraReducers: (builder) => {

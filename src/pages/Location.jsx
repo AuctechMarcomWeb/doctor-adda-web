@@ -8,9 +8,13 @@ import { updateLocationData } from '../redux/slices/userSlice';
 import { patchRequest } from '../Helpers';
 import toast from 'react-hot-toast';
 
+
+
 const Location = () => {
   const [permissionStatus, setPermissionStatus] = useState('pending');
   const [isLoading, setIsLoading] = useState(false);
+
+
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
   const [location, setLocation] = useState(null);
   const navigate = useNavigate();
@@ -42,6 +46,12 @@ const Location = () => {
       
       // Make API call with all user data including location
       await updateUserProfileWithLocation(latitude, longitude);
+
+
+      
+      // Make API call with all user data including location
+      await updateUserProfileWithLocation(latitude, longitude);
+
     } catch (error) {
       console.error('Location permission error:', error);
       setPermissionStatus('denied');
@@ -87,6 +97,7 @@ const Location = () => {
       setIsUpdatingProfile(false);
     }
   };
+
 
   return (
     <div className="bg-gray-50 min-h-screen flex flex-col">
@@ -208,24 +219,31 @@ const Location = () => {
         {(permissionStatus === 'granted' || permissionStatus === 'denied') && (
           <div className="px-6 pb-6">
             <button
+
               onClick={async () => {
                 if (permissionStatus === 'granted') {
                   // If location was granted but API call wasn't made yet, make it now
                   if (location && userProfileData) {
                     await updateUserProfileWithLocation(location.latitude, location.longitude);
                   }
+
                   navigate("/");
                 } else {
                   setPermissionStatus('pending');
                 }
               }}
+
+              className="w-full py-3 px-4 rounded-xl font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg"
+            >
+              {permissionStatus === 'granted' ? 'Continue' : 'Try Again'}
+
               disabled={isUpdatingProfile}
               className={`w-full py-3 px-4 rounded-xl font-semibold text-white transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg ${
                 isUpdatingProfile 
                   ? 'bg-gray-400 cursor-not-allowed' 
                   : 'bg-blue-600 hover:bg-blue-700'
               }`}
-            >
+            
               {isUpdatingProfile ? (
                 <div className="flex items-center justify-center">
                   <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -237,6 +255,7 @@ const Location = () => {
               ) : (
                 permissionStatus === 'granted' ? 'Continue' : 'Try Again'
               )}
+
             </button>
           </div>
         )}
