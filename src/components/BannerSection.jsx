@@ -41,7 +41,7 @@ const BannerSection = () => {
   }, []);
 
   return (
-    <div className=" mx-auto text-white p-6 md:p-12 rounded-3xl flex flex-col md:flex-row items-center justify-between lg:w-[85%] sm:w-full xl:w-[85%]"
+    <div className=" mx-auto text-white p-6 md:p-12 rounded-3xl flex flex-col md:flex-row items-center justify-between lg:w-[70%] sm:w-full xl:w-[70%]"
 
       style={{
         background:
