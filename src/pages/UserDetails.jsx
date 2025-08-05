@@ -1,7 +1,6 @@
 /* eslint-disable no-undef */
 import React, { useState, useEffect } from "react";
 import { User, Mail, Users, CheckCircle, ArrowRight, UserCheck, Settings } from "lucide-react";
-import { patchRequest } from "../Helpers";
 import { useSelector, useDispatch } from "react-redux";
 import { updateUserProfile } from "../redux/slices/userSlice";
 import { useNavigate } from 'react-router-dom';
@@ -26,23 +25,27 @@ const slides = [
 
 
 const UserDetails = ({ onSubmitSuccess }) => {
+
   const userId = useSelector(state => state.user.userData.data._id)
   const locationData = useSelector(state => state.user.locationData)
+
 
   const dispatch = useDispatch();
   const [userData, setUserData] = useState({
     name: "",
     email: "",
+
     gender: "",
     latitude: "",
     longitude: "",
+
+
   });
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  console.log("user id fetched", userId);
 
    useEffect(() => {
       window.scrollTo(0, 0);
@@ -56,6 +59,7 @@ const UserDetails = ({ onSubmitSuccess }) => {
     return () => clearInterval(interval);
   }, []);
 
+
   // Add this useEffect to populate location data when available
   useEffect(() => {
     if (locationData) {
@@ -66,6 +70,7 @@ const UserDetails = ({ onSubmitSuccess }) => {
       }));
     }
   }, [locationData]);
+
 
   const validateForm = () => {
     const newErrors = {};
@@ -105,6 +110,7 @@ const UserDetails = ({ onSubmitSuccess }) => {
 
   setIsLoading(true);
 
+
   const cred = {
     name: userData.name,
     email: userData.email,
@@ -115,22 +121,23 @@ const UserDetails = ({ onSubmitSuccess }) => {
 
   console.log("User Data to Submit: cred", cred);
 
-  try {
-    const res = await patchRequest({ url: `auth/updateProfile/${userId}`, cred });
-    console.log("Response from updateProfile:", res?.data?.data);
 
-    // Store userData in Redux
+  try {
+    // Store userData in Redux only (no API call here)
     dispatch(updateUserProfile(userData));
 
     if (onSubmitSuccess) {
       onSubmitSuccess(userData);
     } else {
-      toast.success("Profile completed!");
+      toast.success("Profile details saved!");
     }
-   navigate('/location');
+
+
+    navigate('/location');
+
   } catch (err) {
-    console.error("Error in updateProfile API:", err);
-    toast.error("Failed to update profile. Please try again.");
+    console.error("Error saving profile data:", err);
+    toast.error("Failed to save profile data. Please try again.");
   } finally {
     setIsLoading(false);
   }

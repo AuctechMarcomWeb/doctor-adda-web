@@ -75,7 +75,9 @@ const Navbar = () => {
     <>
       <nav className="fixed w-full z-50 bg-white shadow-lg">
         <div className=" mx-auto ">
+
           <div className=" max-w-[85%]  max-w-7xl  m-auto flex justify-between items-center h-16 py-10">
+
             {/* Logo */}
             <Link to="/">
               <div className="flex items-center space-x-2">
@@ -220,13 +222,13 @@ const Navbar = () => {
         {isMenuOpen && (
           <div className="md:hidden bg-white border-t">
             <div className="px-2 pt-2 pb-3 space-y-1">
-              <Link to="/" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Home</Link>
-              <Link to="/ambulance" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Blood Bank </Link>
-              <Link to="/ambulance" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Ambulance </Link>
-              <Link to="/pharmacy" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Pharmacies </Link>
-              <Link to="/diagnostic" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Diagnostic </Link>
-              <Link to="/doctor" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Doctors & Specialists</Link>
-              <Link to="/hospital" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Hospitals & Clinics</Link>
+              <Link onClick={() => setIsMenuOpen(false)}   to="/" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Home</Link>
+              <Link  onClick={() => setIsMenuOpen(false)}  to="/ambulance" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Blood Bank </Link>
+              <Link onClick={() => setIsMenuOpen(false)}  to="/ambulance" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Ambulance </Link>
+              <Link onClick={() => setIsMenuOpen(false)}  to="/pharmacy" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Pharmacies </Link>
+              <Link onClick={() => setIsMenuOpen(false)}  to="/diagnostic" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Diagnostic </Link>
+              <Link onClick={() => setIsMenuOpen(false)}  to="/doctor" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Doctors & Specialists</Link>
+              <Link onClick={() => setIsMenuOpen(false)}  to="/hospital" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Hospitals & Clinics</Link>
               
               <Link to="/login"><button className="w-full mt-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-2 rounded-full">
                 Login / SignUp
