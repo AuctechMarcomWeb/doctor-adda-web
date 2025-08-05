@@ -17,7 +17,7 @@ const FeaturedHospitals2 = () => {
   const [hospitalList, setHospitalList] = useState([]);
 
   // const hospitalList = [...hospitals, ...hospitals];
-  // ✅ Fetch hospitals from API
+  // Fetch hospitals from API
   const fetchHospitals = async () => {
     try {
       const response = await getRequest("hospital");
@@ -63,7 +63,7 @@ const FeaturedHospitals2 = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative max-w-[85%]">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative max-w-[70%]">
   <div className="text-center mb-8">
     <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">
       Featured{" "}

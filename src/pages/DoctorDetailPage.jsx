@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Star,
   MapPin,
@@ -26,7 +25,6 @@ import {
   TrendingUp,
   Zap,
 } from "lucide-react";
-import { useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { getRequest } from "../Helpers";
 
@@ -60,7 +58,6 @@ const SectionHeader = ({
     </div>
     <div>
       <h2 className="text-xl font-bold text-gray-900">{title}</h2>
-
       {subtitle && (
         <p className="text-lg text-blue-600 font-medium">{subtitle}</p>
       )}
@@ -127,6 +124,9 @@ const ActionButton = ({
 
 const DoctorDetailPage = () => {
   const [doctor, setDoctor] = useState(null);
+  const [clinicData, setClinicData] = useState(null);
+  const [selectedClinicIndex, setSelectedClinicIndex] = useState(0);
+  const [selectedDate, setSelectedDate] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [reviewData, setReviewData] = useState({
@@ -134,13 +134,6 @@ const DoctorDetailPage = () => {
     comment: "",
     rating: 5,
   });
-  const [selectedDate, setSelectedDate] = useState(null);
-
-  const [clinicData, setClinicData] = useState(null);
-
-  console.log("clinicData", clinicData);
-
-  const [selectedClinicIndex, setSelectedClinicIndex] = useState(0);
 
   const { id } = useParams();
 
@@ -148,57 +141,38 @@ const DoctorDetailPage = () => {
     window.scrollTo(0, 0);
     getRequest(`doctor/${id}`)
       .then((res) => {
-        setDoctor(res?.data?.data);
-
-        setClinicData(res?.data?.data?.clinics[0]);
+        const doc = res?.data?.data;
+        setDoctor(doc);
+        setClinicData(doc?.clinics?.[0]);
       })
       .catch((error) => {
         console.log("error", error);
       });
   }, [id]);
 
+  useEffect(() => {
+    if (clinicData?.availability?.length > 0) {
+      setSelectedDate(clinicData.availability[0].date);
+    }
+  }, [clinicData]);
+
+  const areDatesEqual = (date1, date2) =>
+    new Date(date1).toDateString() === new Date(date2).toDateString();
+
+  const selectedClinic = clinicData || {};
+  const availability = clinicData?.availability || [];
+
+  const selectedDateSlots = useMemo(() => {
+    return (
+      availability.find((d) => areDatesEqual(d.date, selectedDate))?.slots || []
+    );
+  }, [availability, selectedDate]);
+
   const handleReviewSubmit = () => {
     console.log("Submitted Review:", reviewData);
     setShowReviewForm(false);
     setReviewData({ name: "", comment: "", rating: 5 });
   };
-
-  const formatDateLabel = (isoDate) => {
-    const options = { month: "short", day: "numeric" };
-    return new Date(isoDate).toLocaleDateString("en-US", options);
-  };
-
-  const areDatesEqual = (date1, date2) =>
-    new Date(date1).toDateString() === new Date(date2).toDateString();
-
-  const selectedClinic = doctor?.clinics?.[selectedClinicIndex] || {};
-  const availability = selectedClinic.availability || [];
-
-  const availableDates = availability;
-
-  // const availableDates = useMemo(() => {
-  //   return availability
-
-  //     .filter((item) => item.isAvailable)
-  //     .map((item) => ({
-  //       date: item.date,
-  //       label: formatDateLabel(item.date),
-  //       slots: item.slots.filter((slot) => !slot.isBooked),
-  //     }));
-  // }, [availability]);
-
-  const selectedDateSlots = useMemo(() => {
-    return (
-      availableDates.find((d) => areDatesEqual(d.date, selectedDate))?.slots ||
-      []
-    );
-  }, [availableDates, selectedDate]);
-
-  useEffect(() => {
-    if (availableDates.length > 0) {
-      setSelectedDate(availableDates[0].date);
-    }
-  }, []);
 
   const HIGHLIGHTS = [
     { icon: Shield, text: "100% Trusted", color: "text-green-600" },
@@ -215,14 +189,14 @@ const DoctorDetailPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       {/* Hero Section */}
       <section className="py-10 px-4 pt-32 sm:pt-36">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        <div className="w-[65%] mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           {/* Doctor Image & Highlights */}
           <div className="lg:col-span-2">
             <div className="rounded-3xl overflow-hidden shadow-2xl border border-gray-200">
               <img
                 src={doctor?.profilepic}
                 alt={doctor?.fullName}
-                className="w-full h-72 sm:h-80 object-cover transition-transform duration-700"
+                className="w-full h-72 sm:h-80 object-contain transition-transform duration-700"
               />
             </div>
 
@@ -261,12 +235,12 @@ const DoctorDetailPage = () => {
                 <Phone className="w-4 h-4" />
                 {doctor?.phone}
               </p>
-              {doctor?.clinics?.map((clinic, index) => (
-                <p key={index} className="flex items-center gap-2 text-sm">
-                  <MapPin className="w-5 h-5" />
-                  {clinic.clinicAddress}
+             
+                <p  className="flex items-center gap-2 text-sm">
+                  <MapPin className="w-4 h-4" />
+                  {selectedClinic.clinicAddress}
                 </p>
-              ))}
+             
             </div>
 
             <div className="space-y-3 pt-2">
@@ -281,8 +255,8 @@ const DoctorDetailPage = () => {
                 Call Now
               </ActionButton>
               <ActionButton variant="secondary" className="w-full">
-                <MessageCircle className="w-4 h-4" />
-                Book Clinic Visit
+                <MapPin className="w-4 h-4" />
+                Get Location
               </ActionButton>
             </div>
           </div>
@@ -335,50 +309,62 @@ const DoctorDetailPage = () => {
                   <div className="mt-6">
                     <h4 className="text-sm font-semibold mb-2">Select Date</h4>
                     <div className="flex flex-wrap gap-2">
-                      {clinicData?.availability?.map((d, i) => (
-                        <button
-                          key={i}
-                          onClick={() => {
-                            console.log("d", d);
+                      {clinicData?.availability?.map((d, i) => {
+                        const formattedDate = new Date(d?.date).toLocaleDateString("en-IN", {
+                          weekday: "short",
+                          day: "numeric",
+                          month: "short",
+                        });
 
-                            setSelectedDate(d);
-                            setSelectedSlot(null);
-                          }}
-                          className={`px-3 py-2 text-sm rounded-lg font-medium ${
-                            areDatesEqual(selectedDate, d?.date)
-                              ? "bg-blue-600 text-white"
-                              : "bg-gray-100 text-gray-700 hover:bg-blue-50"
-                          }`}
-                        >
-                          {d?.date}
-                        </button>
-                      ))}
+                        return (
+                          <button
+                            key={i}
+                            onClick={() => {
+                              setSelectedDate(d?.date);
+                              setSelectedSlot(null);
+                            }}
+                            className={`px-3 py-2 text-sm rounded-lg font-medium ${
+                              areDatesEqual(selectedDate, d?.date)
+                                ? "bg-blue-600 text-white"
+                                : "bg-gray-100 text-gray-700 hover:bg-blue-50"
+                            }`}
+                          >
+                            {formattedDate}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
+
+
+                  
 
                   {/* Time Slots */}
                   <div className="mt-6">
                     <h4 className="font-bold text-sm mb-2">Available Slots</h4>
                     <div className="grid grid-cols-2 gap-2 max-h-52 overflow-y-auto">
                       {selectedDateSlots.length > 0 ? (
-                        selectedDateSlots.map((slot, i) => (
-                          <button
-                            key={i}
-                            onClick={() => setSelectedSlot(slot.startTime)}
-                            className={`px-2 py-2 text-sm rounded-lg font-medium ${
-                              selectedSlot === slot.startTime
-                                ? "bg-blue-600 text-white"
-                                : "bg-gray-100 text-gray-700 hover:bg-blue-50"
-                            }`}
-                          >
-                            {slot.startTime}- {slot.endTime}
-                          </button>
-                        ))
+                        selectedDateSlots
+                          .filter((slot) => !slot.isBooked)
+                          .map((slot, i) => (
+                            <button
+                              key={i}
+                              onClick={() => setSelectedSlot(slot.startTime)}
+                              className={`px-2 py-2 text-sm rounded-lg font-medium ${
+                                selectedSlot === slot.startTime
+                                  ? "bg-blue-600 text-white"
+                                  : "bg-gray-100 text-gray-700 hover:bg-blue-50"
+                              }`}
+                            >
+                              {slot.startTime} - {slot.endTime}
+                            </button>
+                          ))
                       ) : (
                         <p className="text-gray-500 text-sm col-span-2">
                           No slots available
                         </p>
                       )}
+
                     </div>
                   </div>
 
@@ -390,8 +376,8 @@ const DoctorDetailPage = () => {
                           "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
                       }}
                     >
-                      <Phone className="w-4 h-4" />
-                      Book Appointment
+                      <MessageCircle className="w-4 h-4" />
+                Book Clinic Visit
                     </ActionButton>
                   </div>
                 </GradientCard>
@@ -520,7 +506,7 @@ const DoctorDetailPage = () => {
                 title={`About ${doctor?.fullName}`}
                 subtitle={doctor?.category?.name}
               />
-              <p className="p-4 text-gray-700 leading-relaxed">
+              <p className="p-4 text-gray-700 leading-relaxed text-justify">
                 {doctor?.about}
               </p>
             </GradientCard>
@@ -550,18 +536,18 @@ const DoctorDetailPage = () => {
                 </h3>
               </div>
               <div className="space-y-4">
-                {doctor?.clinics?.map((clinic, index) => (
+              
                   <div
-                    key={index}
+                   
                     className="p-4 bg-gradient-to-r from-gray-50 to-indigo-50 rounded-xl"
                   >
-                    <h4 className="font-bold mb-1">{clinic.clinicName}</h4>
+                    {/* <h4 className="font-bold mb-1">{selectedClinic.clinicName}</h4> */}
                     <p className="text-sm text-gray-600 flex items-center gap-2">
                       <MapPin className="w-4 h-4" />
-                      {clinic.clinicAddress}
+                      {selectedClinic.clinicAddress}
                     </p>
                   </div>
-                ))}
+      
                 <div className="p-4 bg-gradient-to-r from-gray-50 to-indigo-50 rounded-xl">
                   <p className="text-sm text-gray-600 flex items-center gap-2">
                     <Phone className="w-4 h-4" />
