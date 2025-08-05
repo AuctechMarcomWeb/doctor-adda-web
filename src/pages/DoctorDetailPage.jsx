@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { getRequest } from "../Helpers";
+import { AppointmentDateFormat } from "../Utils";
 
 const GradientCard = ({
   children,
@@ -127,6 +128,7 @@ const DoctorDetailPage = () => {
   const [clinicData, setClinicData] = useState(null);
   const [selectedClinicIndex, setSelectedClinicIndex] = useState(0);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDateData, setSelectedDateData] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [reviewData, setReviewData] = useState({
@@ -134,6 +136,9 @@ const DoctorDetailPage = () => {
     comment: "",
     rating: 5,
   });
+
+  console.log("selectedDate", selectedDate);
+  console.log("selectedDateData", selectedDateData);
 
   const { id } = useParams();
 
@@ -144,29 +149,18 @@ const DoctorDetailPage = () => {
         const doc = res?.data?.data;
         setDoctor(doc);
         setClinicData(doc?.clinics?.[0]);
+        setSelectedDate(doc?.clinics?.[0]?.availability[0]?.date);
+        setSelectedDateData(doc?.clinics?.[0]?.availability[0]);
       })
       .catch((error) => {
         console.log("error", error);
       });
   }, [id]);
 
-  useEffect(() => {
-    if (clinicData?.availability?.length > 0) {
-      setSelectedDate(clinicData.availability[0].date);
-    }
-  }, [clinicData]);
-
   const areDatesEqual = (date1, date2) =>
     new Date(date1).toDateString() === new Date(date2).toDateString();
 
   const selectedClinic = clinicData || {};
-  const availability = clinicData?.availability || [];
-
-  const selectedDateSlots = useMemo(() => {
-    return (
-      availability.find((d) => areDatesEqual(d.date, selectedDate))?.slots || []
-    );
-  }, [availability, selectedDate]);
 
   const handleReviewSubmit = () => {
     console.log("Submitted Review:", reviewData);
@@ -235,12 +229,11 @@ const DoctorDetailPage = () => {
                 <Phone className="w-4 h-4" />
                 {doctor?.phone}
               </p>
-             
-                <p  className="flex items-center gap-2 text-sm">
-                  <MapPin className="w-4 h-4" />
-                  {selectedClinic.clinicAddress}
-                </p>
-             
+
+              <p className="flex items-center gap-2 text-sm">
+                <MapPin className="w-4 h-4" />
+                {selectedClinic.clinicAddress}
+              </p>
             </div>
 
             <div className="space-y-3 pt-2">
@@ -281,8 +274,12 @@ const DoctorDetailPage = () => {
                         onClick={() => {
                           setClinicData(clinic);
                           setSelectedClinicIndex(index);
-                          setSelectedDate(null);
-                          setSelectedSlot(null);
+                          setSelectedDate(
+                            clinic?.availability[0]?.date
+                          );
+                          setSelectedDateData(
+                            clinic?.availability[0]
+                          );
                         }}
                         className={`px-4 py-2 rounded-xl font-bold text-sm transition-all duration-300 ${
                           index === selectedClinicIndex
@@ -310,18 +307,12 @@ const DoctorDetailPage = () => {
                     <h4 className="text-sm font-semibold mb-2">Select Date</h4>
                     <div className="flex flex-wrap gap-2">
                       {clinicData?.availability?.map((d, i) => {
-                        const formattedDate = new Date(d?.date).toLocaleDateString("en-IN", {
-                          weekday: "short",
-                          day: "numeric",
-                          month: "short",
-                        });
-
                         return (
                           <button
                             key={i}
                             onClick={() => {
                               setSelectedDate(d?.date);
-                              setSelectedSlot(null);
+                              setSelectedDateData(d);
                             }}
                             className={`px-3 py-2 text-sm rounded-lg font-medium ${
                               areDatesEqual(selectedDate, d?.date)
@@ -329,22 +320,19 @@ const DoctorDetailPage = () => {
                                 : "bg-gray-100 text-gray-700 hover:bg-blue-50"
                             }`}
                           >
-                            {formattedDate}
+                            {AppointmentDateFormat(d?.date)}
                           </button>
                         );
                       })}
                     </div>
                   </div>
 
-
-                  
-
                   {/* Time Slots */}
                   <div className="mt-6">
                     <h4 className="font-bold text-sm mb-2">Available Slots</h4>
                     <div className="grid grid-cols-2 gap-2 max-h-52 overflow-y-auto">
-                      {selectedDateSlots.length > 0 ? (
-                        selectedDateSlots
+                      {selectedDateData?.slots?.length > 0 ? (
+                        selectedDateData?.slots
                           .filter((slot) => !slot.isBooked)
                           .map((slot, i) => (
                             <button
@@ -364,7 +352,6 @@ const DoctorDetailPage = () => {
                           No slots available
                         </p>
                       )}
-
                     </div>
                   </div>
 
@@ -377,7 +364,7 @@ const DoctorDetailPage = () => {
                       }}
                     >
                       <MessageCircle className="w-4 h-4" />
-                Book Clinic Visit
+                      Book Clinic Visit
                     </ActionButton>
                   </div>
                 </GradientCard>
@@ -536,18 +523,14 @@ const DoctorDetailPage = () => {
                 </h3>
               </div>
               <div className="space-y-4">
-              
-                  <div
-                   
-                    className="p-4 bg-gradient-to-r from-gray-50 to-indigo-50 rounded-xl"
-                  >
-                    {/* <h4 className="font-bold mb-1">{selectedClinic.clinicName}</h4> */}
-                    <p className="text-sm text-gray-600 flex items-center gap-2">
-                      <MapPin className="w-4 h-4" />
-                      {selectedClinic.clinicAddress}
-                    </p>
-                  </div>
-      
+                <div className="p-4 bg-gradient-to-r from-gray-50 to-indigo-50 rounded-xl">
+                  {/* <h4 className="font-bold mb-1">{selectedClinic.clinicName}</h4> */}
+                  <p className="text-sm text-gray-600 flex items-center gap-2">
+                    <MapPin className="w-4 h-4" />
+                    {selectedClinic.clinicAddress}
+                  </p>
+                </div>
+
                 <div className="p-4 bg-gradient-to-r from-gray-50 to-indigo-50 rounded-xl">
                   <p className="text-sm text-gray-600 flex items-center gap-2">
                     <Phone className="w-4 h-4" />
