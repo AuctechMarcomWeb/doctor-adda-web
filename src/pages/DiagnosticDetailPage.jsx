@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-labels */
 import React, { useEffect, useState } from "react";
 import {
   Star,
@@ -23,8 +24,9 @@ const DiagnosticDetailPage = () => {
   const [diagnostics, setDiagnostics] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [showReviewPopup, setShowReviewPopup] = useState(false);
-
   const { id } = useParams();
+
+  console.log("diagnostics", diagnostics);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -41,6 +43,7 @@ const DiagnosticDetailPage = () => {
     window.scrollTo(0, 0);
   }, [id]);
 
+  const email = diagnostics?.email;
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 ">
       {/* Hero Section */}
@@ -126,14 +129,26 @@ const DiagnosticDetailPage = () => {
               Call Now
             </a>
 
-            <button className="group bg-white text-[#00659d] px-8 py-3 rounded-full hover:bg-[#00659d] hover:text-white transition-all duration-300 font-medium flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+            <a
+              href={email ? `mailto:${email}` : "#"}
+              className="group bg-white text-[#00659d] px-8 py-3 rounded-full hover:bg-[#00659d] hover:text-white transition-all duration-300 font-medium flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1 inline-flex items-center"
+            >
               <Mail className="w-5 h-5 group-hover:animate-bounce" />
               Email Us
-            </button>
-            <button className="group bg- text-[#00659d] px-8 py-3 rounded-full hover:bg-[#00659d] hover:text-white transition-all duration-300 font-medium flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+            </a>
+            <a
+              href={`https://maps.google.com/?q=${
+                diagnostics?.location?.coordinates[1]
+              },${diagnostics?.location?.coordinates[0]} (${encodeURIComponent(
+                diagnostics?.address || ""
+              )})`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group bg-white text-[#00659d] px-8 py-3 rounded-full hover:bg-[#00659d] hover:text-white transition-all duration-300 font-medium flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1 inline-flex items-center"
+            >
               <LocateFixed className="w-5 h-5 group-hover:animate-pulse" />
               Get Directions
-            </button>
+            </a>
           </div>
         </div>
       </div>
@@ -262,13 +277,33 @@ const DiagnosticDetailPage = () => {
               </div>
               <div className="p-8">
                 <TimeSlotsSection
-                  availability={
-                    diagnostics?.availability?.map((day) => ({
-                      date: day.date,
-                      label: day.label,
-                      slots: day.times.map((time) => ({ startTime: time })),
-                    })) || []
-                  }
+                  // availability={
+                  //   diagnostics?.availability?.map((day) => ({
+                  //     date: day.date,
+                  //     label: day.label,
+                  //     slots: day.times.map((time) => ({ startTime: time })),
+                  //   })) || []
+                  // }
+                  availability={[
+                    {
+                      date: "2025-08-05",
+                      label: "Tue, 5 Aug",
+                      slots: [
+                        { startTime: "09:00 AM", endTime: "9:30 AM" },
+                        { startTime: "10:00 AM", endTime: "10:30 AM" },
+                        { startTime: "11:00 AM", endTime: "11:30 AM" },
+                        { startTime: "12:00 PM", endTime: "12:30 PM" },
+                      ],
+                    },
+                    {
+                      date: "2025-08-06",
+                      label: "Wed, 6 Aug",
+                      slots: [
+                        { startTime: "09:30 AM", endTime: "10:00 AM" },
+                        { startTime: "10:30 AM", endTime: "11:00 AM" },
+                      ],
+                    },
+                  ]}
                 />
               </div>
             </div>
@@ -307,7 +342,7 @@ const DiagnosticDetailPage = () => {
             {/* About Tab */}
             {activeTab === "about" && (
               <div className="space-y-8 text-gray-700 leading-relaxed">
-                <div className="grid md:grid-cols-3 gap-6 mb-8">
+                {/* <div className="grid md:grid-cols-3 gap-6 mb-8">
                   <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-100">
                     <Clock className="w-12 h-12 text-blue-600 mx-auto mb-4" />
                     <h3 className="font-bold text-gray-900 mb-2">
@@ -333,7 +368,7 @@ const DiagnosticDetailPage = () => {
                       Accredited diagnostic center
                     </p>
                   </div>
-                </div>
+                </div> */}
 
                 <div className="prose prose-lg max-w-none">
                   <h3 className="text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3">
@@ -347,11 +382,11 @@ const DiagnosticDetailPage = () => {
                     </p>
                   </div>
 
-                  <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl p-8 border border-emerald-100">
+                  {/* <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl p-8 border border-emerald-100">
                     <p className="text-lg leading-relaxed">
                       {diagnostics?.description}
                     </p>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             )}
