@@ -25,7 +25,7 @@ import {
   TrendingUp,
   Zap,
 } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { getRequest } from "../Helpers";
 import { AppointmentDateFormat } from "../Utils";
 
@@ -137,6 +137,15 @@ const DoctorDetailPage = () => {
     rating: 5,
   });
 
+    const location = useLocation(); // Gives access to query string
+
+  // Parse query parameters
+  const queryParams = new URLSearchParams(location.search);
+  const modeFilter = queryParams.get('modeFilter');
+
+  console.log("modeFilter",modeFilter);
+  
+
   console.log("selectedDate", selectedDate);
   console.log("selectedDateData", selectedDateData);
 
@@ -178,6 +187,32 @@ const DoctorDetailPage = () => {
     },
     { icon: CheckCircle, text: "Licensed Doctor", color: "text-orange-500" },
   ];
+
+  const bookAppointment = (e) => {
+    e.preventDefault();
+
+    const finalData = {
+      clinicName: clinicData?.clinicName,
+      date: selectedDate,
+      doctor: id,
+      fee:clinicData?.consultationFee,
+      isSelf: false,
+      otherPatientDetails: {
+        name: "",
+        age: "",
+        gender: "",
+        type: "",
+      },
+      patient: "685cf37fc439c4973e98f8d6",
+      serviceType: modeFilter,
+      slots: { startTime: "03:15 PM", endTime: "03:30 PM" },
+    };
+
+    console.log("doctor", doctor);
+    console.log("clinicData", clinicData);
+
+    console.log("finalData", finalData);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
@@ -274,12 +309,8 @@ const DoctorDetailPage = () => {
                         onClick={() => {
                           setClinicData(clinic);
                           setSelectedClinicIndex(index);
-                          setSelectedDate(
-                            clinic?.availability[0]?.date
-                          );
-                          setSelectedDateData(
-                            clinic?.availability[0]
-                          );
+                          setSelectedDate(clinic?.availability[0]?.date);
+                          setSelectedDateData(clinic?.availability[0]);
                         }}
                         className={`px-4 py-2 rounded-xl font-bold text-sm transition-all duration-300 ${
                           index === selectedClinicIndex
@@ -357,6 +388,7 @@ const DoctorDetailPage = () => {
 
                   <div className="space-y-3 pt-4">
                     <ActionButton
+                      onClick={bookAppointment}
                       className="w-full "
                       style={{
                         background:

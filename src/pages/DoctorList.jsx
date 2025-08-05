@@ -17,7 +17,7 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import { getRequest } from "../Helpers";
 
-const DoctorCard = (data) => {
+const DoctorCard = ({data,modeFilter}) => {
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
 
@@ -27,7 +27,7 @@ const DoctorCard = (data) => {
     
 
 
-    navigate(`/doctordetail/${id?._id}`);
+    navigate(`/doctordetail/${id?._id}?modeFilter=${modeFilter}`);
   };
 
   return (
@@ -139,8 +139,7 @@ const DoctorList = () => {
 
   console.log("id", id);
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filterType, setFilterType] = useState("all");
+
   const [modeFilter, setModeFilter] = useState("In-clinic");
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -148,17 +147,7 @@ const DoctorList = () => {
 
   console.log("res doctors ===========>", doctors);
 
-  // useEffect(() => {
-  //   getRequest(`doctor/doctors?category=${id}&serviceType=In-clinic`)
-  //     .then((res) => {
-  //       setDoctors(res?.data?.data?.doctors);
-  //     })
-  //     .catch((error) => {
-  //       console.log("error", error);
-  //     });
 
-  //   setIsLoaded(true);
-  // }, []);
 
 
   useEffect(() => {
@@ -339,7 +328,7 @@ const DoctorList = () => {
                 className="animate-fadeInUp"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <DoctorCard {...doctor} />
+                <DoctorCard data={doctor} modeFilter={modeFilter} />
               </div>
             ))
           ) : (
