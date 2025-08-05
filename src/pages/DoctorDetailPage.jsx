@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import {
   Star,
@@ -58,7 +59,6 @@ const SectionHeader = ({
       <Icon className="w-5 h-5 text-white" />
     </div>
     <div>
-
       <h2 className="text-xl font-bold text-gray-900">{title}</h2>
 
       {subtitle && (
@@ -123,7 +123,7 @@ const ActionButton = ({
       {children}
     </button>
   );
-};   
+};
 
 const DoctorDetailPage = () => {
   const [doctor, setDoctor] = useState(null);
@@ -136,12 +136,9 @@ const DoctorDetailPage = () => {
   });
   const [selectedDate, setSelectedDate] = useState(null);
 
+  const [clinicData, setClinicData] = useState(null);
 
-
-  const [clinicData,setClinicData]= useState(null)
-
-  console.log("clinicData",clinicData);
-  
+  console.log("clinicData", clinicData);
 
   const [selectedClinicIndex, setSelectedClinicIndex] = useState(0);
 
@@ -153,8 +150,7 @@ const DoctorDetailPage = () => {
       .then((res) => {
         setDoctor(res?.data?.data);
 
-        setClinicData(res?.data?.data?.clinics[0])
-
+        setClinicData(res?.data?.data?.clinics[0]);
       })
       .catch((error) => {
         console.log("error", error);
@@ -178,50 +174,31 @@ const DoctorDetailPage = () => {
   const selectedClinic = doctor?.clinics?.[selectedClinicIndex] || {};
   const availability = selectedClinic.availability || [];
 
-  const availableDates = availability
+  const availableDates = availability;
 
+  // const availableDates = useMemo(() => {
+  //   return availability
 
+  //     .filter((item) => item.isAvailable)
+  //     .map((item) => ({
+  //       date: item.date,
+  //       label: formatDateLabel(item.date),
+  //       slots: item.slots.filter((slot) => !slot.isBooked),
+  //     }));
+  // }, [availability]);
 
-const availableDates = useMemo(() => {
-  return availability
-
-    .filter((item) => item.isAvailable)
-    .map((item) => ({
-      date: item.date,
-      label: formatDateLabel(item.date),
-      slots: item.slots.filter((slot) => !slot.isBooked),
-    }));
-}, [availability]);
-
-const selectedDateSlots = useMemo(() => {
-  return (
-    availableDates.find((d) => areDatesEqual(d.date, selectedDate))?.slots || []
-  );
-}, [availableDates, selectedDate]);
-
-
-  const selectedDateSlots =
-    availableDates.find((d) => areDatesEqual(d.date, selectedDate))?.slots ||
-    [];
-
+  const selectedDateSlots = useMemo(() => {
+    return (
+      availableDates.find((d) => areDatesEqual(d.date, selectedDate))?.slots ||
+      []
+    );
+  }, [availableDates, selectedDate]);
 
   useEffect(() => {
-  if (availableDates.length > 0) {
-    setSelectedDate(availableDates[0].date);
-  }
-}, [selectedClinicIndex]);
-
-
-  const HIGHLIGHTS = [
-    { icon: Shield, text: "100% Trusted", color: "text-green-600" },
-    { icon: Clock, text: "24/7 Available", color: "text-blue-600" },
-    {
-      icon: Zap,
-      text: `${doctor?.experience || "N/A"} Years Experience`,
-      color: "text-purple-600",
-    },
-    { icon: CheckCircle, text: "Licensed Doctor", color: "text-orange-500" },
-  ];
+    if (availableDates.length > 0) {
+      setSelectedDate(availableDates[0].date);
+    }
+  }, []);
 
   const HIGHLIGHTS = [
     { icon: Shield, text: "100% Trusted", color: "text-green-600" },
@@ -235,7 +212,7 @@ const selectedDateSlots = useMemo(() => {
   ];
 
   return (
-     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       {/* Hero Section */}
       <section className="py-10 px-4 pt-32 sm:pt-36">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
@@ -293,7 +270,13 @@ const selectedDateSlots = useMemo(() => {
             </div>
 
             <div className="space-y-3 pt-2">
-              <ActionButton className="w-full " style={{ background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}}>
+              <ActionButton
+                className="w-full "
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
+                }}
+              >
                 <Phone className="w-4 h-4" />
                 Call Now
               </ActionButton>
@@ -308,363 +291,238 @@ const selectedDateSlots = useMemo(() => {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-10 sm:py-16">
-
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           {/* Left Column */}
           <div className="lg:col-span-2 space-y-16">
-            {/* About */}
-            <GradientCard className="p-6 sm:p-10">
-              <SectionHeader
-                icon={Stethoscope}
-                title={`About ${doctor?.fullName}`}
-                subtitle={doctor?.category?.name}
-              />
-              <p className="text-gray-700 leading-relaxed">{doctor?.about}</p>
-            </GradientCard>
-
-            {/* Education */}
-            <GradientCard
-              gradient="from-green-500/5 to-emerald-500/5"
-              rotation="-rotate-1"
-              className="p-6 sm:p-8"
-            >
-              <SectionHeader
-                icon={GraduationCap}
-                title="Education"
-                gradient="from-green-500 to-emerald-500"
-              />
-              <div className="space-y-6 text-sm">{doctor?.education}</div>
-            </GradientCard>
-
-
-
-        
-
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          {/* Left Column */}
-          <div className="lg:col-span-2 space-y-16">
-
-
-             {/* Appointment Booking */}
-            <GradientCard className="p-6 sm:p-8">
-              {/* Clinic Tabs */}
-              <div className="flex flex-wrap gap-2 mb-4">
-                {doctor?.clinics?.map((clinic, index) => (
-                  <button
-                    key={index}
-                    onClick={() => {
-                      setClinicData(clinic)
-                      setSelectedClinicIndex(index);
-                      setSelectedDate(null);
-                      setSelectedSlot(null);
-                    }}
-                    className={`px-4 py-2 rounded-xl font-bold text-sm transition-all duration-300 ${
-                      index === selectedClinicIndex
-                        ? "bg-blue-600 text-white"
-                        : "bg-gray-100 text-gray-700 hover:bg-blue-50"
-                    }`}
-                  >
-                    {clinic.clinicName}
-                    
-                  
-                  </button>
-                ))}
-              </div>
-
-                    {selectedClinic.clinicAddress}
-
-              {/* Fee */}
-              <div className="text-center p-4 bg-green-50 text-green-700 rounded-xl">
-          
-                <IndianRupee className="w-8 h-8 mx-auto mb-1" />
-                <p className="text-3xl text-black font-bold">
-                  
-                  {selectedClinic.consultationFee}
-                </p>
-                <p className="text">Consultation Fee</p>
-              </div>
-
-               
-                
-                    
-            
-         
-
-              {/* Date Selector */}
-              <div className="mt-6">
-                <h4 className="text-sm font-semibold mb-2">Select Date</h4>
-                <div className="flex flex-wrap gap-2">
-                  {clinicData?.availability?.map((d, i) => (
-                    <button
-                      key={i}
-                      onClick={() => {
-                        console.log("d",d);
-                        
-                        setSelectedDate(d);
-                        setSelectedSlot(null);
-                      }}
-                      className={`px-3 py-2 text-sm rounded-lg font-medium ${
-                        areDatesEqual(selectedDate, d?.date)
-                          ? "bg-blue-600 text-white"
-                          : "bg-gray-100 text-gray-700 hover:bg-blue-50"
-                      }`}
-                    >
-                      {d?.date}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Time Slots */}
-              <div className="mt-6">
-                <h4 className="font-bold text-sm mb-2">Available Slots</h4>
-                <div className="grid grid-cols-2 gap-2 max-h-52 overflow-y-auto">
-                  {selectedDateSlots.length > 0 ? (
-                    selectedDateSlots.map((slot, i) => (
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+              {/* Left Column */}
+              <div className="lg:col-span-4 space-y-16">
+                {/* Appointment Booking */}
+                <GradientCard className="p-6 sm:p-8">
+                  {/* Clinic Tabs */}
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {doctor?.clinics?.map((clinic, index) => (
                       <button
-                        key={i}
-                        onClick={() => setSelectedSlot(slot.startTime)}
-                        className={`px-2 py-2 text-sm rounded-lg font-medium ${
-                          selectedSlot === slot.startTime
+                        key={index}
+                        onClick={() => {
+                          setClinicData(clinic);
+                          setSelectedClinicIndex(index);
+                          setSelectedDate(null);
+                          setSelectedSlot(null);
+                        }}
+                        className={`px-4 py-2 rounded-xl font-bold text-sm transition-all duration-300 ${
+                          index === selectedClinicIndex
                             ? "bg-blue-600 text-white"
                             : "bg-gray-100 text-gray-700 hover:bg-blue-50"
                         }`}
                       >
-                        {slot.startTime}- {slot.endTime}
+                        {clinic.clinicName}
                       </button>
-                    ))
-                  ) : (
-                    <p className="text-gray-500 text-sm col-span-2">
-                      No slots available
+                    ))}
+                  </div>
+
+                  {selectedClinic.clinicAddress}
+
+                  {/* Fee */}
+                  <div className="text-center p-4 bg-green-50 text-green-700 rounded-xl">
+                    <IndianRupee className="w-8 h-8 mx-auto mb-1" />
+                    <p className="text-3xl text-black font-bold">
+                      {selectedClinic.consultationFee}
                     </p>
-                  )}
-                </div>
-              </div>
+                    <p className="text">Consultation Fee</p>
+                  </div>
+                  {/* Date Selector */}
+                  <div className="mt-6">
+                    <h4 className="text-sm font-semibold mb-2">Select Date</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {clinicData?.availability?.map((d, i) => (
+                        <button
+                          key={i}
+                          onClick={() => {
+                            console.log("d", d);
 
-              <div className="space-y-3 pt-4">
-              <ActionButton className="w-full " style={{ background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}}>
-                <Phone className="w-4 h-4" />
-                Book Appointment
-              </ActionButton>
-              </div>
-            </GradientCard>
+                            setSelectedDate(d);
+                            setSelectedSlot(null);
+                          }}
+                          className={`px-3 py-2 text-sm rounded-lg font-medium ${
+                            areDatesEqual(selectedDate, d?.date)
+                              ? "bg-blue-600 text-white"
+                              : "bg-gray-100 text-gray-700 hover:bg-blue-50"
+                          }`}
+                        >
+                          {d?.date}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
 
+                  {/* Time Slots */}
+                  <div className="mt-6">
+                    <h4 className="font-bold text-sm mb-2">Available Slots</h4>
+                    <div className="grid grid-cols-2 gap-2 max-h-52 overflow-y-auto">
+                      {selectedDateSlots.length > 0 ? (
+                        selectedDateSlots.map((slot, i) => (
+                          <button
+                            key={i}
+                            onClick={() => setSelectedSlot(slot.startTime)}
+                            className={`px-2 py-2 text-sm rounded-lg font-medium ${
+                              selectedSlot === slot.startTime
+                                ? "bg-blue-600 text-white"
+                                : "bg-gray-100 text-gray-700 hover:bg-blue-50"
+                            }`}
+                          >
+                            {slot.startTime}- {slot.endTime}
+                          </button>
+                        ))
+                      ) : (
+                        <p className="text-gray-500 text-sm col-span-2">
+                          No slots available
+                        </p>
+                      )}
+                    </div>
+                  </div>
 
+                  <div className="space-y-3 pt-4">
+                    <ActionButton
+                      className="w-full "
+                      style={{
+                        background:
+                          "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
+                      }}
+                    >
+                      <Phone className="w-4 h-4" />
+                      Book Appointment
+                    </ActionButton>
+                  </div>
+                </GradientCard>
 
-
-
-            {/* Reviews */}
-            <GradientCard
-              gradient="from-purple-500/5 to-pink-500/5"
-              rotation="-rotate-1"
-              className="p-6 sm:p-10"
-            >
-              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-8 gap-4">
-                <SectionHeader
-                  icon={MessageCircle}
-                  title="Patient Reviews"
-                  subtitle="What patients say"
-                  gradient="from-purple-500 to-pink-500"
-                />
-                <ActionButton
-                  variant="tertiary"
-                  onClick={() => setShowReviewForm(true)}
+                {/* Reviews */}
+                <GradientCard
+                  gradient="from-purple-500/5 to-pink-500/5"
+                  rotation="-rotate-1"
+                  className="p-6 sm:p-10"
                 >
-                  <PlusCircle className="w-5 h-5" />
-                  Write Review
-                </ActionButton>
-              </div>
-
-              <div className="grid gap-6 max-h-[500px] overflow-y-auto pr-2">
-                {doctor?.reviews?.map((review, index) => (
-                  <div
-                    key={index}
-                    className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100"
-                  >
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-2">
-                        <StarRating rating={review?.rating} />
-                        {review?.createdAt && (
-                          <span className="text-sm text-gray-400">
-                            {new Date(review.createdAt).toLocaleDateString()}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    <p className="text-gray-800 font-medium mb-2">
-                      “{review?.comment}”
-                    </p>
-
-                    <div className="flex items-center gap-3 mt-4">
-                      <div className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center text-sm font-bold text-gray-700 uppercase">
-                        {review?.user?.name?.[0]}
-                      </div>
-                      <div>
-                        <p className="font-semibold text-gray-900">
-                          {review?.user?.name}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          Verified Patient
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Review Form */}
-              {showReviewForm && (
-                <div className="mt-8 p-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl border border-purple-200">
-                  <h3 className="font-bold mb-4 text-xl">
-                    Share Your Experience
-                  </h3>
-                  <div className="space-y-4">
-                    <input
-                      type="text"
-                      placeholder="Your Name"
-                      value={reviewData.name}
-                      onChange={(e) =>
-                        setReviewData({ ...reviewData, name: e.target.value })
-                      }
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl"
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-8 gap-4">
+                    <SectionHeader
+                      icon={MessageCircle}
+                      title="Patient Reviews"
+                      subtitle="What patients say"
+                      gradient="from-purple-500 to-pink-500"
                     />
-                    <textarea
-                      placeholder="Your Review"
-                      rows="4"
-                      value={reviewData.comment}
-                      onChange={(e) =>
-                        setReviewData({
-                          ...reviewData,
-                          comment: e.target.value,
-                        })
-                      }
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl"
-                    />
-                    <div className="flex gap-3">
-                      <ActionButton
-                        variant="tertiary"
-                        onClick={handleReviewSubmit}
-                      >
-                        Submit
-                      </ActionButton>
-                      <button
-                        onClick={() => setShowReviewForm(false)}
-                        className="bg-gray-300 text-gray-700 px-6 py-3 rounded-xl font-bold hover:bg-gray-400"
-                      >
-                        Cancel
-                      </button>
-                    </div>
+                    <ActionButton
+                      variant="tertiary"
+                      onClick={() => setShowReviewForm(true)}
+                    >
+                      <PlusCircle className="w-5 h-5" />
+                      Write Review
+                    </ActionButton>
                   </div>
-                </div>
-              )}
-            </GradientCard>
+
+                  <div className="grid gap-6 max-h-[500px] overflow-y-auto pr-2">
+                    {doctor?.reviews?.map((review, index) => (
+                      <div
+                        key={index}
+                        className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100"
+                      >
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center gap-2">
+                            <StarRating rating={review?.rating} />
+                            {review?.createdAt && (
+                              <span className="text-sm text-gray-400">
+                                {new Date(
+                                  review.createdAt
+                                ).toLocaleDateString()}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        <p className="text-gray-800 font-medium mb-2">
+                          “{review?.comment}”
+                        </p>
+
+                        <div className="flex items-center gap-3 mt-4">
+                          <div className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center text-sm font-bold text-gray-700 uppercase">
+                            {review?.user?.name?.[0]}
+                          </div>
+                          <div>
+                            <p className="font-semibold text-gray-900">
+                              {review?.user?.name}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              Verified Patient
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Review Form */}
+                  {showReviewForm && (
+                    <div className="mt-8 p-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl border border-purple-200">
+                      <h3 className="font-bold mb-4 text-xl">
+                        Share Your Experience
+                      </h3>
+                      <div className="space-y-4">
+                        <input
+                          type="text"
+                          placeholder="Your Name"
+                          value={reviewData.name}
+                          onChange={(e) =>
+                            setReviewData({
+                              ...reviewData,
+                              name: e.target.value,
+                            })
+                          }
+                          className="w-full px-4 py-3 border border-gray-300 rounded-xl"
+                        />
+                        <textarea
+                          placeholder="Your Review"
+                          rows="4"
+                          value={reviewData.comment}
+                          onChange={(e) =>
+                            setReviewData({
+                              ...reviewData,
+                              comment: e.target.value,
+                            })
+                          }
+                          className="w-full px-4 py-3 border border-gray-300 rounded-xl"
+                        />
+                        <div className="flex gap-3">
+                          <ActionButton
+                            variant="tertiary"
+                            onClick={handleReviewSubmit}
+                          >
+                            Submit
+                          </ActionButton>
+                          <button
+                            onClick={() => setShowReviewForm(false)}
+                            className="bg-gray-300 text-gray-700 px-6 py-3 rounded-xl font-bold hover:bg-gray-400"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </GradientCard>
+              </div>
+            </div>
           </div>
 
           {/* Sidebar */}
           <aside className="space-y-8">
-
-            {/* Appointment Booking */}
-            <GradientCard className="p-6 sm:p-8">
-              {/* Clinic Tabs */}
-              <div className="flex flex-wrap gap-2 mb-4">
-                {doctor?.clinics?.map((clinic, index) => (
-                  <button
-                    key={index}
-                    onClick={() => {
-                      setSelectedClinicIndex(index);
-                      setSelectedDate(null);
-                      setSelectedSlot(null);
-                    }}
-                    className={`px-4 py-2 rounded-xl font-bold text-sm transition-all duration-300 ${
-                      index === selectedClinicIndex
-                        ? "bg-blue-600 text-white"
-                        : "bg-gray-100 text-gray-700 hover:bg-blue-50"
-                    }`}
-                  >
-                    {clinic.clinicName}
-                  </button>
-                ))}
-              </div>
-
-              {/* Fee */}
-              <div className="text-center p-4 bg-green-50 text-green-700 rounded-xl">
-                <IndianRupee className="w-8 h-8 mx-auto mb-1" />
-                <p className="text-3xl text-black font-bold">
-                  
-                  {selectedClinic.consultationFee}
-                </p>
-                <p className="text">Consultation Fee</p>
-              </div>
-
-              {/* Date Selector */}
-              <div className="mt-6">
-                <h4 className="text-sm font-semibold mb-2">Select Date</h4>
-                <div className="flex flex-wrap gap-2">
-                  {availableDates.map((d, i) => (
-                    <button
-                      key={i}
-                      onClick={() => {
-                        setSelectedDate(d.date);
-                        setSelectedSlot(null);
-                      }}
-                      className={`px-3 py-2 text-sm rounded-lg font-medium ${
-                        areDatesEqual(selectedDate, d.date)
-                          ? "bg-blue-600 text-white"
-                          : "bg-gray-100 text-gray-700 hover:bg-blue-50"
-                      }`}
-                    >
-                      {d.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Time Slots */}
-              <div className="mt-6">
-                <h4 className="font-bold text-sm mb-2">Available Slots</h4>
-                <div className="grid grid-cols-2 gap-2 max-h-52 overflow-y-auto">
-                  {selectedDateSlots.length > 0 ? (
-                    selectedDateSlots.map((slot, i) => (
-                      <button
-                        key={i}
-                        onClick={() => setSelectedSlot(slot.startTime)}
-                        className={`px-2 py-2 text-sm rounded-lg font-medium ${
-                          selectedSlot === slot.startTime
-                            ? "bg-blue-600 text-white"
-                            : "bg-gray-100 text-gray-700 hover:bg-blue-50"
-                        }`}
-                      >
-                        {slot.startTime}
-                      </button>
-                    ))
-                  ) : (
-                    <p className="text-gray-500 text-sm col-span-2">
-                      No slots available
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div className="space-y-3 pt-4">
-              <ActionButton className="w-full " style={{ background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}}>
-                <Phone className="w-4 h-4" />
-                Book Appointment
-              </ActionButton>
-              </div>
-            </GradientCard>
-
-           
-
-           {/* About */}
+            {/* About */}
             <GradientCard className=" p-6 sm:p-10">
               <SectionHeader
                 icon={Stethoscope}
                 title={`About ${doctor?.fullName}`}
                 subtitle={doctor?.category?.name}
               />
-              <p className="p-4 text-gray-700 leading-relaxed">{doctor?.about}</p>
+              <p className="p-4 text-gray-700 leading-relaxed">
+                {doctor?.about}
+              </p>
             </GradientCard>
 
             {/* Education */}
@@ -681,19 +539,22 @@ const selectedDateSlots = useMemo(() => {
               <div className=" p-4 space-y-6 text-sm">{doctor?.education}</div>
             </GradientCard>
 
-
-
             {/* Clinic Info */}
             <GradientCard className="p-6 sm:p-8">
               <div className="mb-4">
                 <h3 className="text-xl font-bold flex items-center gap-2">
-                  <div className="p-3 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl"><Building2 className="w-5 h-5 text-white" /></div>
+                  <div className="p-3 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl">
+                    <Building2 className="w-5 h-5 text-white" />
+                  </div>
                   Clinic Details
                 </h3>
               </div>
               <div className="space-y-4">
                 {doctor?.clinics?.map((clinic, index) => (
-                  <div key={index} className="p-4 bg-gradient-to-r from-gray-50 to-indigo-50 rounded-xl">
+                  <div
+                    key={index}
+                    className="p-4 bg-gradient-to-r from-gray-50 to-indigo-50 rounded-xl"
+                  >
                     <h4 className="font-bold mb-1">{clinic.clinicName}</h4>
                     <p className="text-sm text-gray-600 flex items-center gap-2">
                       <MapPin className="w-4 h-4" />
@@ -717,9 +578,6 @@ const selectedDateSlots = useMemo(() => {
         </div>
       </main>
     </div>
-
- 
-
   );
 };
 
