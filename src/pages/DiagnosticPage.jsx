@@ -47,8 +47,8 @@ const DiagnosticCard = ({
               {services &&
                 services.map((service, index) => (
                   <div key={service._id || index} className="mb-1">
-                    <div className="font-medium">{service?.name}</div>
-                    <div className="text-gray-500">₹{service?.price}</div>
+                    <div className="font-medium">Services:{service?.name}</div>
+                    {/* <div className="text-gray-500">₹{service?.price}</div> */}
                   </div>
                 ))}
             </div>
@@ -109,11 +109,11 @@ const DiagnosticPage = () => {
     latitude: "",
     longitude: "",
     page: 1,
-    limit: 5,
+    // limit: 5,
   });
   useEffect(() => {
     const fetchDiagostic = async () => {
-      const url = `diagnostics?longitude=${location?.longitude}&latitude=${location?.latitude}&radius=${location?.radius}&page=${location?.page}&limit=${location?.limit}`;
+      const url = `diagnostics?longitude=${location?.longitude}&latitude=${location?.latitude}&radius=${location?.radius}&page=${location?.page}`;
       try {
         const response = await getRequest(url);
         if (response) {
