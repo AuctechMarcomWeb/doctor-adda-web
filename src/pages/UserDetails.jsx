@@ -26,12 +26,20 @@ const slides = [
 
 const UserDetails = ({ onSubmitSuccess }) => {
 
+  const userId = useSelector(state => state.user.userData.data._id)
+  const locationData = useSelector(state => state.user.locationData)
+
 
   const dispatch = useDispatch();
   const [userData, setUserData] = useState({
     name: "",
     email: "",
-    gender: ""
+
+    gender: "",
+    latitude: "",
+    longitude: "",
+
+
   });
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -51,7 +59,18 @@ const UserDetails = ({ onSubmitSuccess }) => {
     return () => clearInterval(interval);
   }, []);
 
-  
+
+  // Add this useEffect to populate location data when available
+  useEffect(() => {
+    if (locationData) {
+      setUserData(prev => ({
+        ...prev,
+        latitude: locationData.latitude,
+        longitude: locationData.longitude,
+      }));
+    }
+  }, [locationData]);
+
 
   const validateForm = () => {
     const newErrors = {};
@@ -91,6 +110,18 @@ const UserDetails = ({ onSubmitSuccess }) => {
 
   setIsLoading(true);
 
+
+  const cred = {
+    name: userData.name,
+    email: userData.email,
+    gender: userData.gender,
+    latitude: userData.latitude,
+    longitude: userData.longitude,
+  };
+
+  console.log("User Data to Submit: cred", cred);
+
+
   try {
     // Store userData in Redux only (no API call here)
     dispatch(updateUserProfile(userData));
@@ -100,7 +131,10 @@ const UserDetails = ({ onSubmitSuccess }) => {
     } else {
       toast.success("Profile details saved!");
     }
+
+
     navigate('/location');
+
   } catch (err) {
     console.error("Error saving profile data:", err);
     toast.error("Failed to save profile data. Please try again.");

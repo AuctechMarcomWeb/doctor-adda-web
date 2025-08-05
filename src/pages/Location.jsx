@@ -2,20 +2,28 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+
+
+
+
 import { useDispatch, useSelector } from 'react-redux';
 import { updateLocationData } from '../redux/slices/userSlice';
 import { patchRequest } from '../Helpers';
 import toast from 'react-hot-toast';
 
+
 const Location = () => {
   const [permissionStatus, setPermissionStatus] = useState('pending');
   const [isLoading, setIsLoading] = useState(false);
+
+
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
   const [location, setLocation] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userId = useSelector(state => state.user.userData.data._id);
   const userProfileData = useSelector(state => state.user.userProfileData);
+
   const requestLocationPermission = async () => {
     setIsLoading(true);
 
@@ -38,9 +46,12 @@ const Location = () => {
       setLocation({ latitude, longitude });
       setPermissionStatus('granted');
       dispatch(updateLocationData({ latitude, longitude }));
+
+
       
       // Make API call with all user data including location
       await updateUserProfileWithLocation(latitude, longitude);
+
     } catch (error) {
       console.error('Location permission error:', error);
       setPermissionStatus('denied');
@@ -56,6 +67,7 @@ const Location = () => {
   const handleDenyLocation = () => {
     setPermissionStatus('denied');
   };
+
 
   const updateUserProfileWithLocation = async (latitude, longitude) => {
     if (!userProfileData || !userId) {
@@ -86,6 +98,7 @@ const Location = () => {
       setIsUpdatingProfile(false);
     }
   };
+
 
   return (
     <div className="bg-gray-50 min-h-screen flex flex-col">
@@ -207,17 +220,24 @@ const Location = () => {
         {(permissionStatus === 'granted' || permissionStatus === 'denied') && (
           <div className="px-6 pb-6">
             <button
+
               onClick={async () => {
                 if (permissionStatus === 'granted') {
                   // If location was granted but API call wasn't made yet, make it now
                   if (location && userProfileData) {
                     await updateUserProfileWithLocation(location.latitude, location.longitude);
                   }
+
                   navigate("/");
                 } else {
                   setPermissionStatus('pending');
                 }
               }}
+
+              className="w-full py-3 px-4 rounded-xl font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg"
+            >
+              {permissionStatus === 'granted' ? 'Continue' : 'Try Again'}
+
               disabled={isUpdatingProfile}
               className={`w-full py-3 px-4 rounded-xl font-semibold text-white transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg ${
                 isUpdatingProfile 
@@ -236,6 +256,7 @@ const Location = () => {
               ) : (
                 permissionStatus === 'granted' ? 'Continue' : 'Try Again'
               )}
+
             </button>
           </div>
         )}

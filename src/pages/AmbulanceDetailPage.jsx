@@ -124,7 +124,7 @@ const AmbulanceDetailPage = () => {
             >
               <PhoneCall className="w-4 h-4" /> Call Now
             </button>
-            {showFallback && !isMobile && (
+            {/* {showFallback && !isMobile && (
         <div className="absolute top-full mt-2 bg-white border border-gray-300 rounded-lg shadow-lg p-3 z-50 w-64">
           <p className="text-sm mb-2">Call failed. Try using:</p>
           <button
@@ -148,7 +148,7 @@ const AmbulanceDetailPage = () => {
             💬 WhatsApp Web
           </button>
         </div>
-      )}
+      )} */}
 
           </div>
         </div>
