@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 import React, { useState, useEffect } from "react";
 import { User, Mail, Users, CheckCircle, ArrowRight, UserCheck, Settings } from "lucide-react";
@@ -28,13 +29,10 @@ const UserDetails = ({ onSubmitSuccess }) => {
 
   const userId = useSelector(state => state.user.userData.data._id)
   const locationData = useSelector(state => state.user.locationData)
-
-
   const dispatch = useDispatch();
   const [userData, setUserData] = useState({
     name: "",
     email: "",
-
     gender: "",
     latitude: "",
     longitude: "",
@@ -59,6 +57,7 @@ const UserDetails = ({ onSubmitSuccess }) => {
     return () => clearInterval(interval);
   }, []);
 
+  
 
   // Add this useEffect to populate location data when available
   useEffect(() => {
@@ -70,8 +69,6 @@ const UserDetails = ({ onSubmitSuccess }) => {
       }));
     }
   }, [locationData]);
-
-
   const validateForm = () => {
     const newErrors = {};
     
@@ -109,8 +106,6 @@ const UserDetails = ({ onSubmitSuccess }) => {
   if (!validateForm()) return;
 
   setIsLoading(true);
-
-
   const cred = {
     name: userData.name,
     email: userData.email,

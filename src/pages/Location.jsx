@@ -1,15 +1,13 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-
-
-
-
 import { useDispatch, useSelector } from 'react-redux';
 import { updateLocationData } from '../redux/slices/userSlice';
 import { patchRequest } from '../Helpers';
 import toast from 'react-hot-toast';
+
 
 
 const Location = () => {
@@ -23,7 +21,6 @@ const Location = () => {
   const dispatch = useDispatch();
   const userId = useSelector(state => state.user.userData.data._id);
   const userProfileData = useSelector(state => state.user.userProfileData);
-
   const requestLocationPermission = async () => {
     setIsLoading(true);
 
@@ -46,6 +43,9 @@ const Location = () => {
       setLocation({ latitude, longitude });
       setPermissionStatus('granted');
       dispatch(updateLocationData({ latitude, longitude }));
+      
+      // Make API call with all user data including location
+      await updateUserProfileWithLocation(latitude, longitude);
 
 
       
@@ -67,7 +67,6 @@ const Location = () => {
   const handleDenyLocation = () => {
     setPermissionStatus('denied');
   };
-
 
   const updateUserProfileWithLocation = async (latitude, longitude) => {
     if (!userProfileData || !userId) {
@@ -244,7 +243,7 @@ const Location = () => {
                   ? 'bg-gray-400 cursor-not-allowed' 
                   : 'bg-blue-600 hover:bg-blue-700'
               }`}
-            >
+            
               {isUpdatingProfile ? (
                 <div className="flex items-center justify-center">
                   <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
