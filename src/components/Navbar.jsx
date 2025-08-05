@@ -76,7 +76,7 @@ const Navbar = () => {
       <nav className="fixed w-full z-50 bg-white shadow-lg">
         <div className=" mx-auto ">
 
-          <div className=" max-w-[85%]  max-w-7xl  m-auto flex justify-between items-center h-16 py-10">
+          <div className=" max-w-[70%]  max-w-7xl  m-auto flex justify-between items-center h-16 py-10">
 
             {/* Logo */}
             <Link to="/">
