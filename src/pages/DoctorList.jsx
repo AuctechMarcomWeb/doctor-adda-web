@@ -206,16 +206,16 @@ const DoctorList = () => {
         </div>
 
         <div
-          className={`relative max-w-7xl flex items-center mx-auto py-8 pb-2 text-center transition-all duration-1000 ${
+          className={`relative w-[85%] flex items-center mx-auto py-8 pb-2 text-center transition-all duration-1000 ${
             isLoaded ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
           }`}
         >
           <div>
-            <h2 className="text-5xl font-bold mb-4 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4  bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
               {doctors[0]?.category?.name}
             </h2>
 
-            <div className="flex flex-wrap gap-4 justify-center items-center mb-12">
+            <div className="flex flex-wrap justify-center gap-2 mb-12">
               {[
                 { icon: Clock, text: "24/7 Available", color: "green" },
                 { icon: Shield, text: "Verified Doctors", color: "blue" },
@@ -269,12 +269,12 @@ const DoctorList = () => {
                   </p>
 
                   <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
-                    <button className="flex items-center gap-2 bg-white text-blue-600 px-6 py-3 rounded-2xl font-semibold hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 shadow-lg cursor-pointer">
+                    <button className="w-full sm:w-auto flex items-center gap-2 bg-white text-blue-600 px-6 py-3 rounded-2xl font-semibold hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 shadow-lg cursor-pointer">
                       <Download className="w-5 h-5" />
                       <span>App Store</span>
                     </button>
                     <a href="https://play.google.com/store/apps/details?id=com.doctors.adda">
-                      <button className="flex items-center gap-2 bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-2xl font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 shadow-lg cursor-pointer">
+                      <button className="w-full sm:w-auto flex items-center gap-2 bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-2xl font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 shadow-lg cursor-pointer">
                         <Download className="w-5 h-5" />
                         <span>Play Store</span>
                       </button>
@@ -288,7 +288,7 @@ const DoctorList = () => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-4 py-12">
+      <div className=" mx-auto px-4 py-12 max-w-[85%]">
         {/* Mode Filter Tabs */}
         <div className="flex justify-center gap-2 mb-12">
           {[
