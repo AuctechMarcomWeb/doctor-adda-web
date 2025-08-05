@@ -1,33 +1,9 @@
 import React, { useState, useEffect, useMemo } from "react";
-import {
-  Star,
-  MapPin,
-  BadgeCheck,
-  Calendar,
-  Stethoscope,
-  GraduationCap,
-  Phone,
-  MessageCircle,
-  Building2,
-  IndianRupee,
-  CalendarDays,
-  Award,
-  Shield,
-  Users,
-  CheckCircle,
-  Video,
-  PlusCircle,
-  Crown,
-  Activity,
-  Clock,
-  Globe,
-  Heart,
-  TrendingUp,
-  Zap,
-} from "lucide-react";
+import { Star, MapPin, BadgeCheck, Calendar, Stethoscope, GraduationCap, Phone, MessageCircle, Building2, IndianRupee, CalendarDays, Award, Shield, Users, CheckCircle, Video,  PlusCircle, Crown, Activity, Clock,Globe,Heart,TrendingUp,Zap, } from "lucide-react";
 import { useLocation, useParams } from "react-router-dom";
 import { getRequest } from "../Helpers";
 import { AppointmentDateFormat } from "../Utils";
+import AppointmentFlow from "../components/AppointmentFlow";
 
 const GradientCard = ({
   children,
@@ -137,14 +113,12 @@ const DoctorDetailPage = () => {
     rating: 5,
   });
 
-    const location = useLocation(); // Gives access to query string
+  const location = useLocation();
 
-  // Parse query parameters
   const queryParams = new URLSearchParams(location.search);
-  const modeFilter = queryParams.get('modeFilter');
+  const modeFilter = queryParams.get("modeFilter");
 
-  console.log("modeFilter",modeFilter);
-  
+  console.log("modeFilter", modeFilter);
 
   console.log("selectedDate", selectedDate);
   console.log("selectedDateData", selectedDateData);
@@ -195,7 +169,7 @@ const DoctorDetailPage = () => {
       clinicName: clinicData?.clinicName,
       date: selectedDate,
       doctor: id,
-      fee:clinicData?.consultationFee,
+      fee: clinicData?.consultationFee,
       isSelf: false,
       otherPatientDetails: {
         name: "",
@@ -205,7 +179,7 @@ const DoctorDetailPage = () => {
       },
       patient: "685cf37fc439c4973e98f8d6",
       serviceType: modeFilter,
-      slots: { startTime: "03:15 PM", endTime: "03:30 PM" },
+      slots: selectedSlot,
     };
 
     console.log("doctor", doctor);
@@ -218,7 +192,7 @@ const DoctorDetailPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       {/* Hero Section */}
       <section className="py-10 px-4 pt-32 sm:pt-36">
-        <div className="w-[65%] mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        <div className="w-[70%] mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           {/* Doctor Image & Highlights */}
           <div className="lg:col-span-2">
             <div className="rounded-3xl overflow-hidden shadow-2xl border border-gray-200">
@@ -292,7 +266,7 @@ const DoctorDetailPage = () => {
       </section>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 py-10 sm:py-16">
+      <main className=" mx-auto px-4 py-10 sm:py-16 w-[70%]">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           {/* Left Column */}
           <div className="lg:col-span-2 space-y-16">
@@ -388,7 +362,7 @@ const DoctorDetailPage = () => {
 
                   <div className="space-y-3 pt-4">
                     <ActionButton
-                      onClick={bookAppointment}
+                      onClick={bookAppointment }
                       className="w-full "
                       style={{
                         background:
@@ -399,6 +373,9 @@ const DoctorDetailPage = () => {
                       Book Clinic Visit
                     </ActionButton>
                   </div>
+
+
+                  
                 </GradientCard>
 
                 {/* Reviews */}
