@@ -1,31 +1,31 @@
 import React, { useState, useEffect } from 'react'
 import { Clock } from 'lucide-react'
 
-const TimeSlotsSection = ({ availableDates = [] }) => {
+const TimeSlotsSection = ({ availability = [] }) => {
   const [selectedDate, setSelectedDate] = useState(null)
   const [selectedSlot, setSelectedSlot] = useState(null)
 
   // Default date selection
   useEffect(() => {
-    if (availableDates.length > 0 && !selectedDate) {
-      setSelectedDate(availableDates[0].date)
+    if (availability.length > 0 && !selectedDate) {
+      setSelectedDate(availability[0].date)
     }
-  }, [availableDates, selectedDate])
+  }, [availability, selectedDate])
 
   // Get selected date object
-  const selectedDateObj = availableDates.find(
+  const selectedDateObj = availability.find(
     (d) =>
       new Date(d.date).toDateString() ===
       new Date(selectedDate).toDateString()
   )
 
   return (
-    <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg p-6 space-y-6">
+    <div className="max-w-3xl mx-auto bg-white rounded-2xl  p-6 space-y-6">
       <h2 className="text-xl font-semibold text-gray-800">Select Date</h2>
 
       {/* Date Selector */}
       <div className="flex flex-wrap gap-3">
-        {availableDates.map((dateItem, index) => (
+        {availability.map((dateItem, index) => (
           <button
             key={index}
             onClick={() => {
@@ -61,15 +61,10 @@ const TimeSlotsSection = ({ availableDates = [] }) => {
           ))}
         </div>
       ) : (
-        <p className="text-sm text-gray-500">No slots available for this date.</p>
+        <p className="text-sm text-gray-500">No slots available.</p>
       )}
 
-      {/* Selected Preview
-      {selectedDate && selectedSlot && (
-        <div className="mt-4 bg-green-100 text-green-800 px-4 py-2 rounded-lg text-sm border border-green-300">
-          ✅ You selected: <strong>{selectedDate}</strong> at <strong>{selectedSlot}</strong>
-        </div>
-      )} */}
+      
     </div>
   )
 }

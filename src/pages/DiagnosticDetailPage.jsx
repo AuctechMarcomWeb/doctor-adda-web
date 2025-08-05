@@ -17,10 +17,13 @@ import {
 import { useParams } from "react-router-dom";
 import { getRequest } from "../Helpers";
 import TimeSlotsSection from "../components/TimeSlotsSelection";
+import DiagonsticsReviewPopup from "./DiagonsticsReviewPopup";
 const DiagnosticDetailPage = () => {
   const [activeTab, setActiveTab] = useState("about");
   const [diagnostics, setDiagnostics] = useState(null);
-  
+  const [reviews, setReviews] = useState([]);
+  const [showReviewPopup, setShowReviewPopup] = useState(false);
+
   const { id } = useParams();
 
   useEffect(() => {
@@ -176,6 +179,16 @@ const DiagnosticDetailPage = () => {
                     </label>
                   ))}
                 </div>
+
+                <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl p-6 border border-emerald-100">
+                  <div className="text-center">
+                    {/* <h3 className="font-bold text-emerald-800 mb-2">Premium Package Coming Soon!</h3> */}
+                    <p className="text-sm text-emerald-600">
+                      Advanced diagnostic tests for early detection &
+                      prevention.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -234,41 +247,33 @@ const DiagnosticDetailPage = () => {
               </div>
             </div>
           </div>
-          
-         <div className="group">
-  <div className="bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100">
-    <div className="bg-gradient-to-r from-purple-500 to-pink-600 p-6">
-      <div className="flex items-center gap-3">
-        <div className="bg-white/20 rounded-full p-3">
-          <Clock className="w-6 h-6 text-white" />
+
+          <div className="group">
+            <div className="bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100">
+              <div className="bg-gradient-to-r from-purple-500 to-pink-600 p-6">
+                <div className="flex items-center gap-3">
+                  <div className="bg-white/20 rounded-full p-3">
+                    <Clock className="w-6 h-6 text-white" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-white">
+                    Book Time Slot
+                  </h2>
+                </div>
+              </div>
+              <div className="p-8">
+                <TimeSlotsSection
+                  availability={
+                    diagnostics?.availability?.map((day) => ({
+                      date: day.date,
+                      label: day.label,
+                      slots: day.times.map((time) => ({ startTime: time })),
+                    })) || []
+                  }
+                />
+              </div>
+            </div>
+          </div>
         </div>
-        <h2 className="text-2xl font-bold text-white">
-          Book Time Slot
-        </h2>
-      </div>
-    </div>
-    <div className="p-8">
-      <TimeSlotsSection
-        availableDates={[
-          {
-            date: "2025-08-05",
-            label: "Tue, 5 Aug",
-            slots: [{ startTime: "10:00 AM" }, { startTime: "11:00 AM" }]
-          },
-          {
-            date: "2025-08-06",
-            label: "Wed, 6 Aug",
-            slots: [{ startTime: "09:00 AM" }, { startTime: "03:00 PM" }]
-          }
-        ]}
-      />
-    </div>
-  </div>
-</div>
-
-        </div>
-
-
 
         {/* Tabs Section */}
         <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
@@ -354,20 +359,34 @@ const DiagnosticDetailPage = () => {
             {/* Reviews Tab */}
             {activeTab === "review" && (
               <div className="space-y-8">
-                <div className="text-center mb-8">
-                  <h3 className="text-3xl font-bold text-gray-900 mb-4">
-                    What Our Patients Say
-                  </h3>
-                  <div className="flex items-center justify-center gap-2 mb-4">
-                    <div className="flex text-yellow-400">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-6 h-6 fill-current" />
-                      ))}
+                <div className="flex items-center justify-between w-full">
+                  {/* Left side: Reviews */}
+                  <div className="text-left">
+                    <h3 className="text-3xl font-bold text-gray-900 mb-4">
+                      What Our Patients Say
+                    </h3>
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="flex text-yellow-400">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className="w-6 h-6 fill-current" />
+                        ))}
+                      </div>
+                      <span className="text-2xl font-bold text-gray-900 ml-2">
+                        4.8
+                      </span>
+                      <span className="text-gray-600">(250+ reviews)</span>
                     </div>
-                    <span className="text-2xl font-bold text-gray-900 ml-2">
-                      4.8
-                    </span>
-                    <span className="text-gray-600">(250+ reviews)</span>
+                  </div>
+
+                  {/* Right side: Share button */}
+                  <div className="text-right">
+                    <button
+                      onClick={() => setShowReviewPopup(true)}
+                      className="group bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-8 py-4 rounded-full hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 font-semibold flex items-center gap-3 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                    >
+                      <PlusCircle className="w-5 h-5 group-hover:animate-spin" />
+                      Share Your Experience
+                    </button>
                   </div>
                 </div>
 
@@ -418,13 +437,6 @@ const DiagnosticDetailPage = () => {
                     </div>
                   ))}
                 </div>
-
-                <div className="text-center pt-8">
-                  <button className="group bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-8 py-4 rounded-full hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 font-semibold flex items-center gap-3 mx-auto shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-                    <PlusCircle className="w-5 h-5 group-hover:animate-spin" />
-                    Share Your Experience
-                  </button>
-                </div>
               </div>
             )}
           </div>
@@ -464,6 +476,12 @@ const DiagnosticDetailPage = () => {
           </div>
         </div>
       </div>
+      <DiagonsticsReviewPopup
+        open={showReviewPopup}
+        onClose={() => setShowReviewPopup(false)}
+        id={diagnostics?._id}
+        onReviewAdded={(review) => setReviews([...reviews, review])}
+      />
     </div>
   );
 };
