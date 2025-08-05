@@ -11,7 +11,6 @@ const regex = {
   mobile: /^[6-9]\d{9}$/,
   number: /^\d+$/,
   isbn: /^(978|979)\d{10}$/,
-
 };
 
 // <-------- Validate Mobile ---------->
@@ -276,11 +275,8 @@ export const getDaysLeft = (freeTrialEndDate) => {
   return daysLeft;
 };
 
-
-
-
 export const formatDate = (inputDate) => {
-  const parts = inputDate.split('/');
+  const parts = inputDate.split("/");
 
   if (parts.length === 3) {
     const year = parts[0];
@@ -290,8 +286,8 @@ export const formatDate = (inputDate) => {
     return `${day}-${month}-${year}`;
   }
 
-  return 'Invalid date';
-}
+  return "Invalid date";
+};
 
 //for magazine
 export const isValidMeaningfulText = (text) => {
@@ -308,9 +304,18 @@ export const isValidMeaningfulText = (text) => {
   const repeatedPattern = /^([a-zA-Z]{2,})\1+$/i;
   if (repeatedPattern.test(cleaned)) return { isValid: false };
 
-  const commonGibberish = ["asdf", "qwerty", "zxcv", "ghjk", "dfgh", "poiuy", "lkjh"];
+  const commonGibberish = [
+    "asdf",
+    "qwerty",
+    "zxcv",
+    "ghjk",
+    "dfgh",
+    "poiuy",
+    "lkjh",
+  ];
   const lower = cleaned.toLowerCase();
-  if (commonGibberish.some((word) => lower.includes(word))) return { isValid: false };
+  if (commonGibberish.some((word) => lower.includes(word)))
+    return { isValid: false };
 
   const validPattern = /^[a-zA-Z0-9\s,'-.&()]+$/;
   if (!validPattern.test(cleaned)) return { isValid: false };
@@ -323,22 +328,37 @@ export const isValidMeaningfulText = (text) => {
   return { isValid: true, formattedText };
 };
 
-
 // === ISBN Simple Validation ===
 // Checks if ISBN starts with 978 and has exactly 13 digits
 // ✅ Simple validation: starts with 978 and is 13 digits
 export const validateISBN = (isbn) => {
-  if (!isbn || typeof isbn !== 'string') return false;
-  const cleaned = isbn.replace(/[^0-9]/g, '');
+  if (!isbn || typeof isbn !== "string") return false;
+  const cleaned = isbn.replace(/[^0-9]/g, "");
   const regex = /^978\d{10}$/;
   return regex.test(cleaned);
 };
 
 // === Format ISBN to 978-x-xxx-xxxxx-x format ===
 export const formatISBN = (isbn) => {
-  const cleaned = isbn.replace(/[^0-9]/g, '');
+  const cleaned = isbn.replace(/[^0-9]/g, "");
   if (cleaned.length !== 13 || !/^978/.test(cleaned)) return isbn; // return original if invalid
 
   // Insert hyphens based on standard positions (grouping: 978 - 1 - 234 - 56789 - 0)
-  return `${cleaned.slice(0, 3)}-${cleaned[3]}-${cleaned.slice(4, 7)}-${cleaned.slice(7, 12)}-${cleaned[12]}`;
+  return `${cleaned.slice(0, 3)}-${cleaned[3]}-${cleaned.slice(
+    4,
+    7
+  )}-${cleaned.slice(7, 12)}-${cleaned[12]}`;
 };
+
+export const AppointmentDateFormat = (date) => {
+  if (!date) return "";
+
+  const formatted = new Date(date).toLocaleDateString("en-IN", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+  });
+
+  return formatted;
+};
+
