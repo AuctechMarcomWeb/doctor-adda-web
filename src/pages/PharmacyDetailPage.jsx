@@ -43,17 +43,11 @@ const PharmacyDetailPage = () => {
 
   console.log("pharmacyId in detail page",id);
 
-
   //console.log("token",token);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-
-
-
-
   useEffect(() => {
     const fetchPharmacy = async () => {
       setLoading(true);

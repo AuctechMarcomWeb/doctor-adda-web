@@ -1,77 +1,82 @@
-import React, { useState, useEffect } from 'react'
-import { Clock } from 'lucide-react'
+import React, { useState, useEffect } from "react";
+import { AppointmentDateFormat } from "../Utils";
 
-const TimeSlotsSection = ({ availableDates = [] }) => {
-  const [selectedDate, setSelectedDate] = useState(null)
-  const [selectedSlot, setSelectedSlot] = useState(null)
+const TimeSlotsSection = ({ availability = [] }) => {
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDateData, setSelectedDateData] = useState(null);
+  const [selectedSlot, setSelectedSlot] = useState(null);
 
-  // Default date selection
+  // Helper: Compare dates in YYYY-MM-DD format
+  const areDatesEqual = (date1, date2) => {
+    if (!date1 || !date2) return false;
+    return String(date1) === String(date2);
+  };
+
+  // Handle date click
+  const handleDateClick = (dateObj) => {
+    setSelectedDate(dateObj.date);
+    setSelectedDateData(dateObj);
+    setSelectedSlot(null);
+  };
+
+  // Default date selection on first load
   useEffect(() => {
-    if (availableDates.length > 0 && !selectedDate) {
-      setSelectedDate(availableDates[0].date)
+    if (availability.length > 0 && !selectedDate) {
+      handleDateClick(availability[0]);
     }
-  }, [availableDates, selectedDate])
-
-  // Get selected date object
-  const selectedDateObj = availableDates.find(
-    (d) =>
-      new Date(d.date).toDateString() ===
-      new Date(selectedDate).toDateString()
-  )
+  }, [availability, selectedDate]);
 
   return (
-    <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg p-6 space-y-6">
-      <h2 className="text-xl font-semibold text-gray-800">Select Date</h2>
-
+    <div className="max-w-3xl mx-auto bg-white rounded-2xl p-6 space-y-6">
       {/* Date Selector */}
-      <div className="flex flex-wrap gap-3">
-        {availableDates.map((dateItem, index) => (
-          <button
-            key={index}
-            onClick={() => {
-              setSelectedDate(dateItem.date)
-              setSelectedSlot(null)
-            }}
-            className={`px-4 py-2 rounded-full border text-sm transition duration-200 ${
-              selectedDate === dateItem.date
-                ? 'bg-blue-600 text-white border-blue-600 shadow'
-                : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-blue-50'
-            }`}
-          >
-            {dateItem.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Time Slots */}
-      {selectedDateObj?.slots?.length > 0 ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-          {selectedDateObj.slots.map((slot, i) => (
+      <div>
+        <h4 className="text-sm font-semibold mb-2">Select Date</h4>
+        <div className="flex flex-wrap gap-2">
+          {availability.map((d, i) => (
             <button
               key={i}
-              onClick={() => setSelectedSlot(slot.startTime)}
-              className={`px-4 py-2 rounded-lg text-sm transition duration-200 ${
-                selectedSlot === slot.startTime
-                  ? 'bg-lightblue-600 text-grey shadow'
-                  : 'bg-gray-100 text-gray-800 hover:bg-green-50'
+              onClick={() => handleDateClick(d)}
+              className={`px-3 py-2 text-sm rounded-lg font-medium ${
+                areDatesEqual(selectedDate, d.date)
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-blue-50"
               }`}
             >
-              🕒 {slot.startTime}
+              {d.date ? AppointmentDateFormat(d.date) : "N/A"}
             </button>
           ))}
         </div>
-      ) : (
-        <p className="text-sm text-gray-500">No slots available for this date.</p>
-      )}
+      </div>
 
-      {/* Selected Preview
-      {selectedDate && selectedSlot && (
-        <div className="mt-4 bg-green-100 text-green-800 px-4 py-2 rounded-lg text-sm border border-green-300">
-          ✅ You selected: <strong>{selectedDate}</strong> at <strong>{selectedSlot}</strong>
+      {/* Time Slots */}
+      <div>
+        <h4 className="font-bold text-sm mb-2">Available Slots</h4>
+        <div className="grid grid-cols-2 gap-2 max-h-52 overflow-y-auto">
+          {selectedDateData?.slots?.filter((slot) => !slot.isBooked)?.length > 0 ? (
+            selectedDateData.slots
+              .filter((slot) => !slot.isBooked)
+              .map((slot, i) => (
+                <button
+                  key={i}
+                  onClick={() => setSelectedSlot(slot.startTime)}
+                  className={`px-2 py-2 text-sm rounded-lg font-medium ${
+                    selectedSlot === slot.startTime
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-blue-50"
+                  }`}
+                >
+                  {slot.startTime} - {slot.endTime}
+                </button>
+              ))
+          ) : (
+            <p className="text-gray-500 text-sm col-span-2">
+              No slots available
+            </p>
+          )}
         </div>
-      )} */}
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default TimeSlotsSection
+export default TimeSlotsSection;
