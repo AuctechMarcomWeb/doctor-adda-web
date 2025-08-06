@@ -1,84 +1,70 @@
+import React, { useState } from "react";
+import { Dialog } from "@headlessui/react";
 
-import React from "react";
-import { MessageCircle } from "lucide-react";
-import { AppointmentDateFormat } from "../Utils";
+const AppointmentFlow = ({ open, onClose, id }) => {
+  const [step, setStep] = useState(1); // Step 1: Who for
 
-const AppointmentFlow = ({
-  step,
-  setStep,
-  doctor,
-  clinicData,
-  selectedDate,
-  selectedSlot,
-}) => {
+  const handleClose = () => {
+    setStep(1);
+    onClose();
+  };
+
   return (
-    step > 0 && (
-      <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md space-y-6 relative">
-          {/* Close Button */}
-          <button
-            onClick={() => setStep(0)}
-            className="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-xl font-bold"
-          >
-            &times;
-          </button>
+    <Dialog open={open} onClose={handleClose} className="relative z-50">
+      {/* Backdrop */}
+      <div className="fixed inset-0 bg-black/30 backdrop-blur-sm" />
 
+      {/* Centered Panel */}
+      <div className="fixed inset-0 flex items-center justify-center">
+        <Dialog.Panel className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
           {/* Step 1: Who is this appointment for */}
           {step === 1 && (
             <>
-              <h2 className="text-xl font-bold text-gray-800 mb-4">
+              <Dialog.Title className="text-lg font-medium mb-4">
                 Who is this appointment for?
-              </h2>
-              <div className="flex flex-col gap-3">
+              </Dialog.Title>
+              <div className="space-y-3">
+                <button className="w-full px-4 py-2 border rounded">Self</button>
+                <button className="w-full px-4 py-2 border rounded">Other</button>
+              </div>
+              <div className="mt-6 text-right">
                 <button
-                  className="py-3 px-4 rounded-xl bg-blue-100 hover:bg-blue-200 font-medium"
                   onClick={() => setStep(2)}
+                  className="px-4 py-2 bg-blue-600 text-white rounded"
                 >
-                  Self
-                </button>
-                <button
-                  className="py-3 px-4 rounded-xl bg-blue-100 hover:bg-blue-200 font-medium"
-                  onClick={() => setStep(2)}
-                >
-                  Other
+                  Continue
                 </button>
               </div>
-              <ActionButton className="w-full mt-4" onClick={() => setStep(2)}>
-                Continue
-              </ActionButton>
             </>
           )}
 
-          {/* Step 2: Choose Payment Method */}
+          {/* Step 2: Choose payment method */}
           {step === 2 && (
             <>
-              <h2 className="text-xl font-bold text-gray-800 mb-4">
+              <Dialog.Title className="text-lg font-medium mb-4">
                 Choose Payment Method
-              </h2>
-              <div className="flex flex-col gap-3">
-                <button
-                  className="py-3 px-4 rounded-xl bg-green-100 hover:bg-green-200 font-medium"
-                  onClick={() => setStep(3)}
-                >
+              </Dialog.Title>
+              <div className="space-y-3">
+                <button className="w-full px-4 py-2 border rounded">
                   Pay Online
                 </button>
-                <button
-                  className="py-3 px-4 rounded-xl bg-yellow-100 hover:bg-yellow-200 font-medium"
-                  onClick={() => setStep(3)}
-                >
+                <button className="w-full px-4 py-2 border rounded">
                   Pay at Clinic
                 </button>
               </div>
-              <div className="flex justify-between gap-4 mt-4">
+              <div className="mt-6 flex justify-between">
                 <button
-                  className="w-1/2 bg-gray-300 text-gray-700 py-2 rounded-xl font-bold hover:bg-gray-400"
-                  onClick={() => setStep(0)}
+                  onClick={handleClose}
+                  className="px-4 py-2 bg-gray-300 text-black rounded"
                 >
                   Cancel
                 </button>
-                <ActionButton className="w-1/2" onClick={() => setStep(3)}>
+                <button
+                  onClick={() => setStep(3)}
+                  className="px-4 py-2 bg-blue-600 text-white rounded"
+                >
                   Continue
-                </ActionButton>
+                </button>
               </div>
             </>
           )}
@@ -86,22 +72,23 @@ const AppointmentFlow = ({
           {/* Step 3: Confirm Appointment */}
           {step === 3 && (
             <>
-              <h2 className="text-xl font-bold text-gray-800 mb-4">
+              <Dialog.Title className="text-lg font-medium mb-4">
                 Confirm Appointment
-              </h2>
-              <p className="text-gray-600 mb-6">
-                Do you want to confirm this appointment?
-              </p>
-              <div className="flex justify-between gap-4">
+              </Dialog.Title>
+              <p>Are you sure you want to book this appointment?</p>
+              <div className="mt-6 flex justify-between">
                 <button
-                  className="w-1/2 bg-gray-300 text-gray-700 py-2 rounded-xl font-bold hover:bg-gray-400"
-                  onClick={() => setStep(0)}
+                  onClick={handleClose}
+                  className="px-4 py-2 bg-gray-300 text-black rounded"
                 >
                   Cancel
                 </button>
-                <ActionButton className="w-1/2" onClick={() => setStep(4)}>
+                <button
+                  onClick={() => setStep(4)}
+                  className="px-4 py-2 bg-green-600 text-white rounded"
+                >
                   Yes, Book
-                </ActionButton>
+                </button>
               </div>
             </>
           )}
@@ -109,35 +96,28 @@ const AppointmentFlow = ({
           {/* Step 4: Appointment Details */}
           {step === 4 && (
             <>
-              <h2 className="text-xl font-bold text-green-600 mb-4">
-                Appointment Confirmed 🎉
-              </h2>
-              <div className="text-sm text-gray-700 space-y-2">
-                <p>
-                  <strong>Doctor:</strong> {doctor?.fullName}
-                </p>
-                <p>
-                  <strong>Clinic:</strong> {clinicData?.clinicName}
-                </p>
-                <p>
-                  <strong>Date:</strong> {AppointmentDateFormat(selectedDate)}
-                </p>
-                <p>
-                  <strong>Time Slot:</strong> {selectedSlot}
-                </p>
-                <p>
-                  <strong>Fee:</strong> ₹{clinicData?.consultationFee}
-                </p>
+              <Dialog.Title className="text-lg font-medium mb-4">
+                Appointment Confirmed!
+              </Dialog.Title>
+              <div className="text-sm text-gray-700 space-y-1">
+                <p>✅ Doctor ID: <strong>{id}</strong></p>
+                <p>📅 Date: Tomorrow</p>
+                <p>🕐 Time: 10:00 AM</p>
+                <p>📍 Location: ABC Clinic</p>
               </div>
-              <ActionButton className="w-full mt-4" onClick={() => setStep(0)}>
-                Close
-              </ActionButton>
+              <div className="mt-6 text-right">
+                <button
+                  onClick={handleClose}
+                  className="px-4 py-2 bg-blue-600 text-white rounded"
+                >
+                  Close
+                </button>
+              </div>
             </>
           )}
-        </div>
-        
+        </Dialog.Panel>
       </div>
-    )
+    </Dialog>
   );
 };
 

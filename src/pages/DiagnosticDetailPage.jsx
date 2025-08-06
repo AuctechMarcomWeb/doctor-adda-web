@@ -138,7 +138,7 @@ const DiagnosticDetailPage = () => {
             </a>
             <a
               href={`https://maps.google.com/?q=${
-                diagnostics?.location?.coordinates[1]
+                diagnostics?.doctor?.coordinates[1]
               },${diagnostics?.location?.coordinates[0]} (${encodeURIComponent(
                 diagnostics?.address || ""
               )})`}
