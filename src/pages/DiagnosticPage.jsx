@@ -32,7 +32,7 @@ const DiagnosticCard = ({
       <div className="flex flex-col md:flex-row gap-4 p-4">
         {/* Thumbnail */}
         <img
-          src={profileImage}
+          src={profileImage ||"https://via.placeholder.com/600x400"}
           alt={profileImage}
           className="w-full md:w-20 h-40 md:h-28 rounded-xl object-cover border border-gray-200"
         />
