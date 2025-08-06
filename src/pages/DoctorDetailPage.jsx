@@ -191,6 +191,18 @@ const DoctorDetailPage = () => {
         setClinicData(doc?.clinics?.[0]);
         setSelectedDate(doc?.clinics?.[0]?.availability[0]?.date);
         setSelectedDateData(doc?.clinics?.[0]?.availability[0]);
+        
+         const firstClinic = doc?.clinics?.[0];
+      const firstAvailability = firstClinic?.availability?.[0];
+
+      setClinicData(firstClinic);
+      setSelectedDate(firstAvailability?.date);
+      setSelectedDateData(firstAvailability);
+
+      //  Set default slot
+      const availableSlot = firstAvailability?.slots?.find(slot => !slot.isBooked);
+      setSelectedSlot(availableSlot || null);
+        
       })
       .catch((error) => {
         console.log("error", error);
