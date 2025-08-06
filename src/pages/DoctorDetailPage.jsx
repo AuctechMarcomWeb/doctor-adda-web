@@ -28,9 +28,6 @@ import {
 import { useLocation, useParams } from "react-router-dom";
 import { getRequest } from "../Helpers";
 import { AppointmentDateFormat } from "../Utils";
-import AppointmentFlow from "../components/AppointmentFlow";
-import DiagonsticsReviewPopup from "./DiagonsticsReviewPopup";
-
 
 const GradientCard = ({
   children,
@@ -127,9 +124,8 @@ const ActionButton = ({
 };
 
 const DoctorDetailPage = () => {
- 
-   const [showReviewPopup, setShowReviewPopup] = useState(false);
-   const [showAppointmentPopup, setShowAppointmentPopup] = useState(false);  
+  const [showReviewPopup, setShowReviewPopup] = useState(false);
+  const [showAppointmentPopup, setShowAppointmentPopup] = useState(false);
   const [doctor, setDoctor] = useState(null);
   const [clinicData, setClinicData] = useState(null);
   const [selectedClinicIndex, setSelectedClinicIndex] = useState(0);
@@ -138,44 +134,37 @@ const DoctorDetailPage = () => {
   const [selectedSlot, setSelectedSlot] = useState(null);
 
   const phoneNumber = "102";
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    const [showFallback, setShowFallback] = useState(false);
-  
-    const tryTelLink = () => {
-      const telUrl = `tel:${phoneNumber}`;
-      const timeout = setTimeout(() => {
-        // If nothing happened → show fallback popup
-        setShowFallback(true);
-      }, 1500);
-  
-      window.location.href = telUrl;
-  
-      // If the page is hidden (meaning app opened), cancel timeout
-      document.addEventListener("visibilitychange", () => {
-        if (document.hidden) clearTimeout(timeout);
-      });
-    };
-  
-    const handleClick = () => {
-      if (isMobile) {
-        window.location.href = `tel:${phoneNumber}`;
-      } else {
-        tryTelLink();
-      }
-    };
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  const [showFallback, setShowFallback] = useState(false);
+
+  const tryTelLink = () => {
+    const telUrl = `tel:${phoneNumber}`;
+    const timeout = setTimeout(() => {
+      // If nothing happened → show fallback popup
+      setShowFallback(true);
+    }, 1500);
+
+    window.location.href = telUrl;
+
+    // If the page is hidden (meaning app opened), cancel timeout
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) clearTimeout(timeout);
+    });
+  };
+
+  const handleClick = () => {
+    if (isMobile) {
+      window.location.href = `tel:${phoneNumber}`;
+    } else {
+      tryTelLink();
+    }
+  };
 
   const [reviewData, setReviewData] = useState({
     name: "",
     comment: "",
     rating: 5,
   });
-
-  const location = useLocation();
-
-  const queryParams = new URLSearchParams(location.search);
-  const modeFilter = queryParams.get("modeFilter");
-
-  console.log("modeFilter", modeFilter);
 
   console.log("selectedDate", selectedDate);
   console.log("selectedDateData", selectedDateData);
@@ -238,7 +227,7 @@ const DoctorDetailPage = () => {
       serviceType: modeFilter,
       slots: selectedSlot,
     };
-    setShowAppointmentPopup(true)
+    setShowAppointmentPopup(true);
 
     console.log("doctor", doctor);
     console.log("clinicData", clinicData);
@@ -304,7 +293,8 @@ const DoctorDetailPage = () => {
             </div>
 
             <div className="space-y-3 pt-2">
-              <ActionButton  onClick={handleClick}
+              <ActionButton
+                onClick={handleClick}
                 className="w-full "
                 style={{
                   background:
@@ -314,16 +304,18 @@ const DoctorDetailPage = () => {
                 <Phone className="w-4 h-4" />
                 Call Now
               </ActionButton>
-              <a href={`https://maps.google.com/?q=${
-                doctor?.doctor?.coordinates[1]
-              },${doctor?.location?.coordinates[0]} (${encodeURIComponent(
-                doctor?.address || ""
-              )})`}
-              target="_blank">
+              <a
+                href={`https://maps.google.com/?q=${
+                  doctor?.doctor?.coordinates[1]
+                },${doctor?.location?.coordinates[0]} (${encodeURIComponent(
+                  doctor?.address || ""
+                )})`}
+                target="_blank"
+              >
                 <ActionButton variant="secondary" className="w-full">
-                <MapPin className="w-4 h-4" />
-                Get Location
-              </ActionButton>
+                  <MapPin className="w-4 h-4" />
+                  Get Location
+                </ActionButton>
               </a>
             </div>
           </div>
@@ -350,8 +342,6 @@ const DoctorDetailPage = () => {
                           setSelectedClinicIndex(index);
                           setSelectedDate(clinic?.availability[0]?.date);
                           setSelectedDateData(clinic?.availability[0]);
-                          
-                          setSelectedSlot(clinic?.availability[0]?.slots[0])
                         }}
                         className={`px-4 py-2 rounded-xl font-bold text-sm transition-all duration-300 ${
                           index === selectedClinicIndex
@@ -384,12 +374,6 @@ const DoctorDetailPage = () => {
                             key={i}
                             onClick={() => {
                               setSelectedDate(d?.date);
-
-                              console.log("d",d);
-                              
-
-
-                              setSelectedSlot(d?.slots[0])
                               setSelectedDateData(d);
                             }}
                             className={`px-3 py-2 text-sm rounded-lg font-medium ${
@@ -436,7 +420,6 @@ const DoctorDetailPage = () => {
                   <div className="space-y-3 pt-4">
                     <ActionButton
                       onClick={bookAppointment}
-                 
                       className="w-full "
                       style={{
                         background:
@@ -513,8 +496,6 @@ const DoctorDetailPage = () => {
                       </div>
                     ))}
                   </div>
-
-                  
                 </GradientCard>
               </div>
             </div>
@@ -560,7 +541,7 @@ const DoctorDetailPage = () => {
               </div>
               <div className="space-y-4">
                 <div className="p-4 bg-gradient-to-r from-gray-50 to-indigo-50 rounded-xl">
-              
+                  {/* <h4 className="font-bold mb-1">{selectedClinic.clinicName}</h4> */}
                   <p className="text-sm text-gray-600 flex items-center gap-2">
                     <MapPin className="w-4 h-4" />
                     {selectedClinic.clinicAddress}
@@ -592,7 +573,6 @@ const DoctorDetailPage = () => {
         open={showAppointmentPopup}
         onClose={() => setShowAppointmentPopup(false)}
         id={doctor?._id}
-        
       />
     </div>
   );
