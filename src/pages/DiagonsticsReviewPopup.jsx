@@ -6,7 +6,13 @@ import { FaStar } from "react-icons/fa"; // Make sure to install react-icons if 
 import Cookies from "js-cookie";
 import { useSelector } from "react-redux";
 
-const DiagonsticsReviewPopup = ({ open, onClose, id, onReviewAdded }) => {
+const DiagonsticsReviewPopup = ({
+  open,
+  setUpdateStatus,
+  onClose,
+  id,
+  onReviewAdded,
+}) => {
   const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
   const [rating, setRating] = useState(1);
   const [hoverRating, setHoverRating] = useState(null);
@@ -23,7 +29,7 @@ const DiagonsticsReviewPopup = ({ open, onClose, id, onReviewAdded }) => {
     console.log("Diagnostics ID:", id);
     console.log("Rating to submit:", rating);
     console.log("Comment to submit:", comment);
-
+    console.log("token", userProfileData);
     setLoading(true);
     setError("");
     setSuccess(false);
@@ -41,7 +47,7 @@ const DiagonsticsReviewPopup = ({ open, onClose, id, onReviewAdded }) => {
       const res = await postRequest({
         url: `diagnostics/${id}/review`,
         cred: { rating, comment },
-        token: userProfileData.authToken,
+        // token: userProfileData.authToken,
       });
 
       console.log("API Response:", res);
@@ -49,6 +55,7 @@ const DiagonsticsReviewPopup = ({ open, onClose, id, onReviewAdded }) => {
 
       if (data?.success) {
         console.log("Review submitted successfully!");
+        setUpdateStatus((prev) => !prev);
         setSuccess(true);
         setComment("");
         setRating(5);
