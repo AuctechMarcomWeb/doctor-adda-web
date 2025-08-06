@@ -238,6 +238,7 @@ const DoctorDetailPage = () => {
       serviceType: modeFilter,
       slots: selectedSlot,
     };
+    setShowAppointmentPopup(true)
 
     console.log("doctor", doctor);
     console.log("clinicData", clinicData);
@@ -349,6 +350,8 @@ const DoctorDetailPage = () => {
                           setSelectedClinicIndex(index);
                           setSelectedDate(clinic?.availability[0]?.date);
                           setSelectedDateData(clinic?.availability[0]);
+                          
+                          setSelectedSlot(clinic?.availability[0]?.slots[0])
                         }}
                         className={`px-4 py-2 rounded-xl font-bold text-sm transition-all duration-300 ${
                           index === selectedClinicIndex
@@ -381,6 +384,12 @@ const DoctorDetailPage = () => {
                             key={i}
                             onClick={() => {
                               setSelectedDate(d?.date);
+
+                              console.log("d",d);
+                              
+
+
+                              setSelectedSlot(d?.slots[0])
                               setSelectedDateData(d);
                             }}
                             className={`px-3 py-2 text-sm rounded-lg font-medium ${
@@ -406,9 +415,9 @@ const DoctorDetailPage = () => {
                           .map((slot, i) => (
                             <button
                               key={i}
-                              onClick={() => setSelectedSlot(slot.startTime)}
+                              onClick={() => setSelectedSlot(slot)}
                               className={`px-2 py-2 text-sm rounded-lg font-medium ${
-                                selectedSlot === slot.startTime
+                                selectedSlot === slot
                                   ? "bg-blue-600 text-white"
                                   : "bg-gray-100 text-gray-700 hover:bg-blue-50"
                               }`}
@@ -426,8 +435,8 @@ const DoctorDetailPage = () => {
 
                   <div className="space-y-3 pt-4">
                     <ActionButton
-                      // onClick={bookAppointment}
-                       onClick={() => setShowAppointmentPopup(true)}
+                      onClick={bookAppointment}
+                 
                       className="w-full "
                       style={{
                         background:
