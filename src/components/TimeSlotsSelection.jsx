@@ -1,10 +1,54 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
 import React, { useState, useEffect } from "react";
 import { AppointmentDateFormat } from "../Utils";
+import { MessageCircle } from "lucide-react";
 
-const TimeSlotsSection = ({ availability = [] }) => {
+const ActionButton = ({
+  children,
+  variant = "primary",
+  className = "",
+  ...props
+}) => {
+  const variants = {
+    primary:
+      "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:shadow-xl transform hover:scale-105",
+    secondary:
+      "bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:shadow-lg",
+    tertiary:
+      "bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:shadow-lg",
+    danger:
+      "bg-gradient-to-r from-red-600 to-red-700 text-white hover:shadow-xl transform hover:scale-105",
+  };
+
+ 
+  return (
+    <button
+      className={`py-3 px-6 rounded-xl font-bold transition-all duration-500 flex items-center justify-center gap-2 ${variants[variant]} ${className}`}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+};
+
+const TimeSlotsSection = ({ availability = [] , onBook}) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedDateData, setSelectedDateData] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
+
+ const bookAppointment =(e) =>{
+  e.preventDefault();
+    if (!selectedDate || !selectedSlot) {
+      alert("Please select a date and time slot before booking.");
+      return;
+    }
+    if (onBook) {
+      onBook(e, selectedDate, selectedSlot); // Pass to parent
+    }
+ }
+
+
 
   // Helper: Compare dates in YYYY-MM-DD format
   const areDatesEqual = (date1, date2) => {
@@ -52,7 +96,8 @@ const TimeSlotsSection = ({ availability = [] }) => {
       <div>
         <h4 className="font-bold text-sm mb-2">Available Slots</h4>
         <div className="grid grid-cols-2 gap-2 max-h-52 overflow-y-auto">
-          {selectedDateData?.slots?.filter((slot) => !slot.isBooked)?.length > 0 ? (
+          {selectedDateData?.slots?.filter((slot) => !slot.isBooked)?.length >
+          0 ? (
             selectedDateData.slots
               .filter((slot) => !slot.isBooked)
               .map((slot, i) => (
@@ -74,6 +119,20 @@ const TimeSlotsSection = ({ availability = [] }) => {
             </p>
           )}
         </div>
+      </div>
+
+      <div className="space-y-3 pt-4">
+        <ActionButton
+          onClick={bookAppointment}
+          className="w-full "
+          style={{
+            background:
+              "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
+          }}
+        >
+          <MessageCircle className="w-4 h-4" />
+          Book Appointment
+        </ActionButton>
       </div>
     </div>
   );
