@@ -43,6 +43,7 @@ const PharmacyDetailPage = () => {
 
   console.log("pharmacyId in detail page",id);
 
+
   //console.log("token",token);
 
   useEffect(() => {
@@ -442,9 +443,8 @@ const PharmacyDetailPage = () => {
       <ReviewPopup
         open={showReviewPopup}
         onClose={() => setShowReviewPopup(false)}
-        pharmacyId={pharmacy._id}
+        pharmacyId={id}
         onReviewAdded={review => setReviews([...reviews, review])}
-       
       />
     </div>
   );

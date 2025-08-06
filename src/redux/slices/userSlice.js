@@ -20,7 +20,8 @@ const userSlice = createSlice({
     logout(state) {
       state.isLoggedIn = false;
       state.userData = null;
-      state.userProfileData = null; // Clear profile data on logout
+      state.userProfileData = null; 
+      state.locationData = null;
     },
     updateUserProfile(state, action) {
       state.userProfileData = action.payload;

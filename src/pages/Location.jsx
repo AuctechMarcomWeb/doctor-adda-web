@@ -219,31 +219,24 @@ const Location = () => {
         {(permissionStatus === 'granted' || permissionStatus === 'denied') && (
           <div className="px-6 pb-6">
             <button
-
               onClick={async () => {
                 if (permissionStatus === 'granted') {
                   // If location was granted but API call wasn't made yet, make it now
                   if (location && userProfileData) {
                     await updateUserProfileWithLocation(location.latitude, location.longitude);
                   }
-
                   navigate("/");
                 } else {
                   setPermissionStatus('pending');
                 }
               }}
-
-              className="w-full py-3 px-4 rounded-xl font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg"
-            >
-              {permissionStatus === 'granted' ? 'Continue' : 'Try Again'}
-
               disabled={isUpdatingProfile}
               className={`w-full py-3 px-4 rounded-xl font-semibold text-white transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg ${
                 isUpdatingProfile 
                   ? 'bg-gray-400 cursor-not-allowed' 
                   : 'bg-blue-600 hover:bg-blue-700'
               }`}
-            
+            >
               {isUpdatingProfile ? (
                 <div className="flex items-center justify-center">
                   <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -255,7 +248,6 @@ const Location = () => {
               ) : (
                 permissionStatus === 'granted' ? 'Continue' : 'Try Again'
               )}
-
             </button>
           </div>
         )}
