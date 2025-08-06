@@ -73,21 +73,20 @@ export const getRequest = async (url) => {
 
 export const postRequest = async (props) => {
   //console.log("post api props====", props);
-  
+
   try {
     const response = await axios?.post(
       `${import.meta.env.VITE_API_BASE_URL}${props?.url}`,
       props?.cred,
       {
         headers: {
-          Authorization: `Bearer ${props?.token}`,
+          Authorization: token,
         },
       }
-    );    return response;
+    );
+    return response;
   } catch (error) {
     if (error.response.status === 401) {
-
-
       deleteCookie("DoctorAddaPanel");
       window != undefined &&
         (window.location.href = `${import.meta.env.VITE_SIGNUP_URL}`);

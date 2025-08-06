@@ -1,7 +1,11 @@
+/* eslint-disable no-undef */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-unused-labels */
 import React, { useEffect, useState } from "react";
 import {
   Star,
+  StarHalf,
   MapPin,
   PhoneCall,
   BadgeCheck,
@@ -16,36 +20,87 @@ import {
   Heart,
 } from "lucide-react";
 import { useParams } from "react-router-dom";
-import { getRequest } from "../Helpers";
+import { getRequest, postRequest } from "../Helpers";
 import TimeSlotsSection from "../components/TimeSlotsSelection";
 import DiagonsticsReviewPopup from "./DiagonsticsReviewPopup";
 const DiagnosticDetailPage = () => {
   const [activeTab, setActiveTab] = useState("about");
   const [diagnostics, setDiagnostics] = useState(null);
-  const [reviews, setReviews] = useState([]);
+  const [reviews, setReviews] = useState();
   const [showReviewPopup, setShowReviewPopup] = useState(false);
   const { id } = useParams();
 
+  const [updateStatus, setUpdateStatus] = useState(false);
+
   console.log("diagnostics", diagnostics);
+
+const bookDiagonstics = async (e, date, slot) => {
+  e.preventDefault();
+  console.log("Parent function called with:", date, slot);
+  try {
+  const payload = {
+    otherPatientDetails: {
+      name: "",
+      age: "",
+      gender: "",
+      number: "",
+      weight: "",
+    },
+    slots: {
+      startTime: slot.startTime,
+      endTime: slot.endTime,
+    },
+    referalId: "686e23039c4689b2f540eda2", 
+    diagnostic: diagnostics?._id,
+    service: diagnostics?.services || [],
+    packages: diagnostics?.packages || [],
+    amount: diagnostics?.amount || 0,
+    date: date,
+    status: "Pending",
+  };
+
+  console.log(" Booking request payload:", payload);
+
+  const res = await postRequest("diagnosticBooking/add", payload);
+
+  console.log("Booking success:", res);
+
+  if (res?.success) {
+    alert("Diagnostic appointment booked successfully");
+  } else {
+    alert(res?.message || "Booking failed");
+  }
+} catch (error) {
+  console.error(" Booking failed:", error);
+  alert("Error booking appointment");
+}
+  }
+
+
+
+
+  const fetchDiagnosticsDetails = async () => {
+    try {
+      const res = await getRequest(`diagnostics/${id}`);
+      console.log("diagnostic ===", res?.data?.data);
+      setDiagnostics(res?.data?.data);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    getRequest(`diagnostics/${id}`)
-      .then((res) => {
-        console.log("diagnostic ===", res?.data?.data);
-        setDiagnostics(res?.data?.data);
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });
-  }, [id]);
+    fetchDiagnosticsDetails();
+  }, [id, updateStatus]);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [id]);
 
   const email = diagnostics?.email;
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 ">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       {/* Hero Section */}
       <div
         className="relative  text-white overflow-hidden"
@@ -277,33 +332,8 @@ const DiagnosticDetailPage = () => {
               </div>
               <div className="p-8">
                 <TimeSlotsSection
-                  // availability={
-                  //   diagnostics?.availability?.map((day) => ({
-                  //     date: day.date,
-                  //     label: day.label,
-                  //     slots: day.times.map((time) => ({ startTime: time })),
-                  //   })) || []
-                  // }
-                  availability={[
-                    {
-                      date: "2025-08-05",
-                      label: "Tue, 5 Aug",
-                      slots: [
-                        { startTime: "09:00 AM", endTime: "9:30 AM" },
-                        { startTime: "10:00 AM", endTime: "10:30 AM" },
-                        { startTime: "11:00 AM", endTime: "11:30 AM" },
-                        { startTime: "12:00 PM", endTime: "12:30 PM" },
-                      ],
-                    },
-                    {
-                      date: "2025-08-06",
-                      label: "Wed, 6 Aug",
-                      slots: [
-                        { startTime: "09:30 AM", endTime: "10:00 AM" },
-                        { startTime: "10:30 AM", endTime: "11:00 AM" },
-                      ],
-                    },
-                  ]}
+                  availability={diagnostics?.availability || []}
+                  onBook={bookDiagonstics}
                 />
               </div>
             </div>
@@ -381,12 +411,6 @@ const DiagnosticDetailPage = () => {
                       {diagnostics?.description}
                     </p>
                   </div>
-
-                  {/* <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl p-8 border border-emerald-100">
-                    <p className="text-lg leading-relaxed">
-                      {diagnostics?.description}
-                    </p>
-                  </div> */}
                 </div>
               </div>
             )}
@@ -402,14 +426,38 @@ const DiagnosticDetailPage = () => {
                     </h3>
                     <div className="flex items-center gap-2 mb-4">
                       <div className="flex text-yellow-400">
-                        {[...Array(5)].map((_, i) => (
-                          <Star key={i} className="w-6 h-6 fill-current" />
-                        ))}
+                        {[...Array(5)].map((_, i) => {
+                          const rating = diagnostics?.averageRating || 0;
+                          if (i + 1 <= rating) {
+                            // Full star
+                            return (
+                              <Star key={i} className="w-6 h-6 fill-current" />
+                            );
+                          } else if (i < rating && rating < i + 1) {
+                            // Half star
+                            return (
+                              <StarHalf
+                                key={i}
+                                className="w-6 h-6 fill-current"
+                              />
+                            );
+                          } else {
+                            // Empty star
+                            return (
+                              <Star key={i} className="w-6 h-6 text-gray-300" />
+                            );
+                          }
+                        })}
                       </div>
+
                       <span className="text-2xl font-bold text-gray-900 ml-2">
-                        4.8
+                        {diagnostics?.averageRating?.toFixed(1) || "0.0"}
                       </span>
-                      <span className="text-gray-600">(250+ reviews)</span>
+
+                      <span className="ml-2 text-gray-500 text-sm">
+                        ({diagnostics?.reviews?.length || 0} reviews)
+                      </span>
+                      {/* <span className="text-gray-600">(250+ reviews)</span> */}
                     </div>
                   </div>
 
@@ -512,10 +560,11 @@ const DiagnosticDetailPage = () => {
         </div>
       </div>
       <DiagonsticsReviewPopup
+        setUpdateStatus={setUpdateStatus}
         open={showReviewPopup}
         onClose={() => setShowReviewPopup(false)}
         id={diagnostics?._id}
-        onReviewAdded={(review) => setReviews([...reviews, review])}
+        onReviewAdded={fetchDiagnosticsDetails} // ✅ refresh after review submit
       />
     </div>
   );
