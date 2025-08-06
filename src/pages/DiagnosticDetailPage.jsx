@@ -23,61 +23,84 @@ import { useParams } from "react-router-dom";
 import { getRequest, postRequest } from "../Helpers";
 import TimeSlotsSection from "../components/TimeSlotsSelection";
 import DiagonsticsReviewPopup from "./DiagonsticsReviewPopup";
+import { useSelector } from "react-redux";
 const DiagnosticDetailPage = () => {
+  const userId = useSelector((state) => state.user.userData.data._id);
+  console.log("userId", userId);
+  
   const [activeTab, setActiveTab] = useState("about");
   const [diagnostics, setDiagnostics] = useState(null);
   const [reviews, setReviews] = useState();
   const [showReviewPopup, setShowReviewPopup] = useState(false);
   const { id } = useParams();
+  const [selectedSlot, setSelectedSlot] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
 
   const [updateStatus, setUpdateStatus] = useState(false);
 
   console.log("diagnostics", diagnostics);
 
-const bookDiagonstics = async (e, date, slot) => {
-  e.preventDefault();
-  console.log("Parent function called with:", date, slot);
-  try {
-  const payload = {
-    otherPatientDetails: {
-      name: "",
-      age: "",
-      gender: "",
-      number: "",
-      weight: "",
-    },
-    slots: {
-      startTime: slot.startTime,
-      endTime: slot.endTime,
-    },
-    referalId: "686e23039c4689b2f540eda2", 
-    diagnostic: diagnostics?._id,
-    service: diagnostics?.services || [],
-    packages: diagnostics?.packages || [],
-    amount: diagnostics?.amount || 0,
-    date: date,
-    status: "Pending",
+  const bookDiagonstics = async (e, date, slot) => {
+    e.preventDefault();
+    console.log("Parent function called with:", date, slot);
+    try {
+      const payload = {
+        // otherPatientDetails: {
+        //   name: "",
+        //   age: "",
+        //   gender: "",
+        //   number: "",
+        //   weight: "",
+        // },
+        slots: slot,
+        //  referalId: "",
+        //  referBy: "",
+         patient: userId,
+        //  report:
+        //  "https://res.cloudinary.com/dxh8fqqvi/image/upload/v1752057537/file_lrnb0w.pdf",
+         date: date,
+        diagnostic:diagnostics?._id ,
+        service:
+          diagnostics?.services?.map((s) => ({
+            _id: s._id,
+            name: s.name,
+            price: s.price,
+          })) || [],
+        packages:
+          diagnostics?.packages?.map((p) => ({
+            _id: p._id,
+            name: p.name,
+            price: p.price,
+            details: p.details,
+          })) || [],
+        amount:
+          (diagnostics?.services?.reduce(
+            (sum, s) => sum + Number(s.price),
+            0
+          ) || 0) +
+          (diagnostics?.packages?.reduce(
+            (sum, p) => sum + Number(p.price),
+            0
+          ) || 0),
+      };
+
+      console.log(" Booking request payload:", payload);
+
+      const res = await postRequest({ url: "diagnosticBooking/add" }, payload);
+
+      console.log("Booking success:", res);
+    console.log(" Booking request payload:=======", payload);
+
+      if (res?.success) {
+        alert("Diagnostic appointment booked successfully");
+      } else {
+        alert(res?.message || "Booking failed");
+      }
+    } catch (error) {
+      console.error(" Booking failed:", error);
+      alert("Error booking appointment");
+    }
   };
-
-  console.log(" Booking request payload:", payload);
-
-  const res = await postRequest("diagnosticBooking/add", payload);
-
-  console.log("Booking success:", res);
-
-  if (res?.success) {
-    alert("Diagnostic appointment booked successfully");
-  } else {
-    alert(res?.message || "Booking failed");
-  }
-} catch (error) {
-  console.error(" Booking failed:", error);
-  alert("Error booking appointment");
-}
-  }
-
-
-
 
   const fetchDiagnosticsDetails = async () => {
     try {
