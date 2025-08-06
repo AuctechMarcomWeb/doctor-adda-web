@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { postRequest } from "../Helpers/index";
 import { FaStar } from "react-icons/fa"; // Make sure to install react-icons if not already
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const ReviewPopup = ({ open, onClose, pharmacyId, onReviewAdded }) => {
   const [rating, setRating] = useState(1);
@@ -10,10 +13,23 @@ const ReviewPopup = ({ open, onClose, pharmacyId, onReviewAdded }) => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
+  console.log("pharmacyId in review popup",pharmacyId);
+
+  const navigate = useNavigate();
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+
   if (!open) return null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!isLoggedIn) {
+      toast.error("You must be logged in to submit a review.");
+      setError("You must be logged in to submit a review.");
+      setTimeout(() => {
+        navigate("/login");
+      }, 1000);
+      return;
+    }
     setLoading(true);
     setError("");
     setSuccess(false);
@@ -23,6 +39,7 @@ const ReviewPopup = ({ open, onClose, pharmacyId, onReviewAdded }) => {
         cred: { rating, comment },
       });
       const data = res.data;
+      console.log("data in review popup",data);
       if (data.success) {
         setSuccess(true);
         setComment("");
