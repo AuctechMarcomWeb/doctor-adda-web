@@ -25,6 +25,7 @@ import DiagnosticDetailPage from "./pages/DiagnosticDetailPage";
 import HospitalDetailPage from "./pages/HospitalDetailPage";
 import DoctorList from "./pages/DoctorList";
 import DoctorDetailPage from "./pages/DoctorDetailPage";
+import AppointmentFlow from "./components/AppointmentFlow";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -64,6 +65,7 @@ function App() {
 
       <Routes>
         <Route path="/location" element={<Location />} />
+        <Route path="/flow" element={<AppointmentFlow />} />
 
         {/* All routes wrapped with Navbar + Footer */}
         <Route
@@ -107,6 +109,7 @@ function App() {
                   path="/hospitaldetail/:id"
                   element={<HospitalDetailPage />}
                 />
+                 
               </Routes>
               <Footer />
             </>

@@ -28,6 +28,9 @@ import {
 import { useLocation, useParams } from "react-router-dom";
 import { getRequest } from "../Helpers";
 import { AppointmentDateFormat } from "../Utils";
+import AppointmentFlow from "../components/AppointmentFlow";
+import DiagonsticsReviewPopup from "./DiagonsticsReviewPopup";
+
 
 const GradientCard = ({
   children,
@@ -124,27 +127,55 @@ const ActionButton = ({
 };
 
 const DoctorDetailPage = () => {
+ 
+   const [showReviewPopup, setShowReviewPopup] = useState(false);
+   const [showAppointmentPopup, setShowAppointmentPopup] = useState(false);  
   const [doctor, setDoctor] = useState(null);
   const [clinicData, setClinicData] = useState(null);
   const [selectedClinicIndex, setSelectedClinicIndex] = useState(0);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedDateData, setSelectedDateData] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
-  const [showReviewForm, setShowReviewForm] = useState(false);
+
+  const phoneNumber = "102";
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const [showFallback, setShowFallback] = useState(false);
+  
+    const tryTelLink = () => {
+      const telUrl = `tel:${phoneNumber}`;
+      const timeout = setTimeout(() => {
+        // If nothing happened → show fallback popup
+        setShowFallback(true);
+      }, 1500);
+  
+      window.location.href = telUrl;
+  
+      // If the page is hidden (meaning app opened), cancel timeout
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) clearTimeout(timeout);
+      });
+    };
+  
+    const handleClick = () => {
+      if (isMobile) {
+        window.location.href = `tel:${phoneNumber}`;
+      } else {
+        tryTelLink();
+      }
+    };
+
   const [reviewData, setReviewData] = useState({
     name: "",
     comment: "",
     rating: 5,
   });
 
-    const location = useLocation(); // Gives access to query string
+  const location = useLocation();
 
-  // Parse query parameters
   const queryParams = new URLSearchParams(location.search);
-  const modeFilter = queryParams.get('modeFilter');
+  const modeFilter = queryParams.get("modeFilter");
 
-  console.log("modeFilter",modeFilter);
-  
+  console.log("modeFilter", modeFilter);
 
   console.log("selectedDate", selectedDate);
   console.log("selectedDateData", selectedDateData);
@@ -195,7 +226,7 @@ const DoctorDetailPage = () => {
       clinicName: clinicData?.clinicName,
       date: selectedDate,
       doctor: id,
-      fee:clinicData?.consultationFee,
+      fee: clinicData?.consultationFee,
       isSelf: false,
       otherPatientDetails: {
         name: "",
@@ -205,7 +236,7 @@ const DoctorDetailPage = () => {
       },
       patient: "685cf37fc439c4973e98f8d6",
       serviceType: modeFilter,
-      slots: { startTime: "03:15 PM", endTime: "03:30 PM" },
+      slots: selectedSlot,
     };
 
     console.log("doctor", doctor);
@@ -218,7 +249,7 @@ const DoctorDetailPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       {/* Hero Section */}
       <section className="py-10 px-4 pt-32 sm:pt-36">
-        <div className="w-[65%] mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        <div className="w-[70%] mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           {/* Doctor Image & Highlights */}
           <div className="lg:col-span-2">
             <div className="rounded-3xl overflow-hidden shadow-2xl border border-gray-200">
@@ -272,7 +303,7 @@ const DoctorDetailPage = () => {
             </div>
 
             <div className="space-y-3 pt-2">
-              <ActionButton
+              <ActionButton  onClick={handleClick}
                 className="w-full "
                 style={{
                   background:
@@ -282,17 +313,24 @@ const DoctorDetailPage = () => {
                 <Phone className="w-4 h-4" />
                 Call Now
               </ActionButton>
-              <ActionButton variant="secondary" className="w-full">
+              <a href={`https://maps.google.com/?q=${
+                doctor?.doctor?.coordinates[1]
+              },${doctor?.location?.coordinates[0]} (${encodeURIComponent(
+                doctor?.address || ""
+              )})`}
+              target="_blank">
+                <ActionButton variant="secondary" className="w-full">
                 <MapPin className="w-4 h-4" />
                 Get Location
               </ActionButton>
+              </a>
             </div>
           </div>
         </div>
       </section>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 py-10 sm:py-16">
+      <main className=" mx-auto px-4 py-10 sm:py-16 w-[70%]">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           {/* Left Column */}
           <div className="lg:col-span-2 space-y-16">
@@ -388,7 +426,8 @@ const DoctorDetailPage = () => {
 
                   <div className="space-y-3 pt-4">
                     <ActionButton
-                      onClick={bookAppointment}
+                      // onClick={bookAppointment}
+                       onClick={() => setShowAppointmentPopup(true)}
                       className="w-full "
                       style={{
                         background:
@@ -414,13 +453,16 @@ const DoctorDetailPage = () => {
                       subtitle="What patients say"
                       gradient="from-purple-500 to-pink-500"
                     />
-                    <ActionButton
-                      variant="tertiary"
-                      onClick={() => setShowReviewForm(true)}
-                    >
-                      <PlusCircle className="w-5 h-5" />
-                      Write Review
-                    </ActionButton>
+                    {/* Right side: Share button */}
+                    <div className="text-right">
+                      <button
+                        onClick={() => setShowReviewPopup(true)}
+                        className="group bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-8 py-4 rounded-full hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 font-semibold flex items-center gap-3 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                      >
+                        <PlusCircle className="w-5 h-5 group-hover:animate-spin" />
+                        Share Your Experience
+                      </button>
+                    </div>
                   </div>
 
                   <div className="grid gap-6 max-h-[500px] overflow-y-auto pr-2">
@@ -463,54 +505,7 @@ const DoctorDetailPage = () => {
                     ))}
                   </div>
 
-                  {/* Review Form */}
-                  {showReviewForm && (
-                    <div className="mt-8 p-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl border border-purple-200">
-                      <h3 className="font-bold mb-4 text-xl">
-                        Share Your Experience
-                      </h3>
-                      <div className="space-y-4">
-                        <input
-                          type="text"
-                          placeholder="Your Name"
-                          value={reviewData.name}
-                          onChange={(e) =>
-                            setReviewData({
-                              ...reviewData,
-                              name: e.target.value,
-                            })
-                          }
-                          className="w-full px-4 py-3 border border-gray-300 rounded-xl"
-                        />
-                        <textarea
-                          placeholder="Your Review"
-                          rows="4"
-                          value={reviewData.comment}
-                          onChange={(e) =>
-                            setReviewData({
-                              ...reviewData,
-                              comment: e.target.value,
-                            })
-                          }
-                          className="w-full px-4 py-3 border border-gray-300 rounded-xl"
-                        />
-                        <div className="flex gap-3">
-                          <ActionButton
-                            variant="tertiary"
-                            onClick={handleReviewSubmit}
-                          >
-                            Submit
-                          </ActionButton>
-                          <button
-                            onClick={() => setShowReviewForm(false)}
-                            className="bg-gray-300 text-gray-700 px-6 py-3 rounded-xl font-bold hover:bg-gray-400"
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
+                  
                 </GradientCard>
               </div>
             </div>
@@ -556,7 +551,7 @@ const DoctorDetailPage = () => {
               </div>
               <div className="space-y-4">
                 <div className="p-4 bg-gradient-to-r from-gray-50 to-indigo-50 rounded-xl">
-                  {/* <h4 className="font-bold mb-1">{selectedClinic.clinicName}</h4> */}
+              
                   <p className="text-sm text-gray-600 flex items-center gap-2">
                     <MapPin className="w-4 h-4" />
                     {selectedClinic.clinicAddress}
@@ -578,6 +573,18 @@ const DoctorDetailPage = () => {
           </aside>
         </div>
       </main>
+      <DiagonsticsReviewPopup
+        open={showReviewPopup}
+        onClose={() => setShowReviewPopup(false)}
+        id={doctor?._id}
+        onReviewAdded={(review) => setReviews([...reviews, review])}
+      />
+      <AppointmentFlow
+        open={showAppointmentPopup}
+        onClose={() => setShowAppointmentPopup(false)}
+        id={doctor?._id}
+        
+      />
     </div>
   );
 };
