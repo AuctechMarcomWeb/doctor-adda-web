@@ -21,7 +21,6 @@ const ActionButton = ({
       "bg-gradient-to-r from-red-600 to-red-700 text-white hover:shadow-xl transform hover:scale-105",
   };
 
- 
   return (
     <button
       className={`py-3 px-6 rounded-xl font-bold transition-all duration-500 flex items-center justify-center gap-2 ${variants[variant]} ${className}`}
@@ -32,13 +31,14 @@ const ActionButton = ({
   );
 };
 
-const TimeSlotsSection = ({ availability = [] , onBook}) => {
+const TimeSlotsSection = ({ availability = [], onBook }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedDateData, setSelectedDateData] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
+  console.log("selectedSlot", selectedSlot);
 
- const bookAppointment =(e) =>{
-  e.preventDefault();
+  const bookAppointment = (e) => {
+    e.preventDefault();
     if (!selectedDate || !selectedSlot) {
       alert("Please select a date and time slot before booking.");
       return;
@@ -46,9 +46,7 @@ const TimeSlotsSection = ({ availability = [] , onBook}) => {
     if (onBook) {
       onBook(e, selectedDate, selectedSlot); // Pass to parent
     }
- }
-
-
+  };
 
   // Helper: Compare dates in YYYY-MM-DD format
   const areDatesEqual = (date1, date2) => {
@@ -103,9 +101,15 @@ const TimeSlotsSection = ({ availability = [] , onBook}) => {
               .map((slot, i) => (
                 <button
                   key={i}
-                  onClick={() => setSelectedSlot(slot.startTime)}
+                  onClick={() =>
+                    setSelectedSlot({
+                      startTime: slot.startTime,
+                      endTime: slot.endTime,
+                    })
+                  }
                   className={`px-2 py-2 text-sm rounded-lg font-medium ${
-                    selectedSlot === slot.startTime
+                    selectedSlot?.startTime === slot.startTime &&
+                    selectedSlot?.endTime === slot.endTime
                       ? "bg-blue-600 text-white"
                       : "bg-gray-100 text-gray-700 hover:bg-blue-50"
                   }`}

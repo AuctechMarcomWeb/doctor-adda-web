@@ -61,7 +61,6 @@ const Navbar = () => {
     dispatch(logout());
     
     // Clear cookies
-    deleteCookie("DoctorAddaPanel");
     clearAuthCookies();
     
     // Close dropdown

@@ -1,6 +1,7 @@
 import React, {useEffect, useState } from "react";
 
 import HospitalCard from "../components/HospitalCard"
+import { getRequest } from "../Helpers"
 
 
 
@@ -11,42 +12,84 @@ const HospitalPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
 
-  const hospitalData = [
-    {
-      name: "Acadis Hospital",
-      type: "ICU ",
-      services: "ICU",
-      phone: 6765678587,
-      location: "Hazratganj, Lucknow, UP",
-      rating: 4.3,
-      image: "https://i.pinimg.com/736x/64/14/2c/64142c98e03babcd3a630be061c6cf97.jpg"
-    },
-    {
-      name: "   Sunrise Hospital",
-      type: "Emergency",
-      services: "Gastroenterologist",
-      phone: 6765678587,
-      location: "1090 Chouraha, Gomti Nagar",
-      rating: 4.0,
-      image: "https://i.pinimg.com/736x/04/3e/5a/043e5ab7f8f04c4fad70c368a5be8094.jpg"
-    },
-    {
-      name: "TrueLife",
-      type: "24/7",
-      services: "Gynecologist",
-      phone: 6765678587,
-      location: "RWJF+P24, Lucknow",
-      rating: 3.9,
-      image: "https://i.pinimg.com/736x/78/4e/e3/784ee381626b6db85ce9d959ba3cba28.jpg"
-    },
-  ];
+  const [hospitals, setHospitals] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const filteredData = hospitalData.filter(hospital => {
+
+  console.log("Hospitals: state", hospitals);
+
+  // Fetch hospitals data from API
+  useEffect(() => {
+    const fetchHospitals = async () => {
+      try {
+        setLoading(true);
+        const response = await getRequest(`hospital`)
+
+        console.log("Hospitals:", response);
+
+        // if (!response.ok) {
+        //   throw new Error('Failed to fetch hospitals');
+        // }
+
+        const data = response?.data?.data?.hospitals
+
+        console.log("Hospitals: data", data);
+        
+        if (data) {
+          setHospitals(data);
+        } else {
+          throw new Error('Invalid data format');
+        }
+      } catch (err) {
+        console.error('Error fetching hospitals:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHospitals();
+  }, []);
+
+  // const hospitalData = [
+  //   {
+  //     name: "Acadis Hospital",
+  //     type: "ICU ",
+  //     services: "ICU",
+  //     phone: 6765678587,
+  //     location: "Hazratganj, Lucknow, UP",
+  //     rating: 4.3,
+  //     image: "https://i.pinimg.com/736x/64/14/2c/64142c98e03babcd3a630be061c6cf97.jpg"
+  //   },
+  //   {
+  //     name: "   Sunrise Hospital",
+  //     type: "Emergency",
+  //     services: "Gastroenterologist",
+  //     phone: 6765678587,
+  //     location: "1090 Chouraha, Gomti Nagar",
+  //     rating: 4.0,
+  //     image: "https://i.pinimg.com/736x/04/3e/5a/043e5ab7f8f04c4fad70c368a5be8094.jpg"
+  //   },
+  //   {
+  //     name: "TrueLife",
+  //     type: "24/7",
+  //     services: "Gynecologist",
+  //     phone: 6765678587,
+  //     location: "RWJF+P24, Lucknow",
+  //     rating: 3.9,
+  //     image: "https://i.pinimg.com/736x/78/4e/e3/784ee381626b6db85ce9d959ba3cba28.jpg"
+  //   },
+  // ];
+
+  const filteredData = hospitals.filter(hospital => {
     const matchesSearch = hospital.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          hospital.location.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filterType === "all" || hospital.type.toLowerCase().includes(filterType.toLowerCase());
     return matchesSearch && matchesFilter;
   });
+
+  console.log("Filtered Data:", filteredData);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-red-50">
@@ -292,7 +335,7 @@ const HospitalPage = () => {
           {filteredData.length > 0 ? (
             filteredData.map((data, index) => (
               <div key={index} className="animate-fadeIn" style={{ animationDelay: `${index * 0.1}s` }}>
-                <HospitalCard {...data} />
+                    <HospitalCard data={data} />
               </div>
             ))
           ) : (
