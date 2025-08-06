@@ -317,7 +317,7 @@ const DoctorDetailPage = () => {
 
             <div className="space-y-3 pt-2">
               <ActionButton  onClick={handleClick}
-                className="w-full "
+                className="w-full cursor-pointer "
                 style={{
                   background:
                     "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
@@ -326,13 +326,13 @@ const DoctorDetailPage = () => {
                 <Phone className="w-4 h-4" />
                 Call Now
               </ActionButton>
-              <a href={`https://maps.google.com/?q=${
+              <  a href={`https://maps.google.com/?q=${
                 doctor?.doctor?.coordinates[1]
               },${doctor?.location?.coordinates[0]} (${encodeURIComponent(
                 doctor?.address || ""
               )})`}
               target="_blank">
-                <ActionButton variant="secondary" className="w-full">
+                <ActionButton variant="secondary" className="w-full cursor-pointer">
                 <MapPin className="w-4 h-4" />
                 Get Location
               </ActionButton>
@@ -365,7 +365,7 @@ const DoctorDetailPage = () => {
                           
                           setSelectedSlot(clinic?.availability[0]?.slots[0])
                         }}
-                        className={`px-4 py-2 rounded-xl font-bold text-sm transition-all duration-300 ${
+                        className={`px-4 py-2 rounded-xl font-bold text-sm transition-all duration-300 cursor-pointer ${
                           index === selectedClinicIndex
                             ? "bg-blue-600 text-white"
                             : "bg-gray-100 text-gray-700 hover:bg-blue-50"
@@ -387,9 +387,9 @@ const DoctorDetailPage = () => {
                     <p className="text">Consultation Fee</p>
                   </div>
                   {/* Date Selector */}
-                  <div className="mt-6">
+                  <div className="mt-6 ">
                     <h4 className="text-sm font-semibold mb-2">Select Date</h4>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-2 " >
                       {clinicData?.availability?.map((d, i) => {
                         return (
                           <button
@@ -404,7 +404,7 @@ const DoctorDetailPage = () => {
                               setSelectedSlot(d?.slots[0])
                               setSelectedDateData(d);
                             }}
-                            className={`px-3 py-2 text-sm rounded-lg font-medium ${
+                            className={`px-3 py-2 text-sm rounded-lg font-medium cursor-pointer ${
                               areDatesEqual(selectedDate, d?.date)
                                 ? "bg-blue-600 text-white"
                                 : "bg-gray-100 text-gray-700 hover:bg-blue-50"
@@ -428,7 +428,7 @@ const DoctorDetailPage = () => {
                             <button
                               key={i}
                               onClick={() => setSelectedSlot(slot)}
-                              className={`px-2 py-2 text-sm rounded-lg font-medium ${
+                              className={`px-2 py-2 text-sm rounded-lg font-medium cursor-pointer ${
                                 selectedSlot === slot
                                   ? "bg-blue-600 text-white"
                                   : "bg-gray-100 text-gray-700 hover:bg-blue-50"
@@ -449,7 +449,7 @@ const DoctorDetailPage = () => {
                     <ActionButton
                       onClick={bookAppointment}
                  
-                      className="w-full "
+                      className="w-full cursor-pointer "
                       style={{
                         background:
                           "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
@@ -478,7 +478,7 @@ const DoctorDetailPage = () => {
                     <div className="text-right">
                       <button
                         onClick={() => setShowReviewPopup(true)}
-                        className="group bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-8 py-4 rounded-full hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 font-semibold flex items-center gap-3 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                        className="cursor-pointer group bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-8 py-4 rounded-full hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 font-semibold flex items-center gap-3 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                       >
                         <PlusCircle className="w-5 h-5 group-hover:animate-spin" />
                         Share Your Experience
