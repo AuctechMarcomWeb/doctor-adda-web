@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
-const ReviewPopup = ({ open, onClose, pharmacyId, onReviewAdded }) => {
+const ReviewPopup = ({ open, onClose, pharmacyId, onReviewAdded, setUpdateStatus }) => {
   const [rating, setRating] = useState(1);
   const [hoverRating, setHoverRating] = useState(null);
   const [comment, setComment] = useState("");
@@ -40,7 +40,10 @@ const ReviewPopup = ({ open, onClose, pharmacyId, onReviewAdded }) => {
       });
       const data = res.data;
       console.log("data in review popup",data);
+      
       if (data.success) {
+                setUpdateStatus((prev) => !prev);
+
         setSuccess(true);
         setComment("");
         setRating(5);

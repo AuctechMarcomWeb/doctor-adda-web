@@ -1,3 +1,4 @@
+/* eslint-disable no-constant-binary-expression */
 /* eslint-disable no-undef */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
@@ -23,11 +24,16 @@ import { useParams } from "react-router-dom";
 import { getRequest, postRequest } from "../Helpers";
 import TimeSlotsSection from "../components/TimeSlotsSelection";
 import DiagonsticsReviewPopup from "./DiagonsticsReviewPopup";
+import DiagonsticsAppointmentFlow from "../components/DiagonsticsAppointmentFlow";
 import { useSelector } from "react-redux";
+import { toast } from "react-hot-toast";
 const DiagnosticDetailPage = () => {
   const userId = useSelector((state) => state.user.userData.data._id);
+  const userProfileData = useSelector((state) => state.user.userProfileData);
+  console.log("userProfileData", userProfileData);
+
   console.log("userId", userId);
-  
+
   const [activeTab, setActiveTab] = useState("about");
   const [diagnostics, setDiagnostics] = useState(null);
   const [reviews, setReviews] = useState();
@@ -35,74 +41,13 @@ const DiagnosticDetailPage = () => {
   const { id } = useParams();
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
-
   const [updateStatus, setUpdateStatus] = useState(false);
+  const [selectedServices, setSelectedServices] = useState([]);
+  const [selectedPackages, setSelectedPackages] = useState([]);
+  const [showAppointmentPopup, setShowAppointmentPopup] = useState(false);
+  const [appointmentData, setAppointmentData] = useState(null);
 
-  console.log("diagnostics", diagnostics);
-
-  const bookDiagonstics = async (e, date, slot) => {
-    e.preventDefault();
-    console.log("Parent function called with:", date, slot);
-    try {
-      const payload = {
-        // otherPatientDetails: {
-        //   name: "",
-        //   age: "",
-        //   gender: "",
-        //   number: "",
-        //   weight: "",
-        // },
-        slots: slot,
-        //  referalId: "",
-        //  referBy: "",
-         patient: userId,
-        //  report:
-        //  "https://res.cloudinary.com/dxh8fqqvi/image/upload/v1752057537/file_lrnb0w.pdf",
-         date: date,
-        diagnostic:diagnostics?._id ,
-        service:
-          diagnostics?.services?.map((s) => ({
-            _id: s._id,
-            name: s.name,
-            price: s.price,
-          })) || [],
-        packages:
-          diagnostics?.packages?.map((p) => ({
-            _id: p._id,
-            name: p.name,
-            price: p.price,
-            details: p.details,
-          })) || [],
-        amount:
-          (diagnostics?.services?.reduce(
-            (sum, s) => sum + Number(s.price),
-            0
-          ) || 0) +
-          (diagnostics?.packages?.reduce(
-            (sum, p) => sum + Number(p.price),
-            0
-          ) || 0),
-      };
-
-      console.log(" Booking request payload:", payload);
-
-      const res = await postRequest({ url: "diagnosticBooking/add" }, payload);
-
-      console.log("Booking success:", res);
-    console.log(" Booking request payload:=======", payload);
-
-      if (res?.success) {
-        alert("Diagnostic appointment booked successfully");
-      } else {
-        alert(res?.message || "Booking failed");
-      }
-    } catch (error) {
-      console.error(" Booking failed:", error);
-      alert("Error booking appointment");
-    }
-  };
-
-  const fetchDiagnosticsDetails = async () => {
+   const fetchDiagnosticsDetails = async () => {
     try {
       const res = await getRequest(`diagnostics/${id}`);
       console.log("diagnostic ===", res?.data?.data);
@@ -117,6 +62,112 @@ const DiagnosticDetailPage = () => {
     fetchDiagnosticsDetails();
   }, [id, updateStatus]);
 
+  const handleServiceCheckbox = (id) => {
+    setSelectedServices((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  };
+
+  const handlePackageCheckbox = (id) => {
+    setSelectedPackages((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  };
+
+  console.log("diagnostics", diagnostics);
+
+  const bookDiagonstics = async (e, date, slot) => {
+    e.preventDefault();
+    console.log("Parent function called with:", date, slot);
+
+    // Filter selected services and packages
+    const selectedServiceDetails = diagnostics?.services?.filter((s) =>
+      selectedServices.includes(s._id)
+    );
+    const selectedPackageDetails = diagnostics?.packages?.filter((p) =>
+      selectedPackages.includes(p._id)
+    );
+
+    // // Block submission if nothing selected
+    if (
+      (!selectedServiceDetails || selectedServiceDetails.length === 0) &&
+      (!selectedPackageDetails || selectedPackageDetails.length === 0)
+    ) {
+      toast.error("Please select at least one service or package.");
+      return;
+    }
+
+    // Calculate total amount
+    const totalAmount =
+      (selectedServiceDetails?.reduce((sum, s) => sum + Number(s.price), 0) ||
+        0) +
+      (selectedPackageDetails?.reduce((sum, p) => sum + Number(p.price), 0) ||
+        0);
+
+    // Build payload
+    const payload = {
+      // referalId: "" ,
+      // referBy: "",
+      // report:  "",
+      patient: userId,
+      diagnostic: diagnostics?._id,
+
+      date: date,
+      slots: { startTime: slot?.startTime, endTime: slot?.endTime },
+      amount: totalAmount,
+      otherPatientDetails: {
+        name: "",
+        age: "",
+        gender: "",
+        number: "",
+        weight: "",
+      },
+      service:
+        selectedServiceDetails?.map((s) => ({
+          _id: s._id,
+          name: s.name,
+          price: s.price,
+        })) || [],
+      packages:
+        selectedPackageDetails?.map((p) => ({
+          _id: p._id,
+          name: p.name,
+          price: p.price,
+          details: p.details,
+        })) || [],
+    };
+
+    try {
+      console.log(" Booking Appointment:", payload);
+      const res = await postRequest({
+        url: `diagnosticBooking/add`,
+        cred: payload,
+      });
+      console.log(" Booking success:", res);
+      setAppointmentData(res?.data?.data);
+      setShowAppointmentPopup(true);
+
+      console.log(" Resetting selected services/packages");
+      setSelectedServices?.([]);
+      setSelectedPackages?.([]);
+    } catch (error) {
+      console.error(" Booking failed:", error);
+      alert(
+        error?.response?.data?.message ||
+          "Internal Server Error. Please try again."
+      );
+    }
+
+    // Log key debug values
+    console.log("Selected Services: ", selectedServices);
+    console.log("Selected Packages: ", selectedPackages);
+    console.log("Date: ", date);
+    console.log("Slot: ", slot);
+    console.log("User ID: ", userId);
+    console.log("Amount: ", totalAmount);
+  };
+
+ 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [id]);
@@ -258,6 +309,8 @@ const DiagnosticDetailPage = () => {
                     >
                       <input
                         type="checkbox"
+                        checked={selectedServices.includes(service._id)}
+                        onChange={() => handleServiceCheckbox(service._id)}
                         className="w-5 h-5 rounded border-2 border-blue-300 text-blue-600 focus:ring-blue-500 focus:ring-2"
                       />
                       <div className="flex-1">
@@ -309,6 +362,8 @@ const DiagnosticDetailPage = () => {
                     >
                       <input
                         type="checkbox"
+                        checked={selectedPackages.includes(pkg._id)}
+                        onChange={() => handlePackageCheckbox(pkg._id)}
                         className="w-5 h-5 rounded border-2 border-emerald-300 text-emerald-600 focus:ring-emerald-500 focus:ring-2"
                       />
                       <div className="flex-1">
@@ -574,10 +629,6 @@ const DiagnosticDetailPage = () => {
                 <PhoneCall className="w-6 h-6 group-hover:animate-pulse" />
                 Call Now
               </a>
-
-              <button className="group bg-gradient-to-r from-green-500 to-emerald-600 text-white px-10 py-4 rounded-full hover:from-green-600 hover:to-emerald-700 transition-all duration-300 font-bold text-lg shadow-xl hover:shadow-2xl transform hover:-translate-y-2">
-                Book Appointment
-              </button>
             </div>
           </div>
         </div>
@@ -587,7 +638,13 @@ const DiagnosticDetailPage = () => {
         open={showReviewPopup}
         onClose={() => setShowReviewPopup(false)}
         id={diagnostics?._id}
-        onReviewAdded={fetchDiagnosticsDetails} // ✅ refresh after review submit
+        onReviewAdded={fetchDiagnosticsDetails} 
+      />
+      <DiagonsticsAppointmentFlow
+        open={showAppointmentPopup}
+        onClose={() => setShowAppointmentPopup(false)}
+        id={diagnostics?._id}
+        appointmentData={appointmentData}
       />
     </div>
   );
