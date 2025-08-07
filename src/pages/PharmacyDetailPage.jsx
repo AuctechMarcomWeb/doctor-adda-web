@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, {useEffect, useState } from "react";
 import {
   MapPin,
@@ -38,7 +39,7 @@ const PharmacyDetailPage = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [reviews, setReviews] = useState([]);
   const [showReviewPopup, setShowReviewPopup] = useState(false);
-
+const[updateStatus,setUpdateStatus] =useState(false)
   const { id } = useParams();
 
   console.log("pharmacyId in detail page",id);
@@ -69,7 +70,7 @@ const PharmacyDetailPage = () => {
       }
     };
     fetchPharmacy();
-  }, []);
+  }, [updateStatus]);
 
   const handleFileChange = (e) => {
     setPrescription(e.target.files[0]);
@@ -441,6 +442,7 @@ const PharmacyDetailPage = () => {
         </div>
       </div>
       <ReviewPopup
+              setUpdateStatus={setUpdateStatus}
         open={showReviewPopup}
         onClose={() => setShowReviewPopup(false)}
         pharmacyId={id}

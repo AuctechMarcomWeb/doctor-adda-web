@@ -44,7 +44,7 @@ const TimeSlotsSection = ({ availability = [], onBook }) => {
       return;
     }
     if (onBook) {
-      onBook(e, selectedDate, selectedSlot); // Pass to parent
+      onBook(e, selectedDate, selectedSlot); 
     }
   };
 
