@@ -22,6 +22,15 @@ const AppointmentFlow = ({ open, onClose, id }) => {
   const [selectedPayment, setSelectedPayment] = useState(null);
   const selectedClinic = clinicData || {};
 
+  const [showPatientList, setShowPatientList] = useState(false);
+  const [showAddPatientForm, setShowAddPatientForm] = useState(false);
+
+  // Dummy patient data
+  const [otherPatients, setOtherPatients] = useState([
+    { name: "Anjali Sharma", gender: "Female", age: 28 },
+    { name: "Ravi Kumar", gender: "Male", age: 35 },
+  ]);
+
   // Get user profile data from Redux
   const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
 
@@ -72,12 +81,93 @@ const AppointmentFlow = ({ open, onClose, id }) => {
                         ? "bg-blue-100 border-blue-600 text-blue-800"
                         : "border-gray-300 hover:bg-blue-50 hover:border-blue-600 text-gray-700"
                     }`}
-                    onClick={() => setSelectedFor(option)}
+                    onClick={() => {
+                      setSelectedFor(option);
+                      setShowPatientList(false);
+                      setShowAddPatientForm(false);
+                    }}
                   >
                     {option === "self" ? "Self" : "Other"}
                   </button>
                 ))}
               </div>
+
+              {selectedFor === "other" && (
+                <div className="mt-4">
+                  <h4 className="text-sm font-medium text-gray-700 mb-2">
+                    Other Patients:
+                  </h4>
+                  {otherPatients.length > 0 ? (
+                    <ul className="space-y-2 text-sm text-gray-700">
+                      {otherPatients.map((p, i) => (
+                        <li
+                          key={i}
+                          className="border border-gray-200 rounded-lg p-2 shadow-sm"
+                        >
+                          {p.name} – {p.gender}, {p.age} yrs
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-sm text-gray-500">No data available</p>
+                  )}
+                </div>
+              )}
+
+              {showPatientList && (
+                <div className="mt-4 border-t pt-4">
+                  <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                    Manage Patients
+                  </h4>
+                  <ul className="space-y-2 text-sm text-gray-700">
+                    {otherPatients.map((p, i) => (
+                      <li key={i} className="border rounded p-2">
+                        {p.name} - {p.gender}, {p.age}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <button
+                    onClick={() => setShowAddPatientForm(true)}
+                    className="mt-4 text-blue-600 hover:underline text-sm font-medium"
+                  >
+                    + Add New Patient
+                  </button>
+                </div>
+              )}
+
+              {showAddPatientForm && (
+                <div className="mt-4 border-t pt-4 space-y-2">
+                  <h4 className="text-sm font-semibold text-gray-700">
+                    Add Patient
+                  </h4>
+                  {/* Simplified form */}
+                  <input
+                    type="text"
+                    placeholder="Name"
+                    className="w-full px-3 py-2 border rounded"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Gender"
+                    className="w-full px-3 py-2 border rounded"
+                  />
+                  <input
+                    type="number"
+                    placeholder="Age"
+                    className="w-full px-3 py-2 border rounded"
+                  />
+                  <button
+                    onClick={() => {
+                      // Add logic to save new patient
+                      setShowAddPatientForm(false);
+                    }}
+                    className="w-full bg-blue-600 text-white py-2 rounded font-medium"
+                  >
+                    Save Patient
+                  </button>
+                </div>
+              )}
 
               <div className="mt-8 flex flex-col sm:flex-row justify-between gap-4">
                 <button
@@ -86,16 +176,25 @@ const AppointmentFlow = ({ open, onClose, id }) => {
                 >
                   Cancel
                 </button>
+
                 <button
-                  onClick={() => setStep(2)}
+                  onClick={() => {
+                    if (selectedFor === "self") {
+                      setStep(2);
+                    } else {
+                      setShowPatientList(true);
+                    }
+                  }}
                   disabled={!selectedFor}
                   className={`w-full px-4 py-3 font-medium rounded-lg transition-all duration-200 ${
                     selectedFor
-                      ? "bg-blue-600 hover:bg-blue-700 text-white"
+                      ? "bg-[#006fab] hover:bg-blue-700 text-white"
                       : "bg-gray-300 text-gray-500 cursor-not-allowed"
                   }`}
                 >
-                  Continue
+                  {selectedFor === "self"
+                    ? "Continue as Self"
+                    : "Manage Patients"}
                 </button>
               </div>
             </>
@@ -129,17 +228,19 @@ const AppointmentFlow = ({ open, onClose, id }) => {
 
               <div className="mt-8 flex flex-col sm:flex-row justify-between gap-4">
                 <button
-                  onClick={handleClose}
-                  className="w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-all duration-200"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => setStep(3)}
+                  onClick={() => {
+                    if (selectedPayment === "clinic") {
+                      setStep(3);
+                    } else {
+                      console.log("Pay Online");
+                      alert("Pay Online");
+                      // setStep(3); // Can later redirect online payment step here if needed
+                    }
+                  }}
                   disabled={!selectedPayment}
                   className={`w-full px-4 py-3 font-medium rounded-lg transition-all duration-200 ${
                     selectedPayment
-                      ? "bg-blue-600 hover:bg-blue-700 text-white"
+                      ? "bg-[#006fab] hover:bg-blue-700 text-white"
                       : "bg-gray-300 text-gray-500 cursor-not-allowed"
                   }`}
                 >
@@ -292,7 +393,7 @@ const AppointmentFlow = ({ open, onClose, id }) => {
               <div className="mt-8">
                 <button
                   onClick={handleClose}
-                  className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold text-base rounded-full transition-all duration-200"
+                  className="w-full px-6 py-3 bg-[#006fab] hover:from-blue-700 hover:to-blue-800 text-white font-semibold text-base rounded-full transition-all duration-200"
                 >
                   Go to Appointments →
                 </button>
