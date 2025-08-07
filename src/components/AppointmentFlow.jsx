@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Dialog } from "@headlessui/react";
 import {
@@ -12,38 +11,42 @@ import {
   Timer,
 } from "lucide-react";
 import { getRequest } from "../Helpers";
+import { useSelector, useDispatch } from "react-redux";
 
 const AppointmentFlow = ({ open, onClose, id }) => {
+  const [selectedDate, setSelectedDate] = useState(null);
   const [clinicData, setClinicData] = useState(null);
-   const [doctor, setDoctor] = useState(null);
+  const [doctor, setDoctor] = useState(null);
   const [step, setStep] = useState(1);
   const [selectedFor, setSelectedFor] = useState(null);
   const [selectedPayment, setSelectedPayment] = useState(null);
-   const selectedClinic = clinicData || {};
+  const selectedClinic = clinicData || {};
 
- 
+  // Get user profile data from Redux
+  const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
+
+  console.log("user profile data from redux in navbar", userProfileData);
+  console.log("isLoggedIn from redux", isLoggedIn);
 
   const handleClose = () => {
     setStep(1);
     onClose();
   };
 
-   useEffect(() => {
-      window.scrollTo(0, 0);
-      getRequest(`doctor/${id}`)
-        .then((res) => {
-          const doc = res?.data?.data;
-          setDoctor(doc);
-          setClinicData(doc?.clinics?.[0]);
-          setSelectedDate(doc?.clinics?.[0]?.availability[0]?.date);
-          setSelectedDateData(doc?.clinics?.[0]?.availability[0]);
-        
-          
-        })
-        .catch((error) => {
-          console.log("error", error);
-        });
-    }, [id]);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    getRequest(`doctor/${id}`)
+      .then((res) => {
+        const doc = res?.data?.data;
+        setDoctor(doc);
+        setClinicData(doc?.clinics?.[0]);
+        setSelectedDate(doc?.clinics?.[0]?.availability[0]?.date);
+        setSelectedDateData(doc?.clinics?.[0]?.availability[0]);
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  }, [id]);
 
   return (
     <Dialog open={open} onClose={handleClose} className="relative z-50">
@@ -183,7 +186,7 @@ const AppointmentFlow = ({ open, onClose, id }) => {
 
               {/* Status */}
               <div className="bg-red-50 border border-red-200 text-red-600 font-semibold text-sm rounded-xl px-4 py-2 mb-6 shadow-sm text-center">
-                ⏳  Awaiting Confirmation
+                ⏳ Awaiting Confirmation
               </div>
 
               {/* Doctor Info */}
@@ -198,9 +201,11 @@ const AppointmentFlow = ({ open, onClose, id }) => {
                     <h3 className="text-base sm:text-lg font-semibold text-gray-900">
                       {doctor?.fullName}
                     </h3>
-                     {doctor?.clinics?.map((clinic, index) => (
-                    <p className="text-sm text-gray-500"> {selectedClinic.clinicAddress}</p>
-                     ))}
+
+                    <p className="text-sm text-gray-500">
+                      {" "}
+                      {selectedClinic.clinicAddress}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -212,13 +217,11 @@ const AppointmentFlow = ({ open, onClose, id }) => {
                 </h4>
                 <p className="text-sm text-gray-500 mb-2">
                   Appointment ID:{" "}
-                  <span className="font-semibold text-gray-700">
-                    APT-73673
-                  </span>
+                  <span className="font-semibold text-gray-700">APT-73673</span>
                 </p>
                 <div className="flex items-center gap-2 text-sm text-gray-700 mb-1">
                   <Calendar className="w-5 h-5 text-blue-600" />
-                  <strong>Wednesday, 06 Aug 2025</strong>
+                  <strong>{selectedDate}</strong>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-700">
                   <Clock className="w-5 h-5 text-blue-600" />
@@ -236,13 +239,14 @@ const AppointmentFlow = ({ open, onClose, id }) => {
                 </h4>
                 <div className="space-y-1 text-sm text-gray-700">
                   <p>
-                    <strong>Name:</strong> Abhishek Yadav
+                    <strong>Name:</strong> {userProfileData?.name || "User"}
                   </p>
                   <p>
-                    <strong>Gender:</strong> Male
+                    <strong>Gender:</strong>
+                    {userProfileData?.gender || "User"}
                   </p>
                   <p>
-                    <strong>Contact:</strong> 8707767805
+                    <strong>Contact:</strong> {userProfileData?.phone || "User"}
                   </p>
                 </div>
               </div>
@@ -251,28 +255,37 @@ const AppointmentFlow = ({ open, onClose, id }) => {
               <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-6">
                 <div className="flex justify-between items-center text-base">
                   <span className="flex items-center gap-2 text-blue-700 font-medium">
-                      <CreditCard className="w-5 h-5" /> Consultation Fee
+                    <CreditCard className="w-5 h-5" /> Consultation Fee
                   </span>
                   <span className="font-semibold text-blue-700 text-lg">
-                    ₹500
+                    {selectedClinic.consultationFee}
                   </span>
                 </div>
               </div>
 
               {/* Actions */}
               <div className="mt-6 flex justify-between text-sm text-blue-700 font-medium">
-                <button
-                  onClick={() => alert("Calling clinic...")}
-                  className="hover:underline hover:text-blue-800 transition-all flex items-center  gap-2"
-                >
+                <a href="tel:+108">
+                  <button
+                    onClick={() => alert("Calling clinic...")}
+                    className="hover:underline hover:text-blue-800 transition-all flex items-center  gap-2"
+                  >
                     <Phone className="w-4 h-4" /> Call Clinic
-                </button>
-                <button
-                  onClick={() => alert("Opening map...")}
-                  className="hover:underline hover:text-blue-800 transition-all flex items-center  gap-2"
+                  </button>
+                </a>
+
+                <a
+                  href="https://maps.app.goo.gl/jb3Koe47X8UqEUXm8"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  <MapPin className="w-4 h-4" /> Get Location
-                </button>
+                  <button
+                    onClick={() => alert("Opening map...")}
+                    className="hover:underline hover:text-blue-800 transition-all flex items-center  gap-2"
+                  >
+                    <MapPin className="w-4 h-4" /> Get Location
+                  </button>
+                </a>
               </div>
 
               {/* Continue */}

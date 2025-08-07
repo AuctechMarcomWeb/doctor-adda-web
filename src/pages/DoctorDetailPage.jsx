@@ -262,7 +262,7 @@ const DoctorDetailPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       {/* Hero Section */}
       <section className="py-10 px-4 pt-32 sm:pt-36">
-        <div className="w-[70%] mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        <div className="lg:w-[70%] sm:w-full xl:w-[70%] mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           {/* Doctor Image & Highlights */}
           <div className="lg:col-span-2">
             <div className="rounded-3xl overflow-hidden shadow-2xl border border-gray-200">
@@ -343,7 +343,7 @@ const DoctorDetailPage = () => {
       </section>
 
       {/* Main Content */}
-      <main className=" mx-auto px-4 py-10 sm:py-16 w-[70%]">
+      <main className=" mx-auto px-4 py-10 sm:py-16 lg:w-[70%] sm:w-full xl:w-[70%]">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           {/* Left Column */}
           <div className="lg:col-span-2 space-y-16">
