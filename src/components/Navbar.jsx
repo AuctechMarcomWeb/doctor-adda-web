@@ -9,6 +9,7 @@ import { logout } from "../redux/slices/userSlice";
 import { deleteCookie, clearAuthCookies } from "../Hooks/cookie";
 import NavBar2 from "./NavBar2";
 import { toast } from "react-hot-toast";
+import NotificationBell from "./NotificationBell";
 
 
 const Navbar = () => {
@@ -175,7 +176,7 @@ const Navbar = () => {
                   <div className="absolute z-100 right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
                     <button
                       onClick={handleLogout}
-                      className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
                     >
                       <LogOut className="w-4 h-4" />
                       Logout
@@ -183,7 +184,7 @@ const Navbar = () => {
                     <Link to="/profile">
                       <button
                         
-                        className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                        className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
                       >
                         <User className="w-4 h-4" />
                         Profile
@@ -191,7 +192,7 @@ const Navbar = () => {
                     </Link>
                     <button
                       
-                      className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
                     >
                       <Settings className="w-4 h-4" />
                       Settings
@@ -213,12 +214,13 @@ const Navbar = () => {
             )}
 
             {/* Notification Icon */}
-            <div className="relative bg-gradient-to-r from-blue-600 to-cyan-600 text-white p-2 rounded-full cursor-pointer " >
+            {/* <div className="relative bg-gradient-to-r from-blue-600 to-cyan-600 text-white p-2 rounded-full cursor-pointer " >
               <Bell className="w-6 h-6" />
               <span className="absolute -top-1.5 -right-1.5 bg-white text-black text-xs font-semibold px-1.5 py-0.5 rounded-full">
                 8
               </span>
-            </div>
+            </div> */}
+            <NotificationBell />
             
 
 
