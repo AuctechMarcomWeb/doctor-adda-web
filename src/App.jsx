@@ -26,6 +26,8 @@ import HospitalDetailPage from "./pages/HospitalDetailPage";
 import DoctorList from "./pages/DoctorList";
 import DoctorDetailPage from "./pages/DoctorDetailPage";
 import AppointmentFlow from "./components/AppointmentFlow";
+import About from "./pages/About";
+import UserProfile from "./components/UserProfile";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -77,6 +79,9 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<LoginSignupFlow />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/profile" element={<UserProfile />} />
+
                 <Route
                   path="/terms-and-conditions"
                   element={<TermsAndConditions />}

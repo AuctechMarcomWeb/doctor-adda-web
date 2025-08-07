@@ -9,8 +9,8 @@ const PrivacyPolicy = () => {
   return (
     <>
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50">
-        <div className="min-h-screen bg-gray-50">
-          <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="min-h-screen bg-gray-50 py-18">
+          <div className="max-w-7xl mx-auto px-6 py-18">
             <div className="bg-white rounded-lg shadow-lg p-8">
               <div className="flex mt-7 items-center mb-8">
                 <Shield className="h-8 w-8 text-blue-600 mr-3" />

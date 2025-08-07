@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Menu, X, Stethoscope, Bell, LogOut } from "lucide-react";
+import { Menu, X, Stethoscope, Bell, LogOut, User, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import logo from "../assets/doctor-adda-logo.png";
@@ -179,6 +179,22 @@ const Navbar = () => {
                     >
                       <LogOut className="w-4 h-4" />
                       Logout
+                    </button>
+                    <Link to="/profile">
+                      <button
+                        
+                        className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      >
+                        <User className="w-4 h-4" />
+                        Profile
+                      </button>
+                    </Link>
+                    <button
+                      
+                      className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                    >
+                      <Settings className="w-4 h-4" />
+                      Settings
                     </button>
                   </div>
                 )}
