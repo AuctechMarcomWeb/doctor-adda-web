@@ -72,7 +72,7 @@ export const getRequest = async (url) => {
 // };
 
 export const postRequest = async (props) => {
-  //console.log("post api props====", props);
+ // console.log("post api props====", props);
 
   try {
     const response = await axios?.post(

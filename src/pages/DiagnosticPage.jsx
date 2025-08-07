@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import {
   MapPin,
@@ -32,7 +33,7 @@ const DiagnosticCard = ({
       <div className="flex flex-col md:flex-row gap-4 p-4">
         {/* Thumbnail */}
         <img
-          src={profileImage ||"https://via.placeholder.com/600x400"}
+          src={profileImage || "https://media.istockphoto.com/id/1778188472/photo/doctor-examining-x-ray-images-in-mri-control-room.jpg?s=612x612&w=0&k=20&c=Qyw6_HvR1H7Yy4U7Nqz_fByN9n5n0tJcfNOVGRJEPjQ="}
           alt={profileImage}
           className="w-full md:w-20 h-40 md:h-28 rounded-xl object-cover border border-gray-200"
         />
