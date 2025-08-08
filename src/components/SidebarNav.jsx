@@ -18,7 +18,7 @@ const SidebarNav = ({ formData, setActiveTab, activeTab, handleEdit }) => {
   return (
     <aside className="lg:w-80 bg-white shadow-xl rounded-2xl p-6 h-fit">
       {/* User Summary */}
-      <div className="text-center border-b border-gray-100 pb-6 mb-6">
+      <div className="text-center border-b border-gray-100 pb-6 pt-6 mb-6 bg-gray-100 rounded-xl">
         <div className="relative inline-block">
           <div className="w-20 h-20 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white flex items-center justify-center text-2xl font-bold shadow-lg">
             {formData.profileImage ? (
@@ -41,7 +41,7 @@ const SidebarNav = ({ formData, setActiveTab, activeTab, handleEdit }) => {
           <span>+91 {formData.mobile}</span>
         </div>
         <button
-          className="mt-4 px-6 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm rounded-full hover:from-orange-600 hover:to-red-600 transition-all shadow-md hover:shadow-lg"
+          className="mt-4 px-6 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm rounded-full hover:from-orange-600 hover:to-red-600 transition-all shadow-md hover:shadow-lg cursor-pointer"
           onClick={handleEdit}
         >
           Edit Profile
@@ -49,14 +49,14 @@ const SidebarNav = ({ formData, setActiveTab, activeTab, handleEdit }) => {
       </div>
 
       {/* Navigation */}
-      <nav className="space-y-2">
+      <nav className="space-y-2 ">
         {menuItems.map((item) => {
           const Icon = item.icon;
           return (
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all ${
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all cursor-pointer ${
                 activeTab === item.id
                   ? "bg-[#006ca7] text-white shadow-md"
                   : "text-gray-700 hover:bg-gray-50"

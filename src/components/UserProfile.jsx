@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Camera,
   Calendar,
@@ -19,6 +19,9 @@ import {
 import SidebarNav from "./SidebarNav";
 
 const UserProfile = () => {
+     useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []);
   const [editMode, setEditMode] = useState(false);
   const [activeTab, setActiveTab] = useState("profile");
   const [formData, setFormData] = useState({
@@ -30,6 +33,7 @@ const UserProfile = () => {
     age: 24,
     profileImage: null,
   });
+  
 
   const [originalData, setOriginalData] = useState(formData);
   const [errors, setErrors] = useState({});
@@ -131,6 +135,7 @@ const UserProfile = () => {
   };
 
   return (
+    
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
       <div className="max-w-7xl mx-auto p-6 pt-38">
         <div className="flex flex-col lg:flex-row gap-6">
@@ -156,7 +161,7 @@ const UserProfile = () => {
                   </div>
                   {!editMode && (
                     <button
-                      className="px-6 py-2 bg-white/20 backdrop-blur-sm text-white rounded-full hover:bg-white/30 transition-all border border-white/30"
+                      className="px-6 py-2 bg-white/20 backdrop-blur-sm text-white rounded-full hover:bg-white/30 transition-all border border-white/30 cursor-pointer"
                       onClick={handleEdit}
                     >
                       <Edit3 size={16} className="inline mr-2" />
@@ -372,16 +377,16 @@ const UserProfile = () => {
                   <div className="mt-8 flex justify-end gap-4 pt-6 border-t border-gray-200">
                     <button
                       onClick={handleCancel}
-                      className="px-8 py-3 rounded-full border-2 border-gray-300 text-gray-700 hover:bg-gray-50 transition-all font-medium"
+                      className="px-8 py-3 rounded-full border-2 border-gray-300 text-gray-700 hover:bg-gray-50 transition-all font-medium cursor-pointer"
                     >
                       <X size={16} className="inline mr-2" />
                       Cancel
                     </button>
                     <button
                       onClick={handleUpdate}
-                      className="px-8 py-3 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:from-green-600 hover:to-emerald-700 transition-all shadow-md hover:shadow-lg font-medium"
+                      className="px-8 py-3 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:from-green-600 hover:to-emerald-700 transition-all shadow-md hover:shadow-lg font-medium cursor-pointer"
                     >
-                      <Check size={16} className="inline mr-2" />
+                      <Check size={16} className="inline mr-2 cursor-pointer" />
                       Update Profile
                     </button>
                   </div>
