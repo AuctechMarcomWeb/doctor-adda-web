@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 import { Heart, Calendar, Video, Shield, Users, Clock, CheckCircle, Star } from 'lucide-react';
 import DoctorsBanner from "../components/DoctorsBanner"; 
 import AboutSection from '../components/AboutSection';
 
 const About = () => {
+  useEffect(() => {
+          window.scrollTo(0, 0);
+        }, []);
   const features = [
     {
       icon: <Calendar className="w-8 h-8" />,
