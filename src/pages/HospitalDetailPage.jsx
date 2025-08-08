@@ -20,25 +20,31 @@ import {
 } from "lucide-react";
 import { getRequest } from "../Helpers";
 import { useParams } from "react-router-dom";
+import HospitalReviewForm from "../components/HospitalReviewForm";
 
 const HospitalDetailPage = () => {
-  const [hospital, setHospital] = useState({
-    facilities: [],
-    doctors: [],
-  });
+
+  const [hospital, setHospital] = useState(null);
   // console.log("hospitals=============???", hospital);
 
   const [activeTab, setActiveTab] = useState("about");
   const { id } = useParams();
+  const [openReviewPopup, setOpenReviewPopup] = useState(false);
+  const [reviews, setReviews] = useState([]);
 
   const fetchHospitalDetails = async (id) => {
     try {
       const res = await getRequest(`hospital/${id}`);
       console.log("Hospitals Details Page :", res?.data?.data);
       setHospital(res?.data?.data);
+      setReviews(res?.data?.data?.reviews || []);
     } catch (error) {
       console.error("Error fetching hospitals", error);
     }
+  };
+
+  const handleAddReview = () => {
+    setOpenReviewPopup(true);
   };
 
   useEffect(() => {
@@ -127,12 +133,12 @@ const getFacilityIcon = (name = "") => {
             <div className="space-y-6">
               <div>
                 <h1 className="text-4xl lg:text-5xl font-bold bg-white bg-clip-text text-transparent mb-3">
-                  CityCare Multispeciality Hospital
+                  {hospital?.name}
                 </h1>
                 <div className="flex items-center gap-2 text-gray-600 mb-4">
                   <MapPin className="w-5 h-5 text-red-500" />
                   <span className="text-lg text-white">
-                    Sector 62, Noida, Delhi NCR
+                    {hospital?.address}
                   </span>
                 </div>
                 <div className="flex items-center gap-4 mb-6">
@@ -144,18 +150,15 @@ const getFacilityIcon = (name = "") => {
                       />
                     ))}
                     <span className="ml-2 text-white font-semibold">
-                      4.8 (2,847 reviews)
+                      {hospital?.averageRating} 
+                      {/* //({hospital?.reviews} reviews) */}
                     </span>
                   </div>
                 </div>
               </div>
 
               <p className="text-white text-lg leading-relaxed">
-                A premier healthcare destination in Delhi NCR, offering
-                world-class medical care across multiple specialties. Our
-                state-of-the-art facility combines cutting-edge technology with
-                compassionate care to deliver exceptional healthcare
-                experiences.
+               {hospital?.description}
               </p>
 
               {/* Action Buttons */}
@@ -175,9 +178,9 @@ const getFacilityIcon = (name = "") => {
 
         {/* Stats Section */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {stats.map((stat, idx) => (
+          {stats.map((stat, index) => (
             <div
-              key={idx}
+              key={index}
               className="bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
             >
               <div className="text-blue-600 mb-3 flex justify-center">
@@ -204,7 +207,7 @@ const getFacilityIcon = (name = "") => {
                 }`}
                 onClick={() => setActiveTab("about")}
               >
-                About Hospital
+                About {hospital?.name}
               </button>
               <button
                 className={`flex-1 py-6 px-8 text-lg font-semibold transition-all duration-300 ${
@@ -226,17 +229,10 @@ const getFacilityIcon = (name = "") => {
                 {/* About Section */}
                 <div className="prose max-w-none">
                   <h2 className="text-3xl font-bold text-gray-800 mb-6">
-                    About CityCare Hospital
+                    About {hospital?.name}
                   </h2>
                   <p className="text-lg text-gray-700 leading-relaxed">
-                    CityCare Multispeciality Hospital stands as a beacon of
-                    excellence in healthcare delivery across Delhi NCR. Our
-                    commitment to providing comprehensive, patient-centered care
-                    is reflected in our state-of-the-art infrastructure,
-                    advanced medical technology, and team of highly qualified
-                    healthcare professionals. We believe in treating not just
-                    the condition, but caring for the whole person with
-                    compassion, respect, and dignity.
+                        {hospital?.description}
                   </p>
                 </div>
 
@@ -247,15 +243,15 @@ const getFacilityIcon = (name = "") => {
                     World-Class Facilities
                   </h3>
                   <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {hospital?.facilities.map((facility, idx) => {
+                    {hospital?.facilities.map((facility) => {
                             const Icon = getFacilityIcon(facility.name)
                       return(
                       <div
-                        key={idx}
+                        key={facility._id}
                         className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100 hover:shadow-md transition-all duration-300"
                       >
                         <div className="flex items-center gap-3">
-            <Icon className="w-5 h-5 text-blue-600" /> 
+                       <Icon className="w-5 h-5 text-blue-600" /> 
                           <span className="font-semibold text-gray-800">
                             {facility.name}
                           </span>
@@ -273,13 +269,13 @@ const getFacilityIcon = (name = "") => {
                     Medical Departments
                   </h3>
                   <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-                    {departments?.map((dept, idx) => (
+                    {hospital?.categories?.map((dept) => (
                       <div
-                        key={idx}
+                        key={dept._id}
                         className="bg-white border-2 border-gray-100 hover:border-blue-300 rounded-lg px-4 py-3 text-center transition-all duration-300 hover:shadow-md"
                       >
                         <span className="text-gray-700 font-medium">
-                          {dept}
+                          {dept?.name}
                         </span>
                       </div>
                     ))}
@@ -292,9 +288,9 @@ const getFacilityIcon = (name = "") => {
                     Our Expert Doctors
                   </h3>
                   <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {hospital?.doctors?.map((doc, idx) => (
+                    {hospital?.doctors?.map((doc) => (
                       <div
-                        key={idx}
+                        key={doc._id}
                         className="bg-white border border-gray-200 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                       >
                         <div className="flex flex-col items-center text-center">
@@ -333,7 +329,7 @@ const getFacilityIcon = (name = "") => {
                     Location & Directions
                   </h3>
                   <p className="text-lg text-gray-700 mb-6">
-                    CityCare Hospital, Sector 62, Noida, Uttar Pradesh 201309
+                    {hospital?.address}
                   </p>
                   <button className="bg-[#00659d] text-white px-8 py-4 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 flex items-center gap-3 font-semibold shadow-lg hover:shadow-xl">
                     <Locate className="w-5 h-5" />
@@ -341,68 +337,48 @@ const getFacilityIcon = (name = "") => {
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
+
               </div>
             )}
 
             {activeTab === "review" && (
               <div className="space-y-8">
-                <div className="text-center mb-8">
+                <div className="mb-8 flex flex-row justify-between">
                   <h2 className="text-3xl font-bold text-gray-800 mb-2">
-                    What Our Patients Say
+                  Customer Reviews
                   </h2>
-                  <p className="text-lg text-gray-600">
-                    Real experiences from our valued patients
-                  </p>
+
+                  <button
+                  onClick={() =>handleAddReview()}
+                   className="bg-[#00659d] text-white px-8 py-4 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl">
+                   Add Review
+                  </button>
+                  
+
                 </div>
 
-                {[
-                  {
-                    name: "Priya Singh",
-                    comment:
-                      "Exceptional care and professionalism! The doctors took time to explain everything clearly, and the nursing staff was incredibly compassionate. The facilities are world-class and I felt completely at ease throughout my treatment.",
-                    rating: 5,
-                    image:
-                      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face",
-                    treatment: "Cardiology Treatment",
-                  },
-                  {
-                    name: "Amit Khurana",
-                    comment:
-                      "Clean, modern hospital with state-of-the-art equipment. The online booking system made scheduling so convenient, and the staff guided me through every step. Highly recommend for anyone seeking quality healthcare.",
-                    rating: 4,
-                    image:
-                      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face",
-                    treatment: "General Consultation",
-                  },
-                  {
-                    name: "Sunita Sharma",
-                    comment:
-                      "Outstanding experience from admission to discharge. The pediatric team was wonderful with my child, making them feel comfortable and safe. The follow-up care was excellent too.",
-                    rating: 5,
-                    image:
-                      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face",
-                    treatment: "Pediatric Care",
-                  },
-                ].map((review, idx) => (
+
+              
+
+                {
+                hospital?.reviews?.map((review) => (
                   <div
-                    key={idx}
+                    key={review._id}
                     className="bg-white border border-gray-200 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300"
                   >
                     <div className="flex flex-col sm:flex-row gap-6">
                       <img
-                        src={review.image}
-                        alt={review.name}
+                        src={'https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250'}
+                        alt={review.user}
                         className="w-20 h-20 rounded-full object-cover border-4 border-blue-100 mx-auto sm:mx-0"
                       />
                       <div className="flex-1">
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3">
                           <div>
-                            <h4 className="text-xl font-bold text-gray-800">
-                              {review.name}
-                            </h4>
-                            <p className="text-blue-600 font-medium">
-                              {review.treatment}
-                            </p>
+                          <h4 className="text-xl font-bold text-gray-800">
+                            {review?.user?.name || "user"}
+                          </h4>
+
                           </div>
                           <div className="flex text-yellow-400 mt-2 sm:mt-0">
                             {[...Array(5)].map((_, i) => (
@@ -430,6 +406,7 @@ const getFacilityIcon = (name = "") => {
                     View All Reviews
                   </button>
                 </div>
+
               </div>
             )}
           </div>
@@ -453,7 +430,20 @@ const getFacilityIcon = (name = "") => {
             </button>
           </div>
         </div>
+
+
+        <HospitalReviewForm
+
+        open={openReviewPopup}
+        onClose={() => setOpenReviewPopup(false)}
+        hospitalId={id}
+        onReviewAdded={review => setReviews([...reviews, review])}
+
+      />
       </div>
+
+      
+      
     </div>
   );
 };
