@@ -3,6 +3,7 @@ import { Menu, X, Stethoscope, Bell, LogOut, User, Settings } from "lucide-react
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import logo from "../assets/doctor-adda-logo.png";
+import NewLogo from "../assets/dr-adda-Logo.png";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaUser, FaPhoneAlt } from "react-icons/fa";
 import { logout } from "../redux/slices/userSlice";
@@ -82,13 +83,13 @@ const Navbar = () => {
             <Link to="/">
               <div className="flex items-center space-x-2">
                 
-                <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-lg flex items-center justify-center">
+                <div className="w-18 h-18  rounded-lg flex items-center justify-center">
                   <Stethoscope className="w-6 h-6 text-white" />
-                  <img src={logo} alt="" />
+                  <img src={NewLogo} alt="" />
                 </div>
-                <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+                {/* <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                   Doctor Adda
-                </span>
+                </span> */}
                 
               </div>
             </Link> 
