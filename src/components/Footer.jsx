@@ -41,7 +41,7 @@ const Footer = () => {
             <div>
               <div className="flex items-center space-x-2 mb-6">
                 <div className="w-18 h-18  rounded-lg flex items-center justify-center">
-                  <Stethoscope className="w-6 h-6 text-white" />
+                  <Stethoscope className="w-18 h-18 text-white" />
                    <img src={NewLogo} alt="" />
                 </div>
                 {/* <span className="text-2xl  font-bold">Doctor Adda</span> */}
