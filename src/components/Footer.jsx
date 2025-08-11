@@ -8,7 +8,7 @@ import {
   ChevronUp,
 } from "lucide-react";
 
-import logo from "../assets/doctor-adda-logo.png";
+// import logo from "../assets/doctor-adda-logo.png";
 import NewLogo from "../assets/dr-adda-Logo.png";
 import { Link } from "react-router-dom";
 
