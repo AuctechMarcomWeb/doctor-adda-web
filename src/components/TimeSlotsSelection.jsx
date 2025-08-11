@@ -138,6 +138,8 @@ const TimeSlotsSection = ({ availability = [], onBook }) => {
           Book Appointment
         </ActionButton>
       </div>
+
+      
     </div>
   );
 };
