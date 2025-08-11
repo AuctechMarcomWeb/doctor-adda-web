@@ -3,7 +3,7 @@ import { Menu, X, Stethoscope, Bell, LogOut, User, Settings } from "lucide-react
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 // import logo from "../assets/doctor-adda-logo.png";
-import logo from "../assets/dr-adda-Logo.png";
+import logo from "../assets/dr-adda-logo.png";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaUser, FaPhoneAlt } from "react-icons/fa";
 import { logout } from "../redux/slices/userSlice";

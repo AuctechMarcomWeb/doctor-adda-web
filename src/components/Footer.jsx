@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 
 // import logo from "../assets/doctor-adda-logo.png";
-import logo from "../assets/dr-adda-Logo.png";
+import logo from "../assets/dr-adda-logo.png";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
