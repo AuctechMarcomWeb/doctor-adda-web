@@ -52,7 +52,7 @@ const SidebarNav = ({ formData, setActiveTab, activeTab, handleEdit }) => {
             <span>{formData?.email}</span>
           </div>
           <div className="flex items-center justify-center gap-1 mt-1 text-gray-600 text-sm">
-            <span>+91 {formData?.mobile}</span>
+            <span>+91 {formData?.phone}</span>
           </div>
           <button
             className="mt-4 px-6 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm rounded-full hover:from-orange-600 hover:to-red-600 transition-all shadow-md hover:shadow-lg cursor-pointer"

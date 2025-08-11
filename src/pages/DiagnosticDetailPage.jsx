@@ -36,16 +36,21 @@ const DiagnosticDetailPage = () => {
 
   const [activeTab, setActiveTab] = useState("about");
   const [diagnostics, setDiagnostics] = useState(null);
+    console.log("diagnostics", diagnostics);
+
   const [reviews, setReviews] = useState();
   const [showReviewPopup, setShowReviewPopup] = useState(false);
   const { id } = useParams();
   const [selectedSlot, setSelectedSlot] = useState(null);
+  const [selectedDateData, setSelectedDateData] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [updateStatus, setUpdateStatus] = useState(false);
   const [selectedServices, setSelectedServices] = useState([]);
   const [selectedPackages, setSelectedPackages] = useState([]);
   const [showAppointmentPopup, setShowAppointmentPopup] = useState(false);
   const [appointmentData, setAppointmentData] = useState(null);
+const [otherPatientDetails, setOtherPatientDetails] = useState([]);
+
 
    const fetchDiagnosticsDetails = async () => {
     try {
@@ -74,7 +79,6 @@ const DiagnosticDetailPage = () => {
     );
   };
 
-  console.log("diagnostics", diagnostics);
 
   const bookDiagonstics = async (e, date, slot) => {
     e.preventDefault();
@@ -115,13 +119,7 @@ const DiagnosticDetailPage = () => {
       date: date,
       slots: { startTime: slot?.startTime, endTime: slot?.endTime },
       amount: totalAmount,
-      otherPatientDetails: {
-        name: "",
-        age: "",
-        gender: "",
-        number: "",
-        weight: "",
-      },
+      otherPatientDetails,
       service:
         selectedServiceDetails?.map((s) => ({
           _id: s._id,
@@ -137,26 +135,26 @@ const DiagnosticDetailPage = () => {
         })) || [],
     };
 
-    try {
-      console.log(" Booking Appointment:", payload);
-      const res = await postRequest({
-        url: `diagnosticBooking/add`,
-        cred: payload,
-      });
-      console.log(" Booking success:", res);
-      setAppointmentData(res?.data?.data);
-      setShowAppointmentPopup(true);
+    // try {
+    //   console.log(" Booking Appointment:", payload);
+    //   const res = await postRequest({
+    //     url: `diagnosticBooking/add`,
+    //     cred: payload,
+    //   });
+    //   console.log(" Booking success:", res);
+    //   console.log(" Resetting selected services/packages");
+    //   setSelectedServices?.([]);
+    //   setSelectedPackages?.([]);
+    // } catch (error) {
+    //   console.error(" Booking failed:", error);
+    //   alert(
+    //     error?.response?.data?.message ||
+    //       "Internal Server Error. Please try again."
+    //   );
+    // }
 
-      console.log(" Resetting selected services/packages");
-      setSelectedServices?.([]);
-      setSelectedPackages?.([]);
-    } catch (error) {
-      console.error(" Booking failed:", error);
-      alert(
-        error?.response?.data?.message ||
-          "Internal Server Error. Please try again."
-      );
-    }
+    setAppointmentData(payload);
+    setShowAppointmentPopup(true);
 
     // Log key debug values
     console.log("Selected Services: ", selectedServices);
@@ -645,6 +643,10 @@ const DiagnosticDetailPage = () => {
         onClose={() => setShowAppointmentPopup(false)}
         id={diagnostics?._id}
         appointmentData={appointmentData}
+         otherPatientDetails={otherPatientDetails}       
+  setOtherPatientDetails={setOtherPatientDetails}
+        
+
       />
     </div>
   );

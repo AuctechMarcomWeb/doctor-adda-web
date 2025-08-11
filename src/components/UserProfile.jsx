@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import {
   Camera,
@@ -17,28 +18,61 @@ import {
   Upload,
 } from "lucide-react";
 import SidebarNav from "./SidebarNav";
+import { useSelector } from "react-redux";
+import { getRequest } from "../Helpers";
 
 const UserProfile = () => {
-     useEffect(() => {
-        window.scrollTo(0, 0);
-      }, []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const [editMode, setEditMode] = useState(false);
   const [activeTab, setActiveTab] = useState("profile");
+  const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
+  const UserId = userProfileData?._id;
+
+  console.log("user", userProfileData);
   const [formData, setFormData] = useState({
-    name: "Abhishek Yadav",
-    email: "abhishekauctech@gmail.com",
-    mobile: "8707767805",
-    dob: "2000-12-15",
-    gender: "Male",
-    age: 24,
+    name: "",
+    email: "",
+    phone: "",
+    dob: "",
+    gender: "",
+    age: null,
     profileImage: null,
   });
-  
+
+  // Fetch user data by ID
+  useEffect(() => {
+    if (!UserId) return;
+
+    const fetchUserData = async () => {
+      try {
+        const data = await getRequest(`auth/getUserById/${UserId}`);
+        console.log("data", data?.data?.data);
+
+        const userData = data?.data?.data;
+
+        setFormData({
+          name: userData?.name || "",
+          email: userData?.email || "",
+          phone: userData?.phone || "",
+          dob: userData?.dob || "11/8/1998",
+          gender: userData?.gender || "",
+          age:
+            userData?.age ||
+            (userData?.dob ? calculateAge(userData.dob) : null),
+          profileImage: userData?.profileImage || null,
+        });
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [UserId]);
 
   const [originalData, setOriginalData] = useState(formData);
   const [errors, setErrors] = useState({});
-
-
 
   const validateForm = () => {
     const newErrors = {};
@@ -126,16 +160,14 @@ const UserProfile = () => {
     return new Date(dateString).toLocaleDateString("en-GB");
   };
 
-  const getInitials = (name) => {
+  const getInitials = (name = "") => {
     return name
       .split(" ")
       .map((n) => n[0])
       .join("")
       .toUpperCase();
   };
-
   return (
-    
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
       <div className="max-w-7xl mx-auto p-6 pt-38">
         <div className="flex flex-col lg:flex-row gap-6">
@@ -211,7 +243,7 @@ const UserProfile = () => {
                       </span>
                       <span className="flex items-center gap-1">
                         <Calendar size={14} />
-                        {formData.age} years old
+                        {formData.age || "24"} years old
                       </span>
                     </div>
                   </div>
@@ -257,7 +289,7 @@ const UserProfile = () => {
                     </label>
                     <div className="px-4 py-3 bg-gray-100 rounded-lg border-2 border-transparent text-gray-500">
                       <Phone size={16} className="inline mr-2" />
-                      +91 {formData.mobile}
+                      +91 {formData.phone}
                     </div>
                   </div>
 
@@ -268,7 +300,7 @@ const UserProfile = () => {
                     </label>
                     <div className="px-4 py-3 bg-gray-100 rounded-lg border-2 border-transparent text-gray-500">
                       <Mail size={16} className="inline mr-2" />
-                      {formData.email}
+                      {formData.email|| "abc@gmail.com"}
                     </div>
                   </div>
 
@@ -314,7 +346,7 @@ const UserProfile = () => {
                       <div>
                         <input
                           type="date"
-                          value={formData.dob}
+                          value={formData.dob || "11/8/1998" }
                           onChange={(e) => handleChange("dob", e.target.value)}
                           className={`w-full px-4 py-3 rounded-lg border-2 outline-none transition-all ${
                             errors.dob
@@ -345,7 +377,7 @@ const UserProfile = () => {
                       <div>
                         <input
                           type="number"
-                          value={formData.age}
+                          value={formData.age || 24}
                           onChange={(e) =>
                             handleChange("age", parseInt(e.target.value))
                           }
@@ -366,7 +398,7 @@ const UserProfile = () => {
                       </div>
                     ) : (
                       <div className="px-4 py-3 bg-gray-50 rounded-lg border-2 border-transparent">
-                        {formData.age} years
+                        {formData.age || 24} years
                       </div>
                     )}
                   </div>

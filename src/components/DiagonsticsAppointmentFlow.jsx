@@ -2,29 +2,49 @@
 import React, { useState, useEffect } from "react";
 import { Dialog } from "@headlessui/react";
 import { Calendar, Clock, Phone, MapPin, CreditCard } from "lucide-react";
-import { getRequest } from "../Helpers";
+import { getRequest, postRequest } from "../Helpers";
 import { useSelector } from "react-redux";
 import { AppointmentDateFormat } from "../Utils";
 import toast from "react-hot-toast";
 
-const DiagonsticsAppointmentFlow = ({ open, onClose, id, appointmentData }) => {
+const DiagonsticsAppointmentFlow = ({
+  open,
+  onClose,
+  id,
+  appointmentData,
+    otherPatientDetails = [],
+  setOtherPatientDetails = () => {}
+}) => {
+  // ... existing states
+  const [newPatient, setNewPatient] = useState({
+    name: "",
+    gender: "",
+    age: "",
+  });
   const [diagnostics, setDiagnostics] = useState(null);
   const [step, setStep] = useState(1);
   const [selectedFor, setSelectedFor] = useState(null);
   const [selectedPayment, setSelectedPayment] = useState(null);
+  const [showPatientList, setShowPatientList] = useState(false);
+  const [showAddPatientForm, setShowAddPatientForm] = useState(false);
 
   const userProfileData = useSelector((state) => state.user.userProfileData);
 
   // Extract appointment data
-  const {
-    diagnostic,
-    otherPatientDetails,
-    slots,
-    amount,
-    appointmentId,
-    date,
-  } = appointmentData || {};
-console.log("appointmentData====>",appointmentData);
+  const { diagnostic, slots, amount, appointmentId, date } =
+    appointmentData || {};
+
+  console.log("appointmentData====>", appointmentData);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setNewPatient((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSavePatient = () => {
+    setOtherPatientDetails((prev) => [...prev, newPatient]);
+    setNewPatient({ name: "", age: "", gender: "" });
+    setShowAddPatientForm(false);
+  };
 
   // Show patient info based on selectedFor
   const isSelf = selectedFor === "self";
@@ -34,15 +54,13 @@ console.log("appointmentData====>",appointmentData);
         gender: userProfileData?.gender,
         phone: userProfileData?.phone,
       }
-    : otherPatientDetails;
-
+    : (otherPatientDetails.length ? otherPatientDetails[otherPatientDetails.length - 1] : { name: "", gender: "", age: "" });
 
   const handleClose = () => {
     setStep(1);
     setSelectedFor(null);
     setSelectedPayment(null);
     onClose();
-    toast.success("✅ Diagnostic appointment created successfully. Status: Pending");
   };
 
   const fetchDiagnosticsDetails = async () => {
@@ -51,6 +69,23 @@ console.log("appointmentData====>",appointmentData);
       setDiagnostics(res?.data?.data);
     } catch (error) {
       console.error("Error fetching diagnostics:", error);
+    }
+  };
+  const handleConfirmBooking = async () => {
+    try {
+      const res = await postRequest({
+        url: `diagnosticBooking/add`,
+        cred: appointmentData, // Parent se aaya hua payload
+      });
+
+      console.log("Booking success:", res);
+      setDiagnostics(res?.data?.data?.diagnostic || null);
+      setStep(4); // Success step
+    } catch (error) {
+      console.error("Booking failed:", error);
+      toast.error(
+        error?.response?.data?.message || "Failed to book appointment"
+      );
     }
   };
 
@@ -64,15 +99,12 @@ console.log("appointmentData====>",appointmentData);
     console.log("Step changed:", step);
   }, [step]);
 
-
-
   return (
     <Dialog open={open} onClose={handleClose} className="relative z-50">
       <div className="fixed inset-0 bg-black/30 backdrop-blur-sm" />
 
       <div className="fixed inset-0 flex items-center justify-center p-4 sm:p-6">
         <Dialog.Panel className="bg-white p-5 sm:p-6 rounded-xl shadow-2xl w-full max-w-sm sm:max-w-md lg:max-w-lg">
-
           {/* Step 1: Who is it for */}
           {step === 1 && (
             <>
@@ -89,30 +121,125 @@ console.log("appointmentData====>",appointmentData);
                         ? "bg-blue-100 border-blue-600 text-blue-800"
                         : "border-gray-300 hover:bg-blue-50 hover:border-blue-600 text-gray-700"
                     }`}
-                    onClick={() => setSelectedFor(option)}
+                    onClick={() => {
+                      setSelectedFor(option);
+                      setShowPatientList(false);
+                      setShowAddPatientForm(false);
+                    }}
                   >
                     {option === "self" ? "Self" : "Other"}
                   </button>
                 ))}
               </div>
 
+              {selectedFor === "other" && (
+                <div className="mt-4">
+                  <h4 className="text-sm font-medium text-gray-700 mb-2">
+                    Other Patients:
+                  </h4>
+                  {otherPatientDetails.length > 0 ? (
+                    <ul className="space-y-2 text-sm text-gray-700">
+                      {otherPatientDetails.map((p, i) => (
+                        <li
+                          key={i}
+                          className="border border-gray-200 rounded-lg p-2 shadow-sm"
+                        >
+                          {p.name} – {p.gender}, {p.age} yrs
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-sm text-gray-500">No data available</p>
+                  )}
+                </div>
+              )}
+
+              {showPatientList && (
+                <div className="mt-4 border-t pt-4">
+                  <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                    Manage Patients
+                  </h4>
+                  <ul className="space-y-2 text-sm text-gray-700">
+                    {diagnostics?.otherPatientDetails?.map((p, i) => (
+                      <li key={i} className="border rounded p-2">
+                        {p.name} - {p.gender}, {p.age}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <button
+                    onClick={() => setShowAddPatientForm(true)}
+                    className="mt-4 text-blue-600 hover:underline text-sm font-medium"
+                  >
+                    + Add New Patient
+                  </button>
+                </div>
+              )}
+
+              {showAddPatientForm && (
+                <div className="mt-4 border-t pt-4 space-y-2">
+                  <h4 className="text-sm font-semibold text-gray-700">
+                    Add Patient
+                  </h4>
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Name"
+                    value={newPatient.name}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border rounded"
+                  />
+                  <input
+                    type="text"
+                    name="gender"
+                    placeholder="Gender"
+                    value={newPatient.gender}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border rounded"
+                  />
+                  <input
+                    type="number"
+                    name="age"
+                    placeholder="Age"
+                    value={newPatient.age}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border rounded"
+                  />
+                  <button
+                    onClick={handleSavePatient}
+                    className="w-full bg-blue-600 text-white py-2 rounded font-medium"
+                  >
+                    Save Patient
+                  </button>
+                </div>
+              )}
+
               <div className="mt-8 flex flex-col sm:flex-row justify-between gap-4">
                 <button
                   onClick={handleClose}
-                  className="w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg"
+                  className="w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-all duration-200"
                 >
                   Cancel
                 </button>
+
                 <button
-                  onClick={() => setStep(2)}
+                  onClick={() => {
+                    if (selectedFor === "self") {
+                      setStep(2);
+                    } else {
+                      setShowPatientList(true);
+                    }
+                  }}
                   disabled={!selectedFor}
-                  className={`w-full px-4 py-3 font-medium rounded-lg ${
+                  className={`w-full px-4 py-3 font-medium rounded-lg transition-all duration-200 ${
                     selectedFor
-                      ? "bg-blue-600 hover:bg-blue-700 text-white"
+                      ? "bg-[#006fab] hover:bg-blue-700 text-white"
                       : "bg-gray-300 text-gray-500 cursor-not-allowed"
                   }`}
                 >
-                  Continue
+                  {selectedFor === "self"
+                    ? "Continue as Self"
+                    : "Manage Patients"}
                 </button>
               </div>
             </>
@@ -126,7 +253,10 @@ console.log("appointmentData====>",appointmentData);
               </Dialog.Title>
 
               <div className="space-y-4">
-                {[{ id: "online", label: "💳 Pay Online" }, { id: "clinic", label: "🏥 Pay at Clinic" }].map(({ id, label }) => (
+                {[
+                  { id: "online", label: "💳 Pay Online" },
+                  { id: "diagonstics", label: "🏥 Pay at Diagnostics" },
+                ].map(({ id, label }) => (
                   <button
                     key={id}
                     onClick={() => setSelectedPayment(id)}
@@ -143,17 +273,19 @@ console.log("appointmentData====>",appointmentData);
 
               <div className="mt-8 flex flex-col sm:flex-row justify-between gap-4">
                 <button
-                  onClick={handleClose}
-                  className="w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => setStep(3)}
+                  onClick={() => {
+                    if (selectedPayment === "diagonstics") {
+                      setStep(3); // Diagnostics payment → directly go to step 3
+                    } else if (selectedPayment === "online") {
+                      console.log("Pay Online");
+                      alert("Redirecting to Online Payment");
+                      // Yaha payment gateway ka code aa sakta hai
+                    }
+                  }}
                   disabled={!selectedPayment}
-                  className={`w-full px-4 py-3 font-medium rounded-lg ${
+                  className={`w-full px-4 py-3 font-medium rounded-lg transition-all duration-200 ${
                     selectedPayment
-                      ? "bg-blue-600 hover:bg-blue-700 text-white"
+                      ? "bg-[#006fab] hover:bg-blue-700 text-white"
                       : "bg-gray-300 text-gray-500 cursor-not-allowed"
                   }`}
                 >
@@ -182,7 +314,7 @@ console.log("appointmentData====>",appointmentData);
                   Cancel
                 </button>
                 <button
-                  onClick={() => setStep(4)}
+                  onClick={handleConfirmBooking}
                   className="w-full px-4 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg"
                 >
                   Yes, Book
@@ -214,7 +346,9 @@ console.log("appointmentData====>",appointmentData);
                     <h3 className="text-base sm:text-lg font-semibold text-gray-900">
                       {diagnostics?.name}
                     </h3>
-                    <p className="text-sm text-gray-500">{diagnostics?.address}</p>
+                    <p className="text-sm text-gray-500">
+                      {diagnostics?.address}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -225,7 +359,10 @@ console.log("appointmentData====>",appointmentData);
                   Scheduled Appointment
                 </h4>
                 <p className="text-sm text-gray-500 mb-2">
-                  Appointment ID: <strong className="text-gray-700">{appointmentId || "N/A"}</strong>
+                  Appointment ID:{" "}
+                  <strong className="text-gray-700">
+                    {appointmentId || "N/A"}
+                  </strong>
                 </p>
                 <div className="flex items-center gap-2 text-sm text-gray-700 mb-1">
                   <Calendar className="w-5 h-5 text-blue-600" />
@@ -233,7 +370,9 @@ console.log("appointmentData====>",appointmentData);
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-700">
                   <Clock className="w-5 h-5 text-blue-600" />
-                  <strong>{slots?.startTime || "N/A"} - {slots?.endTime || "N/A"}</strong>
+                  <strong>
+                    {slots?.startTime || "N/A"} - {slots?.endTime || "N/A"}
+                  </strong>
                 </div>
                 <span className="inline-block mt-4 px-4 py-1 text-xs bg-blue-100 text-blue-700 rounded-full font-medium">
                   {selectedFor?.toUpperCase() || "MYSELF"}
@@ -246,9 +385,15 @@ console.log("appointmentData====>",appointmentData);
                   Patient Information
                 </h4>
                 <div className="space-y-1 text-sm text-gray-700">
-                  <p><strong>Name:</strong> {patientDetails?.name || "N/A"}</p>
-                  <p><strong>Gender:</strong> {patientDetails?.gender || "N/A"}</p>
-                  <p><strong>Contact:</strong> {patientDetails?.phone || "N/A"}</p>
+                  <p>
+                    <strong>Name:</strong> {patientDetails?.name || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Gender:</strong> {patientDetails?.gender || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Contact:</strong> {patientDetails?.phone || "N/A"}
+                  </p>
                 </div>
               </div>
 
