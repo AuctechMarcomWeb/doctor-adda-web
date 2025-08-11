@@ -17,20 +17,26 @@ import {
   CheckCircle,
   ArrowRight,
   Navigation,
+  StarHalf,
 } from "lucide-react";
 import { getRequest } from "../Helpers";
 import { useParams } from "react-router-dom";
 import HospitalReviewForm from "../components/HospitalReviewForm";
+import HospitalTimeSelection from "../components/HospitalTimeSelection";
 
 const HospitalDetailPage = () => {
 
   const [hospital, setHospital] = useState(null);
-  // console.log("hospitals=============???", hospital);
 
-  const [activeTab, setActiveTab] = useState("about");
-  const { id } = useParams();
-  const [openReviewPopup, setOpenReviewPopup] = useState(false);
-  const [reviews, setReviews] = useState([]);
+  const [isTimeSelection, setIsTimeSelection] = useState(false)
+
+  const [activeTab, setActiveTab] = useState("about")
+  const { id } = useParams()
+  const [openReviewPopup, setOpenReviewPopup] = useState(false)
+  const [reviews, setReviews] = useState([])
+  const [selectedDoctor,setSelectedDoctor] = useState()
+
+  console.log(" selectedDoctor  : ", selectedDoctor)
 
   const fetchHospitalDetails = async (id) => {
     try {
@@ -42,6 +48,22 @@ const HospitalDetailPage = () => {
       console.error("Error fetching hospitals", error);
     }
   };
+
+
+  console.log("  hospital?.registeredDoctor ", hospital?.registeredDoctor)
+
+
+  const handleNavgation = () => {
+    if (hospital?.location?.coordinates) {
+      const [lng, lat] = hospital.location.coordinates;
+      const mapUrl = `https://www.google.com/maps?q=${lat},${lng}`;
+      window.open(mapUrl, "_blank");
+    }
+  }
+
+
+
+
 
   const handleAddReview = () => {
     setOpenReviewPopup(true);
@@ -55,15 +77,15 @@ const HospitalDetailPage = () => {
   }, []);
 
   // Function to return correct icon based on facility name
-const getFacilityIcon = (name = "") => {
-  if (name.includes("Emergency Services")) return Heart;
-  if (name.includes("24/7 Pharmacy")) return Clock;
-  if (name.includes("ICU") || name.includes("NICU")) return Shield;
-  if (name.includes("Blood Bank")) return Hospital;
-  if (name.includes("Radiology") || name.includes("MRI") || name.includes("CT")) return BadgeCheck;
-  if (name.includes("Pathology") || name.includes("Lab")) return Stethoscope;
-  return Hospital; 
-};
+  const getFacilityIcon = (name = "") => {
+    if (name.includes("Emergency Services")) return Heart;
+    if (name.includes("24/7 Pharmacy")) return Clock;
+    if (name.includes("ICU") || name.includes("NICU")) return Shield;
+    if (name.includes("Blood Bank")) return Hospital;
+    if (name.includes("Radiology") || name.includes("MRI") || name.includes("CT")) return BadgeCheck;
+    if (name.includes("Pathology") || name.includes("Lab")) return Stethoscope;
+    return Hospital;
+  };
 
   const departments = [
     "Cardiology",
@@ -142,36 +164,57 @@ const getFacilityIcon = (name = "") => {
                   </span>
                 </div>
                 <div className="flex items-center gap-4 mb-6">
+
+
                   <div className="flex items-center gap-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className="w-5 h-5 fill-yellow-400 text-yellow-400"
-                      />
-                    ))}
+                    <div className="flex items-center">
+                      {[...Array(5)].map((_, i) => {
+                        const rating = hospital?.averageRating || 0;
+                        if (i < Math.floor(rating)) {
+                          // Full star
+                          return <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />;
+                        } else if (i < rating) {
+                          // Half star
+                          return <StarHalf key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />;
+                        } else {
+                          // Empty star
+                          return <Star key={i} className="w-4 h-4 text-gray-300" />;
+                        }
+                      })}
+                    </div>
+                    {/* Rating Text */}
                     <span className="ml-2 text-white font-semibold">
-                      {hospital?.averageRating} 
-                      {/* //({hospital?.reviews} reviews) */}
+                      {hospital?.averageRating || 0} /5
                     </span>
                   </div>
+
+
                 </div>
               </div>
 
               <p className="text-white text-lg leading-relaxed">
-               {hospital?.description}
+                {hospital?.description}
               </p>
 
               {/* Action Buttons */}
               <div className="grid sm:grid-cols-2 gap-4">
-                <button className="bg-gradient-to-r from-red-500 to-red-600 text-white py-4 px-6 rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-300 flex items-center justify-center gap-3 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+
+                <button
+                  onClick={() => {
+                    window.location.href = `tel:${hospital?.phone}`
+                  }}
+                  className="bg-gradient-to-r from-red-500 to-red-600 text-white py-4 px-6 rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-300 flex items-center justify-center gap-3 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1">
                   <PhoneCall className="w-5 h-5" />
                   Emergency Call
                 </button>
-                <button className="bg-gradient-to-r from-green-500 to-green-600 text-white py-4 px-6 rounded-xl hover:from-green-600 hover:to-green-700 transition-all duration-300 flex items-center justify-center gap-3 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+
+                <button onClick={() => setIsTimeSelection(true)} className="bg-gradient-to-r from-green-500 to-green-600 text-white py-4 px-6 rounded-xl hover:from-green-600 hover:to-green-700 transition-all duration-300 flex items-center justify-center gap-3 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1">
                   <CalendarCheck className="w-5 h-5" />
                   Book Appointment
                 </button>
+
               </div>
+
             </div>
           </div>
         </div>
@@ -200,21 +243,19 @@ const getFacilityIcon = (name = "") => {
           <div className="border-b border-gray-200 bg-gray-50">
             <nav className="flex">
               <button
-                className={`flex-1 py-6 px-8 text-lg font-semibold transition-all duration-300 ${
-                  activeTab === "about"
-                    ? "bg-white text-[#00659d] border-b-4 border-[#00659d] shadow-sm"
-                    : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
-                }`}
+                className={`flex-1 py-6 px-8 text-lg font-semibold transition-all duration-300 ${activeTab === "about"
+                  ? "bg-white text-[#00659d] border-b-4 border-[#00659d] shadow-sm"
+                  : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                  }`}
                 onClick={() => setActiveTab("about")}
               >
                 About {hospital?.name}
               </button>
               <button
-                className={`flex-1 py-6 px-8 text-lg font-semibold transition-all duration-300 ${
-                  activeTab === "review"
-                    ? "bg-white text-[#00659d] border-b-4 border-[#00659d] shadow-sm"
-                    : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
-                }`}
+                className={`flex-1 py-6 px-8 text-lg font-semibold transition-all duration-300 ${activeTab === "review"
+                  ? "bg-white text-[#00659d] border-b-4 border-[#00659d] shadow-sm"
+                  : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                  }`}
                 onClick={() => setActiveTab("review")}
               >
                 Patient Reviews
@@ -232,7 +273,7 @@ const getFacilityIcon = (name = "") => {
                     About {hospital?.name}
                   </h2>
                   <p className="text-lg text-gray-700 leading-relaxed">
-                        {hospital?.description}
+                    {hospital?.description}
                   </p>
                 </div>
 
@@ -244,21 +285,21 @@ const getFacilityIcon = (name = "") => {
                   </h3>
                   <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {hospital?.facilities.map((facility) => {
-                            const Icon = getFacilityIcon(facility.name)
-                      return(
-                      <div
-                        key={facility._id}
-                        className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100 hover:shadow-md transition-all duration-300"
-                      >
-                        <div className="flex items-center gap-3">
-                       <Icon className="w-5 h-5 text-blue-600" /> 
-                          <span className="font-semibold text-gray-800">
-                            {facility.name}
-                          </span>
+                      const Icon = getFacilityIcon(facility.name)
+                      return (
+                        <div
+                          key={facility._id}
+                          className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100 hover:shadow-md transition-all duration-300"
+                        >
+                          <div className="flex items-center gap-3">
+                            <Icon className="w-5 h-5 text-blue-600" />
+                            <span className="font-semibold text-gray-800">
+                              {facility.name}
+                            </span>
+                          </div>
                         </div>
-                      </div>
                       );
-})}
+                    })}
                   </div>
                 </div>
 
@@ -291,9 +332,12 @@ const getFacilityIcon = (name = "") => {
                     {hospital?.doctors?.map((doc) => (
                       <div
                         key={doc._id}
-                        className="bg-white border border-gray-200 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                        className="bg-white border cursor-pointer border-gray-200 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                       >
-                        <div className="flex flex-col items-center text-center">
+                        <div
+                         onClick={()=> {setIsTimeSelection(true)
+                                         setSelectedDoctor(doc)}}
+                         className="flex flex-col items-center text-center">
                           <img
                             src={
                               doc?.image || "https://img.freepik.com/free-photo/portrait-female-doctor_144627-39388.jpg"
@@ -308,14 +352,37 @@ const getFacilityIcon = (name = "") => {
                             {doc?.specialization}
                           </p>
                           <p className="text-gray-600 text-sm mb-3">
-                            {doc?.experience}
+                            {doc?.experience} years of experience
                           </p>
-                          <div className="flex items-center gap-1">
-                            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                            <span className="text-gray-700 font-semibold">
-                              {doc?.rating}
-                            </span>
-                          </div>
+
+                        </div>
+                      </div>
+                    ))}
+                    {hospital?.registeredDoctor?.map((doc) => (
+                      <div
+                        key={doc._id}
+                        className="bg-white  cursor-pointer border border-gray-200 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                      >
+                        <div 
+                        onClick={()=> { setIsTimeSelection(true); setSelectedDoctor( doc); }}
+                        className="flex flex-col items-center text-center">
+                          <img
+                            src={
+                              doc?.doctorId?.profilepic || "https://img.freepik.com/free-photo/portrait-female-doctor_144627-39388.jpg"
+                            }
+                            alt={doc?.doctorId?.fullName}
+                            className="w-24 h-24 rounded-full object-cover border-4 border-blue-100 mb-4"
+                          />
+                          <h4 className="text-xl font-bold text-gray-800 mb-1">
+                            {doc?.doctorId?.fullName}
+                          </h4>
+                          <p className="text-blue-600 font-semibold mb-2">
+                            {doc?.doctorId?.category?.name}
+                          </p>
+                          <p className="text-gray-600 text-sm mb-3">
+                            {doc?.doctorId?.experience} years of experience
+                          </p>
+
                         </div>
                       </div>
                     ))}
@@ -331,7 +398,9 @@ const getFacilityIcon = (name = "") => {
                   <p className="text-lg text-gray-700 mb-6">
                     {hospital?.address}
                   </p>
-                  <button className="bg-[#00659d] text-white px-8 py-4 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 flex items-center gap-3 font-semibold shadow-lg hover:shadow-xl">
+                  <button
+                    onClick={handleNavgation}
+                    className="bg-[#00659d] text-white px-8 py-4 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 flex items-center gap-3 font-semibold shadow-lg hover:shadow-xl">
                     <Locate className="w-5 h-5" />
                     Get Directions
                     <ArrowRight className="w-4 h-4" />
@@ -345,61 +414,60 @@ const getFacilityIcon = (name = "") => {
               <div className="space-y-8">
                 <div className="mb-8 flex flex-row justify-between">
                   <h2 className="text-3xl font-bold text-gray-800 mb-2">
-                  Customer Reviews
+                    Customer Reviews
                   </h2>
 
                   <button
-                  onClick={() =>handleAddReview()}
-                   className="bg-[#00659d] text-white px-8 py-4 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl">
-                   Add Review
+                    onClick={() => handleAddReview()}
+                    className="bg-[#00659d] text-white px-8 py-4 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl">
+                    Add Review
                   </button>
-                  
+
 
                 </div>
 
 
-              
+
 
                 {
-                hospital?.reviews?.map((review) => (
-                  <div
-                    key={review._id}
-                    className="bg-white border border-gray-200 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300"
-                  >
-                    <div className="flex flex-col sm:flex-row gap-6">
-                      <img
-                        src={'https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250'}
-                        alt={review.user}
-                        className="w-20 h-20 rounded-full object-cover border-4 border-blue-100 mx-auto sm:mx-0"
-                      />
-                      <div className="flex-1">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3">
-                          <div>
-                          <h4 className="text-xl font-bold text-gray-800">
-                            {review?.user?.name || "user"}
-                          </h4>
+                  hospital?.reviews?.map((review) => (
+                    <div
+                      key={review._id}
+                      className="bg-white border border-gray-200 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300"
+                    >
+                      <div className="flex flex-col sm:flex-row gap-6">
+                        <img
+                          src={'https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250'}
+                          alt={review.user}
+                          className="w-20 h-20 rounded-full object-cover border-4 border-blue-100 mx-auto sm:mx-0"
+                        />
+                        <div className="flex-1">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3">
+                            <div>
+                              <h4 className="text-xl font-bold text-gray-800">
+                                {review?.user?.name || "user"}
+                              </h4>
 
-                          </div>
-                          <div className="flex text-yellow-400 mt-2 sm:mt-0">
-                            {[...Array(5)].map((_, i) => (
-                              <Star
-                                key={i}
-                                className={`w-5 h-5 ${
-                                  i < review.rating
+                            </div>
+                            <div className="flex text-yellow-400 mt-2 sm:mt-0">
+                              {[...Array(5)].map((_, i) => (
+                                <Star
+                                  key={i}
+                                  className={`w-5 h-5 ${i < review.rating
                                     ? "fill-yellow-400"
                                     : "text-gray-300"
-                                }`}
-                              />
-                            ))}
+                                    }`}
+                                />
+                              ))}
+                            </div>
                           </div>
+                          <p className="text-gray-700 leading-relaxed text-lg italic">
+                            "{review.comment}"
+                          </p>
                         </div>
-                        <p className="text-gray-700 leading-relaxed text-lg italic">
-                          "{review.comment}"
-                        </p>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
 
                 <div className="text-center">
                   <button className="bg-[#00659d] text-white px-8 py-4 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl">
@@ -422,28 +490,39 @@ const getFacilityIcon = (name = "") => {
             CityCare Hospital
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-white text-[#00659d] px-8 py-4 rounded-xl font-bold hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl">
+            <button 
+             onClick={() => setIsTimeSelection(true)}
+            className="bg-white text-[#00659d] px-8 py-4 rounded-xl font-bold hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl">
               Book Appointment Now
             </button>
-            <button className="border-2 border-white text-white px-8 py-4 rounded-xl font-bold hover:bg-white hover:text-[#00659d] transition-all duration-300">
-              Call +91-9876543210
+            <button
+              onClick={() => {
+                window.location.href = `tel:${hospital?.phone}`
+              }}
+              className="border-2 cursor-pointer border-white text-white px-8 py-4 rounded-xl font-bold hover:bg-white hover:text-[#00659d] transition-all duration-300">
+              {hospital?.phone}
             </button>
           </div>
         </div>
 
 
         <HospitalReviewForm
+          open={openReviewPopup}
+          onClose={() => setOpenReviewPopup(false)}
+          hospitalId={id}
+          onReviewAdded={review => setReviews([...reviews, review])}
+        />
 
-        open={openReviewPopup}
-        onClose={() => setOpenReviewPopup(false)}
-        hospitalId={id}
-        onReviewAdded={review => setReviews([...reviews, review])}
+        <HospitalTimeSelection
+          isOpen={isTimeSelection}
+          onClose={() => setIsTimeSelection(false)}
+          slotDetails = {selectedDoctor}
+        />
 
-      />
       </div>
 
-      
-      
+
+
     </div>
   );
 };
