@@ -1,40 +1,29 @@
 import React, {useEffect, useState } from "react";
-
 import HospitalCard from "../components/HospitalCard"
 import { getRequest } from "../Helpers"
+import { useDebounce } from "../Hooks/useDebounce"
 
 
 
 const HospitalPage = () => {
-   useEffect(() => {
-      window.scrollTo(0, 0);
-    }, []);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filterType, setFilterType] = useState("all");
 
+  const [searchTerm, setSearchTerm] = useState("");
   const [hospitals, setHospitals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [filterType, setFilterType] = useState("all");
+  
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
-
-  console.log("Hospitals: state", hospitals);
 
   // Fetch hospitals data from API
   useEffect(() => {
     const fetchHospitals = async () => {
       try {
         setLoading(true);
-        const response = await getRequest(`hospital`)
-
-        console.log("Hospitals:", response);
-
-        // if (!response.ok) {
-        //   throw new Error('Failed to fetch hospitals');
-        // }
+        const response = await getRequest(`hospital?search=${debouncedSearchTerm}`)
 
         const data = response?.data?.data?.hospitals
-
-        console.log("Hospitals: data", data);
         
         if (data) {
           setHospitals(data);
@@ -50,46 +39,13 @@ const HospitalPage = () => {
     };
 
     fetchHospitals();
+  }, [debouncedSearchTerm]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
   }, []);
 
-  // const hospitalData = [
-  //   {
-  //     name: "Acadis Hospital",
-  //     type: "ICU ",
-  //     services: "ICU",
-  //     phone: 6765678587,
-  //     location: "Hazratganj, Lucknow, UP",
-  //     rating: 4.3,
-  //     image: "https://i.pinimg.com/736x/64/14/2c/64142c98e03babcd3a630be061c6cf97.jpg"
-  //   },
-  //   {
-  //     name: "   Sunrise Hospital",
-  //     type: "Emergency",
-  //     services: "Gastroenterologist",
-  //     phone: 6765678587,
-  //     location: "1090 Chouraha, Gomti Nagar",
-  //     rating: 4.0,
-  //     image: "https://i.pinimg.com/736x/04/3e/5a/043e5ab7f8f04c4fad70c368a5be8094.jpg"
-  //   },
-  //   {
-  //     name: "TrueLife",
-  //     type: "24/7",
-  //     services: "Gynecologist",
-  //     phone: 6765678587,
-  //     location: "RWJF+P24, Lucknow",
-  //     rating: 3.9,
-  //     image: "https://i.pinimg.com/736x/78/4e/e3/784ee381626b6db85ce9d959ba3cba28.jpg"
-  //   },
-  // ];
-
-  const filteredData = hospitals.filter(hospital => {
-    const matchesSearch = hospital.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         hospital.location.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = filterType === "all" || hospital.type.toLowerCase().includes(filterType.toLowerCase());
-    return matchesSearch && matchesFilter;
-  });
-
-  console.log("Filtered Data:", filteredData);
+ 
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-red-50">
@@ -287,7 +243,7 @@ const HospitalPage = () => {
               </div>
               <input
                 type="text"
-                placeholder="Search by name or location..."
+                placeholder="Search hospitals by name or location..."
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -322,18 +278,28 @@ const HospitalPage = () => {
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-gray-800">
             Available Hospitals
-            <span className="ml-2 text-lg text-gray-500">({filteredData.length})</span>
+            <span className="ml-2 text-lg text-gray-500">({hospitals.length})</span>
           </h2>
           <div className="flex items-center gap-2 text-sm text-gray-600">
-            <span className="w-3 h-3 bg-green-500 rounded-full"></span>
-            <span>Live Updates</span>
+            {loading && (
+              <div className="flex items-center gap-2">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
+                <span>Searching...</span>
+              </div>
+            )}
+            {!loading && (
+              <>
+                <span className="w-3 h-3 bg-green-500 rounded-full"></span>
+                <span>Live Updates</span>
+              </>
+            )}
           </div>
         </div>
 
         {/* Hospital Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {filteredData.length > 0 ? (
-            filteredData.map((data, index) => (
+          {hospitals.length > 0 ? (
+            hospitals.map((data, index) => (
               <div key={index} className="animate-fadeIn" style={{ animationDelay: `${index * 0.1}s` }}>
                     <HospitalCard data={data} />
               </div>
