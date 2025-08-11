@@ -15,10 +15,8 @@ const HospitalReviewForm = ({ open, onClose, hospitalId, onReviewAdded, setUpdat
 
   console.log("hospitalId in review popup",hospitalId);
 
-  const navigate = useNavigate();
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-
-  
+  const navigate = useNavigate()
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn)
 
   if (!open) return null;
 
@@ -43,21 +41,22 @@ const HospitalReviewForm = ({ open, onClose, hospitalId, onReviewAdded, setUpdat
       const data = res.data;
       console.log("data in review popup",data);
       
-      if (success) {
-        setUpdateStatus((prev) => !prev);
+      if (data?.success) {
 
+        setUpdateStatus((prev) => !prev);
         setSuccess(true);
         setComment("");
         setRating(5);
 
-        if (onReviewAdded) onReviewAdded(data.data);
+        if (onReviewAdded) onReviewAdded(data?.data);
 
         setTimeout(() => {
-          setSuccess(false);
           onClose();
-        }, 1200);
+          setSuccess(false);
+        }, 100);
 
       } else {
+        
         setError(data.message || "Failed to submit review");
 
       }
