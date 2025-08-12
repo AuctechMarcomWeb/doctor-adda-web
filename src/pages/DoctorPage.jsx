@@ -217,7 +217,7 @@ const DoctorPage = () => {
         {/* Enhanced Glassmorphism Overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/8 via-transparent to-blue-900/10 backdrop-blur-sm"></div>
 
-        <div className="relative z-10 relative max-w-7xl mx-auto px-4 pt-40">
+        <div className="relative z-10 relative lg:w-[70%] sm:w-full xl:w-[70%] mx-auto px-4 pt-40  ">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
             {/* Left Content - Enhanced */}
             <div className="flex-1 text-center lg:text-left max-w-2xl">
@@ -546,7 +546,7 @@ const DoctorPage = () => {
       `}</style>
 
       {/* Search and Filter Section */}
-      <div className="max-w-7xl mx-auto  py-8 pb-8">
+      <div className="lg:w-[70%] sm:w-full xl:w-[70%] mx-auto  py-8 pb-8">
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-gray-100">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
@@ -640,7 +640,7 @@ const DoctorPage = () => {
       </div>
 
       {/* Features Section */}
-      <div className="max-w-6xl mx-auto px-4 ">
+      <div className="lg:w-[70%] sm:w-full xl:w-[70%] mx-auto px-4 ">
         <div className="text-center mb-10">
           <h2 className="text-3xl font-bold text-gray-800 mb-4">
             Why Choose Our Platform
@@ -714,7 +714,7 @@ const DoctorPage = () => {
 
       {/* Testimonials Section */}
       <div className="bg-gray-50 py-12">
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="lg:w-[70%] sm:w-full xl:w-[70%] mx-auto px-4">
           <div className="text-center mb-10">
             <h2 className="text-3xl font-bold text-gray-800 mb-4">
               What Our Patients Say

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Menu, X, Stethoscope, Bell, LogOut, User, Settings } from "lucide-react";
+import { Menu, X, Stethoscope, Bell, LogOut, User, Settings, File } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 // import logo from "../assets/doctor-adda-logo.png";
@@ -128,7 +128,9 @@ const Navbar = () => {
         <div className="h-5 w-px bg-gray-300 hidden md:block" />
 
         {/* Customer Support */}
-        <div className="flex items-center space-x-2 text-gray-600 hidden md:block">
+
+        <a href="tel:+1800-572-0005">
+          <div className="flex items-center space-x-2 text-gray-600 hidden md:block">
           
           <div className="flex items-center gap-1">
             <FaPhoneAlt className="text-gray-500 text-base" />
@@ -141,14 +143,19 @@ const Navbar = () => {
           </div>
         </div>
 
+
+        </a>
+
         {/* Vertical Divider */}
         <div className="h-5 w-px bg-gray-300 hidden md:block" />
 
         {/* Corporate Bookings */}
-        <div className="text-gray-600 hidden md:block ">
-          <span className="text-xs block text-gray-500">For Corporate Bookings/Enquiry</span>
-          <span className="text-sm font-semibold text-gray-800">931-125-387-5</span>
+        <a href="tel:+931-125-387-5">
+          <div className="text-gray-600 hidden md:block ">
+          <span className="text-xs block text-gray-500">For Appointment Bookings/Enquiry</span>
+          <span className="text-sm font-semibold text-gray-800">+91 9838075493</span>
         </div>
+        </a>
 
 
             
@@ -182,13 +189,22 @@ const Navbar = () => {
                       <LogOut className="w-4 h-4" />
                       Logout
                     </button>
-                    <Link to="/profile">
+                    <Link onClick={() => setDropdownOpen(false)} to="/profile">
                       <button
                         
                         className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
                       >
                         <User className="w-4 h-4" />
                         Profile
+                      </button>
+                    </Link>
+                    <Link onClick={() => setDropdownOpen(false)} to="/appointments">
+                      <button
+                        
+                        className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
+                      >
+                        <File className="w-4 h-4" />
+                        Appointments
                       </button>
                     </Link>
                     <button

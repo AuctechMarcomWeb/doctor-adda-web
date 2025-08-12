@@ -41,7 +41,7 @@ const BannerSection = () => {
   }, []);
 
   return (
-    <div className=" mx-auto text-white p-6 md:p-12 rounded-3xl flex flex-col md:flex-row items-center justify-between lg:w-[70%] sm:w-full xl:w-[70%]"
+    <div className=" mx-auto text-white p-6  md:p-12 rounded-3xl flex flex-col md:flex-row items-center justify-between lg:w-[70%] sm:w-full xl:w-[70%]"
 
       style={{
         background:
@@ -51,7 +51,7 @@ const BannerSection = () => {
       }}
     >
       {/* Left Content */}
-      <div className="max-w-7xl  py-20 ">
+      <div className="max-w-7xl  py-2 sm:py-12 ">
         <h2 className="text-4xl font-bold ">Your Health,One Tap Away</h2>
 
         <div className="flex items-center gap-4 mt-6">
