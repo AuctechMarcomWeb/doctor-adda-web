@@ -63,7 +63,7 @@ const FeaturedHospitals2 = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative max-w-[70%]">
+    <div className=" mx-auto px-4 sm:px-6 lg:px-8 py-8 relative lg:w-[70%] sm:w-full xl:w-[70%]">
   <div className="text-center mb-8">
     <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">
       Featured{" "}

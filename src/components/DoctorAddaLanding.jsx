@@ -5,7 +5,7 @@ const DoctorAddaLanding = () => {
     <div className="bg-gradient-to-br from-blue-50 via-white to-cyan-50">
       {/* Stats Section */}
       <section className="py-16 bg-[#006aa4]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="lg:w-[70%] sm:w-full xl:w-[70%] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 text-center text-white">
             {[
               { number: "1000+", label: "Expert Doctors" },

@@ -128,7 +128,9 @@ const Navbar = () => {
         <div className="h-5 w-px bg-gray-300 hidden md:block" />
 
         {/* Customer Support */}
-        <div className="flex items-center space-x-2 text-gray-600 hidden md:block">
+
+        <a href="tel:+1800-572-0005">
+          <div className="flex items-center space-x-2 text-gray-600 hidden md:block">
           
           <div className="flex items-center gap-1">
             <FaPhoneAlt className="text-gray-500 text-base" />
@@ -141,14 +143,19 @@ const Navbar = () => {
           </div>
         </div>
 
+
+        </a>
+
         {/* Vertical Divider */}
         <div className="h-5 w-px bg-gray-300 hidden md:block" />
 
         {/* Corporate Bookings */}
-        <div className="text-gray-600 hidden md:block ">
-          <span className="text-xs block text-gray-500">For Corporate Bookings/Enquiry</span>
-          <span className="text-sm font-semibold text-gray-800">931-125-387-5</span>
+        <a href="tel:+931-125-387-5">
+          <div className="text-gray-600 hidden md:block ">
+          <span className="text-xs block text-gray-500">For Appointment Bookings/Enquiry</span>
+          <span className="text-sm font-semibold text-gray-800">+91 9838075493</span>
         </div>
+        </a>
 
 
             
