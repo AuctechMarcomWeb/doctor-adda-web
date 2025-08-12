@@ -77,7 +77,7 @@ const Navbar = () => {
       <nav className="fixed w-full z-50 bg-white shadow-lg">
         <div className=" mx-auto ">
 
-          <div className=" max-w-[70%]  max-w-7xl  m-auto flex justify-between items-center h-16 py-10">
+          <div className="  m-auto flex justify-between items-center h-16 py-10 px-2 lg:w-[70%] sm:w-full xl:w-[70%]">
 
             {/* Logo */}
             <Link to="/">
@@ -156,7 +156,7 @@ const Navbar = () => {
             {/* User Profile */}
             {isLoggedIn && userProfileData ? (
               console.log("userProfileData navbar", userProfileData.name),
-              <div className="relative" ref={dropdownRef}>
+              <div className="relative hidden md:block" ref={dropdownRef}>
                 <div 
                   className="flex items-center gap-2 cursor-pointer"
                   onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -174,7 +174,7 @@ const Navbar = () => {
                 
                 {/* Dropdown Menu */}
                 {dropdownOpen && (
-                  <div className="absolute z-100 right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
+                  <div className="absolute z-100 right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200  ">
                     <button
                       onClick={handleLogout}
                       className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
@@ -248,7 +248,7 @@ const Navbar = () => {
               <Link onClick={() => setIsMenuOpen(false)}  to="/doctor" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Doctors & Specialists</Link>
               <Link onClick={() => setIsMenuOpen(false)}  to="/hospital" className="block px-3 py-2 text-gray-700 hover:text-blue-600">Hospitals & Clinics</Link>
               
-              <Link to="/login"><button className="w-full mt-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-2 rounded-full">
+              <Link onClick={() => setIsMenuOpen(false)} to="/login"><button className="w-full mt-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-2 rounded-full">
                 Login / SignUp
               </button></Link>
             </div>
