@@ -11,7 +11,7 @@ const AboutUsSection = () => {
         <div className="absolute top-1/2 left-1/4 w-16 h-16 border border-white/20 rounded-full"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto relative z-10 max-w-[70%]">
+      <div className=" mx-auto relative z-10 lg:w-[70%] sm:w-full xl:w-[70%]">
         {/* Header */}
         <div className="text-center mb-12 px-4">
           <h2 className="text-3xl sm:text-4xl font-bold text-white leading-tight mb-4">
