@@ -28,6 +28,8 @@ import DoctorDetailPage from "./pages/DoctorDetailPage";
 import AppointmentFlow from "./components/AppointmentFlow";
 import About from "./pages/About";
 import UserProfile from "./components/UserProfile";
+import ManagePatients from "./components/ManagePatients";
+import ManagePets from "./components/ManagePets";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -77,6 +79,8 @@ function App() {
               <Navbar />
               <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path="/manage-patients" element={<ManagePatients />} />
+                <Route path="/pets" element={<ManagePets />} />
                 <Route path="/login" element={<LoginSignupFlow />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/about" element={<About />} />
