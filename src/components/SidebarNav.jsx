@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { User, MapPin, Heart, Settings, Users, PawPrint } from "lucide-react";
 import ManagePetsModal from "./ManagePetsModal";
+import ManagePatientsModal from "./ManagePatientsModal";
 
 const menuItems = [
   { id: "profile", label: "My Profile", icon: User },
@@ -14,6 +15,7 @@ const menuItems = [
 
 const SidebarNav = ({ formData, setActiveTab, activeTab, handleEdit }) => {
   const [isPetsModalOpen, setIsPetsModalOpen] = useState(false);
+  const [isPatientsModalOpen, setIsPatientsModalOpen] = useState(false);
 
   const getInitials = (name) =>
     name ? name.split(" ").map((n) => n[0]).join("").toUpperCase() : "";
@@ -21,6 +23,8 @@ const SidebarNav = ({ formData, setActiveTab, activeTab, handleEdit }) => {
   const handleMenuClick = (id) => {
     if (id === "pets") {
       setIsPetsModalOpen(true);
+    } else if (id === "patients") {
+      setIsPatientsModalOpen(true);
     } else {
       setActiveTab(id);
     }
@@ -88,6 +92,12 @@ const SidebarNav = ({ formData, setActiveTab, activeTab, handleEdit }) => {
       <ManagePetsModal
         isOpen={isPetsModalOpen}
         onClose={() => setIsPetsModalOpen(false)}
+      />
+
+      {/* Manage Patients Modal */}
+      <ManagePatientsModal
+        isOpen={isPatientsModalOpen}
+        onClose={() => setIsPatientsModalOpen(false)}
       />
     </>
   );

@@ -12,8 +12,9 @@ const DiagonsticsAppointmentFlow = ({
   onClose,
   id,
   appointmentData,
-    otherPatientDetails = [],
-  setOtherPatientDetails = () => {}
+  otherPatientDetails = [],
+  setOtherPatientDetails = () => {},
+  onOpenManagePatients = () => {},
 }) => {
   // ... existing states
   const [newPatient, setNewPatient] = useState({
@@ -26,7 +27,6 @@ const DiagonsticsAppointmentFlow = ({
   const [selectedFor, setSelectedFor] = useState(null);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [showPatientList, setShowPatientList] = useState(false);
-  const [showAddPatientForm, setShowAddPatientForm] = useState(false);
 
   const userProfileData = useSelector((state) => state.user.userProfileData);
 
@@ -35,16 +35,6 @@ const DiagonsticsAppointmentFlow = ({
     appointmentData || {};
 
   console.log("appointmentData====>", appointmentData);
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setNewPatient((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSavePatient = () => {
-    setOtherPatientDetails((prev) => [...prev, newPatient]);
-    setNewPatient({ name: "", age: "", gender: "" });
-    setShowAddPatientForm(false);
-  };
 
   // Show patient info based on selectedFor
   const isSelf = selectedFor === "self";
@@ -54,13 +44,14 @@ const DiagonsticsAppointmentFlow = ({
         gender: userProfileData?.gender,
         phone: userProfileData?.phone,
       }
-    : (otherPatientDetails.length ? otherPatientDetails[otherPatientDetails.length - 1] : { name: "", gender: "", age: "" });
+    : otherPatientDetails;
 
   const handleClose = () => {
     setStep(1);
     setSelectedFor(null);
     setSelectedPayment(null);
     onClose();
+    onOpenManagePatients();
   };
 
   const fetchDiagnosticsDetails = async () => {
@@ -122,9 +113,7 @@ const DiagonsticsAppointmentFlow = ({
                         : "border-gray-300 hover:bg-blue-50 hover:border-blue-600 text-gray-700"
                     }`}
                     onClick={() => {
-                      setSelectedFor(option);
-                      setShowPatientList(false);
-                      setShowAddPatientForm(false);
+                      setSelectedFor(option); // just select
                     }}
                   >
                     {option === "self" ? "Self" : "Other"}
@@ -144,7 +133,7 @@ const DiagonsticsAppointmentFlow = ({
                           key={i}
                           className="border border-gray-200 rounded-lg p-2 shadow-sm"
                         >
-                          {p.name} – {p.gender}, {p.age} yrs
+                          {p.name} – {p.gender}, {p.age}, {p.weight}yrs
                         </li>
                       ))}
                     </ul>
@@ -155,10 +144,7 @@ const DiagonsticsAppointmentFlow = ({
               )}
 
               {showPatientList && (
-                <div className="mt-4 border-t pt-4">
-                  <h4 className="text-sm font-semibold text-gray-700 mb-2">
-                    Manage Patients
-                  </h4>
+                <div className="mt-4 pt-4">
                   <ul className="space-y-2 text-sm text-gray-700">
                     {diagnostics?.otherPatientDetails?.map((p, i) => (
                       <li key={i} className="border rounded p-2">
@@ -166,51 +152,6 @@ const DiagonsticsAppointmentFlow = ({
                       </li>
                     ))}
                   </ul>
-
-                  <button
-                    onClick={() => setShowAddPatientForm(true)}
-                    className="mt-4 text-blue-600 hover:underline text-sm font-medium"
-                  >
-                    + Add New Patient
-                  </button>
-                </div>
-              )}
-
-              {showAddPatientForm && (
-                <div className="mt-4 border-t pt-4 space-y-2">
-                  <h4 className="text-sm font-semibold text-gray-700">
-                    Add Patient
-                  </h4>
-                  <input
-                    type="text"
-                    name="name"
-                    placeholder="Name"
-                    value={newPatient.name}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border rounded"
-                  />
-                  <input
-                    type="text"
-                    name="gender"
-                    placeholder="Gender"
-                    value={newPatient.gender}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border rounded"
-                  />
-                  <input
-                    type="number"
-                    name="age"
-                    placeholder="Age"
-                    value={newPatient.age}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border rounded"
-                  />
-                  <button
-                    onClick={handleSavePatient}
-                    className="w-full bg-blue-600 text-white py-2 rounded font-medium"
-                  >
-                    Save Patient
-                  </button>
                 </div>
               )}
 
@@ -226,8 +167,9 @@ const DiagonsticsAppointmentFlow = ({
                   onClick={() => {
                     if (selectedFor === "self") {
                       setStep(2);
-                    } else {
-                      setShowPatientList(true);
+                    } else if (selectedFor === "other") {
+                      onClose();
+                      onOpenManagePatients(); // navigate now
                     }
                   }}
                   disabled={!selectedFor}
