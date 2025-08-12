@@ -94,11 +94,11 @@ const BannerSection = () => {
 
 
         {/* Features */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6 text-sm">
-          <div className="flex items-start gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6 text-sm ">
+          <div className="flex items-start gap-2 ">
             <FaMotorcycle size={30} className="text-orange-400 mt-1" />
             <span>
-              <span className="font-semibold">Free Sample Collection</span>
+              <span className="font-semibold ">Free Sample Collection</span>
               <br />
               within <span className="text-yellow-300 font-bold">
                 60 Mins
@@ -124,7 +124,7 @@ const BannerSection = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-4 mt-6">
+        <div className="flex items-center gap-4 mt-6 ">
           <button className="bg-Blue-400 border border-white text-white font-semibold px-4 py-2 rounded-lg hover:bg-white hover:text-[#0074b2] transition cursor-pointer">
             Book Appointment
           </button>

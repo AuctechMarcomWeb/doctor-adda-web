@@ -117,7 +117,7 @@ const NotificationBell = () => {
   };
 
   return (
-    <div className="relative" ref={bellRef}>
+    <div className="relative hidden md:block" ref={bellRef}>
       {/* Notification Bell Button */}
       <div className="relative">
         <button
