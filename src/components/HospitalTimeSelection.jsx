@@ -1,7 +1,16 @@
 import React, { useState } from "react";
 
-const HospitalTimeSelection = ({ isOpen, onClose, slotDetails }) => {
-  console.log("slotDetails popup:", slotDetails);
+const HospitalTimeSelection = ({ isOpen, onClose, slotDetails, onSlotSelected }) => {
+
+  const [selectedDate, setSelectedDate] = useState( null);
+  const [selectedTime, setSelectedTime] = useState(null);
+
+  console.log('  slotDetails :', slotDetails)
+
+  //console.log("slotDetails popup:", slotDetails);
+  //console.log(" selectedDate :", selectedDate)
+ // console.log(" selectedTime :", selectedTime)
+
 
   // Convert API dates to labels and values
   const dates =
@@ -15,9 +24,6 @@ const HospitalTimeSelection = ({ isOpen, onClose, slotDetails }) => {
       const value = dateObj.toISOString().split("T")[0]; // YYYY-MM-DD
       return { label, value, slots: item.slots };
     }) || [];
-
-  const [selectedDate, setSelectedDate] = useState(dates[0]?.value || null);
-  const [selectedTime, setSelectedTime] = useState(null);
 
   // Get slots for selected date
   const slotsForSelectedDate =
@@ -90,6 +96,7 @@ const HospitalTimeSelection = ({ isOpen, onClose, slotDetails }) => {
 
         {/* Book Button */}
         <button
+          onClick={() => onSlotSelected(selectedDate, selectedTime)}
           className="w-full mt-8 py-4 rounded-full bg-blue-600 text-white font-semibold text-lg hover:bg-blue-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
           disabled={!selectedTime}
         >
