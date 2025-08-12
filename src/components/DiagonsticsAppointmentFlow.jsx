@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { Dialog } from "@headlessui/react";
@@ -13,22 +14,23 @@ const DiagonsticsAppointmentFlow = ({
   id,
   appointmentData,
   otherPatientDetails = [],
-  setOtherPatientDetails = () => {},
+  setOtherPatientDetails,
   onOpenManagePatients = () => {},
 }) => {
-  // ... existing states
-  const [newPatient, setNewPatient] = useState({
-    name: "",
-    gender: "",
-    age: "",
-  });
   const [diagnostics, setDiagnostics] = useState(null);
   const [step, setStep] = useState(1);
   const [selectedFor, setSelectedFor] = useState(null);
   const [selectedPayment, setSelectedPayment] = useState(null);
-  const [showPatientList, setShowPatientList] = useState(false);
-
   const userProfileData = useSelector((state) => state.user.userProfileData);
+  const UserId = userProfileData?._id;
+  console.log("UserId", UserId);
+  console.log("userProfileData:", userProfileData);
+
+  const [patients, setPatients] = useState([]);
+
+  const [selectedPatient, setSelectedPatient] = useState(null);
+
+  const otherPatients = patients.length > 0 ? patients : otherPatientDetails;
 
   // Extract appointment data
   const { diagnostic, slots, amount, appointmentId, date } =
@@ -51,7 +53,7 @@ const DiagonsticsAppointmentFlow = ({
     setSelectedFor(null);
     setSelectedPayment(null);
     onClose();
-    onOpenManagePatients();
+    // onOpenManagePatients();
   };
 
   const fetchDiagnosticsDetails = async () => {
@@ -62,14 +64,24 @@ const DiagonsticsAppointmentFlow = ({
       console.error("Error fetching diagnostics:", error);
     }
   };
+  useEffect(() => {
+    if (id) {
+      fetchDiagnosticsDetails();
+    }
+  }, [id]);
+
+  console.log("appointmentId", {
+    ...appointmentData,
+    otherPatientDetails: selectedPatient,
+  });
+
   const handleConfirmBooking = async () => {
     try {
       const res = await postRequest({
         url: `diagnosticBooking/add`,
-        cred: appointmentData, // Parent se aaya hua payload
+        cred: { ...appointmentData, otherPatientDetails: { patient: selectedPatient } }
       });
-
-      console.log("Booking success:", res);
+      console.log("Booking success:", res?.data?.data);
       setDiagnostics(res?.data?.data?.diagnostic || null);
       setStep(4); // Success step
     } catch (error) {
@@ -81,14 +93,23 @@ const DiagonsticsAppointmentFlow = ({
   };
 
   useEffect(() => {
-    if (id) {
-      fetchDiagnosticsDetails();
-    }
-  }, [id]);
-
-  useEffect(() => {
     console.log("Step changed:", step);
   }, [step]);
+
+  const fetchPatients = async () => {
+    if (!UserId) return;
+    try {
+      const res = await getRequest(`auth/getMembers/${UserId}`);
+      console.log("Fetched patients:", res?.data?.data || []);
+      setPatients(res?.data?.data || []);
+    } catch (error) {
+      console.error("Error fetching patients:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPatients();
+  }, [UserId]);
 
   return (
     <Dialog open={open} onClose={handleClose} className="relative z-50">
@@ -97,6 +118,7 @@ const DiagonsticsAppointmentFlow = ({
       <div className="fixed inset-0 flex items-center justify-center p-4 sm:p-6">
         <Dialog.Panel className="bg-white p-5 sm:p-6 rounded-xl shadow-2xl w-full max-w-sm sm:max-w-md lg:max-w-lg">
           {/* Step 1: Who is it for */}
+          {/* Step 1: Who is this appointment for */}
           {step === 1 && (
             <>
               <Dialog.Title className="text-xl sm:text-2xl font-semibold text-center text-gray-800 mb-6">
@@ -113,7 +135,8 @@ const DiagonsticsAppointmentFlow = ({
                         : "border-gray-300 hover:bg-blue-50 hover:border-blue-600 text-gray-700"
                     }`}
                     onClick={() => {
-                      setSelectedFor(option); // just select
+                      setSelectedFor(option);
+                      setSelectedPatient(null); // Reset selected patient when option changes
                     }}
                   >
                     {option === "self" ? "Self" : "Other"}
@@ -121,37 +144,32 @@ const DiagonsticsAppointmentFlow = ({
                 ))}
               </div>
 
+              {/* If 'Other' selected show patients list */}
               {selectedFor === "other" && (
                 <div className="mt-4">
                   <h4 className="text-sm font-medium text-gray-700 mb-2">
                     Other Patients:
                   </h4>
-                  {otherPatientDetails.length > 0 ? (
-                    <ul className="space-y-2 text-sm text-gray-700">
-                      {otherPatientDetails.map((p, i) => (
+                  {otherPatients.length > 0 ? (
+                    <ul className="space-y-2 text-sm text-gray-700 max-h-40 overflow-auto">
+                      {otherPatients.map((p, i) => (
                         <li
                           key={i}
-                          className="border border-gray-200 rounded-lg p-2 shadow-sm"
+                          className={`border rounded-lg p-2 shadow-sm cursor-pointer ${
+                            selectedPatient?.name === p.name
+                              ? "border-blue-600 bg-blue-50"
+                              : "border-gray-200"
+                          }`}
+                          onClick={() => setSelectedPatient(p)}
                         >
-                          {p.name} – {p.gender}, {p.age}, {p.weight}yrs
+                          {p.name} , {p.gender}, {p.age}{" "}
+                          {p.weight ? p.weight + "yrs" : ""}
                         </li>
                       ))}
                     </ul>
                   ) : (
                     <p className="text-sm text-gray-500">No data available</p>
                   )}
-                </div>
-              )}
-
-              {showPatientList && (
-                <div className="mt-4 pt-4">
-                  <ul className="space-y-2 text-sm text-gray-700">
-                    {diagnostics?.otherPatientDetails?.map((p, i) => (
-                      <li key={i} className="border rounded p-2">
-                        {p.name} - {p.gender}, {p.age}
-                      </li>
-                    ))}
-                  </ul>
                 </div>
               )}
 
@@ -163,26 +181,45 @@ const DiagonsticsAppointmentFlow = ({
                   Cancel
                 </button>
 
-                <button
-                  onClick={() => {
-                    if (selectedFor === "self") {
-                      setStep(2);
-                    } else if (selectedFor === "other") {
-                      onClose();
-                      onOpenManagePatients(); // navigate now
-                    }
-                  }}
-                  disabled={!selectedFor}
-                  className={`w-full px-4 py-3 font-medium rounded-lg transition-all duration-200 ${
-                    selectedFor
-                      ? "bg-[#006fab] hover:bg-blue-700 text-white"
-                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  }`}
-                >
-                  {selectedFor === "self"
-                    ? "Continue as Self"
-                    : "Manage Patients"}
-                </button>
+                {/* Buttons logic: */}
+                {selectedFor === "self" && (
+                  <button
+                    onClick={() => setStep(2)}
+                    disabled={!selectedFor}
+                    className={`w-full px-4 py-3 font-medium rounded-lg transition-all duration-200 ${
+                      selectedFor
+                        ? "bg-[#006fab] hover:bg-blue-700 text-white"
+                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    }`}
+                  >
+                    Continue as Self
+                  </button>
+                )}
+
+                {selectedFor === "other" && (
+                  <>
+                    {selectedPatient ? (
+                      // If patient selected, show Continue button
+                      <button
+                        onClick={() => setStep(2)}
+                        className="w-full px-4 py-3 bg-[#006fab] hover:bg-blue-700 text-white font-medium rounded-lg transition-all duration-200"
+                      >
+                        Continue
+                      </button>
+                    ) : (
+                      // No patient selected, show Manage Patients button
+                      <button
+                        onClick={() => {
+                          onClose();
+                          onOpenManagePatients();
+                        }}
+                        className="w-full px-4 py-3 bg-gray-300 text-gray-700 font-medium rounded-lg transition-all duration-200 hover:bg-gray-400"
+                      >
+                        Manage Patients
+                      </button>
+                    )}
+                  </>
+                )}
               </div>
             </>
           )}
@@ -301,7 +338,7 @@ const DiagonsticsAppointmentFlow = ({
                   Scheduled Appointment
                 </h4>
                 <p className="text-sm text-gray-500 mb-2">
-                  Appointment ID:{" "}
+                  Appointment ID:
                   <strong className="text-gray-700">
                     {appointmentId || "N/A"}
                   </strong>
@@ -328,13 +365,22 @@ const DiagonsticsAppointmentFlow = ({
                 </h4>
                 <div className="space-y-1 text-sm text-gray-700">
                   <p>
-                    <strong>Name:</strong> {patientDetails?.name || "N/A"}
+                    <strong>Name:</strong>{" "}
+                    {otherPatientDetails?.patient?.name ||
+                      patientDetails?.name ||
+                      "N/A"}
                   </p>
                   <p>
-                    <strong>Gender:</strong> {patientDetails?.gender || "N/A"}
+                    <strong>Gender:</strong>{" "}
+                    {otherPatientDetails?.patient?.gender ||
+                      patientDetails?.gender ||
+                      "N/A"}
                   </p>
                   <p>
-                    <strong>Contact:</strong> {patientDetails?.phone || "N/A"}
+                    <strong>Contact:</strong>{" "}
+                    {otherPatientDetails?.patient?.phone ||
+                      patientDetails?.phone ||
+                      "N/A"}
                   </p>
                 </div>
               </div>

@@ -1,32 +1,18 @@
-import React, { useState } from "react";
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
+import React, { useEffect, useState } from "react";
 import SidebarNav from "./SidebarNav";
-import { Plus, User, Edit3, Trash2, X } from "lucide-react";
+import { Plus, User, Edit3, Trash2, X, LogIn, Edit } from "lucide-react";
+import { useSelector } from "react-redux";
+import { deleteRequest, getRequest, patchRequest, postRequest } from "../Helpers";
 
 const ManagePatients = () => {
-  const [patients, setPatients] = useState([
-    {
-      id: 1,
-      name: "Amit Sharma",
-      age: 35,
-      email: "amit@example.com",
-      gender: "Male",
-      orderFor: "Myself",
-    },
-    {
-      id: 2,
-      name: "Priya Singh",
-      age: 28,
-      email: "priya@example.com",
-      gender: "Female",
-      orderFor: "Someone else",
-    },
-  ]);
+  const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
+  const UserId = userProfileData?._id;
+  console.log("UserId", UserId);
 
+  const [patients, setPatients] = useState([]);
   const [activeTab, setActiveTab] = useState("patients");
-  const [formData, setFormData] = useState({
-    name: "John Doe",
-    email: "john@example.com",
-  });
 
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -36,50 +22,93 @@ const ManagePatients = () => {
     age: "",
     email: "",
     gender: "",
-    orderFor: "",
+    oderingFor: "",
   });
+  console.log("newPatient", newPatient);
 
   const [editPatient, setEditPatient] = useState(null);
 
-  const handleAddPatient = () => {
+  //Fetch Patients API
+  const fetchPatients = async () => {
+    try {
+      const res = await getRequest(`auth/getMembers/${UserId}`);
+      console.log("Fetch PAtients", res?.data?.data || []);
+
+      setPatients(res?.data?.data || []);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPatients();
+  }, [UserId]);
+
+  //add api
+  const handleAddPatient = async () => {
     if (
       !newPatient.name ||
       !newPatient.age ||
       !newPatient.email ||
       !newPatient.gender ||
-      !newPatient.orderFor
+      !newPatient.oderingFor
     ) {
       alert("Please fill all fields");
       return;
     }
-    setPatients([...patients, { ...newPatient, id: Date.now() }]);
-    setNewPatient({
-      name: "",
-      age: "",
-      email: "",
-      gender: "",
-      orderFor: "",
-    });
+    try {
+      const res = await postRequest({
+        url: `auth/addMember/${UserId}`,
+        cred: newPatient,
+      });
+      console.log("add patient", res);
+
+      setPatients(res?.data); // depends on your API response shape
+    } catch (error) {
+      console.error("Error adding patient:", error);
+    }
     setShowAddModal(false);
   };
 
-  const handleUpdatePatient = () => {
-    if (
-      !editPatient.name ||
-      !editPatient.age ||
-      !editPatient.email ||
-      !editPatient.gender ||
-      !editPatient.orderFor
-    ) {
-      alert("Please fill all fields");
-      return;
-    }
-    setPatients(
-      patients.map((p) => (p.id === editPatient.id ? editPatient : p))
-    );
+  //edit api
+ const handleUpdatePatient = async () => {
+  if (
+    !editPatient.name ||
+    !editPatient.age ||
+    !editPatient.email ||
+    !editPatient.gender ||
+    !editPatient.oderingFor
+  ) {
+    alert("Please fill all fields");
+    return;
+  }
+  try {
+    const res = await patchRequest({
+      url: `auth/updateMember/${UserId}/${editPatient._id}`,
+      cred: editPatient,
+    });
+    console.log("update patient", res?.data?.data);
+    setPatients(res?.data?.data || []);
     setEditPatient(null);
     setShowEditModal(false);
-  };
+  } catch (error) {
+    console.error("Error updating patient:", error);
+  }
+};
+
+//delete api
+const handleDeletePatient = async (patientId) => {
+  try {
+    const res = await deleteRequest(`auth/deleteMember/${UserId}/${patientId}`);
+    console.log("Delete patient response:", res?.data?.data);
+    setPatients(res?.data?.data);
+  } catch (error) {
+    console.error("Error deleting patient:", error);
+  }
+};
+
+
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 font-sans">
@@ -106,14 +135,14 @@ const ManagePatients = () => {
 
             {/* Patients List */}
             <div className="space-y-5">
-              {patients.length === 0 ? (
+              {patients?.length === 0 ? (
                 <p className="text-gray-400 text-center py-8 text-lg font-medium">
                   No patients found.
                 </p>
               ) : (
-                patients.map((patient) => (
+                patients?.map((patient) => (
                   <div
-                    key={patient.id}
+                    key={patient._id}
                     className="flex items-center justify-between p-5 border border-gray-200 rounded-2xl bg-white shadow-sm hover:shadow-lg transition-shadow duration-300 transform hover:scale-[1.02]"
                   >
                     <div className="flex items-center gap-5">
@@ -122,16 +151,16 @@ const ManagePatients = () => {
                       </div>
                       <div>
                         <h3 className="font-semibold text-gray-900 text-lg">
-                          {patient.name}
+                          {patient?.name}
                         </h3>
                         <p className="text-sm text-gray-600 mt-1">
-                          Age: {patient.age} | Gender: {patient.gender}
+                          Age: {patient?.age} | Gender: {patient?.gender}
                         </p>
                         <p className="text-sm text-gray-600 mt-0.5">
-                          Email: {patient.email}
+                          Email: {patient?.email}
                         </p>
                         <p className="text-sm text-gray-600 mt-0.5">
-                          Order for: {patient.orderFor}
+                          Order for: {patient?.oderingFor}
                         </p>
                       </div>
                     </div>
@@ -142,16 +171,14 @@ const ManagePatients = () => {
                           setShowEditModal(true);
                         }}
                         className="flex items-center gap-1 text-[#006ca7] font-semibold hover:text-[#004a70] transition-colors"
-                        aria-label={`Edit ${patient.name}`}
+                        aria-label={`Edit ${patient?.name}`}
                       >
                         <Edit3 size={18} /> Edit
                       </button>
                       <button
-                        onClick={() =>
-                          setPatients(patients.filter((p) => p.id !== patient.id))
-                        }
+                          onClick={() => handleDeletePatient(patient._id)}
                         className="flex items-center gap-1 text-red-600 font-semibold hover:text-red-700 transition-colors"
-                        aria-label={`Remove ${patient.name}`}
+                        aria-label={`Remove ${patient?.name}`}
                       >
                         <Trash2 size={18} /> Remove
                       </button>
@@ -199,7 +226,7 @@ const ManagePatients = () => {
                   <input
                     type="text"
                     placeholder="Full Name"
-                    value={newPatient.name}
+                    value={newPatient?.name}
                     onChange={(e) =>
                       setNewPatient({ ...newPatient, name: e.target.value })
                     }
@@ -210,7 +237,7 @@ const ManagePatients = () => {
                   <input
                     type="number"
                     placeholder="Age"
-                    value={newPatient.age}
+                    value={newPatient?.age}
                     onChange={(e) =>
                       setNewPatient({ ...newPatient, age: e.target.value })
                     }
@@ -221,7 +248,7 @@ const ManagePatients = () => {
                   <input
                     type="email"
                     placeholder="Email"
-                    value={newPatient.email}
+                    value={newPatient?.email}
                     onChange={(e) =>
                       setNewPatient({ ...newPatient, email: e.target.value })
                     }
@@ -229,7 +256,7 @@ const ManagePatients = () => {
                     required
                   />
                   <select
-                    value={newPatient.gender}
+                    value={newPatient?.gender}
                     onChange={(e) =>
                       setNewPatient({ ...newPatient, gender: e.target.value })
                     }
@@ -252,30 +279,32 @@ const ManagePatients = () => {
                       <label className="flex items-center gap-3 cursor-pointer">
                         <input
                           type="radio"
-                          name="orderFor"
+                          name="oderingFor"
                           value="Myself"
-                          checked={newPatient.orderFor === "Myself"}
+                          checked={newPatient?.oderingFor === "Myself"}
                           onChange={(e) =>
                             setNewPatient({
                               ...newPatient,
-                              orderFor: e.target.value,
+                              oderingFor: e.target.value,
                             })
                           }
                           className="accent-[#006ca7] w-5 h-5"
                           required
                         />
-                        <span className="text-gray-800 font-medium">Myself</span>
+                        <span className="text-gray-800 font-medium">
+                          Myself
+                        </span>
                       </label>
                       <label className="flex items-center gap-3 cursor-pointer">
                         <input
                           type="radio"
-                          name="orderFor"
+                          name="oderingFor"
                           value="Someone else"
-                          checked={newPatient.orderFor === "Someone else"}
+                          checked={newPatient?.oderingFor === "Someone else"}
                           onChange={(e) =>
                             setNewPatient({
                               ...newPatient,
-                              orderFor: e.target.value,
+                              oderingFor: e.target.value,
                             })
                           }
                           className="accent-[#006ca7] w-5 h-5"
@@ -345,7 +374,7 @@ const ManagePatients = () => {
                   <input
                     type="text"
                     placeholder="Full Name"
-                    value={editPatient.name}
+                    value={editPatient?.name}
                     onChange={(e) =>
                       setEditPatient({ ...editPatient, name: e.target.value })
                     }
@@ -356,7 +385,7 @@ const ManagePatients = () => {
                   <input
                     type="number"
                     placeholder="Age"
-                    value={editPatient.age}
+                    value={editPatient?.age}
                     onChange={(e) =>
                       setEditPatient({ ...editPatient, age: e.target.value })
                     }
@@ -367,7 +396,7 @@ const ManagePatients = () => {
                   <input
                     type="email"
                     placeholder="Email"
-                    value={editPatient.email}
+                    value={editPatient?.email}
                     onChange={(e) =>
                       setEditPatient({ ...editPatient, email: e.target.value })
                     }
@@ -375,7 +404,7 @@ const ManagePatients = () => {
                     required
                   />
                   <select
-                    value={editPatient.gender}
+                    value={editPatient?.gender}
                     onChange={(e) =>
                       setEditPatient({ ...editPatient, gender: e.target.value })
                     }
@@ -398,30 +427,32 @@ const ManagePatients = () => {
                       <label className="flex items-center gap-3 cursor-pointer">
                         <input
                           type="radio"
-                          name="editOrderFor"
+                          name="editoderingFor"
                           value="Myself"
-                          checked={editPatient.orderFor === "Myself"}
+                          checked={editPatient?.oderingFor === "Myself"}
                           onChange={(e) =>
                             setEditPatient({
                               ...editPatient,
-                              orderFor: e.target.value,
+                              oderingFor: e.target.value,
                             })
                           }
                           className="accent-[#006ca7] w-5 h-5"
                           required
                         />
-                        <span className="text-gray-800 font-medium">Myself</span>
+                        <span className="text-gray-800 font-medium">
+                          Myself
+                        </span>
                       </label>
                       <label className="flex items-center gap-3 cursor-pointer">
                         <input
                           type="radio"
-                          name="editOrderFor"
+                          name="editoderingFor"
                           value="Someone else"
-                          checked={editPatient.orderFor === "Someone else"}
+                          checked={editPatient?.oderingFor === "Someone else"}
                           onChange={(e) =>
                             setEditPatient({
                               ...editPatient,
-                              orderFor: e.target.value,
+                              oderingFor: e.target.value,
                             })
                           }
                           className="accent-[#006ca7] w-5 h-5"

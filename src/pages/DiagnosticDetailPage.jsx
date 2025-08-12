@@ -27,7 +27,7 @@ import DiagonsticsReviewPopup from "./DiagonsticsReviewPopup";
 import DiagonsticsAppointmentFlow from "../components/DiagonsticsAppointmentFlow";
 import { useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
-import ManagePatientsModal from "../components/ManagePatientsModal";
+//import ManagePatientsModal from "../components/ManagePatientsModal";
 import { useNavigate } from "react-router-dom";
 const DiagnosticDetailPage = () => {
   const userId = useSelector((state) => state.user.userData.data._id);
@@ -59,10 +59,6 @@ const [otherPatientDetails, setOtherPatientDetails] = useState({
   weight: ""
 });
 
-// payload direct bhej do
-const payload = {
-  otherPatientDetails
-};
   console.log("otherPatientDetails", otherPatientDetails);
 
   const [showManagePatients, setShowManagePatients] = useState(false); // for Manage Patients modal
@@ -73,7 +69,7 @@ const handleAddOtherPatient = (patientData) => {
 };
 
   const handleOpenManagePatients = () => {
-    navigate("/profile");
+    navigate("/manage-patients");
   };
 
   const fetchDiagnosticsDetails = async () => {
@@ -651,13 +647,6 @@ const handleAddOtherPatient = (patientData) => {
         setOtherPatientDetails={setOtherPatientDetails}
         onOpenManagePatients={handleOpenManagePatients}
       />
-     
-      <ManagePatientsModal
-  isOpen={showManagePatients}
-  onClose={() => setShowManagePatients(false)}
-  otherPatientDetails={otherPatientDetails}
-  setOtherPatientDetails={setOtherPatientDetails}
-/>
 
     </div>
   );
