@@ -5,6 +5,8 @@ import SidebarNav from "./SidebarNav";
 import { Plus, User, Edit3, Trash2, X, LogIn, Edit } from "lucide-react";
 import { useSelector } from "react-redux";
 import { deleteRequest, getRequest, patchRequest, postRequest } from "../Helpers";
+import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 
 const ManagePatients = () => {
   useEffect(() => {
@@ -18,7 +20,10 @@ const ManagePatients = () => {
   const [activeTab, setActiveTab] = useState("patients");
 
   const [showAddModal, setShowAddModal] = useState(false);
+  console.log("showAddModal",showAddModal);
+  
   const [showEditModal, setShowEditModal] = useState(false);
+console.log("showEditModal",showEditModal);
 
   const [newPatient, setNewPatient] = useState({
     name: "",
@@ -31,6 +36,8 @@ const ManagePatients = () => {
 
   const [editPatient, setEditPatient] = useState(null);
 
+  console.log("editPatient",editPatient);
+  
   //Fetch Patients API
   const fetchPatients = async () => {
     try {
@@ -49,70 +56,85 @@ const ManagePatients = () => {
 
   //add api
   const handleAddPatient = async () => {
-    if (
-      !newPatient.name ||
-      !newPatient.age ||
-      !newPatient.email ||
-      !newPatient.gender ||
-      !newPatient.oderingFor
-    ) {
-      alert("Please fill all fields");
-      return;
-    }
-    try {
-      const res = await postRequest({
-        url: `auth/addMember/${UserId}`,
-        cred: newPatient,
-      });
-      console.log("add patient", res);
-
-      setPatients(res?.data); // depends on your API response shape
-    } catch (error) {
-      console.error("Error adding patient:", error);
-    }
-    setShowAddModal(false);
-  };
-
-  //edit api
- const handleUpdatePatient = async () => {
-  if (
-    !editPatient.name ||
-    !editPatient.age ||
-    !editPatient.email ||
-    !editPatient.gender ||
-    !editPatient.oderingFor
-  ) {
+  if (!newPatient.name || !newPatient.age || !newPatient.email || !newPatient.gender || !newPatient.oderingFor) {
     alert("Please fill all fields");
     return;
   }
   try {
-    const res = await patchRequest({
+    const response = await postRequest({
+      url: `auth/addMember/${UserId}`,
+      cred: newPatient,
+    });
+
+    console.log("✅ Patient added successfully:", response?.data?.data);
+
+    await fetchPatients(); // ✅ Refresh from API
+    setShowAddModal(false);
+    setNewPatient({ name: "", age: "", email: "", gender: "", oderingFor: "" });
+    toast.success("Patient added successfully!");
+  } catch (error) {
+    console.error("Error adding patient:", error);
+    toast.error(" Failed to add patient");
+  }
+};
+
+  //edit api
+const handleUpdatePatient = async () => {
+  if (!editPatient?.name || !editPatient.age || !editPatient.email || !editPatient.gender || !editPatient.oderingFor) {
+    alert("Please fill all fields");
+    return;
+  }
+  try {
+     const res =await patchRequest({
       url: `auth/updateMember/${UserId}/${editPatient._id}`,
       cred: editPatient,
     });
-    console.log("update patient", res?.data?.data);
-    setPatients(res?.data?.data || []);
-    setEditPatient(null);
+    console.log("✅ Patient added successfully:", res?.data?.data);
+
+    await fetchPatients(); 
     setShowEditModal(false);
+    setEditPatient(null);
+    toast.success("Patient updated successfully!");
   } catch (error) {
     console.error("Error updating patient:", error);
+    
   }
 };
 
 //delete api
 const handleDeletePatient = async (patientId) => {
-  try {
-    const res = await deleteRequest(`auth/deleteMember/${UserId}/${patientId}`);
-    console.log("Delete patient response:", res?.data?.data);
-    setPatients(res?.data?.data);
-  } catch (error) {
-    console.error("Error deleting patient:", error);
-  }
+  console.log("patientId", patientId);
+
+  Swal.fire({
+    title: "Are you sure?",
+    text: "This patient will be permanently deleted!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Yes, delete it!",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        const res = await deleteRequest(`auth/deleteMember/${UserId}/${patientId}`);
+        console.log("✅ Patient deleted successfully:", res?.data?.data);
+
+        await fetchPatients();
+
+        Swal.fire({
+          title: "Deleted!",
+          text: "The patient has been deleted.",
+          icon: "success",
+          timer: 2000,
+          showConfirmButton: false
+        });
+      } catch (error) {
+        console.error("Error deleting patient:", error);
+        Swal.fire("Error", "Something went wrong while deleting!", "error");
+      }
+    }
+  });
 };
-
-
-
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 font-sans">
       <div className="max-w-7xl mx-auto p-6 pt-42">
@@ -169,15 +191,17 @@ const handleDeletePatient = async (patientId) => {
                     </div>
                     <div className="flex gap-4">
                       <button
-                        onClick={() => {
-                          setEditPatient(patient);
-                          setShowEditModal(true);
-                        }}
-                        className="flex items-center gap-1 text-[#006ca7] font-semibold hover:text-[#004a70] transition-colors"
-                        aria-label={`Edit ${patient?.name}`}
-                      >
-                        <Edit3 size={18} /> Edit
-                      </button>
+  onClick={() => {
+    console.log("Editing patient:", patient); // 🔍 check current data
+    setEditPatient(patient);
+    setShowEditModal(true);
+  }}
+  className="flex items-center gap-1 text-[#006ca7] font-semibold hover:text-[#004a70] transition-colors"
+  aria-label={`Edit ${patient?.name}`}
+>
+  <Edit3 size={18} /> Edit
+</button>
+
                       <button
                           onClick={() => handleDeletePatient(patient._id)}
                         className="flex items-center gap-1 text-red-600 font-semibold hover:text-red-700 transition-colors"
@@ -283,8 +307,8 @@ const handleDeletePatient = async (patientId) => {
                         <input
                           type="radio"
                           name="oderingFor"
-                          value="Myself"
-                          checked={newPatient?.oderingFor === "Myself"}
+                          value="forMe"
+                          checked={newPatient?.oderingFor === "forMe"}
                           onChange={(e) =>
                             setNewPatient({
                               ...newPatient,
@@ -302,8 +326,8 @@ const handleDeletePatient = async (patientId) => {
                         <input
                           type="radio"
                           name="oderingFor"
-                          value="Someone else"
-                          checked={newPatient?.oderingFor === "Someone else"}
+                          value="forSomeoneElse"
+                          checked={newPatient?.oderingFor === "forSomeoneElse"}
                           onChange={(e) =>
                             setNewPatient({
                               ...newPatient,
@@ -430,9 +454,9 @@ const handleDeletePatient = async (patientId) => {
                       <label className="flex items-center gap-3 cursor-pointer">
                         <input
                           type="radio"
-                          name="editoderingFor"
-                          value="Myself"
-                          checked={editPatient?.oderingFor === "Myself"}
+                          name="oderingFor"
+                          value="forMe"
+                          checked={editPatient?.oderingFor === "forMe"}
                           onChange={(e) =>
                             setEditPatient({
                               ...editPatient,
@@ -449,9 +473,9 @@ const handleDeletePatient = async (patientId) => {
                       <label className="flex items-center gap-3 cursor-pointer">
                         <input
                           type="radio"
-                          name="editoderingFor"
-                          value="Someone else"
-                          checked={editPatient?.oderingFor === "Someone else"}
+                          name="oderingFor"
+                          value="forSomeoneElse"
+                          checked={editPatient?.oderingFor === "forSomeoneElse"}
                           onChange={(e) =>
                             setEditPatient({
                               ...editPatient,
