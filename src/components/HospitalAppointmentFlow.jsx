@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { X, User, CreditCard, Calendar, CheckCircle, ArrowRight } from "lucide-react";
 import { postRequest } from "../Helpers";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 
 const HospitalAppointmentFlow = ({ isOpen, onClose, slotDetails,doctorType }) => {
+
   const [currentStep, setCurrentStep] = useState(1);
   const [appointmentFor, setAppointmentFor] = useState("self");
   const [paymentMethod, setPaymentMethod] = useState("online");
@@ -12,11 +13,17 @@ const HospitalAppointmentFlow = ({ isOpen, onClose, slotDetails,doctorType }) =>
   const [patientPhone, setPatientPhone] = useState("");
   const [patientGender, setPatientGender] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [appointmentConfirmData , setAppointmentConfirmData] = useState("") 
+
+  console.log("      appointmentConfirmData ==", appointmentConfirmData)
+
   const userId = useSelector((state) => state.user?.userData?.data?._id);
 
 
   console.log("slottt detailsss flow page: ",slotDetails)
   console.log("doctorType doctorType flow page: ",doctorType)
+  //console.log("doctorType doctorType flow page: ",doctorType)
+  
 
   // Helper: derive endTime from selected date/time
   const deriveSelectedSlot = () => {
@@ -38,19 +45,64 @@ const HospitalAppointmentFlow = ({ isOpen, onClose, slotDetails,doctorType }) =>
     }
   };
 
-  
-  
+  // Helper formatters for display labels
+  const formatDateLabel = (dateIsoString) => {
+    if (!dateIsoString) return "";
+    const d = new Date(dateIsoString);
+    const weekday = d.toLocaleDateString("en-US", { weekday: "short" });
+    const day = d.getDate();
+    const month = d.toLocaleDateString("en-US", { month: "short" });
+    return `${weekday}, ${day} ${month}`;
+  };
+
+  const formatTimeRange = (start, end) => {
+    if (start && end) return `${start} - ${end}`;
+    return start || "";
+  };
+
+  // Data derived from confirmed appointment (fallbacks to selection)
+  const dummyData = useMemo(() => {
+    const selectedSlot = deriveSelectedSlot();
+    const confirmed = appointmentConfirmData || {};
+    const confirmedHospital = confirmed.hospital || slotDetails?.hospitalDetails || {};
+    const confirmedPatient = confirmed.patientId || {};
+
+    const dateIso = confirmed.date || (slotDetails?.date ? new Date(slotDetails.date).toISOString() : "");
+    const start = confirmed?.slots?.startTime || selectedSlot?.startTime || slotDetails?.time || "";
+    const end = confirmed?.slots?.endTime || selectedSlot?.endTime || "";
+
+    const doctorName = slotDetails?.doctor?.name || "Doctor";
+    const specialization = slotDetails?.specialization || slotDetails?.doctorId?.category?.name || "General";
+    const fee = confirmed?.fee ?? slotDetails?.doctor?.fee;
+
+    return {
+      doctorName,
+      specialization,
+      hospitalName: confirmedHospital?.name || "N/A",
+      hospitalAddress: confirmedHospital?.address || "",
+      selectedDate: formatDateLabel(dateIso),
+      selectedTime: formatTimeRange(start, end),
+      consultationFee: typeof fee === "number" ? `₹${fee}` : (fee ? `₹${fee}` : "₹0"),
+      appointmentId: confirmed?.appointmentId || ("APT" + Math.random().toString(36).substr(2, 9).toUpperCase()),
+      patient: {
+        name: confirmedPatient?.name || "",
+        gender: confirmedPatient?.gender || "",
+        phone: confirmedPatient?.phone || "",
+      },
+      isSelf: typeof confirmed?.isSelf === "boolean" ? confirmed.isSelf : appointmentFor === "self",
+    };
+  }, [appointmentConfirmData, slotDetails, appointmentFor]);
 
   // Dummy static data
-  const dummyData = {
-    doctorName: slotDetails?.name || slotDetails?.doctorId?.fullName || "Dr. John Smith",
-    specialization: slotDetails?.specialization || slotDetails?.doctorId?.category?.name || "Cardiology",
-    hospitalName: "CityCare Hospital",
-    selectedDate: "Fri, 4 Jul",
-    selectedTime: "09:00 - 09:30",
-    consultationFee: "₹500",
-    appointmentId: "APT" + Math.random().toString(36).substr(2, 9).toUpperCase()
-  };
+  // const dummyData = {
+  //   doctorName:  "Dr. John Smith",
+  //   specialization: slotDetails?.specialization || slotDetails?.doctorId?.category?.name || "Cardiology",
+  //   hospitalName: "CityCare Hospital",
+  //   selectedDate: "Fri, 4 Jul",
+  //   selectedTime: "09:00 - 09:30",
+  //   consultationFee: "₹500",
+  //   appointmentId: "APT" + Math.random().toString(36).substr(2, 9).toUpperCase()
+  // };
 
   const resetSteps = () => {
     setCurrentStep(1);
@@ -60,7 +112,7 @@ const HospitalAppointmentFlow = ({ isOpen, onClose, slotDetails,doctorType }) =>
     setPatientPhone("");
     setPatientGender("");
     setIsSubmitting(false);
-  };
+  }
 
   const handleClose = () => {
     resetSteps();
@@ -95,7 +147,7 @@ const HospitalAppointmentFlow = ({ isOpen, onClose, slotDetails,doctorType }) =>
           ? { internalDoctorId: doctor?._id }
           : { registeredDoctorId: doctor?._id }),
         patientId: userId,
-        fee: 500,
+        fee: doctor?.fee,
         isSelf: appointmentFor === "self",
         ...(appointmentFor === "other"
           ? {
@@ -107,14 +159,15 @@ const HospitalAppointmentFlow = ({ isOpen, onClose, slotDetails,doctorType }) =>
               },
             }
           : {}),
-        date: slotDetails?.date ? new Date(slotDetails.date).toISOString() : new Date().toISOString(),
+        date: slotDetails?.date ? new Date(slotDetails.date).toISOString() : new Date().toISOString(),       
         slots: {
-          startTime: slotDetails?.time || selectedSlot?.startTime || "",
-          endTime: selectedSlot?.endTime || "",
+          startTime: selectedSlot?.startTime || "",               
+          endTime: selectedSlot?.endTime || "",                   
         },
       };
 
       const res = await postRequest({ url: `hospitalAppointment/add`, cred: payload });
+      setAppointmentConfirmData(res?.data?.data)
       console.log("Hospital appointment booked:", res);
       setCurrentStep(4);
     } catch (error) {
@@ -313,17 +366,17 @@ const HospitalAppointmentFlow = ({ isOpen, onClose, slotDetails,doctorType }) =>
         </div>
       </div>
 
-      {/* Diagnostic Lab Information Card */}
+      {/* Hospital Information Card */}
       <div className="bg-white rounded-lg shadow-sm p-4 border">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 bg-white rounded-full border-2 border-green-200 flex items-center justify-center">
             <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-              <span className="text-white text-xs font-bold">D</span>
+              <span className="text-white text-xs font-bold">H</span>
             </div>
           </div>
           <div>
-            <h3 className="font-bold text-black">City Lab Diagnostics</h3>
-            <p className="text-sm text-gray-600">123 Lab Street, Health City</p>
+            <h3 className="font-bold text-black">{dummyData.hospitalName}</h3>
+            <p className="text-sm text-gray-600">{dummyData.hospitalAddress || ""}</p>
           </div>
         </div>
       </div>
@@ -332,18 +385,18 @@ const HospitalAppointmentFlow = ({ isOpen, onClose, slotDetails,doctorType }) =>
       <div className="bg-white rounded-lg shadow-sm p-4 border">
         <h3 className="font-bold text-black mb-3">Scheduled Appointment</h3>
         <div className="space-y-2">
-          <p className="text-sm text-black">Appointment ID: N/A</p>
+          <p className="text-sm text-black">Appointment ID: {dummyData.appointmentId || "N/A"}</p>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 border-2 border-blue-500 rounded"></div>
-            <span className="text-sm text-black">Fri, 4 Jul</span>
+            <span className="text-sm text-black">{dummyData.selectedDate || ""}</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 border-2 border-blue-500 rounded"></div>
-            <span className="text-sm text-black">09:00 - 09:30</span>
+            <span className="text-sm text-black">{dummyData.selectedTime || ""}</span>
           </div>
         </div>
         <div className="mt-3">
-          <span className="inline-block bg-blue-100 text-blue-600 text-xs font-medium px-3 py-1 rounded-full">SELF</span>
+          <span className="inline-block bg-blue-100 text-blue-600 text-xs font-medium px-3 py-1 rounded-full">{dummyData.isSelf ? "SELF" : "OTHER"}</span>
         </div>
       </div>
 
@@ -351,9 +404,9 @@ const HospitalAppointmentFlow = ({ isOpen, onClose, slotDetails,doctorType }) =>
       <div className="bg-white rounded-lg shadow-sm p-4 border">
         <h3 className="font-bold text-black mb-3">Patient Information</h3>
         <div className="space-y-2 text-sm text-black">
-          <p>Name: faiz ahmad</p>
-          <p>Gender: male</p>
-          <p>Contact: 9999999999</p>
+          <p>Name: {dummyData.patient?.name || "-"}</p>
+          <p>Gender: {dummyData.patient?.gender || "-"}</p>
+          <p>Contact: {dummyData.patient?.phone || "-"}</p>
         </div>
       </div>
 
@@ -364,7 +417,7 @@ const HospitalAppointmentFlow = ({ isOpen, onClose, slotDetails,doctorType }) =>
             <div className="w-5 h-5 bg-blue-500 rounded"></div>
             <span className="text-blue-600">Consultation Fee</span>
           </div>
-          <span className="font-bold text-blue-600">₹300</span>
+          <span className="font-bold text-blue-600">{dummyData.consultationFee}</span>
         </div>
       </div>
 
@@ -372,7 +425,7 @@ const HospitalAppointmentFlow = ({ isOpen, onClose, slotDetails,doctorType }) =>
       <div className="flex gap-4 pt-4">
         <button className="flex-1 flex items-center justify-center gap-2 text-blue-600 py-3">
           <div className="w-5 h-5 border-2 border-blue-500 rounded"></div>
-          <span>Call Diagnostic</span>
+          <span>Call Hospital</span>
         </button>
         <button className="flex-1 flex items-center justify-center gap-2 text-blue-600 py-3">
           <div className="w-5 h-5 border-2 border-blue-500 rounded"></div>
@@ -398,6 +451,7 @@ const HospitalAppointmentFlow = ({ isOpen, onClose, slotDetails,doctorType }) =>
   };
 
   return (
+
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
       <div className="bg-white rounded-2xl shadow-2xl p-10 w-full max-w-2xl relative animate-fadeIn">
         {/* Close Button */}
@@ -412,6 +466,7 @@ const HospitalAppointmentFlow = ({ isOpen, onClose, slotDetails,doctorType }) =>
         {renderCurrentStep()}
       </div>
     </div>
+    
   );
 };
 

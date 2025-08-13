@@ -5,11 +5,7 @@ const HospitalTimeSelection = ({ isOpen, onClose, slotDetails, onSlotSelected })
   const [selectedDate, setSelectedDate] = useState( null);
   const [selectedTime, setSelectedTime] = useState(null);
 
-  console.log('  slotDetails :', slotDetails)
-
-  //console.log("slotDetails popup:", slotDetails);
-  //console.log(" selectedDate :", selectedDate)
- // console.log(" selectedTime :", selectedTime)
+  console.log('time selection slotDetails :', slotDetails)
 
 
   // Convert API dates to labels and values
@@ -48,8 +44,24 @@ const HospitalTimeSelection = ({ isOpen, onClose, slotDetails, onSlotSelected })
 
         {/* Doctor Name */}
         <p className="text-lg font-semibold text-gray-700 mb-6">
-          Dr. {slotDetails?.name || slotDetails?.doctorId?.fullName || "Unknown"}
+           {slotDetails?.name || slotDetails?.doctorId?.fullName || "Unknown"}
         </p>
+        
+        {/* Experience and Fee Box */}
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-4 mb-6 shadow-sm">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <span className="text-sm font-medium text-blue-700">Experience:</span>
+              <span className="text-sm font-semibold text-blue-900">{slotDetails?.experience || "Unknown"}</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <span className="text-sm font-medium text-green-700">Fee:</span>
+              <span className="text-sm font-semibold text-green-900">₹{slotDetails?.fee || "Unknown"}</span>
+            </div>
+          </div>
+        </div>
 
         {/* Date Selection */}
         <div className="flex flex-wrap gap-3">

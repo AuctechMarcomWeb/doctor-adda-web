@@ -539,7 +539,6 @@ const HospitalDetailPage = () => {
              date: selectedDate,
              time: selectedTime ,
              hospitalDetails : hospital,
-             
             }}
           doctorType={selectedDoctor && hospital?.doctors?.some(doc => doc._id === selectedDoctor._id) ? "Internal" : "Registered"}
         />
