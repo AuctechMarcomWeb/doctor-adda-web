@@ -32,28 +32,28 @@ const MedicalImagingBanner = () => {
   }, [current]); // run effect when 'current' changes
 
   return (
-    <div className="relative w-full max-w-7xl mx-auto flex items-center justify-center h-[280px] max-w-[70%]">
+    <div className="relative  mx-auto flex items-center justify-center h-[170px] md:h-[280px] lg:w-[70%] sm:w-full xl:w-[70%]">
       {/* Slides container */}
       <div className="relative flex items-center justify-center w-full overflow-hidden">
         {/* Previous image (left) */}
         <img
           src={images[getIndex(current - 1)]}
           alt="prev"
-          className="w-[700px] h-[260px] object-cover rounded-2xl opacity-50 scale-90 transition-all duration-300 "
+          className="w-[700px] md:h-[260px] h-[120px] object-cover rounded-2xl opacity-50 scale-90 transition-all duration-300 "
         />
 
         {/* Active (centered) image */}
         <img
           src={images[current]}
           alt="current"
-          className="absolute w-[700px] h-[260px] object-cover rounded-2xl z-10 shadow-xl transition-all duration-500"
+          className="absolute h-[120px] md:w-[700px] md:h-[260px] object-cover rounded-2xl z-10 shadow-xl transition-all duration-500"
         />
 
         {/* Next image (right) */}
         <img
           src={images[getIndex(current + 1)]}
           alt="next"
-          className="w-[700px] h-[260px] object-cover rounded-2xl opacity-50 scale-90 transition-all duration-300"
+          className="w-[700px] md:h-[260px] h-[120px] object-cover rounded-2xl opacity-50 scale-90 transition-all duration-300"
         />
       </div>
 

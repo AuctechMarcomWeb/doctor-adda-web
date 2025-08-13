@@ -35,8 +35,6 @@ const TimeSlotsSection = ({ availability = [], onBook }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedDateData, setSelectedDateData] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
-  console.log("selectedSlot", selectedSlot);
-
   const bookAppointment = (e) => {
     e.preventDefault();
     if (!selectedDate || !selectedSlot) {

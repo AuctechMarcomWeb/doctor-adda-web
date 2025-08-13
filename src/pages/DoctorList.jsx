@@ -195,7 +195,7 @@ const DoctorList = () => {
         </div>
 
         <div
-          className={`relative w-[85%] flex items-center mx-auto py-8 pb-2 text-center transition-all duration-1000 ${
+          className={`relative lg:w-[70%] sm:w-full xl:w-[70%] flex items-center  flex-col md:flex-row mx-auto py-8 px-2 pb-2 text-center transition-all duration-1000 ${
             isLoaded ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
           }`}
         >
@@ -223,7 +223,7 @@ const DoctorList = () => {
           </div>
 
           {/* App Download Section */}
-          <div className="max-w-2xl mx-auto">
+          <div className=" mx-auto">
             <div className="bg-gradient-to-r from-white/15 to-white/10 backdrop-blur-md rounded-3xl p-4 border border-white/20 shadow-2xl">
               <div className="flex flex-col md:flex-row items-center gap-6">
                 {/* Phone Mockup */}
@@ -277,7 +277,7 @@ const DoctorList = () => {
       </div>
 
       {/* Main Content */}
-      <div className=" mx-auto px-4 py-12 max-w-[85%]">
+      <div className=" mx-auto px-4 py-12 lg:w-[70%] sm:w-full xl:w-[70%]">
         {/* Mode Filter Tabs */}
         <div className="flex justify-center gap-2 mb-12">
           {[

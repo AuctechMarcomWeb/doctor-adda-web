@@ -28,6 +28,10 @@ import DoctorDetailPage from "./pages/DoctorDetailPage";
 import AppointmentFlow from "./components/AppointmentFlow";
 import About from "./pages/About";
 import UserProfile from "./components/UserProfile";
+import ManagePatients from "./components/ManagePatients";
+import ManagePets from "./components/ManagePets";
+import AppointmentSelection from "./components/AppointmentSelection";
+import DoctorAppointmentsPage from "./components/DoctorAppointmentsPage";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -77,10 +81,15 @@ function App() {
               <Navbar />
               <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path="/manage-patients" element={<ManagePatients />} />
+                <Route path="/pets" element={<ManagePets />} />
                 <Route path="/login" element={<LoginSignupFlow />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/profile" element={<UserProfile />} />
+                <Route path="/appointments" element={<AppointmentSelection />} />
+                <Route path="/doctor-appointments" element={<DoctorAppointmentsPage />} />
+
 
                 <Route
                   path="/terms-and-conditions"
