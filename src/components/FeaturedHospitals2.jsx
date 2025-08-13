@@ -65,7 +65,7 @@ const FeaturedHospitals2 = () => {
   return (
     <div className=" mx-auto px-4 sm:px-6 lg:px-8 py-8 relative lg:w-[70%] sm:w-full xl:w-[70%]">
   <div className="text-center mb-8">
-    <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">
+    <h2 className="text-lg sm:text-4xl font-bold text-gray-800 mb-4">
       Featured{" "}
       <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
         Hospitals
@@ -123,7 +123,7 @@ const FeaturedHospitals2 = () => {
           </div>
 
           <div className="p-4 sm:p-6">
-            <h3 className="mb-2 text-base sm:text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-300">
+            <h3 className="mb-2 text-sm sm:text-base font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-300">
               {hospital.name?.split(" ").slice(0, 3).join(" ")}
             </h3>
             <p className="text-gray-600 text-xs sm:text-sm mb-4 leading-relaxed min-h-[5rem]">

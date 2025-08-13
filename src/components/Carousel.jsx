@@ -43,14 +43,14 @@ const Carousel = () => {
   };
 
   return (
-    <div className="relative  mx-auto rounded-3xl p-8 backdrop-blur-sm lg:w-[60%] sm:w-full xl:w-[60%]">
-      <div className="relative flex items-center justify-center h-[260px] perspective-1000">
+    <div className="relative  mx-auto rounded-3xl md:p-8 md:px-0 md:py-0 py-4 px-8 backdrop-blur-sm lg:w-[60%] sm:w-full xl:w-[60%]">
+      <div className="relative flex items-center justify-center h-[100] perspective-1000">
         
         <div className="absolute left-0 transform -translate-x-16 rotate-y-45 transition-all duration-700 ease-out">
           <img
             src={images[getIndex(current - 1)]}
             alt="previous"
-            className="w-[280px] h-[200px] object-cover rounded-xl opacity-40 scale-75 shadow-2xl cursor-pointer"
+            className="md:w-[280px] md:h-[200px] w-[200px] h[100px] object-cover rounded-xl opacity-40 scale-75 shadow-2xl cursor-pointer"
             onClick={prevSlide}
           />
         </div>
@@ -59,7 +59,7 @@ const Carousel = () => {
           <img
             src={images[current]}
             alt="current"
-            className="w-[600px] h-[280px] object-cover rounded-2xl shadow-2xl"
+            className="md:w-[600px]  md:h-[280px] w-[250px] h[150px] object-cover rounded-2xl shadow-2xl"
           />
         </div>
 
@@ -67,7 +67,7 @@ const Carousel = () => {
           <img
             src={images[getIndex(current + 1)]}
             alt="next"
-            className="w-[280px] h-[200px] object-cover rounded-xl opacity-40 scale-75 shadow-2xl cursor-pointer"
+            className="md:w-[280px] md:h-[200px] w-[200px] h[100px] object-cover rounded-xl opacity-40 scale-75 shadow-2xl cursor-pointer"
             onClick={nextSlide}
           />
         </div>
@@ -75,16 +75,16 @@ const Carousel = () => {
 
       <button
         onClick={prevSlide}
-        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 w-14 h-14 flex items-center justify-center rounded-full z-30"
+        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 md:w-14 md:h-14 w-8 h-8 flex items-center justify-center rounded-full z-30"
       >
-        <ChevronLeft className="w-6 h-6 text-gray-800" />
+        <ChevronLeft className="md:w-6 md:h-6  text-gray-800" />
       </button>
 
       <button
         onClick={nextSlide}
-        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 w-14 h-14 flex items-center justify-center rounded-full z-30"
+        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 md:w-14 md:h-14 w-8 h-8 flex items-center justify-center rounded-full z-30"
       >
-        <ChevronRight className="w-6 h-6 text-gray-800" />
+        <ChevronRight className="md:w-6 md:h-6 text-gray-800" />
       </button>
 
       <style jsx>{`
