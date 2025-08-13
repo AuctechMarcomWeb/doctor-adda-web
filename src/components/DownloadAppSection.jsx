@@ -7,10 +7,10 @@ const DownloadAppSection = () => {
       <div className="mx-auto flex flex-col-reverse md:flex-row items-center justify-between gap-10 lg:w-[70%] sm:w-full xl:w-[70%]">
         {/* Left Content */}
         <div className="flex-1 text-center md:text-left">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="text-lg sm:text-4xl font-bold mb-4">
             Download the Dr. Adda App
           </h2>
-          <p className="text-base sm:text-lg md:text-xl text-blue-100 mb-6">
+          <p className="text-sm sm:text-base text-blue-100 mb-6">
             Book appointments, consult doctors, and manage your health — all in one place. Get the best care anytime, anywhere.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 items-center justify-center md:justify-start">
@@ -20,7 +20,7 @@ const DownloadAppSection = () => {
               className="flex items-center gap-3 bg-white text-blue-700 px-5 py-3 rounded-xl shadow-md hover:bg-gray-100 transition"
             >
               <FaGooglePlay size={22} />
-              <span className="text-base font-semibold">Google Play</span>
+              <span className="text-xs md:text-base font-semibold">Google Play</span>
             </a>
 
             {/* App Store Button */}
@@ -29,7 +29,7 @@ const DownloadAppSection = () => {
               className="flex items-center gap-3 bg-white text-blue-700 px-5 py-3 rounded-xl shadow-md hover:bg-gray-100 transition"
             >
               <FaApple size={22} />
-              <span className="text-base font-semibold">App Store</span>
+              <span className="text-xs md:text-base font-semibold">App Store</span>
             </a>
           </div>
         </div>

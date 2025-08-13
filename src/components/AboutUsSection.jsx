@@ -14,7 +14,7 @@ const AboutUsSection = () => {
       <div className=" mx-auto relative z-10 lg:w-[70%] sm:w-full xl:w-[70%]">
         {/* Header */}
         <div className="text-center mb-12 px-4">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white leading-tight mb-4">
+          <h2 className="text-lg sm:text-4xl font-bold text-white leading-tight mb-4">
             Welcome to{" "}
             <span className="relative">
               <span className="bg-gradient-to-r from-[#fcbe57] to-[#ffd700] bg-clip-text text-transparent">
@@ -30,13 +30,13 @@ const AboutUsSection = () => {
           {/* Left Content */}
           <div className="space-y-6">
             <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 sm:p-8 border border-white/10">
-              <p className="text-white/90 leading-relaxed mb-4">
+              <p className="text-white/90 leading-relaxed mb-4 text-sm sm:text-base">
                 At <strong className="text-[#fcbe57]">Doctors Adda</strong>, we believe that quality healthcare should be accessible
                 to everyone. With a legacy spanning over <strong className="text-white">two decades</strong>, we've remained committed to
                 offering world-class medical care—where modern innovation meets human compassion.
               </p>
 
-              <p className="text-white/80 leading-relaxed mb-6">
+              <p className="text-white/80 leading-relaxed mb-6 text-sm sm:text-base">
                 Our team of skilled doctors, nurses, and health professionals work collaboratively to
                 ensure every patient receives personalized care—whether it's a regular health check-up
                 or a complex procedure. Your health journey is our priority.
@@ -54,7 +54,7 @@ const AboutUsSection = () => {
                     className="text-center p-4 bg-white/5 rounded-xl border border-white/10"
                   >
                     <div className="text-2xl font-bold text-[#fcbe57] mb-1">{item.value}</div>
-                    <div className="text-white/70 text-sm">{item.label}</div>
+                    <div className="text-white/70 text-sm sm:text-base">{item.label}</div>
                   </div>
                 ))}
               </div>

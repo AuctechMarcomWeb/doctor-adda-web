@@ -60,7 +60,7 @@ const MedicalImagingBanner = () => {
       {/* Left Arrow */}
       <button
         onClick={prevSlide}
-        className="absolute left-10 top-1/2 -translate-y-1/2 bg-white w-10 h-10 flex items-center justify-center rounded-full shadow-md z-20"
+        className="absolute left-10 top-1/2 -translate-y-1/2 bg-white md:w-10 md:h-10 w-8 h-8 flex items-center justify-center rounded-full shadow-md z-20"
       >
         <ChevronLeft className="text-black" />
       </button>
@@ -68,7 +68,7 @@ const MedicalImagingBanner = () => {
       {/* Right Arrow */}
       <button
         onClick={nextSlide}
-        className="absolute right-10 top-1/2 -translate-y-1/2 bg-white w-10 h-10 flex items-center justify-center rounded-full shadow-md z-20"
+        className="absolute right-10 top-1/2 -translate-y-1/2 bg-white md:w-10 md:h-10 w-8 h-8 flex items-center justify-center rounded-full shadow-md z-20"
       >
         <ChevronRight className="text-black" />
       </button>

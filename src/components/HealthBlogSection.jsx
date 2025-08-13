@@ -80,7 +80,7 @@ const HealthBlogSection = () => {
 
         {/* Header */}
         <div className="text-center mb-8">
-          <h2 className="text-4xl font-bold text-gray-900">
+          <h2 className="text-lg sm:text-4xl font-bold text-gray-900">
             Health <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Blogs</span>
           </h2>
         </div>
@@ -94,7 +94,7 @@ const HealthBlogSection = () => {
                   <img src={post.image} alt={post.title} className="w-full h-full object-cover transition-transform duration-300 hover:scale-110" />
                 </div>
                 <div className="p-5">
-                  <h3 className="text-lg font-semibold text-gray-800 hover:text-teal-600 transition-colors duration-200">
+                  <h3 className="text-sm sm:text-base font-semibold text-gray-800 hover:text-teal-600 transition-colors duration-200">
                     {post.title}
                   </h3>
                 </div>

@@ -26,15 +26,15 @@ const features = [
 
 const WhyChooseUs = () => {
   return (
-    <div className=" mx-auto py-12 px-4 sm:px-6 lg:px-8 bg-white text-center lg:w-[70%] sm:w-full xl:w-[70%]">
-      <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-12">
+    <div className=" mx-auto md:py-12 py-4 px-4 sm:px-6 lg:px-8 bg-white text-center lg:w-[70%] sm:w-full xl:w-[70%]">
+      <h2 className="text-lg sm:text-4xl font-bold text-gray-800 mb-2 md:mb-12">
         Why {" "}
         <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
           Choose Us
         </span>
       </h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 md:gap-10 gap-4">
         {features.map((item, index) => (
           <div key={index} className="flex flex-col items-center">
             <div
@@ -48,7 +48,7 @@ const WhyChooseUs = () => {
             >
               {item.icon}
             </div>
-            <h3 className="text-xl sm:text-2xl font-bold text-[#1e8dbd] mt-6">
+            <h3 className="text-lg sm:text-2xl font-bold text-[#1e8dbd] md:mt-6 mt-2">
               {item.title}
             </h3>
             <p className="text-sm sm:text-base text-gray-600 mt-3 max-w-xs px-2">

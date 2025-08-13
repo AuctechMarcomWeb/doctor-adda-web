@@ -88,12 +88,12 @@ const DoctorCategoryCards = () => {
             {categories.map((category, index) => {
               const IconComponent = getIconByCategory(category.name);
               return (
-                <SwiperSlide key={index}>
+                <SwiperSlide key={index} >
                   <div
                     onClick={() => navigate(`/doctorlist/${category?._id}`)}
                     className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 cursor-pointer overflow-hidden"
                   >
-                    <div className="relative h-20 sm:h-48 md:h-52 overflow-hidden">
+                    <div className="relative h-30 sm:h-48 md:h-52 overflow-hidden">
                       <img
                         src={category.imageUrl}
                         alt={category.name}
@@ -114,14 +114,14 @@ const DoctorCategoryCards = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="p-4 sm:p-6">
-                      <h3 className="mb-2 text-base sm:text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-300">
+                    <div className="md:p-4 sm:p-6 p-2">
+                      <h3 className="md:mb-2   text-sm sm:text-base font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-300">
                         {category.name}
                       </h3>
                       <p className="text-gray-600 text-xs sm:text-sm mb-4 line-clamp-2">
                         {category.description}
                       </p>
-                      <button className="w-full bg-[#00669e] text-white font-semibold py-2 sm:py-3 px-4 rounded-lg hover:bg-blue-700 transform hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg">
+                      <button className="w-full bg-[#00669e] text-white text-xs md:text-base  font-semibold font-semibold py-2 sm:py-3 px-4 rounded-lg hover:bg-blue-700 transform hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg">
                         View More
                       </button>
                     </div>
@@ -163,13 +163,13 @@ const DoctorCategoryCards = () => {
         </div>
 
         {/* Pagination */}
-        <div className="swiper-pagination-custom mt-6 text-center" />
+        <div className="swiper-pagination-custom md:mt-6 mt-2 text-center" />
 
         {/* View All Button */}
-        <div className="flex justify-center mt-8">
+        <div className="flex justify-center md:mt-8 mt-2">
           <button
             onClick={() => navigate("/doctor")}
-            className="w-40 bg-[#00669e] text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-700 transform hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg"
+            className="w-40 bg-[#00669e] text-white text-xs md:text-base  font-semibold font-semibold py-3 px-6 rounded-lg hover:bg-blue-700 transform hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg"
           >
             View All
           </button>
