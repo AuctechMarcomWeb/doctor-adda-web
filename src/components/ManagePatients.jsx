@@ -9,6 +9,9 @@ import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 
 const ManagePatients = () => {
+  useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
   const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
   const UserId = userProfileData?._id;
   console.log("UserId", UserId);

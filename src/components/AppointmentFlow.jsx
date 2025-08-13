@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Dialog } from "@headlessui/react";
 import {
   Calendar,
@@ -56,6 +57,7 @@ const AppointmentFlow = ({ open, onClose, id }) => {
         console.log("error", error);
       });
   }, [id]);
+  const navigate = useNavigate();
 
   return (
     <Dialog open={open} onClose={handleClose} className="relative z-50">
@@ -114,34 +116,13 @@ const AppointmentFlow = ({ open, onClose, id }) => {
                 </div>
               )}
 
-              {showPatientList && (
-                <div className="mt-4 border-t pt-4">
-                  <h4 className="text-sm font-semibold text-gray-700 mb-2">
-                    Manage Patients
-                  </h4>
-                  <ul className="space-y-2 text-sm text-gray-700">
-                    {otherPatients.map((p, i) => (
-                      <li key={i} className="border rounded p-2">
-                        {p.name} - {p.gender}, {p.age}
-                      </li>
-                    ))}
-                  </ul>
-
-                  <button
-                    onClick={() => setShowAddPatientForm(true)}
-                    className="mt-4 text-blue-600 hover:underline text-sm font-medium"
-                  >
-                    + Add New Patient
-                  </button>
-                </div>
-              )}
+              {showPatientList && <div className="mt-4 border-t pt-4"></div>}
 
               {showAddPatientForm && (
                 <div className="mt-4 border-t pt-4 space-y-2">
                   <h4 className="text-sm font-semibold text-gray-700">
                     Add Patient
                   </h4>
-                  {/* Simplified form */}
                   <input
                     type="text"
                     placeholder="Name"
@@ -159,7 +140,6 @@ const AppointmentFlow = ({ open, onClose, id }) => {
                   />
                   <button
                     onClick={() => {
-                      // Add logic to save new patient
                       setShowAddPatientForm(false);
                     }}
                     className="w-full bg-blue-600 text-white py-2 rounded font-medium"
@@ -182,7 +162,7 @@ const AppointmentFlow = ({ open, onClose, id }) => {
                     if (selectedFor === "self") {
                       setStep(2);
                     } else {
-                      setShowPatientList(true);
+                      navigate("/manage-patients");
                     }
                   }}
                   disabled={!selectedFor}

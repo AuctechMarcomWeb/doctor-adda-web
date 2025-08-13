@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import SidebarNav from "./SidebarNav";
 import { Plus, PawPrint, Edit, Trash2, X } from "lucide-react";
@@ -8,7 +7,14 @@ import Swal from "sweetalert2";
 
 
 const ManagePets = () => {
-  const [pets, setPets] = useState([]);
+  useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
+  const [pets, setPets] = useState([
+    { id: 1, name: "Max", type: "Dog", age: 3, breed: "Labrador" },
+    { id: 2, name: "Whiskers", type: "Cat", age: 2, breed: "Persian" },
+  ]);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPet, setEditingPet] = useState(null);
   const { userProfileData } = useSelector((state) => state.user);

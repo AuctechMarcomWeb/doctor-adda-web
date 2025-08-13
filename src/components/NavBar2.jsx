@@ -201,7 +201,9 @@ const NavBar2 = () => {
       >
         {/* Top nav area + dropdown hover wrapper */}
         <div className="flex items-center  px-6  justify-between font-medium text-gray-800 text-[15px] overflow-x-auto ">
-          <FaHome className="text-lg font-semibold text-gray-800 cursor-pointer hover:text-[#0074b2]" />
+          <a href="/">
+            <FaHome  className="text-lg font-semibold text-gray-800 cursor-pointer hover:text-[#0074b2]" />
+          </a>
 
           {menuItems.map((menu) => (
             <div
