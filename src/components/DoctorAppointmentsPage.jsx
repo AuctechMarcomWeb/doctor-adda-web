@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Calendar, Clock, Phone, MessageSquare, Trash2, Info } from "lucide-react";
 
 const initialAppointments = [
@@ -25,6 +25,9 @@ const initialAppointments = [
 ];
 
 const DoctorAppointmentsPage = () => {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
   const [appointments, setAppointments] = useState(initialAppointments);
   const [filter, setFilter] = useState("All");
   const [notification, setNotification] = useState("");
