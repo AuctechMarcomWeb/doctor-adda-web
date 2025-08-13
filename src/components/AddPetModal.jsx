@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { X } from "lucide-react";
+import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 
 const AddPetModal = ({ isOpen, onClose, onAddPet }) => {
+   const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
+  const UserId = userProfileData?._id;
+  console.log("UserId", UserId);
   const [form, setForm] = useState({
     image: "",
     name: "",
@@ -38,7 +44,7 @@ const AddPetModal = ({ isOpen, onClose, onAddPet }) => {
 
           {/* Title */}
           <Dialog.Title className="text-2xl font-bold mb-6 text-center text-gray-800">
-            🐾 Add New Pet
+            🐾 Add Nekldlrgery
           </Dialog.Title>
 
           {/* Image Preview */}
@@ -78,15 +84,7 @@ const AddPetModal = ({ isOpen, onClose, onAddPet }) => {
               value={form.type}
               onChange={(e) => setForm({ ...form, type: e.target.value })}
             />
-            <select
-              className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              value={form.gender}
-              onChange={(e) => setForm({ ...form, gender: e.target.value })}
-            >
-              <option value="">Select Gender</option>
-              <option>Male</option>
-              <option>Female</option>
-            </select>
+           
             <div className="grid grid-cols-2 gap-4">
               <input
                 type="number"

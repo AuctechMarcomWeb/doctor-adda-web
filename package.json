@@ -27,6 +27,7 @@
     "react-slick": "^0.30.3",
     "redux-persist": "^6.0.0",
     "slick-carousel": "^1.8.1",
+    "sweetalert2": "^11.22.3",
     "swiper": "^11.2.10",
     "tailwindcss": "^4.1.7"
   },

@@ -1,71 +1,139 @@
-import React, { useState } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect } from "react";
 import SidebarNav from "./SidebarNav";
 import { Plus, PawPrint, Edit, Trash2, X } from "lucide-react";
+import { useSelector } from "react-redux";
+import { getRequest, postRequest, patchRequest, deleteRequest } from "../Helpers";
+import Swal from "sweetalert2";
+
 
 const ManagePets = () => {
-  const [pets, setPets] = useState([
-    { id: 1, name: "Max", type: "Dog", age: 3, breed: "Labrador" },
-    { id: 2, name: "Whiskers", type: "Cat", age: 2, breed: "Persian" },
-  ]);
-
+  const [pets, setPets] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPet, setEditingPet] = useState(null);
+  const { userProfileData } = useSelector((state) => state.user);
+  const UserId = userProfileData?._id;
+
   const [formData, setFormData] = useState({
     name: "",
     type: "",
     age: "",
-    breed: "",
+    weight: "",
   });
 
+  // Fetch pets from API
+  const fetchPets = async () => {
+    try {
+      const res = await getRequest(`auth/getpets/${UserId}`);
+      console.log("Fetch Pets ===", res?.data?.data);
+      setPets(res?.data?.data || []);
+    } catch (error) {
+      console.error("Error fetching pets:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (UserId) fetchPets();
+  }, [UserId]);
+
+  // Open modal for add/edit
   const openModal = (pet = null) => {
     if (pet) {
       setEditingPet(pet);
       setFormData({
-        name: pet.name,
-        type: pet.type,
-        age: pet.age.toString(),
-        breed: pet.breed,
+        name: pet?.name,
+        type: pet?.type,
+        age: pet?.age?.toString() || "",
+        weight: pet?.weight || "",
       });
     } else {
       setEditingPet(null);
-      setFormData({ name: "", type: "", age: "", breed: "" });
+      setFormData({ name: "", type: "", age: "", weight: "" });
     }
     setIsModalOpen(true);
   };
 
   const closeModal = () => setIsModalOpen(false);
 
-  const handleSave = () => {
-    if (!formData.name.trim() || !formData.type.trim()) {
+  // Add pet API
+  const addPet = async () => {
+    if (!formData?.name?.trim() || !formData?.type?.trim()) {
       alert("Please fill in the required fields: Name and Type.");
       return;
     }
+    try {
+      const res = await postRequest({
+        url: `auth/addpets/${UserId}`,
+        cred: { ...formData, age: parseInt(formData?.age) || 0 },
+      });
+      console.log("Pet added:", res?.data?.data);
 
-    if (editingPet) {
-      setPets(
-        pets.map((pet) =>
-          pet.id === editingPet.id
-            ? { ...pet, ...formData, age: parseInt(formData.age) || 0 }
-            : pet
-        )
-      );
-    } else {
-      const newPet = {
-        id: pets.length ? Math.max(...pets.map((p) => p.id)) + 1 : 1,
-        ...formData,
-        age: parseInt(formData.age) || 0,
-      };
-      setPets([...pets, newPet]);
-    }
-
-    closeModal();
-  };
-
-  const handleDelete = (id) => {
-    if (window.confirm("Are you sure you want to delete this pet?")) {
-      setPets(pets.filter((pet) => pet.id !== id));
+      // Refresh pets list
+      await fetchPets();
+      closeModal();
+    } catch (error) {
+      console.error("Error adding pet:", error);
+      alert("Something went wrong while adding the pet.");
     }
   };
+
+  // Update pet API
+  const updatePet = async () => {
+    if (!formData?.name?.trim() || !formData?.type?.trim()) {
+      alert("Please fill in the required fields: Name and Type.");
+      return;
+    }
+    try {
+      const res = await patchRequest({
+        url: `auth/updatepets/${UserId}/${editingPet?._id}`,
+        cred: { ...formData, age: parseInt(formData?.age) || 0 },
+      });
+      console.log("Pet updated:", res?.data?.data);
+
+      // Refresh pets list
+      await fetchPets();
+      closeModal();
+    } catch (error) {
+      console.error("Error updating pet:", error);
+      alert("Something went wrong while updating the pet.");
+    }
+  };
+
+  // Delete pet API
+
+const handleDelete = async (petId) => {
+  console.log("petId", petId);
+
+  Swal.fire({
+    title: "Are you sure?",
+    text: "This pet will be permanently deleted!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Yes, delete it!",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        const res = await deleteRequest(`auth/deletepets/${UserId}/${petId}`);
+        console.log("✅ Patient deleted successfully:", res?.data?.data);
+
+        await fetchPets();
+
+        Swal.fire({
+          title: "Deleted!",
+          text: "The pet has been deleted.",
+          icon: "success",
+          timer: 2000,
+          showConfirmButton: false
+        });
+      } catch (error) {
+        console.error("Error deleting pet:", error);
+        Swal.fire("Error", "Something went wrong while deleting!", "error");
+      }
+    }
+  });
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 font-sans">
@@ -101,7 +169,7 @@ const ManagePets = () => {
               <div className="space-y-6">
                 {pets.map((pet) => (
                   <article
-                    key={pet.id}
+                    key={pet._id}
                     className="flex items-center justify-between p-6 bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300"
                   >
                     {/* Left: Icon + Info */}
@@ -118,7 +186,7 @@ const ManagePets = () => {
                           <span className="font-medium">{pet.type}</span>
                         </p>
                         <p className="text-sm text-gray-600 mt-0.5">
-                          Breed: <span className="font-medium">{pet.breed}</span>
+                          Weight: <span className="font-medium">{pet.weight}</span>
                         </p>
                       </div>
                     </div>
@@ -134,7 +202,7 @@ const ManagePets = () => {
                         Edit
                       </button>
                       <button
-                        onClick={() => handleDelete(pet.id)}
+                        onClick={() => handleDelete(pet._id)}
                         className="flex items-center gap-2 text-red-600 font-semibold hover:text-red-700 transition-colors"
                         aria-label={`Remove ${pet.name}`}
                       >
@@ -180,7 +248,7 @@ const ManagePets = () => {
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
-                    handleSave();
+                    editingPet ? updatePet() : addPet();
                   }}
                   className="space-y-6"
                 >
@@ -217,10 +285,10 @@ const ManagePets = () => {
                   />
                   <input
                     type="text"
-                    placeholder="Breed"
-                    value={formData.breed}
+                    placeholder="Weight"
+                    value={formData.weight}
                     onChange={(e) =>
-                      setFormData({ ...formData, breed: e.target.value })
+                      setFormData({ ...formData, weight: e.target.value })
                     }
                     className="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:ring-4 focus:ring-[#006ca7] outline-none transition"
                   />

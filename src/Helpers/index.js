@@ -72,7 +72,7 @@ export const getRequest = async (url) => {
 // };
 
 export const postRequest = async (props) => {
- // console.log("post api props====", props);
+  // console.log("post api props====", props);
 
   try {
     const response = await axios?.post(
@@ -86,13 +86,7 @@ export const postRequest = async (props) => {
     );
     return response;
   } catch (error) {
-    if (error.response.status === 401) {
-      deleteCookie("DoctorAddaPanel");
-      window != undefined &&
-        (window.location.href = `${import.meta.env.VITE_SIGNUP_URL}`);
-      console.error("Unauthorized: Redirecting to login page");
-    }
-    throw error;
+    console.log(123, error);
   }
 };
 
