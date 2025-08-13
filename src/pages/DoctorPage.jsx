@@ -13,58 +13,33 @@ import DownloadAppSection from "../components/DownloadAppSection";
 import { useNavigate } from "react-router-dom";
 import { getRequest } from "../Helpers/index";
 
-const SpecialtyCard = ({
-
-  specialty,
-  image,
-  description,
-  doctorCount,
-  rating,
-  availability,
-}) => {
-  const navigate = useNavigate();
-  const handleViewDetails = (id) => {
-    navigate(`/doctorlist/${id}`);
-  };
-   const [categories, setCategories] = useState([]);
-  
-    const fetchCategories = async () => {
-      try {
-        const response = await getRequest("category");
-        //console.log("fetched category", response);
-        setCategories(response?.data?.data?.categories || []);
-      } catch (error) {
-       // console.error(error);
-      }
-    };
-    useEffect(() => {
-      fetchCategories();
-    }, []);
-
+const SpecialtyCard = ({ id, name, imageUrl, onViewDoctors }) => {
   return (
     <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-105 overflow-hidden border border-gray-100">
-      
+      {/* Image Section */}
       <div className="relative h-48 overflow-hidden">
         <img
-          src={image}
-          alt={specialty}
+          src={imageUrl}
+          alt={name}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
         <div className="absolute bottom-4 left-4 right-4">
-          <h3 className="text-white font-bold text-xl mb-1">{specialty}</h3>
+          <h3 className="text-white font-bold text-xl mb-1">{name}</h3>
         </div>
       </div>
 
-      <div className="px-18 py-4">
+      {/* Button */}
+      <div className="px-6 py-4">
         <button
-          onClick={handleViewDetails}
+          onClick={() => onViewDoctors(id)}
           className="w-full bg-[#00659d] hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 cursor-pointer"
         >
           View Doctors
         </button>
       </div>
 
+      {/* Animated top bar */}
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-purple-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
     </div>
   );
@@ -84,6 +59,9 @@ const DoctorPage = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  const navigate = useNavigate();
+  const [categories, setCategories] = useState([]);
+  const [search, setSearch] = useState("");
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
@@ -99,55 +77,68 @@ const DoctorPage = () => {
     { icon: Video, text: "Video Consults" },
     { icon: Calendar, text: "Instant Booking" },
   ];
+  
 
   const specialtyData = [
     {
-      specialty: "General Physician",
-      image:
-        "https://i.pinimg.com/736x/e7/b2/2c/e7b22c1f928c1d06d00dc1c887ef9918.jpg",
-      type: "general",
+      _id: "1",
+      name: "Dentistry",
+      imageUrl:
+        "https://images.unsplash.com/photo-1606811971618-4486d14f3eab",
+      description: "Oral health, teeth, gums and dental care",
     },
     {
-      specialty: "Gynaecology",
-      image:
-        "https://i.pinimg.com/1200x/6c/59/95/6c599523460f54ddeba81f3cd689ae04.jpg",
-      type: "specialist",
+      _id: "2",
+      name: "Cardiology",
+      imageUrl:
+        "https://images.unsplash.com/photo-1580281657521-3b2f2b4417d1",
+      description: "Heart specialists and cardiovascular treatments",
     },
     {
-      specialty: "Dermatology",
-      image:
-        "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-      type: "specialist",
-    },
-    {
-      specialty: "Diabetology",
-      image:
-        "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80",
-      type: "specialist",
-    },
-    {
-      specialty: "Cardiology",
-      image:
-        "https://images.unsplash.com/photo-1628348068343-c6a848d2b6dd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-      type: "specialist",
-    },
-    {
-      specialty: "Psychiatry",
-      image:
-        "https://images.unsplash.com/photo-1527613426441-4da17471b66d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2085&q=80",
-      type: "specialist",
+      _id: "3",
+      name: "Neurology",
+      imageUrl:
+        "https://images.unsplash.com/photo-1588776814546-512b39d88a5c",
+      description: "Brain, nerves and neurological disorders",
     },
   ];
 
-  const filteredData = specialtyData.filter((doctor) => {
-    const matchesSearch =
-      doctor.specialty.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      doctor.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter =
-      filterType === "all" ||
-      doctor.type.toLowerCase().includes(filterType.toLowerCase());
-    return matchesSearch && matchesFilter;
-  });
+   // Fetch categories from API
+  const fetchCategories = async () => {
+    try {
+      const response = await getRequest("category");
+      const apiCategories = response?.data?.data?.categories || [];
+      setCategories(apiCategories.length > 0 ? apiCategories : specialtyData);
+    } catch (error) {
+      console.error(error);
+      setCategories(specialtyData); // fallback
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  // Navigate to doctors list page
+  const handleViewDetails = (id) => {
+    navigate(`/doctorlist/${id}`);
+  };
+
+  // const filteredData = specialtyData.filter((doctor) => {
+  //   const matchesSearch =
+  //     doctor.specialty.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //     doctor.description.toLowerCase().includes(searchTerm.toLowerCase());
+  //   const matchesFilter =
+  //     filterType === "all" ||
+  //     doctor.type.toLowerCase().includes(filterType.toLowerCase());
+  //   return matchesSearch && matchesFilter;
+  // });
+
+   const filteredData = categories.filter(
+    (cat) =>
+      cat.name.toLowerCase().includes(search.toLowerCase()) ||
+      (cat.description || "").toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
@@ -546,97 +537,32 @@ const DoctorPage = () => {
       `}</style>
 
       {/* Search and Filter Section */}
-      <div className="lg:w-[70%] sm:w-full xl:w-[70%] mx-auto  py-8 pb-8">
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-gray-100">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1 relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg
-                  className="h-5 w-5 text-gray-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-              </div>
-              <input
-                type="text"
-                placeholder="Search by specialty..."
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
+      <div className="flex items-center justify-center">
+        <div className="p-6 w-[70%] ">
+      {/* Search Bar */}
+      <div className="mb-6 flex justify-center">
+        <input
+          type="text"
+          placeholder="Search for a specialty..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full max-w-lg border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+      </div>
 
-            <div className="relative">
-              <select
-                className="appearance-none bg-white border border-gray-300 rounded-xl px-4 py-3 pr-8 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
-                value={filterType}
-                onChange={(e) => setFilterType(e.target.value)}
-              >
-                <option value="all">All Specialties</option>
-                <option value="general">General</option>
-                <option value="specialist">Specialist</option>
-              </select>
-              <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                <svg
-                  className="h-4 w-4 text-gray-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Results Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-800">
-            Medical Specialties
-            <span className="ml-2 text-lg text-gray-500">
-              ({filteredData.length})
-            </span>
-          </h2>
-        </div>
-
-        {/* Specialty Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {filteredData.length > 0 ? (
-            filteredData.map((data, index) => (
-              <div
-                key={index}
-                className="animate-fadeIn"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <SpecialtyCard {...data} />
-              </div>
-            ))
-          ) : (
-            <div className="col-span-full text-center py-12">
-              <div className="text-6xl mb-4">👨‍⚕️</div>
-              <h3 className="text-xl font-semibold text-gray-700 mb-2">
-                No specialties found
-              </h3>
-              <p className="text-gray-500">
-                Try adjusting your search criteria
-              </p>
-            </div>
-          )}
-        </div>
+      {/* Specialty Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        {filteredData.map((category) => (
+          <SpecialtyCard
+            key={category._id}
+            id={category._id}
+            name={category.name}
+            imageUrl={category.imageUrl}
+            onViewDoctors={handleViewDetails}
+          />
+        ))}
+      </div>
+    </div>
       </div>
 
       {/* Features Section */}

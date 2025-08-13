@@ -1,4 +1,4 @@
-import React from "react";
+ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Stethoscope,
@@ -66,6 +66,9 @@ const AppointmentTypeCard = ({
 
 const AppointmentSelection = () => {
   const navigate = useNavigate();
+  useEffect(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-indigo-50/50">
