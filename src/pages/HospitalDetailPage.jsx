@@ -23,20 +23,26 @@ import { getRequest } from "../Helpers";
 import { useParams } from "react-router-dom";
 import HospitalReviewForm from "../components/HospitalReviewForm";
 import HospitalTimeSelection from "../components/HospitalTimeSelection";
+import HospitalAppointmentFlow from "../components/HospitalAppointmentFlow";
 
 const HospitalDetailPage = () => {
 
   const [hospital, setHospital] = useState(null);
 
   const [isTimeSelection, setIsTimeSelection] = useState(false)
+  const [isAppointmentFlow, setIsAppointmentFlow] = useState(false)
 
   const [activeTab, setActiveTab] = useState("about")
   const { id } = useParams()
   const [openReviewPopup, setOpenReviewPopup] = useState(false)
   const [reviews, setReviews] = useState([])
   const [selectedDoctor,setSelectedDoctor] = useState()
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(null);
 
   console.log(" selectedDoctor  : ", selectedDoctor)
+  console.log(" selectedDate  : ", selectedDate)
+  console.log(" selectedTime  : ", selectedTime)
 
   const fetchHospitalDetails = async (id) => {
     try {
@@ -352,7 +358,7 @@ const HospitalDetailPage = () => {
                             {doc?.specialization}
                           </p>
                           <p className="text-gray-600 text-sm mb-3">
-                            {doc?.experience} years of experience
+                            {doc?.experience}  of experience
                           </p>
 
                         </div>
@@ -516,7 +522,25 @@ const HospitalDetailPage = () => {
         <HospitalTimeSelection
           isOpen={isTimeSelection}
           onClose={() => setIsTimeSelection(false)}
-          slotDetails = {selectedDoctor}
+          slotDetails={selectedDoctor}
+          onSlotSelected={(date, time) => {
+            setSelectedDate(date);
+            setSelectedTime(time);
+            setIsTimeSelection(false);
+            setIsAppointmentFlow(true);
+          }}
+        />
+
+        <HospitalAppointmentFlow
+          isOpen={isAppointmentFlow}
+          onClose={() => setIsAppointmentFlow(false)}
+          slotDetails={{
+             doctor: selectedDoctor, 
+             date: selectedDate,
+             time: selectedTime ,
+             hospitalDetails : hospital,
+            }}
+          doctorType={selectedDoctor && hospital?.doctors?.some(doc => doc._id === selectedDoctor._id) ? "Internal" : "Registered"}
         />
 
       </div>
