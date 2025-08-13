@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Dialog } from "@headlessui/react";
 import {
   Calendar,
@@ -56,6 +57,7 @@ const AppointmentFlow = ({ open, onClose, id }) => {
         console.log("error", error);
       });
   }, [id]);
+  const navigate = useNavigate();
 
   return (
     <Dialog open={open} onClose={handleClose} className="relative z-50">
@@ -67,138 +69,118 @@ const AppointmentFlow = ({ open, onClose, id }) => {
         <Dialog.Panel className="bg-white p-5 sm:p-6 rounded-xl shadow-2xl w-full max-w-sm sm:max-w-md lg:max-w-lg">
           {/* Step 1: Who for */}
           {step === 1 && (
-            <>
-              <Dialog.Title className="text-xl sm:text-2xl font-semibold text-center text-gray-800 mb-6">
-                Who is this appointment for?
-              </Dialog.Title>
+        <>
+          <Dialog.Title className="text-xl sm:text-2xl font-semibold text-center text-gray-800 mb-6">
+            Who is this appointment for?
+          </Dialog.Title>
 
-              <div className="space-y-4">
-                {["self", "other"].map((option) => (
-                  <button
-                    key={option}
-                    className={`w-full px-4 py-3 border rounded-xl shadow-sm transition-all duration-200 font-medium text-sm sm:text-base ${
-                      selectedFor === option
-                        ? "bg-blue-100 border-blue-600 text-blue-800"
-                        : "border-gray-300 hover:bg-blue-50 hover:border-blue-600 text-gray-700"
-                    }`}
-                    onClick={() => {
-                      setSelectedFor(option);
-                      setShowPatientList(false);
-                      setShowAddPatientForm(false);
-                    }}
-                  >
-                    {option === "self" ? "Self" : "Other"}
-                  </button>
-                ))}
-              </div>
+          <div className="space-y-4">
+            {["self", "other"].map((option) => (
+              <button
+                key={option}
+                className={`w-full px-4 py-3 border rounded-xl shadow-sm transition-all duration-200 font-medium text-sm sm:text-base ${
+                  selectedFor === option
+                    ? "bg-blue-100 border-blue-600 text-blue-800"
+                    : "border-gray-300 hover:bg-blue-50 hover:border-blue-600 text-gray-700"
+                }`}
+                onClick={() => {
+                  setSelectedFor(option);
+                  setShowPatientList(false);
+                  setShowAddPatientForm(false);
+                }}
+              >
+                {option === "self" ? "Self" : "Other"}
+              </button>
+            ))}
+          </div>
 
-              {selectedFor === "other" && (
-                <div className="mt-4">
-                  <h4 className="text-sm font-medium text-gray-700 mb-2">
-                    Other Patients:
-                  </h4>
-                  {otherPatients.length > 0 ? (
-                    <ul className="space-y-2 text-sm text-gray-700">
-                      {otherPatients.map((p, i) => (
-                        <li
-                          key={i}
-                          className="border border-gray-200 rounded-lg p-2 shadow-sm"
-                        >
-                          {p.name} – {p.gender}, {p.age} yrs
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="text-sm text-gray-500">No data available</p>
-                  )}
-                </div>
+          {selectedFor === "other" && (
+            <div className="mt-4">
+              <h4 className="text-sm font-medium text-gray-700 mb-2">
+                Other Patients:
+              </h4>
+              {otherPatients.length > 0 ? (
+                <ul className="space-y-2 text-sm text-gray-700">
+                  {otherPatients.map((p, i) => (
+                    <li
+                      key={i}
+                      className="border border-gray-200 rounded-lg p-2 shadow-sm"
+                    >
+                      {p.name} – {p.gender}, {p.age} yrs
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-sm text-gray-500">No data available</p>
               )}
-
-              {showPatientList && (
-                <div className="mt-4 border-t pt-4">
-                  <h4 className="text-sm font-semibold text-gray-700 mb-2">
-                    Manage Patients
-                  </h4>
-                  <ul className="space-y-2 text-sm text-gray-700">
-                    {otherPatients.map((p, i) => (
-                      <li key={i} className="border rounded p-2">
-                        {p.name} - {p.gender}, {p.age}
-                      </li>
-                    ))}
-                  </ul>
-
-                  <button
-                    onClick={() => setShowAddPatientForm(true)}
-                    className="mt-4 text-blue-600 hover:underline text-sm font-medium"
-                  >
-                    + Add New Patient
-                  </button>
-                </div>
-              )}
-
-              {showAddPatientForm && (
-                <div className="mt-4 border-t pt-4 space-y-2">
-                  <h4 className="text-sm font-semibold text-gray-700">
-                    Add Patient
-                  </h4>
-                  {/* Simplified form */}
-                  <input
-                    type="text"
-                    placeholder="Name"
-                    className="w-full px-3 py-2 border rounded"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Gender"
-                    className="w-full px-3 py-2 border rounded"
-                  />
-                  <input
-                    type="number"
-                    placeholder="Age"
-                    className="w-full px-3 py-2 border rounded"
-                  />
-                  <button
-                    onClick={() => {
-                      // Add logic to save new patient
-                      setShowAddPatientForm(false);
-                    }}
-                    className="w-full bg-blue-600 text-white py-2 rounded font-medium"
-                  >
-                    Save Patient
-                  </button>
-                </div>
-              )}
-
-              <div className="mt-8 flex flex-col sm:flex-row justify-between gap-4">
-                <button
-                  onClick={handleClose}
-                  className="w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-all duration-200"
-                >
-                  Cancel
-                </button>
-
-                <button
-                  onClick={() => {
-                    if (selectedFor === "self") {
-                      setStep(2);
-                    } else {
-                      setShowPatientList(true);
-                    }
-                  }}
-                  disabled={!selectedFor}
-                  className={`w-full px-4 py-3 font-medium rounded-lg transition-all duration-200 ${
-                    selectedFor
-                      ? "bg-[#006fab] hover:bg-blue-700 text-white"
-                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  }`}
-                >
-                  {selectedFor === "self"
-                    ? "Continue as Self"
-                    : "Manage Patients"}
-                </button>
-              </div>
-            </>
+            </div>
           )}
+
+          {showPatientList && (
+            <div className="mt-4 border-t pt-4"></div>
+          )}
+
+          {showAddPatientForm && (
+            <div className="mt-4 border-t pt-4 space-y-2">
+              <h4 className="text-sm font-semibold text-gray-700">
+                Add Patient
+              </h4>
+              <input
+                type="text"
+                placeholder="Name"
+                className="w-full px-3 py-2 border rounded"
+              />
+              <input
+                type="text"
+                placeholder="Gender"
+                className="w-full px-3 py-2 border rounded"
+              />
+              <input
+                type="number"
+                placeholder="Age"
+                className="w-full px-3 py-2 border rounded"
+              />
+              <button
+                onClick={() => {
+                  setShowAddPatientForm(false);
+                }}
+                className="w-full bg-blue-600 text-white py-2 rounded font-medium"
+              >
+                Save Patient
+              </button>
+            </div>
+          )}
+
+          <div className="mt-8 flex flex-col sm:flex-row justify-between gap-4">
+            <button
+              onClick={handleClose}
+              className="w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-all duration-200"
+            >
+              Cancel
+            </button>
+
+            <button
+              onClick={() => {
+                if (selectedFor === "self") {
+                  setStep(2);
+                } else {
+                  navigate("/manage-patients");
+                }
+              }}
+              disabled={!selectedFor}
+              className={`w-full px-4 py-3 font-medium rounded-lg transition-all duration-200 ${
+                selectedFor
+                  ? "bg-[#006fab] hover:bg-blue-700 text-white"
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+              }`}
+            >
+              {selectedFor === "self"
+                ? "Continue as Self"
+                : "Manage Patients"}
+            </button>
+          </div>
+        </>
+      )}
 
           {/* Step 2: Payment */}
           {step === 2 && (

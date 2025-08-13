@@ -7,6 +7,9 @@ import { useSelector } from "react-redux";
 import { deleteRequest, getRequest, patchRequest, postRequest } from "../Helpers";
 
 const ManagePatients = () => {
+  useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
   const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
   const UserId = userProfileData?._id;
   console.log("UserId", UserId);

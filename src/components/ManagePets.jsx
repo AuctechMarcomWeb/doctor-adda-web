@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SidebarNav from "./SidebarNav";
 import { Plus, PawPrint, Edit, Trash2, X } from "lucide-react";
 
 const ManagePets = () => {
+  useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
   const [pets, setPets] = useState([
     { id: 1, name: "Max", type: "Dog", age: 3, breed: "Labrador" },
     { id: 2, name: "Whiskers", type: "Cat", age: 2, breed: "Persian" },
