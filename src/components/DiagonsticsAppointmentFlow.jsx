@@ -70,13 +70,11 @@ const DiagonsticsAppointmentFlow = ({
     }
   }, [id]);
 
-  console.log("appointmentId", {
-    ...appointmentData,
-    otherPatientDetails: selectedPatient,
-  });
-
+ 
   const handleConfirmBooking = async () => {
     try {
+          setOtherPatientDetails({ patient: selectedPatient }); // ensure UI syncs
+
       const res = await postRequest({
         url: `diagnosticBooking/add`,
         cred: { ...appointmentData, otherPatientDetails: { patient: selectedPatient } }
@@ -160,7 +158,11 @@ const DiagonsticsAppointmentFlow = ({
                               ? "border-blue-600 bg-blue-50"
                               : "border-gray-200"
                           }`}
-                          onClick={() => setSelectedPatient(p)}
+                          onClick={() =>{ setSelectedPatient(p);
+                            setOtherPatientDetails({ patient: p }); // update parent state
+                          }}
+                              
+
                         >
                           {p.name} , {p.gender}, {p.age}{" "}
                           {p.weight ? p.weight + "yrs" : ""}

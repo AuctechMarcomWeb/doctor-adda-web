@@ -47,6 +47,8 @@ const DiagnosticDetailPage = () => {
   const [selectedDateData, setSelectedDateData] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [updateStatus, setUpdateStatus] = useState(false);
+  console.log("updateStatus",updateStatus);
+  
   const [selectedServices, setSelectedServices] = useState([]);
   const [selectedPackages, setSelectedPackages] = useState([]);
   const [showAppointmentPopup, setShowAppointmentPopup] = useState(false);
@@ -61,7 +63,6 @@ const [otherPatientDetails, setOtherPatientDetails] = useState({
 
   console.log("otherPatientDetails", otherPatientDetails);
 
-  const [showManagePatients, setShowManagePatients] = useState(false); // for Manage Patients modal
 
   const navigate = useNavigate();
 const handleAddOtherPatient = (patientData) => {
@@ -75,8 +76,10 @@ const handleAddOtherPatient = (patientData) => {
   const fetchDiagnosticsDetails = async () => {
     try {
       const res = await getRequest(`diagnostics/${id}`);
-      console.log("diagnostic ===", res?.data?.data);
+      console.log("diagnostic data fetch ===", res?.data?.data);
       setDiagnostics(res?.data?.data);
+      setReviews(res?.data?.data?.reviews || []);
+
     } catch (error) {
       console.log("error", error);
     }
@@ -84,9 +87,11 @@ const handleAddOtherPatient = (patientData) => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+      if (!id) return;
     fetchDiagnosticsDetails();
   }, [id, updateStatus]);
 
+  
   const handleServiceCheckbox = (id) => {
     setSelectedServices((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
