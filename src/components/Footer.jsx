@@ -42,7 +42,7 @@ const Footer = () => {
               <div className="flex items-center space-x-2 mb-6">
                 <div className="w-18 h-18  rounded-lg flex items-center justify-center">
                   <Stethoscope className="w-18 h-18 text-white" />
-                   <img src={logo} alt="" />
+                  <img src={logo} alt="" />
                 </div>
                 {/* <span className="text-2xl  font-bold">Doctor Adda</span> */}
               </div>
@@ -62,12 +62,12 @@ const Footer = () => {
                   Home
                 </Link>
                 <Link
-                  to="/"
+                  to="/login"
                   className="block text-gray-400 hover:text-white transition-colors"
                 >
                   Login
                 </Link>
-               
+
                 <Link
                   to="/contact"
                   className="block text-gray-400 hover:text-white transition-colors"
@@ -85,13 +85,22 @@ const Footer = () => {
 
             <div>
               <h3 className="text-lg font-semibold mb-4">Services</h3>
-              <div className="space-y-2">
-                <div className="text-gray-400">Doctor & Specialists</div>
-                <div className="text-gray-400">Ambulance  </div>
-                <div className="text-gray-400">Diagnostics</div>
-                <div className="text-gray-400">Hospitals</div>
+              <div className="flex flex-col space-y-2">
+                <Link to="/doctor" className="text-gray-400 hover:text-white transition-colors">
+                  Doctor & Specialists
+                </Link>
+                <Link to="/ambulance" className="text-gray-400 hover:text-white transition-colors">
+                  Ambulance
+                </Link>
+                <Link to="/diagnostic" className="text-gray-400 hover:text-white transition-colors">
+                  Diagnostics
+                </Link>
+                <Link to="/hospital" className="text-gray-400 hover:text-white transition-colors">
+                  Hospitals
+                </Link>
               </div>
             </div>
+
 
             <div>
               <h3 className="text-lg font-semibold mb-4">Contact Info</h3>

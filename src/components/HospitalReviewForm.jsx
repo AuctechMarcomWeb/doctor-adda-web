@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { postRequest } from "../Helpers/index";
-import { FaStar } from "react-icons/fa"; // Make sure to install react-icons if not already
+import { FaStar } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
-const HospitalReviewForm = ({ open, onClose, hospitalId, onReviewAdded, setUpdateStatus }) => {
+const HospitalReviewForm = ({ open, onClose, hospitalId, onReviewAdded }) => {
   const [rating, setRating] = useState(1);
   const [hoverRating, setHoverRating] = useState(null);
   const [comment, setComment] = useState("");
@@ -13,10 +13,8 @@ const HospitalReviewForm = ({ open, onClose, hospitalId, onReviewAdded, setUpdat
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
-  console.log("hospitalId in review popup",hospitalId);
-
-  const navigate = useNavigate()
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn)
+  const navigate = useNavigate();
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
   if (!open) return null;
 
@@ -33,35 +31,33 @@ const HospitalReviewForm = ({ open, onClose, hospitalId, onReviewAdded, setUpdat
     setLoading(true);
     setError("");
     setSuccess(false);
+
     try {
       const res = await postRequest({
         url: `hospital/${hospitalId}/review`,
         cred: { rating, comment },
       });
-      const data = res.data;
-      console.log("data in review popup",data);
-      
-      if (data?.success) {
+      const data = res?.data;
 
-        setUpdateStatus((prev) => !prev);
+      if (data?.success) {
         setSuccess(true);
         setComment("");
-        setRating(5);
-
+        setRating(1);
         if (onReviewAdded) onReviewAdded(data?.data);
-
+        toast.success("Review submitted!");
         setTimeout(() => {
-          onClose();
           setSuccess(false);
-        }, 100);
-
+          onClose();
+        }, 1200);
       } else {
-        
-        setError(data.message || "Failed to submit review");
-
+        setError(data?.message || "Alreeady submitted a review.");
+        toast.error(data?.message || "Alreeady submitted a review.");
       }
     } catch (err) {
-      setError(err.response.data.message || "Failed to submit review");
+      console.error(err);
+      const errorMsg = err?.response?.data?.message || "Alreeady submitted a review.";
+      setError(errorMsg);
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }

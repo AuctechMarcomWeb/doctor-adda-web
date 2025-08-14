@@ -60,7 +60,7 @@ const DiagnosticDetailPage = () => {
     weight: "",
   });
 
-  console.log("otherPatientDetails", otherPatientDetails);
+  console.log("otherPatientDetails", otherPatientDetails);   
 
   const navigate = useNavigate();
   const handleAddOtherPatient = (patientData) => {
