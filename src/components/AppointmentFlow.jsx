@@ -311,6 +311,8 @@ const AppointmentFlow = ({
 
           {/* Step 4: Final Appointment Details */}
           {step === 4 && (
+            <div className="max-h-[80vh] sm:max-h-[85vh] md:max-h-[90vh] overflow-y-auto px-2">
+
             <>
               <Dialog.Title className="text-2xl font-bold text-center text-green-700 mb-8">
                 My Appointment
@@ -459,6 +461,7 @@ const AppointmentFlow = ({
                 </button>
               </div>
             </>
+            </div>
           )}
         </Dialog.Panel>
       </div>

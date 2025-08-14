@@ -62,10 +62,11 @@ const DiagonsticsReviewPopup = ({
           onClose();
         }, 1500);
       } else {
-        setError(data.message || "Failed to submit review");
+        setError(error?.response?.data?.message);
       }
-    } catch (err) {
-      setError(err?.response?.data?.message || "Failed to submit review");
+    } catch (error) {
+      setError(error?.response?.data?.message || "Failed to submit review");
+
     } finally {
       setLoading(false);
     }
@@ -127,7 +128,7 @@ const DiagonsticsReviewPopup = ({
 
           {/* Response message above button */}
 {error && <div className="text-red-500 text-sm">{error}</div>}
-          {successMessage && <div className="text-green-600 text-sm">Review submitted!</div>}
+          {successMessage && <div className="text-green-600 text-sm">{successMessage}</div>}
 
           {/* Submit button */}
           <button
