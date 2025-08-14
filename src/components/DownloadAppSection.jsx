@@ -4,7 +4,7 @@ import { FaGooglePlay, FaApple } from "react-icons/fa";
 const DownloadAppSection = () => {
   return (
     <section className="bg-[#00659c] text-white py-12 px-4 sm:px-6 md:px-12">
-      <div className="mx-auto flex flex-col-reverse md:flex-row items-center justify-between gap-10 lg:w-[70%] sm:w-full xl:w-[70%]">
+      <div className="mx-auto flex flex-col-reverse md:flex-row items-center justify-between gap-10 sm:w-full lg:w-[80%]  xl:w-[80%] 2xl:w-[70%] ">
         {/* Left Content */}
         <div className="flex-1 text-center md:text-left">
           <h2 className="text-lg sm:text-4xl font-bold mb-4">

@@ -3,7 +3,7 @@ import { Heart, Users, Award, Clock, Shield, Star } from 'lucide-react';
 
 const AboutUsSection = () => {
   return (
-    <section className="relative bg-gradient-to-br from-[#00659c] via-[#0074b2] to-[#005a8a] py-4 md:py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
+    <section className="relative bg-gradient-to-br from-[#00659c] via-[#0074b2] to-[#005a8a] py-4 md:py-12 px-4 sm:px-6 lg:px-8 overflow-hidden mt-4 md:mt-8">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10 pointer-events-none">
         <div className="absolute top-20 left-10 w-32 h-32 border border-white/20 rounded-full"></div>

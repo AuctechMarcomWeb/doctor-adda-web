@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import DoctorAddaLanding from "../components/DoctorAddaLanding";
 import DoctorAddaHero from "../components/DoctorAddaHero";
 import DoctorCategoryCards from "../components/DoctorCategoryCards";
@@ -19,8 +19,29 @@ import MedicalImagingBanner from "../components/MedicalImagingBanner";
 import WhyChooseUs from "../components/WhyChooseUs";
 import Carousel from "../components/Carousel";
 import HomePageImagePopup from "../components/HomePageImagePopup";
+import { getRequest } from "../Helpers";
 
 const Home = () => {
+
+  const [data,setData] = useState([])
+
+  console.log("dfgfdg================>",data);
+
+    useEffect(() => {
+  
+      getRequest(`banner?isPagination=false`).then((res)=>{
+        setData(res?.data?.data)
+      }).catch((error)=>{
+        console.log("error",error);
+        
+      })
+  
+  
+  
+    }, []);
+
+
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
@@ -28,7 +49,7 @@ const Home = () => {
     <>
       {/* <MedicalHeroSection/> */}
 
-      <HomePageImagePopup />
+      <HomePageImagePopup data={data} />
 
       <BannerSection />
 
