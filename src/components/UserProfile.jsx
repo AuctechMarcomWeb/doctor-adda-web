@@ -260,7 +260,7 @@ const UserProfile = () => {
                       <div>
                         <input
                           type="text"
-                          value={formData.name}
+                          value={formData?.name}
                           onChange={(e) => handleChange("name", e.target.value)}
                           className={`w-full px-4 py-3 rounded-lg border-2 outline-none transition-all ${
                             errors.name
@@ -289,7 +289,7 @@ const UserProfile = () => {
                     </label>
                     <div className="px-4 py-3 bg-gray-100 rounded-lg border-2 border-transparent text-gray-500">
                       <Phone size={16} className="inline mr-2" />
-                      +91 {formData.phone}
+                      +91 {formData?.phone}
                     </div>
                   </div>
 
@@ -300,7 +300,7 @@ const UserProfile = () => {
                     </label>
                     <div className="px-4 py-3 bg-gray-100 rounded-lg border-2 border-transparent text-gray-500">
                       <Mail size={16} className="inline mr-2" />
-                      {formData.email|| "abc@gmail.com"}
+                      {formData?.email|| "abc@gmail.com"}
                     </div>
                   </div>
 
@@ -319,7 +319,7 @@ const UserProfile = () => {
                             <input
                               type="radio"
                               value={gender}
-                              checked={formData.gender === gender}
+                              checked={formData?.gender === gender}
                               onChange={(e) =>
                                 handleChange("gender", e.target.value)
                               }
@@ -332,7 +332,7 @@ const UserProfile = () => {
                     ) : (
                       <div className="px-4 py-3 bg-gray-50 rounded-lg border-2 border-transparent">
                         <User size={16} className="inline mr-2" />
-                        {formData.gender}
+                        {formData?.gender}
                       </div>
                     )}
                   </div>
@@ -398,7 +398,7 @@ const UserProfile = () => {
                       </div>
                     ) : (
                       <div className="px-4 py-3 bg-gray-50 rounded-lg border-2 border-transparent">
-                        {formData.age || 24} years
+                        {formData?.age || 24} years
                       </div>
                     )}
                   </div>
@@ -428,6 +428,13 @@ const UserProfile = () => {
           </main>
         </div>
       </div>
+      <SidebarNav
+  formData={formData}      // ✅ Pass formData here
+  activeTab={activeTab}
+  setActiveTab={setActiveTab}
+  handleEdit={handleEdit}
+/>
+
     </div>
   );
 };

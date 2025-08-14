@@ -76,11 +76,11 @@ const HealthBlogSection = () => {
     <div className="bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
 
 
-      <div className=" mx-auto lg:w-[70%] sm:w-full xl:w-[70%]">
+      <div className=" mx-auto sm:w-full lg:w-[80%]  xl:w-[70%]">
 
         {/* Header */}
         <div className="text-center mb-8">
-          <h2 className="text-lg sm:text-4xl font-bold text-gray-900">
+          <h2 className="text-xl  md:text-2xl lg:text-4xl font-bold text-gray-900">
             Health <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Blogs</span>
           </h2>
         </div>

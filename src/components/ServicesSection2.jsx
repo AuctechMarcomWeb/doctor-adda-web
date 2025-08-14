@@ -21,10 +21,10 @@ const ServicesSection2 = () => {
 
   return (
     <div className="w-full bg-white py-2 md:py-8">
-      <div className="mx-auto px-4 sm:px-6 lg:px-8 lg:w-[70%] sm:w-full xl:w-[70%]">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8 sm:w-full lg:w-[80%]  xl:w-[70%]">
         {/* Header */}
         <div className="text-center mb-4 md:mb-8">
-          <h2 className="text-lg sm:text-4xl font-bold text-gray-800 mb-2 md:mb-4">
+          <h2 className="text-xl  md:text-2xl lg:text-4xl font-bold text-gray-800 mb-2 md:mb-4">
             Our{" "}
             <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
               Categories
@@ -51,7 +51,7 @@ const ServicesSection2 = () => {
               }}
             >
               {/* Image */}
-              <div className="w-full h-20 sm:h-36 lg:h-40 rounded-2xl overflow-hidden shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-105">
+              <div className="w-full h-20 sm:h-36 lg:h-30 2xl:h-40 rounded-2xl overflow-hidden shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-105">
                 <img
                   src={service.imageUrl}
                   alt={service.name}

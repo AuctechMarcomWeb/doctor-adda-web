@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Dialog } from "@headlessui/react";
@@ -11,11 +13,21 @@ import {
   CheckCircle,
   Timer,
 } from "lucide-react";
-import { getRequest } from "../Helpers";
-import { useSelector, useDispatch } from "react-redux";
+import { getRequest, postRequest } from "../Helpers";
+import { useSelector } from "react-redux";
 
-const AppointmentFlow = ({ open, onClose, id }) => {
+const AppointmentFlow = ({
+  open,
+  onClose,
+  id,
+  appointmentData,
+  otherPatientDetails = [],
+  setOtherPatientDetails,
+  onOpenManagePatients = () => {},
+}) => {
+  const [selectedDateData, setSelectedDateData] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedSlot, setSelectedSlot] = useState(null);
   const [clinicData, setClinicData] = useState(null);
   const [doctor, setDoctor] = useState(null);
   const [step, setStep] = useState(1);
@@ -23,26 +35,70 @@ const AppointmentFlow = ({ open, onClose, id }) => {
   const [selectedPayment, setSelectedPayment] = useState(null);
   const selectedClinic = clinicData || {};
 
-  const [showPatientList, setShowPatientList] = useState(false);
-  const [showAddPatientForm, setShowAddPatientForm] = useState(false);
-
-  // Dummy patient data
-  const [otherPatients, setOtherPatients] = useState([
-    { name: "Anjali Sharma", gender: "Female", age: 28 },
-    { name: "Ravi Kumar", gender: "Male", age: 35 },
-  ]);
-
   // Get user profile data from Redux
   const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
-
+  const UserId = userProfileData?._id;
   console.log("user profile data from redux in navbar", userProfileData);
   console.log("isLoggedIn from redux", isLoggedIn);
 
-  const handleClose = () => {
-    setStep(1);
-    onClose();
+  const [patients, setPatients] = useState([]);
+  const [selectedPatient, setSelectedPatient] = useState(null);
+
+  const otherPatients = patients.length > 0 ? patients : otherPatientDetails;
+
+  // Extract appointment data
+  const { appointmentId, slots } = appointmentData || {};
+
+  // Show patient info based on selectedFor
+  const isSelf = selectedFor === "self";
+  const patientDetails = isSelf
+    ? {
+        name: userProfileData?.name,
+        gender: userProfileData?.gender,
+        phone: userProfileData?.phone,
+      }
+    : otherPatientDetails;
+
+  const handleConfirmBooking = async () => {
+    try {
+      setOtherPatientDetails({ patient: selectedPatient });
+
+      const res = await postRequest({
+        url: `appointment/add`,
+        cred: {
+          ...appointmentData,
+          otherPatientDetails: { patient: selectedPatient },
+        },
+      });
+      console.log("Booking confirmed", res?.data?.data);
+      setDoctor(res?.data?.data);
+      setStep(4);
+    } catch (error) {
+      console.log("Error booking appointment", error);
+    }
   };
 
+  const fetchPatients = async () => {
+    if (!UserId) return;
+    try {
+      const res = await getRequest(`auth/getMembers/${UserId}`);
+      console.log("Fetched patients:", res?.data?.data || []);
+      setPatients(res?.data?.data || []);
+    } catch (error) {
+      console.error("Error fetching patients:", error);
+    }
+  };
+  useEffect(() => {
+    fetchPatients();
+  }, [UserId]);
+
+  const handleClose = () => {
+    setStep(1);
+    setSelectedFor(null);
+    setSelectedPayment(null);
+    onOpenManagePatients();
+    onClose();
+  };
   useEffect(() => {
     window.scrollTo(0, 0);
     getRequest(`doctor/${id}`)
@@ -57,7 +113,6 @@ const AppointmentFlow = ({ open, onClose, id }) => {
         console.log("error", error);
       });
   }, [id]);
-  const navigate = useNavigate();
 
   return (
     <Dialog open={open} onClose={handleClose} className="relative z-50">
@@ -85,8 +140,7 @@ const AppointmentFlow = ({ open, onClose, id }) => {
                     }`}
                     onClick={() => {
                       setSelectedFor(option);
-                      setShowPatientList(false);
-                      setShowAddPatientForm(false);
+                      setSelectedPatient(null); // Reset selected patient when option changes
                     }}
                   >
                     {option === "self" ? "Self" : "Other"}
@@ -94,58 +148,35 @@ const AppointmentFlow = ({ open, onClose, id }) => {
                 ))}
               </div>
 
+              {/* If 'Other' selected show patients list */}
               {selectedFor === "other" && (
                 <div className="mt-4">
                   <h4 className="text-sm font-medium text-gray-700 mb-2">
                     Other Patients:
                   </h4>
                   {otherPatients.length > 0 ? (
-                    <ul className="space-y-2 text-sm text-gray-700">
+                    <ul className="space-y-2 text-sm text-gray-700 max-h-40 overflow-auto">
                       {otherPatients.map((p, i) => (
                         <li
                           key={i}
-                          className="border border-gray-200 rounded-lg p-2 shadow-sm"
+                          className={`border rounded-lg p-2 shadow-sm cursor-pointer ${
+                            selectedPatient?.name === p.name
+                              ? "border-blue-600 bg-blue-50"
+                              : "border-gray-200"
+                          }`}
+                          onClick={() => {
+                            setSelectedPatient(p);
+                            setOtherPatientDetails({ patient: p }); // update parent state
+                          }}
                         >
-                          {p.name} – {p.gender}, {p.age} yrs
+                          {p.name}, {p.gender}, {p.age}{" "}
+                          {p.weight ? p.weight + "yrs" : ""}
                         </li>
                       ))}
                     </ul>
                   ) : (
                     <p className="text-sm text-gray-500">No data available</p>
                   )}
-                </div>
-              )}
-
-              {showPatientList && <div className="mt-4 border-t pt-4"></div>}
-
-              {showAddPatientForm && (
-                <div className="mt-4 border-t pt-4 space-y-2">
-                  <h4 className="text-sm font-semibold text-gray-700">
-                    Add Patient
-                  </h4>
-                  <input
-                    type="text"
-                    placeholder="Name"
-                    className="w-full px-3 py-2 border rounded"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Gender"
-                    className="w-full px-3 py-2 border rounded"
-                  />
-                  <input
-                    type="number"
-                    placeholder="Age"
-                    className="w-full px-3 py-2 border rounded"
-                  />
-                  <button
-                    onClick={() => {
-                      setShowAddPatientForm(false);
-                    }}
-                    className="w-full bg-blue-600 text-white py-2 rounded font-medium"
-                  >
-                    Save Patient
-                  </button>
                 </div>
               )}
 
@@ -157,26 +188,45 @@ const AppointmentFlow = ({ open, onClose, id }) => {
                   Cancel
                 </button>
 
-                <button
-                  onClick={() => {
-                    if (selectedFor === "self") {
-                      setStep(2);
-                    } else {
-                      navigate("/manage-patients");
-                    }
-                  }}
-                  disabled={!selectedFor}
-                  className={`w-full px-4 py-3 font-medium rounded-lg transition-all duration-200 ${
-                    selectedFor
-                      ? "bg-[#006fab] hover:bg-blue-700 text-white"
-                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  }`}
-                >
-                  {selectedFor === "self"
-                    ? "Continue as Self"
-                    : "Manage Patients"}
-                </button>
-                
+                {/* Buttons logic: */}
+                {selectedFor === "self" && (
+                  <button
+                    onClick={() => setStep(2)}
+                    disabled={!selectedFor}
+                    className={`w-full px-4 py-3 font-medium rounded-lg transition-all duration-200 ${
+                      selectedFor
+                        ? "bg-[#006fab] hover:bg-blue-700 text-white"
+                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    }`}
+                  >
+                    Continue as Self
+                  </button>
+                )}
+
+                {selectedFor === "other" && (
+                  <>
+                    {selectedPatient ? (
+                      // If patient selected, show Continue button
+                      <button
+                        onClick={() => setStep(2)}
+                        className="w-full px-4 py-3 bg-[#006fab] hover:bg-blue-700 text-white font-medium rounded-lg transition-all duration-200"
+                      >
+                        Continue
+                      </button>
+                    ) : (
+                      // No patient selected, show Manage Patients button
+                      <button
+                        onClick={() => {
+                          onClose();
+                          onOpenManagePatients();
+                        }}
+                        className="w-full px-4 py-3 bg-gray-300 text-gray-700 font-medium rounded-lg transition-all duration-200 hover:bg-gray-400"
+                      >
+                        Manage Patients
+                      </button>
+                    )}
+                  </>
+                )}
               </div>
             </>
           )}
@@ -250,7 +300,7 @@ const AppointmentFlow = ({ open, onClose, id }) => {
                   Cancel
                 </button>
                 <button
-                  onClick={() => setStep(4)}
+                  onClick={handleConfirmBooking}
                   className="w-full px-4 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-all duration-200"
                 >
                   Yes, Book
@@ -281,7 +331,7 @@ const AppointmentFlow = ({ open, onClose, id }) => {
                   />
                   <div>
                     <h3 className="text-base sm:text-lg font-semibold text-gray-900">
-                      {doctor?.fullName}
+                      {doctor?.clinicName}
                     </h3>
 
                     <p className="text-sm text-gray-500">
@@ -299,7 +349,9 @@ const AppointmentFlow = ({ open, onClose, id }) => {
                 </h4>
                 <p className="text-sm text-gray-500 mb-2">
                   Appointment ID:{" "}
-                  <span className="font-semibold text-gray-700">APT-73673</span>
+                  <span className="font-semibold text-gray-700">
+                    {appointmentId || "NA"}
+                  </span>
                 </p>
                 <div className="flex items-center gap-2 text-sm text-gray-700 mb-1">
                   <Calendar className="w-5 h-5 text-blue-600" />
@@ -307,30 +359,57 @@ const AppointmentFlow = ({ open, onClose, id }) => {
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-700">
                   <Clock className="w-5 h-5 text-blue-600" />
-                  <strong>03:50 PM - 04:25 PM</strong>
+                  <strong>
+                    {slots?.startTime} - {slots?.endTime}
+                  </strong>
                 </div>
                 <span className="inline-block mt-4 px-4 py-1 text-xs bg-blue-100 text-blue-700 rounded-full font-medium">
-                  MYSELF
+                  {selectedFor?.toUpperCase() || "MYSELF"}
                 </span>
               </div>
 
               {/* Patient Info */}
-              <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-6">
+              <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-6 w-full max-w-md mx-auto">
                 <h4 className="text-base font-semibold text-gray-800 mb-4">
                   Patient Information
                 </h4>
-                <div className="space-y-1 text-sm text-gray-700">
-                  <p>
-                    <strong>Name:</strong> {userProfileData?.name || "User"}
-                  </p>
-                  <p>
-                    <strong>Gender:</strong>
-                    {userProfileData?.gender || "User"}
-                  </p>
-                  <p>
-                    <strong>Contact:</strong> {userProfileData?.phone || "User"}
-                  </p>
-                </div>
+                {selectedFor === "self" ? (
+                  <div className="space-y-1 text-sm text-gray-700">
+                    <p className="flex flex-wrap">
+                      <strong className="mr-1">Name:</strong>{" "}
+                      {userProfileData?.name || "N/A"}
+                    </p>
+                    <p className="flex flex-wrap">
+                      <strong className="mr-1">Gender:</strong>{" "}
+                      {userProfileData?.gender || "N/A"}
+                    </p>
+                    <p className="flex flex-wrap">
+                      <strong className="mr-1">Contact:</strong>{" "}
+                      {userProfileData?.phone || "N/A"}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-1 text-sm text-gray-700">
+                    <p className="flex flex-wrap">
+                      <strong className="mr-1">Name:</strong>{" "}
+                      {selectedPatient?.name ||
+                        otherPatientDetails?.patient?.name ||
+                        "N/A"}
+                    </p>
+                    <p className="flex flex-wrap">
+                      <strong className="mr-1">Gender:</strong>{" "}
+                      {selectedPatient?.gender ||
+                        otherPatientDetails?.patient?.gender ||
+                        "N/A"}
+                    </p>
+                    <p className="flex flex-wrap">
+                      <strong className="mr-1">Contact:</strong>{" "}
+                      {selectedPatient?.phone ||
+                        otherPatientDetails?.patient?.phone ||
+                        "N/A"}
+                    </p>
+                  </div>
+                )}
               </div>
 
               {/* Fee */}

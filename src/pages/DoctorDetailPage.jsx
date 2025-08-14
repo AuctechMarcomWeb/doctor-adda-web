@@ -1,5 +1,7 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useMemo } from "react";
-import ReviewPopup from "../components/ReviewPopup";
+// import DiagonsticsReviewPopup from "../components/DiagonsticsReviewPopup";
 import {
   Star,
   MapPin,
@@ -26,11 +28,12 @@ import {
   TrendingUp,
   Zap,
 } from "lucide-react";
-import { useLocation, useParams } from "react-router-dom";
+import { useNavigate, useLocation, useParams, Navigate } from "react-router-dom";
 import { getRequest } from "../Helpers";
 import { AppointmentDateFormat } from "../Utils";
 import AppointmentFlow from "../components/AppointmentFlow";
-import DiagonsticsReviewPopup from "./DiagonsticsReviewPopup";
+import { useSelector } from "react-redux";
+//import ReviewPopup from "../components/ReviewPopup";
 
 const GradientCard = ({
   children,
@@ -131,11 +134,22 @@ const DoctorDetailPage = () => {
   const [reviews, setReviews] = useState([]);
   const [showAppointmentPopup, setShowAppointmentPopup] = useState(false);
   const [doctor, setDoctor] = useState(null);
+  console.log("doctor====",doctor);
+  
   const [clinicData, setClinicData] = useState(null);
   const [selectedClinicIndex, setSelectedClinicIndex] = useState(0);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedDateData, setSelectedDateData] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
+  const [otherPatientDetails, setOtherPatientDetails] = useState({
+    name: "",
+    age: "",
+    gender: "",
+    number: "",
+    weight: ""
+  });
+  const [appointmentData, setAppointmentData] = useState(null);
+  const userId = useSelector((state) => state.user.userData.data._id);
 
   const phoneNumber = "102";
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -181,6 +195,11 @@ const DoctorDetailPage = () => {
   console.log("selectedDateData", selectedDateData);
 
   const { id } = useParams();
+    const navigate = useNavigate();
+  
+const handleOpenManagePatients = () => {
+    navigate("/manage-patients");
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -191,10 +210,8 @@ const DoctorDetailPage = () => {
         setClinicData(doc?.clinics?.[0]);
         setSelectedDate(doc?.clinics?.[0]?.availability[0]?.date);
         setSelectedDateData(doc?.clinics?.[0]?.availability[0]);
-
         const firstClinic = doc?.clinics?.[0];
         const firstAvailability = firstClinic?.availability?.[0];
-
         setClinicData(firstClinic);
         setSelectedDate(firstAvailability?.date);
         setSelectedDateData(firstAvailability);
@@ -241,22 +258,19 @@ const DoctorDetailPage = () => {
       doctor: id,
       fee: clinicData?.consultationFee,
       isSelf: false,
-      otherPatientDetails: {
-        name: "",
-        age: "",
-        gender: "",
-        type: "",
-      },
-      patient: "685cf37fc439c4973e98f8d6",
+      otherPatientDetails,
+      patient: userId,
       serviceType: modeFilter,
       slots: selectedSlot,
     };
+    setAppointmentData(finalData);
     setShowAppointmentPopup(true);
 
     console.log("doctor", doctor);
     console.log("clinicData", clinicData);
 
     console.log("finalData", finalData);
+    
   };
 
   return (
@@ -595,16 +609,21 @@ const DoctorDetailPage = () => {
           </aside>
         </div>
       </main>
-      <ReviewPopup
-        open={showReviewPopup}
+      {/* <DiagonsticsReviewPopup    
+    open={showReviewPopup}
         onClose={() => setShowReviewPopup(false)}
-        pharmacyId={id}
+        id={id}
+        entityType="diagnostics"
         onReviewAdded={review => setReviews([...reviews, review])}
-      />
+/> */}
       <AppointmentFlow
         open={showAppointmentPopup}
         onClose={() => setShowAppointmentPopup(false)}
-        id={doctor?._id}
+        id={id}
+        appointmentData={appointmentData}
+        otherPatientDetails={otherPatientDetails}
+        setOtherPatientDetails={setOtherPatientDetails}
+        onOpenManagePatients={handleOpenManagePatients}
       />
     </div>
   );
