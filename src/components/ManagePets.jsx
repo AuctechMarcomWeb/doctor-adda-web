@@ -4,7 +4,7 @@ import { Plus, PawPrint, Edit, Trash2, X } from "lucide-react";
 import { useSelector } from "react-redux";
 import { getRequest, postRequest, patchRequest, deleteRequest } from "../Helpers";
 import Swal from "sweetalert2";
-
+import toast from "react-hot-toast";
 
 const ManagePets = () => {
   useEffect(() => {
@@ -64,7 +64,7 @@ const ManagePets = () => {
   // Add pet API
   const addPet = async () => {
     if (!formData?.name?.trim() || !formData?.type?.trim()) {
-      alert("Please fill in the required fields: Name and Type.");
+      alert("Please fill all required fields.");
       return;
     }
     try {
@@ -72,21 +72,22 @@ const ManagePets = () => {
         url: `auth/addpets/${UserId}`,
         cred: { ...formData, age: parseInt(formData?.age) || 0 },
       });
-      console.log("Pet added:", res?.data?.data);
+      console.log("Pet add:", res?.data?.data);
+    toast.success("Pet added successfully!");
 
       // Refresh pets list
       await fetchPets();
       closeModal();
     } catch (error) {
       console.error("Error adding pet:", error);
-      alert("Something went wrong while adding the pet.");
+    toast.error(" Failed to add pet");
     }
   };
 
   // Update pet API
   const updatePet = async () => {
     if (!formData?.name?.trim() || !formData?.type?.trim()) {
-      alert("Please fill in the required fields: Name and Type.");
+      alert("Please fill all required fields.");
       return;
     }
     try {
@@ -95,13 +96,14 @@ const ManagePets = () => {
         cred: { ...formData, age: parseInt(formData?.age) || 0 },
       });
       console.log("Pet updated:", res?.data?.data);
+      toast.success("Pet updated successfully!");
 
       // Refresh pets list
       await fetchPets();
       closeModal();
     } catch (error) {
       console.error("Error updating pet:", error);
-      alert("Something went wrong while updating the pet.");
+      toast.error("Failed to update pet");
     }
   };
 
@@ -288,6 +290,7 @@ const handleDelete = async (petId) => {
                       setFormData({ ...formData, age: e.target.value })
                     }
                     className="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:ring-4 focus:ring-[#006ca7] outline-none transition"
+                    required
                   />
                   <input
                     type="text"

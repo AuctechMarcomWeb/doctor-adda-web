@@ -15,7 +15,7 @@ import { getRequest } from "../Helpers/index";
 
 const SpecialtyCard = ({ id, name, imageUrl, onViewDoctors }) => {
   return (
-    <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-105 overflow-hidden border border-gray-100">
+    <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-105 overflow-hidden border border-gray-100"  onClick={() => onViewDoctors(id)}>
       {/* Image Section */}
       <div className="relative h-48 overflow-hidden">
         <img
@@ -269,7 +269,7 @@ const DoctorPage = () => {
                   </button>
                 </a>
 
-                <button
+                {/* <button
                   onMouseEnter={() => setHoveredButton("book")}
                   onMouseLeave={() => setHoveredButton(null)}
                   className="group relative bg-gradient-to-r from-pink-500 to-rose-400 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105 transition-all duration-300 overflow-hidden animate-slide-in-right cursor-pointer"
@@ -284,7 +284,7 @@ const DoctorPage = () => {
                       <div className="absolute -right-2 -top-2 w-3 h-3 bg-yellow-400 rounded-full animate-bounce"></div>
                     )}
                   </div>
-                </button>
+                </button> */}
               </div>
             </div>
 

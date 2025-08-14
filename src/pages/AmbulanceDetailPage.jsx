@@ -1,12 +1,15 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import { Star, MapPin, PhoneCall, BadgeCheck } from "lucide-react";
+import { Star, MapPin, PhoneCall, BadgeCheck, PlusCircle ,StarHalf } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { getRequest } from "../Helpers";
+import DiagonsticsReviewPopup from "../components/DiagonsticsReviewPopup";
 
 const AmbulanceDetailPage = () => {
   const [activeTab, setActiveTab] = useState("about");
   const [ambulance, setAmbulance] = useState(null);
+  const [showReviewPopup, setShowReviewPopup] = useState(false);
+const [updateStatus, setUpdateStatus] = useState(false);
 
   const { id } = useParams();
 
@@ -20,13 +23,11 @@ const AmbulanceDetailPage = () => {
       .catch((error) => {
         console.log("error", error);
       });
-  }, [id]);
+  }, [id,updateStatus]);
 
-
- const phoneNumber = "102";
+  const phoneNumber = "102";
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   const [showFallback, setShowFallback] = useState(false);
-
   const tryTelLink = () => {
     const telUrl = `tel:${phoneNumber}`;
     const timeout = setTimeout(() => {
@@ -119,7 +120,7 @@ const AmbulanceDetailPage = () => {
 
           <div className="bg-white rounded-xl shadow-md p-4">
             <button
-  onClick={handleClick}
+              onClick={handleClick}
               className="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition duration-200 text-sm font-medium flex justify-center items-center gap-2"
             >
               <PhoneCall className="w-4 h-4" /> Call Now
@@ -149,7 +150,6 @@ const AmbulanceDetailPage = () => {
           </button>
         </div>
       )} */}
-
           </div>
         </div>
       </div>
@@ -200,49 +200,115 @@ const AmbulanceDetailPage = () => {
 
         {/* Review Section */}
         {activeTab === "review" && (
-          <div className="space-y-6">
-            {(ambulance.reviews || []).map((review, index) => (
-              <div
-                key={index}
-                className="border rounded-xl p-5 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-4"
-              >
-                <img
-                  src={review?.user?.profilepic}
-                  alt={review?.user?.name}
-                  className="w-12 h-12 rounded-full object-cover border border-gray-300"
-                />
-                <div className="flex-1">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <p className="font-semibold text-gray-900">
-                        {review?.user?.name}
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        ({review?.user?.email})
-                      </p>
-                    </div>
-                    <div className="flex text-yellow-500">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`w-4 h-4 ${
-                            i < review?.rating
-                              ? "fill-yellow-400"
-                              : "text-gray-300"
-                          }`}
-                        />
-                      ))}
-                    </div>
+          <div className="space-y-8">
+            <div className="flex items-center justify-between w-full">
+              {/* Left side: Reviews */}
+              <div className="text-left">
+                <h3 className="text-3xl font-bold text-gray-900 mb-4">
+                  What Our Patients Say
+                </h3>
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="flex text-yellow-400">
+                    {[...Array(5)].map((_, i) => {
+                      const rating = ambulance?.averageRating || 0;
+                      if (i + 1 <= rating) {
+                        // Full star
+                        return (
+                          <Star key={i} className="w-6 h-6 fill-current" />
+                        );
+                      } else if (i < rating && rating < i + 1) {
+                        // Half star
+                        return (
+                          <StarHalf key={i} className="w-6 h-6 fill-current" />
+                        );
+                      } else {
+                        // Empty star
+                        return (
+                          <Star key={i} className="w-6 h-6 text-gray-300" />
+                        );
+                      }
+                    })}
                   </div>
-                  <p className="text-sm text-gray-600 mt-1">
-                    {review?.comment}
-                  </p>
+
+                  <span className="text-2xl font-bold text-gray-900 ml-2">
+                    {ambulance?.averageRating?.toFixed(1) || "0.0"}
+                  </span>
+
+                  <span className="ml-2 text-gray-500 text-sm">
+                    ({ambulance?.reviews?.length || 0} reviews)
+                  </span>
                 </div>
               </div>
-            ))}
+              {/* Right side: Share button */}
+              <div className="text-right">
+                <button
+                  onClick={() => setShowReviewPopup(true)}
+                  className="group bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-8 py-4 rounded-full hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 font-semibold flex items-center gap-3 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                >
+                  <PlusCircle className="w-5 h-5 group-hover:animate-spin" />
+                  Share Your Experience
+                </button>
+              </div>
+            </div>
+            <div className="grid gap-6">
+              {ambulance?.reviews?.map((review) => (
+                <div
+                  key={review._id}
+                  className="bg-gradient-to-r from-white to-gray-50 border border-gray-200 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                >
+                  <div className="flex items-start gap-6">
+                    <div className="relative">
+                      <img
+                        src={
+                          review?.user?.profilepic ||
+                          "https://ui-avatars.com/api/?name=Anonymous&background=random"
+                        }
+                        alt={review?.user?.name}
+                        className="w-16 h-16 rounded-full object-cover border-4 border-white shadow-lg"
+                      />
+                      <div className="absolute -bottom-1 -right-1 bg-blue-500 rounded-full p-1">
+                        <BadgeCheck className="w-4 h-4 text-white" />
+                      </div>
+                    </div>
+
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between mb-3">
+                        <h4 className="font-bold text-gray-900 text-lg">
+                          {review?.user?.name}
+                        </h4>
+                        <div className="flex text-yellow-400">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`w-5 h-5 ${
+                                i < review.rating
+                                  ? "fill-current"
+                                  : "text-gray-300"
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                      <p className="text-gray-700 leading-relaxed italic">
+                        "{review?.comment}"
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>
+      <DiagonsticsReviewPopup 
+        setUpdateStatus={setUpdateStatus}
+        open={showReviewPopup}
+        onClose={() => setShowReviewPopup(false)}
+        id={ambulance?._id}
+          entityType="ambulance"
+
+        //onReviewAdded={fetchAmbulance}
+      />
     </div>
   );
 };
