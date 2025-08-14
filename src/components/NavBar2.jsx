@@ -193,14 +193,14 @@ const NavBar2 = () => {
   return (
     <div className="w-full bg-white border-t hidden sm:block relative z-50">
       <div
-        className=" mx-auto relative lg:w-[70%] sm:w-full xl:w-[70%] "
+        className=" mx-auto relative sm:w-full lg:w-[80%]  xl:w-[70%] "
         onMouseLeave={() => {
           setOpenDropdown(null);
           setActiveSubCategory(null);
         }}
       >
         {/* Top nav area + dropdown hover wrapper */}
-        <div className="flex items-center  px-6  justify-between font-medium text-gray-800 text-[15px] overflow-x-auto ">
+        <div className="flex items-center sm:px-1 md:px-4 xl:px-4 justify-between font-medium text-gray-800 sm:text-[12px] md:text-[12px] xl:text-[15px]  overflow-x-auto ">
           <a href="/">
             <FaHome  className="text-lg font-semibold text-gray-800 cursor-pointer hover:text-[#0074b2]" />
           </a>
@@ -242,7 +242,7 @@ const NavBar2 = () => {
 
             >
               <div
-                className={`flex items-center gap-1 px-3 py-2 rounded hover:bg-[#0074b2] hover:text-white transition cursor-pointer ${
+                className={`flex items-center gap-1  md:px-1 md:py-1 lg:px-0 lg:py-1 xl:px-3 xl:py-2 rounded hover:bg-[#0074b2] hover:text-white transition cursor-pointer ${
                   openDropdown === menu.key ? "bg-[#0074b2] text-white" : ""
                 }`}
               >

@@ -42,7 +42,7 @@ const BannerSection = () => {
 
   return (
     <div
-      className=" mx-auto text-white px-2  md:p-12 rounded-3xl flex flex-row md:flex-row items-center gap-4 justify-between lg:w-[70%] sm:w-full xl:w-[70%]"
+      className=" mx-auto text-white px-2  md:p-12 rounded-3xl flex flex-row md:flex-row items-center gap-4 justify-between sm:w-full lg:w-[80%]  xl:w-[70%]"
       style={{
         background:
           "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
