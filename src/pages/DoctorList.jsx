@@ -12,6 +12,7 @@ import {
   Users,
   Smartphone,
   Download,
+  Briefcase 
 } from "lucide-react";
 
 import { useNavigate, useParams } from "react-router-dom";
@@ -30,6 +31,7 @@ const DoctorCard = ({data,modeFilter}) => {
     navigate(`/doctordetail/${id?._id}?modeFilter=${modeFilter}`);
   };
 
+  
   return (
     <div
 
@@ -83,9 +85,13 @@ const DoctorCard = ({data,modeFilter}) => {
         {/* Details */}
         <div className="space-y-3 mb-6">
           <div className="flex items-center gap-3 text-gray-600">
-            <MapPin className="w-4 h-4 text-blue-500" />
-            <span className="text-sm">{data?.clinics[0]?.clinicAddress}</span>
-          </div>
+<MapPin className="w-[18px] h-[18px] text-blue-500 stroke-[1.5] shrink-0" />
+  <span className="text-sm">{data?.clinics[0]?.clinicAddress}</span>
+</div>
+<div className="flex items-center gap-3 text-gray-600">
+<Briefcase className="w-[18px] h-[18px] text-blue-500 stroke-[1.5] shrink-0" />
+  <span className="text-sm">Service Type: {modeFilter}</span>
+</div>
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">

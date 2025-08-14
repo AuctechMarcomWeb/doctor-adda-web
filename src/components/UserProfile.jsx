@@ -428,6 +428,13 @@ const UserProfile = () => {
           </main>
         </div>
       </div>
+      <SidebarNav
+  formData={formData}      // ✅ Pass formData here
+  activeTab={activeTab}
+  setActiveTab={setActiveTab}
+  handleEdit={handleEdit}
+/>
+
     </div>
   );
 };
