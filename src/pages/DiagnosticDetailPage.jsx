@@ -61,7 +61,7 @@ const [otherPatientDetails, setOtherPatientDetails] = useState({
   weight: ""
 });
 
-  console.log("otherPatientDetails", otherPatientDetails);
+  console.log("otherPatientDetails", otherPatientDetails);   
 
 
   const navigate = useNavigate();

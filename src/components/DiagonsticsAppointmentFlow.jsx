@@ -116,6 +116,7 @@ const DiagonsticsAppointmentFlow = ({
       <div className="fixed inset-0 flex items-center justify-center p-4 sm:p-6">
         <Dialog.Panel className="bg-white p-5 sm:p-6 rounded-xl shadow-2xl w-full max-w-sm sm:max-w-md lg:max-w-lg">
           {/* Step 1: Who is it for */}
+          
           {/* Step 1: Who is this appointment for */}
           {step === 1 && (
             <>
@@ -426,6 +427,7 @@ const DiagonsticsAppointmentFlow = ({
               </div>
             </>
           )}
+
         </Dialog.Panel>
       </div>
     </Dialog>
