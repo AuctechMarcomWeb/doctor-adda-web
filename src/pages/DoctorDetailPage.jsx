@@ -136,6 +136,13 @@ const DoctorDetailPage = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedDateData, setSelectedDateData] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
+  const [otherPatientDetails, setOtherPatientDetails] = useState({
+    name: "",
+    age: "",
+    gender: "",
+    number: "",
+    weight: ""
+  });
 
   const phoneNumber = "102";
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -241,12 +248,7 @@ const DoctorDetailPage = () => {
       doctor: id,
       fee: clinicData?.consultationFee,
       isSelf: false,
-      otherPatientDetails: {
-        name: "",
-        age: "",
-        gender: "",
-        type: "",
-      },
+      otherPatientDetails,
       patient: "685cf37fc439c4973e98f8d6",
       serviceType: modeFilter,
       slots: selectedSlot,
@@ -605,7 +607,9 @@ const DoctorDetailPage = () => {
       <AppointmentFlow
         open={showAppointmentPopup}
         onClose={() => setShowAppointmentPopup(false)}
-        id={doctor?._id}
+        id={id}
+        otherPatientDetails={otherPatientDetails}
+        setOtherPatientDetails={setOtherPatientDetails}
       />
     </div>
   );
