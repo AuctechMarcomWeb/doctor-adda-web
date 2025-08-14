@@ -19,7 +19,7 @@ const SidebarNav = ({ formData }) => {
       <div className="flex flex-col items-center">
         <div className="relative">
           <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold text-xl">
-            {formData?.name ? getInitials(formData.name) : "NA"}
+            {formData?.name ? getInitials(formData?.name) : "NA"}
           </div>
           <span className="absolute bottom-1 right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></span>
         </div>

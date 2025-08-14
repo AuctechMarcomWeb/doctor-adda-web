@@ -47,8 +47,7 @@ const DiagnosticDetailPage = () => {
   const [selectedDateData, setSelectedDateData] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [updateStatus, setUpdateStatus] = useState(false);
-  console.log("updateStatus", updateStatus);
-
+//for booking
   const [selectedServices, setSelectedServices] = useState([]);
   const [selectedPackages, setSelectedPackages] = useState([]);
   const [showAppointmentPopup, setShowAppointmentPopup] = useState(false);
@@ -136,7 +135,6 @@ const DiagnosticDetailPage = () => {
       // report:  "",
       patient: userId,
       diagnostic: diagnostics?._id,
-
       date: date,
       slots: { startTime: slot?.startTime, endTime: slot?.endTime },
       amount: totalAmount,
