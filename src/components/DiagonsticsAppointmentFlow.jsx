@@ -115,7 +115,6 @@ const DiagonsticsAppointmentFlow = ({
 
       <div className="fixed inset-0 flex items-center justify-center p-4 sm:p-6">
         <Dialog.Panel className="bg-white p-5 sm:p-6 rounded-xl shadow-2xl w-full max-w-sm sm:max-w-md lg:max-w-lg">
-          {/* Step 1: Who is it for */}
           {/* Step 1: Who is this appointment for */}
           {step === 1 && (
             <>
@@ -206,7 +205,7 @@ const DiagonsticsAppointmentFlow = ({
                         onClick={() => setStep(2)}
                         className="w-full px-4 py-3 bg-[#006fab] hover:bg-blue-700 text-white font-medium rounded-lg transition-all duration-200"
                       >
-                        Continue
+                        Continue as Other
                       </button>
                     ) : (
                       // No patient selected, show Manage Patients button
@@ -361,31 +360,38 @@ const DiagonsticsAppointmentFlow = ({
               </div>
 
               {/* Patient Info */}
-              <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-6">
-                <h4 className="text-base font-semibold text-gray-800 mb-4">
-                  Patient Information
-                </h4>
-                <div className="space-y-1 text-sm text-gray-700">
-                  <p>
-                    <strong>Name:</strong>{" "}
-                    {otherPatientDetails?.patient?.name ||
-                      patientDetails?.name ||
-                      "N/A"}
-                  </p>
-                  <p>
-                    <strong>Gender:</strong>{" "}
-                    {otherPatientDetails?.patient?.gender ||
-                      patientDetails?.gender ||
-                      "N/A"}
-                  </p>
-                  <p>
-                    <strong>Contact:</strong>{" "}
-                    {otherPatientDetails?.patient?.phone ||
-                      patientDetails?.phone ||
-                      "N/A"}
-                  </p>
-                </div>
-              </div>
+              <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-6 w-full max-w-md mx-auto">
+  <h4 className="text-base  font-semibold text-gray-800 mb-4">
+    Patient Information
+  </h4>
+
+  <div className="space-y-1 text-sm text-gray-700">
+    <p className="flex flex-wrap">
+      <strong className="mr-1">Name:</strong>
+      <span>
+        {otherPatientDetails?.patient?.name ||
+          patientDetails?.name ||
+          "N/A"}
+      </span>
+    </p>
+    <p className="flex flex-wrap">
+      <strong className="mr-1">Gender:</strong>
+      <span>
+        {otherPatientDetails?.patient?.gender ||
+          patientDetails?.gender ||
+          "N/A"}
+      </span>
+    </p>
+    <p className="flex flex-wrap">
+      <strong className="mr-1">Contact:</strong>
+      <span>
+        {otherPatientDetails?.patient?.phone ||
+          patientDetails?.phone ||
+          "N/A"}
+      </span>
+    </p>
+  </div>
+</div>
 
               {/* Fee */}
               <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-6">
