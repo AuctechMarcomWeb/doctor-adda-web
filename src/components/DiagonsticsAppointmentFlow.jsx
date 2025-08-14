@@ -435,6 +435,7 @@ const DiagonsticsAppointmentFlow = ({
             </>
             </div>
           )}
+
         </Dialog.Panel>
       </div>
     </Dialog>

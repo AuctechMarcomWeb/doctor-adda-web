@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const HospitalTimeSelection = ({ isOpen, onClose, slotDetails, onSlotSelected }) => {
 
@@ -6,6 +9,18 @@ const HospitalTimeSelection = ({ isOpen, onClose, slotDetails, onSlotSelected })
   const [selectedTime, setSelectedTime] = useState(null);
 
   console.log('time selection slotDetails :', slotDetails)
+  // const navigate = useNavigate()
+  // const isLoggedIn = useSelector((state) => state.user.isLoggedIn)
+
+  // if (!isLoggedIn) {
+  //   toast.error("You must be logged in to submit a review.");
+  //   setTimeout(() => {
+  //     navigate("/login");
+  //   }, 1000);
+  //   return;
+  // }
+
+
 
 
   // Convert API dates to labels and values
@@ -19,7 +34,23 @@ const HospitalTimeSelection = ({ isOpen, onClose, slotDetails, onSlotSelected })
       });
       const value = dateObj.toISOString().split("T")[0]; // YYYY-MM-DD
       return { label, value, slots: item.slots };
-    }) || [];
+    }) || []
+
+
+     // Disable background scrolling when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    // Cleanup function to restore scrolling when component unmounts
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
 
   // Get slots for selected date
   const slotsForSelectedDate =
@@ -28,13 +59,13 @@ const HospitalTimeSelection = ({ isOpen, onClose, slotDetails, onSlotSelected })
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl shadow-2xl p-10 w-full max-w-2xl relative animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm ">
+      <div className="bg-white rounded-2xl shadow-2xl p-10 w-full max-w-2xl relative animate-fadeIn max-h-[90vh] overflow-y-auto">
         
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl"
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl z-10"
         >
           &times;
         </button>
@@ -49,17 +80,29 @@ const HospitalTimeSelection = ({ isOpen, onClose, slotDetails, onSlotSelected })
         
         {/* Experience and Fee Box */}
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-4 mb-6 shadow-sm">
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+
+           <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <span className="text-sm font-medium text-blue-700">specialization:</span>
+              <span className="text-sm font-semibold text-blue-900">{slotDetails?.specialization || "Unknown"}</span>
+            </div>
+
+
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
               <span className="text-sm font-medium text-blue-700">Experience:</span>
               <span className="text-sm font-semibold text-blue-900">{slotDetails?.experience || "Unknown"}</span>
             </div>
+
+
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-green-500 rounded-full"></div>
               <span className="text-sm font-medium text-green-700">Fee:</span>
               <span className="text-sm font-semibold text-green-900">₹{slotDetails?.fee || "Unknown"}</span>
             </div>
+
+
           </div>
         </div>
 
@@ -87,7 +130,7 @@ const HospitalTimeSelection = ({ isOpen, onClose, slotDetails, onSlotSelected })
         <h3 className="text-lg font-semibold text-blue-600 mt-8">
           Available Slots
         </h3>
-        <div className="grid grid-cols-3 gap-4 mt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
           {slotsForSelectedDate.map((slot, idx) => (
             <button
               key={idx}
@@ -116,7 +159,8 @@ const HospitalTimeSelection = ({ isOpen, onClose, slotDetails, onSlotSelected })
         </button>
       </div>
     </div>
-  );
-};
+  )
+
+}
 
 export default HospitalTimeSelection;

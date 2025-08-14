@@ -20,10 +20,12 @@ import {
   StarHalf,
 } from "lucide-react";
 import { getRequest } from "../Helpers";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import HospitalReviewForm from "../components/HospitalReviewForm";
 import HospitalTimeSelection from "../components/HospitalTimeSelection";
 import HospitalAppointmentFlow from "../components/HospitalAppointmentFlow";
+import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
 
 const HospitalDetailPage = () => {
 
@@ -34,9 +36,11 @@ const HospitalDetailPage = () => {
 
   const [activeTab, setActiveTab] = useState("about")
   const { id } = useParams()
+  const navigate = useNavigate();
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const [openReviewPopup, setOpenReviewPopup] = useState(false)
   const [reviews, setReviews] = useState([])
-  const [selectedDoctor,setSelectedDoctor] = useState()
+  const [selectedDoctor, setSelectedDoctor] = useState()
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
 
@@ -214,10 +218,10 @@ const HospitalDetailPage = () => {
                   Emergency Call
                 </button>
 
-                <button onClick={() => setIsTimeSelection(true)} className="bg-gradient-to-r from-green-500 to-green-600 text-white py-4 px-6 rounded-xl hover:from-green-600 hover:to-green-700 transition-all duration-300 flex items-center justify-center gap-3 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                {/* <button onClick={() => setIsTimeSelection(true)} className="bg-gradient-to-r from-green-500 to-green-600 text-white py-4 px-6 rounded-xl hover:from-green-600 hover:to-green-700 transition-all duration-300 flex items-center justify-center gap-3 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1">
                   <CalendarCheck className="w-5 h-5" />
                   Book Appointment
-                </button>
+                </button> */}
 
               </div>
 
@@ -341,9 +345,19 @@ const HospitalDetailPage = () => {
                         className="bg-white border cursor-pointer border-gray-200 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                       >
                         <div
-                         onClick={()=> {setIsTimeSelection(true)
-                                         setSelectedDoctor(doc)}}
-                         className="flex flex-col items-center text-center">
+                          onClick={() => {
+
+                            if (!isLoggedIn) {
+                              toast.error("You must be logged in to book an appointment.");
+                              setTimeout(() => { navigate("/login"); }, 1000); return;
+                            }
+
+                            setIsTimeSelection(true);
+
+                            setSelectedDoctor(doc);
+                          }
+                          }
+                          className="flex flex-col items-center text-center">
                           <img
                             src={
                               doc?.image || "https://img.freepik.com/free-photo/portrait-female-doctor_144627-39388.jpg"
@@ -369,9 +383,18 @@ const HospitalDetailPage = () => {
                         key={doc._id}
                         className="bg-white  cursor-pointer border border-gray-200 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                       >
-                        <div 
-                        onClick={()=> { setIsTimeSelection(true); setSelectedDoctor( doc); }}
-                        className="flex flex-col items-center text-center">
+                        <div
+                          onClick={() => {
+
+                            if (!isLoggedIn) {
+                              toast.error("You must be logged in to book an appointment.");
+                              setTimeout(() => { navigate("/login"); }, 1000); return;
+                            }
+
+                            setIsTimeSelection(true);
+                            setSelectedDoctor(doc);
+                          }}
+                          className="flex flex-col items-center text-center">
                           <img
                             src={
                               doc?.doctorId?.profilepic || "https://img.freepik.com/free-photo/portrait-female-doctor_144627-39388.jpg"
@@ -475,11 +498,11 @@ const HospitalDetailPage = () => {
                     </div>
                   ))}
 
-                <div className="text-center">
+                {/* <div className="text-center">
                   <button className="bg-[#00659d] text-white px-8 py-4 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl">
                     View All Reviews
                   </button>
-                </div>
+                </div> */}
 
               </div>
             )}
@@ -496,11 +519,11 @@ const HospitalDetailPage = () => {
             CityCare Hospital
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button 
+            {/* <button 
              onClick={() => setIsTimeSelection(true)}
             className="bg-white text-[#00659d] px-8 py-4 rounded-xl font-bold hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl">
               Book Appointment Now
-            </button>
+            </button> */}
             <button
               onClick={() => {
                 window.location.href = `tel:${hospital?.phone}`
@@ -532,14 +555,14 @@ const HospitalDetailPage = () => {
         />
 
         <HospitalAppointmentFlow
-          isOpen={isAppointmentFlow}
+          open={isAppointmentFlow}
           onClose={() => setIsAppointmentFlow(false)}
           slotDetails={{
-             doctor: selectedDoctor, 
-             date: selectedDate,
-             time: selectedTime ,
-             hospitalDetails : hospital,
-            }}
+            doctor: selectedDoctor,
+            date: selectedDate,
+            time: selectedTime,
+            hospitalDetails: hospital,
+          }}
           doctorType={selectedDoctor && hospital?.doctors?.some(doc => doc._id === selectedDoctor._id) ? "Internal" : "Registered"}
         />
 

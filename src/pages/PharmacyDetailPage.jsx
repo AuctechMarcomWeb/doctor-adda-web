@@ -26,6 +26,7 @@ import ReviewPopup from "../components/ReviewPopup";
 import Cookies from "js-cookie";
 import { getRequest } from "../Helpers";
 import { useParams } from "react-router-dom";
+import PharmacyAppointmentFlow from "../components/PharmacyAppointmentFlow";
 
 
 const PharmacyDetailPage = () => {
@@ -39,7 +40,9 @@ const PharmacyDetailPage = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [reviews, setReviews] = useState([]);
   const [showReviewPopup, setShowReviewPopup] = useState(false);
-const[updateStatus,setUpdateStatus] =useState(false)
+  const[updateStatus,setUpdateStatus] =useState(false)
+  const [showAppointmentFlow, setShowAppointmentFlow] = useState(false);
+
   const { id } = useParams();
 
   console.log("pharmacyId in detail page",id);
@@ -311,7 +314,7 @@ const[updateStatus,setUpdateStatus] =useState(false)
                     {/* Form Fields */}
                     <div className="space-y-6">
                       <div>
-                        <label className="block mb-2 font-medium text-gray-700">Add Description</label>
+                        <label className="block mb-2 font-medium text-gray-700">Search and add medicine</label>
                         <input
                           type="text"
                           value={description}
@@ -321,19 +324,22 @@ const[updateStatus,setUpdateStatus] =useState(false)
                         />
                       </div>
                       <div>
-                        <label className="block mb-2 font-medium text-gray-700">Duration of Supply</label>
-                        <input
+                        <label className="block mb-2 font-medium text-gray-700">Call Pharmacy</label>
+                        {/* <input
                           type="text"
                           value={duration}
                           onChange={(e) => setDuration(e.target.value)}
                           placeholder="Enter Number of days"
                           className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
-                        />
+                        /> */}
                       </div>
-                      <button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl">
+                      <button
+                      onClick={() => setShowAppointmentFlow(true)}
+                       className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl">
                         Continue
                       </button>
                     </div>
+                    
                   </div>
                 </div>
 
@@ -441,13 +447,22 @@ const[updateStatus,setUpdateStatus] =useState(false)
           </div>
         </div>
       </div>
-      <ReviewPopup
-              setUpdateStatus={setUpdateStatus}
+      <ReviewPopup            
+        setUpdateStatus={setUpdateStatus}
         open={showReviewPopup}
         onClose={() => setShowReviewPopup(false)}
         pharmacyId={id}
         onReviewAdded={review => setReviews([...reviews, review])}
       />
+
+      <PharmacyAppointmentFlow 
+        open={showAppointmentFlow}
+        onClose={() => setShowAppointmentFlow(false)}
+        id={id}
+      />
+
+
+
     </div>
   );
 };
