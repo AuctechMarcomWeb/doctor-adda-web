@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import ReviewPopup from "../components/ReviewPopup";
+// import DiagonsticsReviewPopup from "../components/DiagonsticsReviewPopup";
 import {
   Star,
   MapPin,
@@ -30,7 +30,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { getRequest } from "../Helpers";
 import { AppointmentDateFormat } from "../Utils";
 import AppointmentFlow from "../components/AppointmentFlow";
-import DiagonsticsReviewPopup from "./DiagonsticsReviewPopup";
+//import ReviewPopup from "../components/ReviewPopup";
 
 const GradientCard = ({
   children,
@@ -597,12 +597,13 @@ const DoctorDetailPage = () => {
           </aside>
         </div>
       </main>
-      <ReviewPopup
-        open={showReviewPopup}
+      {/* <DiagonsticsReviewPopup    
+    open={showReviewPopup}
         onClose={() => setShowReviewPopup(false)}
-        pharmacyId={id}
+        id={id}
+        entityType="diagnostics"
         onReviewAdded={review => setReviews([...reviews, review])}
-      />
+/> */}
       <AppointmentFlow
         open={showAppointmentPopup}
         onClose={() => setShowAppointmentPopup(false)}

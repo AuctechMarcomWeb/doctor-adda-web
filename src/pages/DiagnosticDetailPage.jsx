@@ -23,7 +23,7 @@ import {
 import { useParams } from "react-router-dom";
 import { getRequest, postRequest } from "../Helpers";
 import TimeSlotsSection from "../components/TimeSlotsSelection";
-import DiagonsticsReviewPopup from "./DiagonsticsReviewPopup";
+import DiagonsticsReviewPopup from "../components/DiagonsticsReviewPopup";
 import DiagonsticsAppointmentFlow from "../components/DiagonsticsAppointmentFlow";
 import { useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
@@ -47,27 +47,26 @@ const DiagnosticDetailPage = () => {
   const [selectedDateData, setSelectedDateData] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [updateStatus, setUpdateStatus] = useState(false);
-  console.log("updateStatus",updateStatus);
-  
+  console.log("updateStatus", updateStatus);
+
   const [selectedServices, setSelectedServices] = useState([]);
   const [selectedPackages, setSelectedPackages] = useState([]);
   const [showAppointmentPopup, setShowAppointmentPopup] = useState(false);
   const [appointmentData, setAppointmentData] = useState(null);
-const [otherPatientDetails, setOtherPatientDetails] = useState({
-  name: "",
-  age: "",
-  gender: "",
-  number: "",
-  weight: ""
-});
+  const [otherPatientDetails, setOtherPatientDetails] = useState({
+    name: "",
+    age: "",
+    gender: "",
+    number: "",
+    weight: "",
+  });
 
   console.log("otherPatientDetails", otherPatientDetails);
 
-
   const navigate = useNavigate();
-const handleAddOtherPatient = (patientData) => {
-  setOtherPatientDetails((prev) => [...prev, patientData]);
-};
+  const handleAddOtherPatient = (patientData) => {
+    setOtherPatientDetails((prev) => [...prev, patientData]);
+  };
 
   const handleOpenManagePatients = () => {
     navigate("/manage-patients");
@@ -79,7 +78,6 @@ const handleAddOtherPatient = (patientData) => {
       console.log("diagnostic data fetch ===", res?.data?.data);
       setDiagnostics(res?.data?.data);
       setReviews(res?.data?.data?.reviews || []);
-
     } catch (error) {
       console.log("error", error);
     }
@@ -87,11 +85,10 @@ const handleAddOtherPatient = (patientData) => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-      if (!id) return;
+    if (!id) return;
     fetchDiagnosticsDetails();
   }, [id, updateStatus]);
 
-  
   const handleServiceCheckbox = (id) => {
     setSelectedServices((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
@@ -143,7 +140,7 @@ const handleAddOtherPatient = (patientData) => {
       date: date,
       slots: { startTime: slot?.startTime, endTime: slot?.endTime },
       amount: totalAmount,
-    otherPatientDetails,
+      otherPatientDetails,
       service:
         selectedServiceDetails?.map((s) => ({
           _id: s._id,
@@ -641,7 +638,9 @@ const handleAddOtherPatient = (patientData) => {
         open={showReviewPopup}
         onClose={() => setShowReviewPopup(false)}
         id={diagnostics?._id}
-        onReviewAdded={fetchDiagnosticsDetails}
+        entityType="diagnostics"
+        onReviewAdded={(review) => setReviews([...reviews, review])}
+        // onReviewAdded={fetchDiagnosticsDetails}
       />
       <DiagonsticsAppointmentFlow
         open={showAppointmentPopup}
@@ -652,7 +651,6 @@ const handleAddOtherPatient = (patientData) => {
         setOtherPatientDetails={setOtherPatientDetails}
         onOpenManagePatients={handleOpenManagePatients}
       />
-
     </div>
   );
 };

@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { User, MapPin, Heart, Settings, Users, PawPrint } from "lucide-react";
 
-const SidebarNav = () => {
+const SidebarNav = ({ formData }) => {
   const menuItems = [
     { path: "/profile", label: "My Profile", icon: User },
     { path: "/address", label: "Address", icon: MapPin },
@@ -19,13 +19,13 @@ const SidebarNav = () => {
       <div className="flex flex-col items-center">
         <div className="relative">
           <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold text-xl">
-            AY
+            {formData?.name ? getInitials(formData.name) : "NA"}
           </div>
           <span className="absolute bottom-1 right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></span>
         </div>
-        <h2 className="mt-3 font-semibold text-lg">Abhishek Yadav</h2>
-        <p className="text-sm text-gray-500">abhishekyadav705439@gmail.com</p>
-        <p className="text-sm text-gray-500">+91 8707767805</p>
+        <h2 className="mt-3 font-semibold text-lg">{formData?.name || "NA"}</h2>
+        <p className="text-sm text-gray-500">{formData?.email || "NA"}</p>
+        <p className="text-sm text-gray-500">+91 {formData?.phone || "0000000000"}</p>
         <button className="mt-3 px-4 py-2 text-white rounded-full bg-gradient-to-r from-orange-400 to-red-500 text-sm shadow-md">
           Edit Profile
         </button>
@@ -54,4 +54,15 @@ const SidebarNav = () => {
   );
 };
 
+// Helper to get initials
+const getInitials = (name = "") => {
+  return name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase();
+};
+
 export default SidebarNav;
+
+
