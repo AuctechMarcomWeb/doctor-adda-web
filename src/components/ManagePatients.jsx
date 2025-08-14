@@ -97,7 +97,6 @@ const handleUpdatePatient = async () => {
     toast.success("Patient updated successfully!");
   } catch (error) {
     console.error("Error updating patient:", error);
-    
   }
 };
 
