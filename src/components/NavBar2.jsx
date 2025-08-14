@@ -193,7 +193,7 @@ const NavBar2 = () => {
   return (
     <div className="w-full bg-white border-t hidden sm:block relative z-50">
       <div
-        className=" mx-auto relative sm:w-full lg:w-[80%]  xl:w-[70%] "
+        className=" mx-auto relative sm:w-full lg:w-[80%]  xl:w-[80%] 2xl:w-[70%] "
         onMouseLeave={() => {
           setOpenDropdown(null);
           setActiveSubCategory(null);

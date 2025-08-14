@@ -32,7 +32,7 @@ const MedicalImagingBanner = () => {
   }, [current]); // run effect when 'current' changes
 
   return (
-    <div className="relative  mx-auto flex items-center justify-center h-[170px] md:h-[280px] sm:w-full lg:w-[80%]  xl:w-[70%]">
+    <div className="relative  mx-auto flex items-center justify-center h-[170px] md:h-[280px] sm:w-full lg:w-[80%]  xl:w-[80%] 2xl:w-[70%] ">
       {/* Slides container */}
       <div className="relative flex items-center justify-center w-full overflow-hidden">
         {/* Previous image (left) */}
