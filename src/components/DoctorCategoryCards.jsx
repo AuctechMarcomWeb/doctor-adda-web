@@ -48,10 +48,10 @@ const DoctorCategoryCards = () => {
 
   return (
     <div className="bg-gradient-to-br from-slate-50 to-blue-50 md:py-8 py-2 relative">
-      <div className=" mx-auto px-4 sm:px-6 lg:px-8 lg:w-[70%] sm:w-full xl:w-[70%]">
+      <div className=" mx-auto px-4 sm:px-6 lg:px-8 sm:w-full lg:w-[80%]  xl:w-[70%]">
         {/* Header */}
         <div className="text-center  mb-4 md:mb-8">
-          <h2 className="text-lg sm:text-4xl font-bold text-gray-800 md:mb-4 mb-1">
+          <h2 className="text-xl  md:text-2xl lg:text-4xl font-bold text-gray-800 md:mb-4 mb-1">
             Doctors &{" "}
             <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
               Specialists

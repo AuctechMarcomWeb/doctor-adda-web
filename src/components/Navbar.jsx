@@ -84,7 +84,7 @@ const Navbar = () => {
     <>
       <nav className="fixed w-full z-50 bg-white shadow-lg">
         <div className=" mx-auto ">
-          <div className="  m-auto flex justify-between items-center h-16 md:py-10 md:px-2 px-2 py-10 pr-4 lg:w-[70%] sm:w-full xl:w-[70%]">
+          <div className="  m-auto flex justify-between items-center h-16 md:py-10 md:px-2 px-2 py-10 pr-4 sm:w-full lg:w-[80%]  xl:w-[70%]">
             {/* Logo */}
             <Link to="/">
               <div className="flex items-center space-x-2">
@@ -105,7 +105,7 @@ const Navbar = () => {
               </div>
               <div>
                 <div className="text-xs text-gray-500">Your Location</div>
-                <div className="text-sm text-gray-800 font-semibold flex items-center">
+                <div className=" md:text-xs xl:text-sm  text-gray-800 font-semibold flex items-center">
                   Lucknow <span className="ml-1">▾</span>
                 </div>
               </div>
@@ -126,8 +126,8 @@ const Navbar = () => {
                     <span className="text-xs block text-gray-500 ">
                       Customer Support
                     </span>
-                    <span className="text-sm font-semibold text-gray-800">
-                      1800-572-0005 / 999-888-000-5
+                    <span className="md:text-xs xl:text-sm font-semibold text-gray-800">
+                      1800-572-0005 
                     </span>
                   </div>
                 </div>
@@ -143,7 +143,7 @@ const Navbar = () => {
                 <span className="text-xs block text-gray-500">
                   For Appointment Bookings/Enquiry
                 </span>
-                <span className="text-sm font-semibold text-gray-800">
+                <span className="md:text-xs xl:text-sm font-semibold text-gray-800">
                   +91 9838075493
                 </span>
               </div>

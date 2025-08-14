@@ -124,7 +124,7 @@ const NotificationBell = () => {
           className="relative bg-[#3c83f8] hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 text-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 cursor-pointer"
           onClick={() => setIsOpen(!isOpen)}
         >
-          <Bell className={`w-6 h-6 ${isOpen ? 'animate-pulse' : ''}`} />
+          <Bell className={`  md:w-4 md:h-4  xl:w-6 xl:h-6 ${isOpen ? 'animate-pulse' : ''}`} />
           
           {/* Notification Badge */}
           {unreadCount > 0 && (

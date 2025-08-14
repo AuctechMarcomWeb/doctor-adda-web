@@ -3,7 +3,7 @@ import { Heart, Users, Award, Clock, Shield, Star } from 'lucide-react';
 
 const AboutUsSection = () => {
   return (
-    <section className="relative bg-gradient-to-br from-[#00659c] via-[#0074b2] to-[#005a8a] py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
+    <section className="relative bg-gradient-to-br from-[#00659c] via-[#0074b2] to-[#005a8a] py-4 md:py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10 pointer-events-none">
         <div className="absolute top-20 left-10 w-32 h-32 border border-white/20 rounded-full"></div>
@@ -11,10 +11,10 @@ const AboutUsSection = () => {
         <div className="absolute top-1/2 left-1/4 w-16 h-16 border border-white/20 rounded-full"></div>
       </div>
 
-      <div className=" mx-auto relative z-10 lg:w-[70%] sm:w-full xl:w-[70%]">
+      <div className=" mx-auto relative z-10 sm:w-full lg:w-[80%]  xl:w-[70%]">
         {/* Header */}
-        <div className="text-center mb-12 px-4">
-          <h2 className="text-lg sm:text-4xl font-bold text-white leading-tight mb-4">
+        <div className="text-center mb-4 md:mb-12 px-4">
+          <h2 className="text-xl  md:text-2xl lg:text-4xl font-bold text-white leading-tight mb-4">
             Welcome to{" "}
             <span className="relative">
               <span className="bg-gradient-to-r from-[#fcbe57] to-[#ffd700] bg-clip-text text-transparent">
@@ -43,7 +43,7 @@ const AboutUsSection = () => {
               </p>
 
               {/* Stats */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6 ">
                 {[
                   { label: "Years Experience", value: "25+" },
                   { label: "Happy Patients", value: "50K+" },
@@ -51,8 +51,8 @@ const AboutUsSection = () => {
                 ].map((item, index) => (
                   <div
                     key={index}
-                    className="text-center p-4 bg-white/5 rounded-xl border border-white/10"
-                  >
+                    className="text-center p-4 bg-white/5 rounded-xl border border-white/10 hidden md:block"
+                  > 
                     <div className="text-2xl font-bold text-[#fcbe57] mb-1">{item.value}</div>
                     <div className="text-white/70 text-sm sm:text-base">{item.label}</div>
                   </div>
@@ -67,7 +67,7 @@ const AboutUsSection = () => {
                     <Heart size={18} className="ml-2 group-hover:text-red-500 transition-colors" />
                   </button>
                 </a>
-                <button className="border-2 border-white/30 text-white hover:bg-white/10 font-semibold px-6 py-3 rounded-full transition-all duration-300 backdrop-blur-sm">
+                <button className="border-2 border-white/30 text-white hover:bg-white/10 font-semibold px-6 py-3 rounded-full transition-all duration-300 backdrop-blur-sm hidden md:block">
                   Book Appointment
                 </button>
               </div>
@@ -81,7 +81,7 @@ const AboutUsSection = () => {
                 <img
                   src="https://images.unsplash.com/photo-1638202993928-7267aad84c31?w=500&h=600&fit=crop"
                   alt="Medical team providing healthcare"
-                  className="w-full h-80 sm:h-96 object-cover"
+                  className="w-full h-50 lg:h-96 object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
               </div>
@@ -114,12 +114,12 @@ const AboutUsSection = () => {
 
             {/* Feature Cards */}
             <div className="mt-8 grid grid-cols-2 gap-4 max-w-xs mx-auto sm:max-w-sm">
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20 text-center">
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20 text-center hidden md:block">
                 <Users size={24} className="text-[#fcbe57] mx-auto mb-2" />
                 <div className="text-white font-semibold text-sm">Expert Team</div>
                 <div className="text-white/70 text-xs">Specialized Care</div>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20 text-center">
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20 text-center hidden md:block">
                 <Clock size={24} className="text-[#fcbe57] mx-auto mb-2" />
                 <div className="text-white font-semibold text-sm">24/7 Support</div>
                 <div className="text-white/70 text-xs">Always Available</div>

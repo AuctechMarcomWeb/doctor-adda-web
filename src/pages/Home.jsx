@@ -18,6 +18,7 @@ import AboutUsSection from "../components/AboutUsSection";
 import MedicalImagingBanner from "../components/MedicalImagingBanner";
 import WhyChooseUs from "../components/WhyChooseUs";
 import Carousel from "../components/Carousel";
+import HomePageImagePopup from "../components/HomePageImagePopup";
 
 const Home = () => {
   useEffect(() => {
@@ -26,6 +27,8 @@ const Home = () => {
   return (
     <>
       {/* <MedicalHeroSection/> */}
+
+      <HomePageImagePopup />
 
       <BannerSection />
 
