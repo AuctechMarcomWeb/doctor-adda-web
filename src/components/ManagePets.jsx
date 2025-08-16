@@ -148,7 +148,9 @@ const handleDelete = async (petId) => {
       <div className="max-w-7xl mx-auto p-6 pt-42">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar */}
-          <SidebarNav activeTab="pets" />
+          <SidebarNav activeTab="pets"
+                  formData={userProfileData}
+           />
 
           {/* Main Content */}
           <main className="flex-1 p-8 bg-white rounded-3xl shadow-lg">
