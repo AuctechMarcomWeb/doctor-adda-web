@@ -25,7 +25,7 @@ const SpecialtyCard = ({ id, name, imageUrl, onViewDoctors }) => {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
         <div className="absolute bottom-4 left-4 right-4">
-          <h3 className="text-white font-bold text-xl mb-1">{name}</h3>
+          <h3 className="text-white font-bold text-base md:text-xl mb-1">{name}</h3>
         </div>
       </div>
 
@@ -33,7 +33,7 @@ const SpecialtyCard = ({ id, name, imageUrl, onViewDoctors }) => {
       <div className="px-6 py-4">
         <button
           onClick={() => onViewDoctors(id)}
-          className="w-full bg-[#00659d] hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 cursor-pointer"
+          className="w-full bg-[#00659d] hover:bg-blue-700 text-white text-xs md:text-base lg:text-lg font-semibold md:py-3 md:px-6 py-2 px-2 rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 cursor-pointer"
         >
           View Doctors
         </button>
@@ -50,8 +50,8 @@ const FeatureCard = ({ icon, title, description }) => (
     <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-200 transition-colors">
       {icon}
     </div>
-    <h3 className="font-bold text-lg mb-2 text-gray-800">{title}</h3>
-    <p className="text-gray-600 text-sm">{description}</p>
+    <h3 className="font-bold text-base md:text-lg mb-2 text-gray-800">{title}</h3>
+    <p className="text-gray-600  text-sm">{description}</p>
   </div>
 );
 
@@ -200,17 +200,13 @@ const DoctorPage = () => {
         {/* Enhanced Glassmorphism Overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/8 via-transparent to-blue-900/10 backdrop-blur-sm"></div>
 
-        <div className="relative z-10 relative lg:w-[70%] sm:w-full xl:w-[70%] mx-auto px-4 pt-40  ">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
+        <div className="relative z-10 relative sm:w-full lg:w-[80%] xl:w-[80%] 2xl:w-[70%] mx-auto px-4 pt-24 md:pt-40 pb-4  ">
+          <div className="flex flex-row lg:flex-row items-center justify-between md:gap-12 gap-2">
             {/* Left Content - Enhanced */}
-            <div className="flex-1 text-center lg:text-left max-w-2xl">
-              <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md rounded-full px-5 py-2 mb-6 transform hover:scale-105 transition-all duration-300 border border-white/20 hover:bg-white/25">
-                <Smartphone className="w-4 h-4 animate-pulse" />
-                <span className="text-sm font-medium">New App Available</span>
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-ping"></div>
-              </div>
+            <div className="flex-1  lg:text-left max-w-2xl">
+              
 
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+              <h2 className="text-xl md:text-2xl lg:text-4xl font-bold md:mb-6 mb-4 leading-tight">
                 <span className="block bg-gradient-to-r from-white via-cyan-100 to-white bg-clip-text text-transparent animate-text-shimmer">
                   Your Health,
                 </span>
@@ -223,27 +219,33 @@ const DoctorPage = () => {
               </h2>
 
               <p
-                className="text-white/90 text-lg mb-8 leading-relaxed animate-fade-in-up"
+                className="text-white/90 text-sm sm:text-base mb-8 leading-relaxed animate-fade-in-up  hidden md:block"
                 style={{ animationDelay: "0.5s" }}
               >
                 Experience healthcare reimagined. Connect with world-class
                 doctors, book instant consultations, and manage your health
                 journey with our award-winning mobile app.
               </p>
+              <p
+                className="text-white/90 text-sm sm:text-base mb-4  leading-relaxed animate-fade-in-up md:hidden "
+                style={{ animationDelay: "0.5s" }}
+              >
+               Connect with world-class doctors, and book instant consultations.
+              </p>
 
               {/* Enhanced Feature Pills */}
-              <div className="flex flex-wrap gap-3 mb-8 justify-center lg:justify-start">
+              <div className=" hidden md:flex flex flex-wrap gap-3 md:mb-8  mb-4 lg:justify-start  ">
                 {features.map((feature, index) => (
                   <div
                     key={index}
-                    className="flex items-center gap-2 bg-white/15 backdrop-blur-md rounded-full px-4 py-2 transform hover:scale-110 hover:bg-white/25 transition-all duration-300 border border-white/10 animate-slide-in-up"
+                    className="flex items-center gap-2 bg-white/15 backdrop-blur-md rounded-full md:px-4 md:py-2 px-2 py-1 transform hover:scale-110 hover:bg-white/25 transition-all duration-300 border border-white/10 animate-slide-in-up "
                     style={{ animationDelay: `${0.7 + index * 0.1}s` }}
                   >
                     <feature.icon
-                      className="w-4 h-4 animate-pulse"
+                      className=" w-4 h-4 animate-pulse "
                       style={{ animationDelay: `${index * 0.2}s` }}
                     />
-                    <span className="text-sm font-medium">{feature.text}</span>
+                    <span className="text-sm sm:text-base font-medium">{feature.text}</span>
                   </div>
                 ))}
               </div>
@@ -254,7 +256,7 @@ const DoctorPage = () => {
                   <button
                     onMouseEnter={() => setHoveredButton("download")}
                     onMouseLeave={() => setHoveredButton(null)}
-                    className="group relative bg-white text-gray-900 px-8 py-4 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105 transition-all duration-300 overflow-hidden animate-slide-in-left cursor-pointer"
+                    className="group relative bg-white text-gray-900 px-4 py-2 md:px-8 md:py-4 rounded-2xl font-bold text-xs md:text-base lg:text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105 transition-all duration-300 overflow-hidden animate-slide-in-left cursor-pointer"
                     style={{ animationDelay: "1s" }}
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -269,22 +271,6 @@ const DoctorPage = () => {
                   </button>
                 </a>
 
-                {/* <button
-                  onMouseEnter={() => setHoveredButton("book")}
-                  onMouseLeave={() => setHoveredButton(null)}
-                  className="group relative bg-gradient-to-r from-pink-500 to-rose-400 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105 transition-all duration-300 overflow-hidden animate-slide-in-right cursor-pointer"
-                  style={{ animationDelay: "1.2s" }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-rose-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-                  <div className="relative z-10 flex items-center gap-3">
-                    <Calendar className="w-5 h-5 group-hover:animate-spin" />
-                    Book Now
-                    {hoveredButton === "book" && (
-                      <div className="absolute -right-2 -top-2 w-3 h-3 bg-yellow-400 rounded-full animate-bounce"></div>
-                    )}
-                  </div>
-                </button> */}
               </div>
             </div>
 
@@ -301,11 +287,11 @@ const DoctorPage = () => {
                     <img
                       src="https://i.pinimg.com/1200x/c6/58/c9/c658c97ed95a94b2990dc7abe2715c96.jpg"
                       alt="Medical consultation"
-                      className="w-full h-72 md:h-80 object-cover rounded-2xl shadow-2xl group-hover:shadow-3xl transition-shadow duration-700"
+                      className="w-full h-40 md:h-80 object-cover rounded-2xl shadow-2xl group-hover:shadow-3xl transition-shadow duration-700"
                     />
 
                     {/* Floating Elements on Image */}
-                    <div className="absolute -top-4 -right-4 bg-white/90 backdrop-blur-md rounded-2xl p-3 shadow-xl animate-float border border-white/30">
+                    <div className="absolute -top-4 -right-4 bg-white/90 backdrop-blur-md rounded-2xl p-3 shadow-xl animate-float border border-white/30  hidden md:block">
                       <Video className="w-6 h-6 text-blue-600" />
                       <div className="text-xs font-semibold text-gray-800 mt-1">
                         Live Consult
@@ -313,7 +299,7 @@ const DoctorPage = () => {
                     </div>
 
                     <div
-                      className="absolute -bottom-4 -left-4 bg-white/90 backdrop-blur-md rounded-2xl p-3 shadow-xl animate-float"
+                      className="absolute -bottom-4 -left-4 bg-white/90 backdrop-blur-md rounded-2xl p-3 shadow-xl animate-float hidden md:block"
                       style={{ animationDelay: "1s" }}
                     >
                       <Heart
@@ -325,7 +311,7 @@ const DoctorPage = () => {
                       </div>
                     </div>
 
-                    <div className="absolute top-1/2 -right-6 bg-gradient-to-r from-green-400 to-emerald-500 text-white rounded-xl p-2 shadow-xl animate-bounce-slow">
+                    <div className="absolute top-1/2 -right-6 bg-gradient-to-r from-green-400 to-emerald-500 text-white rounded-xl p-2 shadow-xl animate-bounce-slow hidden md:block">
                       <div className="text-sm font-bold">24/7</div>
                       <div className="text-xs">Available</div>
                     </div>
@@ -530,40 +516,40 @@ const DoctorPage = () => {
 
       {/* Search and Filter Section */}
       <div className="flex items-center justify-center">
-        <div className="p-6 w-[70%] ">
-      {/* Search Bar */}
-      <div className="mb-6 flex justify-center">
-        <input
-          type="text"
-          placeholder="Search for a specialty..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full max-w-lg border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-      </div>
+          <div className="p-6 sm:w-full lg:w-[80%] xl:w-[80%] 2xl:w-[70%] ">
+            {/* Search Bar */}
+            <div className="mb-6 flex justify-center">
+              <input
+                type="text"
+                placeholder="Search for a specialty..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full max-w-lg border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              />
+            </div>
 
-      {/* Specialty Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-        {filteredData.map((category) => (
-          <SpecialtyCard
-            key={category._id}
-            id={category._id}
-            name={category.name}
-            imageUrl={category.imageUrl}
-            onViewDoctors={handleViewDetails}
-          />
-        ))}
-      </div>
-    </div>
-      </div>
+            {/* Specialty Cards */}
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+              {filteredData.map((category) => (
+                <SpecialtyCard
+                  key={category._id}
+                  id={category._id}
+                  name={category.name}
+                  imageUrl={category.imageUrl}
+                  onViewDoctors={handleViewDetails}
+                />
+              ))}
+            </div>
+        </div>
+     </div>
 
       {/* Features Section */}
       <div className="lg:w-[70%] sm:w-full xl:w-[70%] mx-auto px-4 ">
         <div className="text-center mb-10">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">
+          <h2 className="text-xl  md:text-2xl lg:text-3xl font-bold text-gray-800 mb-4">
             Why Choose Our Platform
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <p className="text-gray-600 text-sm sm:text-base max-w-2xl mx-auto">
             Experience healthcare like never before with our comprehensive
             medical services
           </p>

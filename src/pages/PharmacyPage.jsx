@@ -253,7 +253,7 @@ const PharmacyPage = () => {
         {/* Enhanced Wave divider with animation */}
         <div className="absolute bottom-0 left-0 w-full overflow-hidden ">
           <svg
-            className="relative block w-full h-12 animate-pulse"
+            className="relative block w-full md:h-12 h-8 animate-pulse"
             viewBox="0 0 1200 120"
             preserveAspectRatio="none"
           >
