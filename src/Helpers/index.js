@@ -1,27 +1,29 @@
-/* eslint-disable no-undef */
 import { deleteCookie } from "../Hooks/cookie";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { confirmDialog } from "primereact/confirmdialog";
 import toast from "react-hot-toast";
 
-// FETCHING TOKEN FROM COOKIE
-export const token = Cookies.get("DoctorAddaPanel");
+// Function to fetch the latest token from cookie
+export const getToken = () => Cookies.get("DoctorAddaPanel");
 
 export const request = async (props) => {
+
+
   try {
+    
     const response = await axios?.[props?.method](
       `${import.meta.env.VITE_API_BASE_URL}${props?.url}`,
       props?.cred,
       {
         headers: {
-          Authorization: `${token}`,
+            Authorization: `${getToken()}`,
         },
         withCredentials: true,
       }
-    );
-
+    )
     return response;
+
   } catch (error) {
     if (error.response.status === 401) {
       deleteCookie("DoctorAddaPanel");
@@ -38,7 +40,7 @@ export const getRequest = async (url) => {
       `${import.meta.env.VITE_API_BASE_URL}${url}`,
       {
         headers: {
-          Authorization: `${token}`,
+            Authorization: `${getToken()}`,
         },
       }
     );
@@ -81,7 +83,7 @@ export const postRequest = async (props) => {
       props?.cred,
       {
         headers: {
-          Authorization: token,
+            Authorization: getToken(),
         },
       }
     );
@@ -99,7 +101,7 @@ export const putRequest = async (props) => {
       props?.cred,
       {
         headers: {
-          Authorization: `${token}`,
+            Authorization: `${getToken()}`,
         },
       }
     );
@@ -124,7 +126,7 @@ export const patchRequest = async (props) => {
       props?.cred,
       {
         headers: {
-          Authorization: `${token}`,
+            Authorization: `${getToken()}`,
         },
       }
     );
@@ -147,7 +149,7 @@ export const deleteRequest = async (url) => {
       `${import.meta.env.VITE_API_BASE_URL}${url}`,
       {
         headers: {
-          Authorization: `${token}`,
+            Authorization: `${getToken()}`,
         },
       }
     );
@@ -175,7 +177,7 @@ export const deleteRequest1 = async (url) => {
         `${import.meta.env.VITE_API_BASE_URL}${url}`,
         {
           headers: {
-            Authorization: `${token}`,
+              Authorization: `${getToken()}`,
           },
         }
       );
@@ -256,7 +258,7 @@ export const fileUpload = async (props) => {
       props?.cred,
       {
         headers: {
-          Authorization: `${token}`,
+          Authorization: `${getToken()}`,
           "Content-Type": "multipart/form-data",
         },
         // withCredentials: true,
@@ -284,7 +286,7 @@ export const noTokenfileUpload = async (props) => {
       {
         responseType: "arraybuffer",
         headers: {
-          Authorization: `${token}`,
+            Authorization: `${getToken()}`,
           "Content-Type": "multipart/form-data",
         },
         withCredentials: true,
