@@ -33,7 +33,8 @@ import { getRequest } from "../Helpers";
 import { AppointmentDateFormat } from "../Utils";
 import AppointmentFlow from "../components/AppointmentFlow";
 import { useSelector } from "react-redux";
-//import ReviewPopup from "../components/ReviewPopup";
+
+import DiagonsticsReviewPopup from "../components/DiagonsticsReviewPopup";
 
 const GradientCard = ({
   children,
@@ -135,7 +136,7 @@ const DoctorDetailPage = () => {
   const [showAppointmentPopup, setShowAppointmentPopup] = useState(false);
   const [doctor, setDoctor] = useState(null);
   console.log("doctor====",doctor);
-  
+  const [updateStatus,setUpdateStatus] = useState(null);
   const [clinicData, setClinicData] = useState(null);
   const [selectedClinicIndex, setSelectedClinicIndex] = useState(0);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -225,7 +226,7 @@ const handleOpenManagePatients = () => {
       .catch((error) => {
         console.log("error", error);
       });
-  }, [id]);
+  }, [id, updateStatus]);
 
   const areDatesEqual = (date1, date2) =>
     new Date(date1).toDateString() === new Date(date2).toDateString();
@@ -609,13 +610,14 @@ const handleOpenManagePatients = () => {
           </aside>
         </div>
       </main>
-      {/* <DiagonsticsReviewPopup    
+      <DiagonsticsReviewPopup    
     open={showReviewPopup}
         onClose={() => setShowReviewPopup(false)}
         id={id}
-        entityType="diagnostics"
+        entityType="doctor"
         onReviewAdded={review => setReviews([...reviews, review])}
-/> */}
+        setUpdateStatus={setUpdateStatus}
+/>
       <AppointmentFlow
         open={showAppointmentPopup}
         onClose={() => setShowAppointmentPopup(false)}

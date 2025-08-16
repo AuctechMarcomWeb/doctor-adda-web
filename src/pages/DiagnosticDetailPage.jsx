@@ -534,7 +534,6 @@ const DiagnosticDetailPage = () => {
                         ({diagnostics?.reviews?.length || 0} reviews)
                       </span>
                       {/* <span className="text-gray-600">(250+ reviews)</span> */}
-                  
                     </div>
                   </div>
 
@@ -548,8 +547,6 @@ const DiagnosticDetailPage = () => {
                       Share Your Experience
                     </button>
                   </div>
-
-
                 </div>
 
                 <div className="grid gap-6">
