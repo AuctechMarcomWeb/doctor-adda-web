@@ -305,8 +305,7 @@ const [updateStatus, setUpdateStatus] = useState(false);
         open={showReviewPopup}
         onClose={() => setShowReviewPopup(false)}
         id={ambulance?._id}
-          entityType="ambulance"
-
+        entityType="ambulance"
         //onReviewAdded={fetchAmbulance}
       />
     </div>

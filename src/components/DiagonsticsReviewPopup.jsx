@@ -49,13 +49,14 @@ const DiagonsticsReviewPopup = ({
         cred: { rating, comment },
       });
       const data = res.data;
-      console.log("data in review popup", res);
+      console.log("data in review popup", data);
 
       if (data.success) {
         setUpdateStatus((prev) => !prev);
         setSuccessMessage(true);
         setComment("");
         setRating(5);
+        toast.success(data?.message || "Review added successfully");
         if (onReviewAdded) onReviewAdded(data.data);
 
         setTimeout(() => {

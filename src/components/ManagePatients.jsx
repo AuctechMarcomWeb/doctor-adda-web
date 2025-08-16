@@ -138,9 +138,11 @@ const handleDeletePatient = async (patientId) => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 font-sans">
       <div className="max-w-7xl mx-auto p-6 pt-42">
         <div className="flex flex-col lg:flex-row gap-8">
+          
           {/* Sidebar */}
-          {/* Sidebar */}
-          <SidebarNav activeTab="patients" />
+          <SidebarNav activeTab="patients"
+          formData={userProfileData}
+           />
 
           {/* Patients Section */}
           <div className="flex-1 bg-white rounded-3xl shadow-lg p-8">

@@ -19,6 +19,7 @@ const DiagonsticsAppointmentFlow = ({
 }) => {
   const [diagnostics, setDiagnostics] = useState(null);
   const [step, setStep] = useState(1);
+  const [bookingData, setBookingData] = useState(null);
   const [selectedFor, setSelectedFor] = useState(null);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const userProfileData = useSelector((state) => state.user.userProfileData);
@@ -29,6 +30,8 @@ const DiagonsticsAppointmentFlow = ({
   const [patients, setPatients] = useState([]);
 
   const [selectedPatient, setSelectedPatient] = useState(null);
+  const [loading, setLoading] = useState(false);
+
 
   const otherPatients = patients.length > 0 ? patients : otherPatientDetails;
 
@@ -72,6 +75,7 @@ const DiagonsticsAppointmentFlow = ({
 
  
   const handleConfirmBooking = async () => {
+      setLoading(true); // Start loader
     try {
           setOtherPatientDetails({ patient: selectedPatient }); // ensure UI syncs
 
@@ -81,13 +85,16 @@ const DiagonsticsAppointmentFlow = ({
       });
       console.log("Booking success:", res?.data?.data);
       setDiagnostics(res?.data?.data?.diagnostic || null);
+      setBookingData(res?.data?.data);   // ✅ store complete booking details
       setStep(4); // Success step
     } catch (error) {
       console.error("Booking failed:", error);
       toast.error(
         error?.response?.data?.message || "Failed to book appointment"
       );
-    }
+    }finally {
+    setLoading(false); // Stop loader after API success/error
+  }
   };
 
   useEffect(() => {
@@ -112,7 +119,6 @@ const DiagonsticsAppointmentFlow = ({
   return (
     <Dialog open={open} onClose={handleClose} className="relative z-50">
       <div className="fixed inset-0 bg-black/30 backdrop-blur-sm" />
-
       <div className="fixed inset-0 flex items-center justify-center p-4 sm:p-6">
         <Dialog.Panel className="bg-white p-5 sm:p-6 rounded-xl shadow-2xl w-full max-w-sm sm:max-w-md lg:max-w-lg">
           {/* Step 1: Who is this appointment for */}
@@ -289,15 +295,16 @@ const DiagonsticsAppointmentFlow = ({
               <div className="flex flex-col sm:flex-row justify-between gap-4">
                 <button
                   onClick={handleClose}
-                  className="w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg"
+                  className="w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-all duration-200"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleConfirmBooking}
+                  disabled={loading}
                   className="w-full px-4 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg"
                 >
-                  Yes, Book
+  {loading ? "Booking..." : "Yes, Book"}
                 </button>
               </div>
             </>
@@ -308,16 +315,16 @@ const DiagonsticsAppointmentFlow = ({
             <div className="max-h-[80vh] sm:max-h-[85vh] md:max-h-[90vh] overflow-y-auto px-2">
 
             <>
-              <Dialog.Title className="text-2xl font-bold text-center text-green-700 mb-8">
+              <Dialog.Title className="text-2xl font-bold text-center text-green-700 mb-4">
                 My Appointment
               </Dialog.Title>
 
-              <div className="bg-red-50 border border-red-200 text-red-600 font-semibold text-sm rounded-xl px-4 py-2 mb-6 text-center">
+              <div className="bg-red-50 border border-red-200 text-red-600 font-semibold text-sm rounded-xl px-2 py-2 mb-2 text-center">
                 ⏳ Awaiting Confirmation
               </div>
 
               {/* Diagnostic Info */}
-              <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-6">
+              <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-4">
                 <div className="flex items-center gap-4 sm:gap-5">
                   <img
                     src={diagnostics?.profileImage}
@@ -336,14 +343,14 @@ const DiagonsticsAppointmentFlow = ({
               </div>
 
               {/* Appointment Time */}
-              <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-6">
-                <h4 className="text-base font-semibold text-gray-800 mb-4">
+              <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-2">
+                <h4 className="text-base font-semibold text-gray-800 mb-2">
                   Scheduled Appointment
                 </h4>
                 <p className="text-sm text-gray-500 mb-2">
                   Appointment ID:
                   <strong className="text-gray-700">
-                    {appointmentId || "N/A"}
+  {bookingData?.appointmentId || appointmentId || "N/A"}
                   </strong>
                 </p>
                 <div className="flex items-center gap-2 text-sm text-gray-700 mb-1">
@@ -362,8 +369,8 @@ const DiagonsticsAppointmentFlow = ({
               </div>
 
               {/* Patient Info */}
-              <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-6 w-full max-w-md mx-auto">
-  <h4 className="text-base  font-semibold text-gray-800 mb-4">
+              <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-4 w-full max-w-md mx-auto">
+  <h4 className="text-base  font-semibold text-gray-800 mb-2">
     Patient Information
   </h4>
 
@@ -396,7 +403,7 @@ const DiagonsticsAppointmentFlow = ({
 </div>
 
               {/* Fee */}
-              <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-6">
+              <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-4">
                 <div className="flex justify-between items-center text-base">
                   <span className="flex items-center gap-2 text-blue-700 font-medium">
                     <CreditCard className="w-5 h-5" /> Consultation Fee
@@ -408,7 +415,7 @@ const DiagonsticsAppointmentFlow = ({
               </div>
 
               {/* Actions */}
-              <div className="mt-6 flex justify-between text-sm text-blue-700 font-medium">
+              <div className="mt-4 flex justify-between text-sm text-blue-700 font-medium">
                 <button
                   onClick={() => alert("Calling clinic...")}
                   className="hover:underline hover:text-blue-800 flex items-center gap-2"
@@ -424,7 +431,7 @@ const DiagonsticsAppointmentFlow = ({
               </div>
 
               {/* Final CTA */}
-              <div className="mt-8">
+              <div className="mt-6">
                 <button
                   onClick={handleClose}
                   className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold text-base rounded-full"
