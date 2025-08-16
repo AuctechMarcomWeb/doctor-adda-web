@@ -1,4 +1,5 @@
 import React, {useEffect, useState } from "react";
+import {  Download, } from "lucide-react";
 import HospitalCard from "../components/HospitalCard"
 import { getRequest } from "../Helpers"
 import { useDebounce } from "../Hooks/useDebounce"
@@ -12,6 +13,7 @@ const HospitalPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filterType, setFilterType] = useState("all");
+  const [hoveredButton, setHoveredButton] = useState(null);
   
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
@@ -51,10 +53,10 @@ const HospitalPage = () => {
 
   return (
 
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-red-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
       {/* Hero Banner */}
       {/* Enhanced Hero Banner */}
-      <div className="relative text-white overflow-hidden min-h-[500px]" style={{
+      <div className="relative text-white overflow-hidden" style={{
         background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
       }}>
         {/* Animated background overlay */}
@@ -63,9 +65,7 @@ const HospitalPage = () => {
         {/* Floating medical icons */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute top-20 left-10 w-16 h-16 bg-white/10 rounded-full animate-bounce delay-300 flex items-center justify-center">
-            <svg className="w-8 h-8 text-white/70" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1.323l3.954 1.582 1.599-.8a1 1 0 01.894 1.79l-1.233.616 1.738 5.42a1 1 0 01-.285 1.05A3.989 3.989 0 0115 14a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.715-5.349L11 7.618V16a1 1 0 11-2 0V7.618L6.237 6.582l1.715 5.349a1 1 0 01-.285 1.05A3.989 3.989 0 015 14a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.738-5.42-1.233-.617a1 1 0 01.894-1.788l1.599.799L9 4.323V3a1 1 0 011-1z" clipRule="evenodd" />
-            </svg>
+            
           </div>
           <div className="absolute top-32 right-20 w-20 h-20 bg-white/10 rounded-full animate-pulse delay-150 flex items-center justify-center">
             
@@ -81,29 +81,32 @@ const HospitalPage = () => {
         </div>
         
         {/* Main content */}
-        <div className="relative max-w-7xl mx-auto px-4 py-16 flex items-center min-h-[500px]">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
+        <div className="relative sm:w-full lg:w-[80%] xl:w-[80%] 2xl:w-[70%] mx-auto px-4 pt-24 pb-10 md:pt-32 flex items-center">
+          <div className="grid grid-cols-2 gap-4 md:gap-12 items-center w-full">
             
             {/* Left content */}
             <div className="text-left space-y-6">
-              <div className="inline-flex items-center justify-center w-24 h-24 bg-white/20 rounded-full mb-6 backdrop-blur-sm animate-pulse">
-                
-              </div>
+             
               
               <div className="space-y-4">
-                <h2 className="text-4xl md:text-5xl font-bold leading-tight animate-fadeInUp">
+                <h2 className="text-xl md:text-2xl lg:text-4xl font-bold md:mb-6 mb-4 leading-tight">
+                <span className="block bg-gradient-to-r from-white via-cyan-100 to-white bg-clip-text text-transparent animate-text-shimmer">
                   Find Trusted
-                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-300 animate-pulse">
+                </span>
+                <span className="relative inline-block mt-2">
+                  <span className="bg-gradient-to-r from-yellow-200 via-pink-200 to-cyan-200 bg-clip-text text-transparent animate-color-shift">
                     Hospitals & Clinics
                   </span>
-                </h2>
+                  <div className="absolute -bottom-3 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 via-pink-400 to-cyan-400 rounded-full transform scale-x-0 animate-scale-x-delayed"></div>
+                </span>
+              </h2>
                 
-                <p className="text-blue-100 text-white/90 text-lg mb-8 max-w-xl animate-fadeInUp animation-delay-300">
+                <p className="text-blue-100 text-white/90 text-sm sm:text-base md:mb-8 max-w-xl animate-fadeInUp animation-delay-300">
                   Discover quality healthcare facilities near you with 24/7 emergency services and specialized medical care
                 </p>
               </div>
               
-              <div className="flex flex-wrap gap-4 animate-fadeInUp animation-delay-500">
+              <div className=" hidden md:flex flex flex-wrap gap-4 animate-fadeInUp animation-delay-500">
                 <div className="flex items-center gap-3 bg-white/20 backdrop-blur-sm rounded-full px-6 py-3 transform hover:scale-105 transition-transform duration-300">
                   <div className="w-3 h-3 bg-green-400 rounded-full animate-ping"></div>
                   <span className="text-sm font-medium">24/7 Emergency Care</span>
@@ -130,6 +133,28 @@ const HospitalPage = () => {
                   Emergency Contact
                 </button>
               </div> */}
+              {/* Enhanced Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                <a href="https://play.google.com/store/apps/details?id=com.doctors.adda">
+                  <button
+                    onMouseEnter={() => setHoveredButton("download")}
+                    onMouseLeave={() => setHoveredButton(null)}
+                    className="group relative bg-white text-gray-900 px-4 py-2 md:px-8 md:py-4 rounded-2xl font-bold text-xs md:text-base lg:text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105 transition-all duration-300 overflow-hidden animate-slide-in-left cursor-pointer"
+                    style={{ animationDelay: "1s" }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                    <div className="relative z-10 flex items-center gap-3 group-hover:text-white transition-colors duration-300">
+                      <Download className="w-5 h-5 group-hover:animate-bounce" />
+                      Download App
+                      {hoveredButton === "download" && (
+                        <div className="absolute -right-2 -top-2 w-3 h-3 bg-green-400 rounded-full animate-ping"></div>
+                      )}
+                    </div>
+                  </button>
+                </a>
+
+              </div>
             </div>
             
             {/* Right image */}
@@ -138,13 +163,13 @@ const HospitalPage = () => {
                 <img 
                   src="https://i.pinimg.com/736x/cb/68/63/cb68636c31e597f6c4c90102138abd24.jpg" 
                   alt="Modern Hospital Building" 
-                  className="rounded-3xl shadow-2xl w-full h-96 object-cover transform hover:scale-105 transition-transform duration-500"
+                  className="rounded-3xl shadow-2xl w-full md:h-96 h-50 object-cover transform hover:scale-105 transition-transform duration-500"
                 />
                 <div className=""></div>
               </div>
               
               {/* Floating stats cards */}
-              <div className="absolute -top-6 -left-6 bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-xl animate-bounce delay-500">
+              <div className=" hidden md:flex absolute -top-6 -left-6 bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-xl animate-bounce delay-500">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
                     <svg className="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
@@ -158,7 +183,7 @@ const HospitalPage = () => {
                 </div>
               </div>
               
-              <div className="absolute -bottom-6 -right-6 bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-xl animate-bounce delay-700">
+              <div className=" hidden md:flex absolute -bottom-6 -right-6 bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-xl animate-bounce delay-700">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
                     <svg className="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
@@ -177,7 +202,7 @@ const HospitalPage = () => {
         
         {/* Enhanced wave divider with animation */}
         <div className="absolute bottom-0 left-0 w-full overflow-hidden">
-          <svg className="relative block w-full h-12 animate-pulse" viewBox="0 0 1200 120" preserveAspectRatio="none">
+          <svg className="relative block w-full md:h-12 h-8 animate-pulse" viewBox="0 0 1200 120" preserveAspectRatio="none">
             <defs>
               <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" style={{stopColor: 'rgba(255,255,255,0.1)'}} />
@@ -238,20 +263,30 @@ const HospitalPage = () => {
       </div>
 
       {/* Search and Filter Section */}
-      <div className="max-w-7xl mx-auto  py-8">
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-gray-100">
-          <div className="flex flex-col md:flex-row gap-4">
-            {/* Search Bar */}
-            <div className="flex-1 relative">
+      <div className="sm:w-full lg:w-[80%]  xl:w-[80%] 2xl:w-[70%] mx-auto  px-2 py-8">
+        <div className="bg-white rounded-2xl shadow-lg p-2 md:p-6 mb-8 border border-gray-100">
+          <div className="flex flex-row items-center md:flex-row gap-4">
+           {/* Search Bar */}
+            <div className="flex-1 relative ">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                <svg
+                  className="h-5 w-5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
                 </svg>
               </div>
               <input
                 type="text"
-                placeholder="Search hospitals by name or location..."
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+                placeholder="Search by name or location..."
+                className="w-full pl-10 pr-4 md:py-3 py-1 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -260,7 +295,7 @@ const HospitalPage = () => {
             {/* Filter Dropdown */}
             <div className="relative">
               <select
-                className="appearance-none bg-white border border-gray-300 rounded-xl px-4 py-3 pr-8 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+                className="appearance-none bg-white border border-gray-300 rounded-xl px-4 md:py-3 py-1 pr-8 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
                 value={filterType}
                 onChange={(e) => setFilterType(e.target.value)}
               >
@@ -283,9 +318,11 @@ const HospitalPage = () => {
 
         {/* Results Header */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-800">
-            Available Hospitals
-            <span className="ml-2 text-lg text-gray-500">({hospitals.length})</span>
+          <h2 className="text-xl  md:text-2xl lg:text-3xl font-bold text-gray-800 text-center text-gray-800">
+            Available{" "}
+            <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+              Hospitals{" "}
+            </span>
           </h2>
           <div className="flex items-center gap-2 text-sm text-gray-600">
             {loading && (
