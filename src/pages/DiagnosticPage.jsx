@@ -271,21 +271,15 @@ const DiagnosticPage = () => {
           />
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-6 py-24">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="relative sm:w-full lg:w-[80%] xl:w-[80%] 2xl:w-[70%] mx-auto px-6 py-24">
+          <div className="grid grid-cols-2 md:gap-16 items-center">
             {/* Left Content - Enhanced with Animations */}
             <div className="text-white space-y-8 animate-slide-left">
-              {/* Certification Badge */}
-              <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3 text-sm font-medium animate-pulse-glow">
-                <BadgeCheck className="w-5 h-5 text-green-400 animate-rotate-in" />
-                <span className="font-semibold">
-                  Certified & Trusted Healthcare
-                </span>
-              </div>
+              
 
               {/* Main Heading */}
               <div className="space-y-4">
-                <h2 className="text-4xl md:text-5xl font-bold leading-tight">
+                <h2 className="text-xl md:text-2xl lg:text-4xl font-bold leading-tight">
                   <span className="block animate-fade-up">Diagnostic</span>
                   <span
                     className="block gradient-text animate-fade-up"
@@ -298,7 +292,7 @@ const DiagnosticPage = () => {
 
               {/* Description */}
               <p
-                className="text-white/90 text-lg leading-relaxed max-w-2xl animate-fade-up"
+                className="text-white/90 text-sm sm:text-base leading-relaxed max-w-2xl animate-fade-up"
                 style={{ animationDelay: "0.6s" }}
               >
                 Experience world-class diagnostic services with cutting-edge
@@ -313,12 +307,12 @@ const DiagnosticPage = () => {
                 className="flex flex-col sm:flex-row gap-4 pt-6 animate-fade-up"
                 style={{ animationDelay: "1.6s" }}
               >
-                <button className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 animate-pulse-glow cursor-pointer">
+                <button className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-bold py-4 px-8 rounded-full text-xs md:text-base transition-all duration-300 transform hover:scale-105 animate-pulse-glow cursor-pointer hidden md:block">
                   Book Appointment
                 </button>
                 <a href="https://play.google.com/store/apps/details?id=com.doctors.adda">
-                  <button className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-full text-lg transition-all duration-300 border border-white/20 cursor-pointer">
-                    Download App Now
+                  <button className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white font-semibold md:py-4 md:px-8 px-4 py-2 rounded-full  text-xs md:text-base transition-all duration-300 border border-white/20 cursor-pointer">
+                    Download App 
                   </button>
                 </a>
               </div>
@@ -360,8 +354,8 @@ const DiagnosticPage = () => {
                   </div>
 
                   {/* Mini Feature Cards */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 backdrop-blur-sm rounded-xl p-4 text-center">
+                  <div className="grid grid-cols-2 gap-4 ">
+                    <div className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 backdrop-blur-sm rounded-xl p-4 text-center hidden md:block">
                       <div className="bg-white/20 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-2 animate-rotate-in">
                         <Shield className="w-6 h-6 text-green-300" />
                       </div>
@@ -370,7 +364,7 @@ const DiagnosticPage = () => {
                       </p>
                     </div>
 
-                    <div className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-sm rounded-xl p-4 text-center">
+                    <div className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-sm rounded-xl p-4 text-center hidden md:block">
                       <div
                         className="bg-white/20 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-2 animate-rotate-in"
                         style={{ animationDelay: "0.5s" }}
@@ -394,7 +388,7 @@ const DiagnosticPage = () => {
                 </div> */}
 
                 <div
-                  className="absolute -bottom-6 -right-6 w-20 h-20 bg-gradient-to-br from-green-400 to-cyan-500 rounded-2xl shadow-2xl flex items-center justify-center animate-float"
+                  className="absolute -bottom-6 -right-6 w-20 h-20 bg-gradient-to-br from-green-400 to-cyan-500 rounded-2xl shadow-2xl flex items-center justify-center animate-float hidden md:flex"
                   style={{ animationDelay: "3s" }}
                 >
                   <Heart className="w-10 h-10 text-white" />
