@@ -381,13 +381,17 @@ const PharmacyDetailPage = () => {
                       </div>
                     </div>
                   </div>
-                  <button
+                  
+                  <div className="text-right">
+                    <button
                     onClick={() => setShowReviewPopup(true)}
-                    className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl"
-                  >
-                    <PlusCircle className="w-5 h-5" />
-                    Add Review
-                  </button>
+                    className="group bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-8 py-4 rounded-full hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 font-semibold flex items-center gap-3 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                    >
+                      <PlusCircle className="w-5 h-5 group-hover:animate-spin" />
+                      Share Your Experience
+                    </button>
+                  </div>
+                  
                 </div>
 
                 {/* Reviews List */}

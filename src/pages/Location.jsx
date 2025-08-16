@@ -25,6 +25,7 @@ const Location = () => {
     setIsLoading(true);
 
     try {
+
       if (!navigator.geolocation) {
         setPermissionStatus('unsupported');
         setIsLoading(false);
@@ -100,12 +101,11 @@ const Location = () => {
 
 
   return (
+
     <div className="bg-gray-50 min-h-screen flex flex-col">
-      
 
     <Navbar />
-   
-  
+
     <div className="flex-grow flex items-center justify-center p-4 my-20 mt-46">
       <div className="bg-white rounded-2xl shadow-2xl max-w-xl w-full transform transition-all duration-300">
   

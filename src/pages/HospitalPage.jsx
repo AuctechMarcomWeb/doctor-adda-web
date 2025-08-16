@@ -37,9 +37,11 @@ const HospitalPage = () => {
         setLoading(false);
       }
     };
-
     fetchHospitals();
   }, [debouncedSearchTerm]);
+
+
+  
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -48,6 +50,7 @@ const HospitalPage = () => {
  
 
   return (
+
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-red-50">
       {/* Hero Banner */}
       {/* Enhanced Hero Banner */}
@@ -115,7 +118,7 @@ const HospitalPage = () => {
                 </div>
               </div>
               
-              <div className="pt-6 animate-fadeInUp animation-delay-700">
+              {/* <div className="pt-6 animate-fadeInUp animation-delay-700">
                 <button
                  onClick={() => {
                   window.location.href = "tel:+911234567890"
@@ -126,7 +129,7 @@ const HospitalPage = () => {
                   </svg>
                   Emergency Contact
                 </button>
-              </div>
+              </div> */}
             </div>
             
             {/* Right image */}
@@ -322,6 +325,7 @@ const HospitalPage = () => {
       <div className=" text-white py-8 mt-12" style={{
     background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}}>
         <div className="max-w-4xl mx-auto px-4 text-center">
+          
           <div className="flex items-center justify-center gap-4 mb-4">
             <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
               <span className="text-2xl"><img src="src/assets/alert.png" height={50} width={50} alt="" /></span>
@@ -331,12 +335,19 @@ const HospitalPage = () => {
               <p className="text-red-100">Call immediately for urgent medical assistance</p>
             </div>
           </div>
-          <a href="tel:108" className="flex inline-block bg-white text-red-600 font-bold py-3 px-12 rounded-full text-lg hover:bg-red-50 transition-all duration-300 transform hover:scale-105">
-            <div className="flex gap-1"><img src="https://i.pinimg.com/1200x/7e/21/b9/7e21b9661c85d61676143a8ae2c9a73b.jpg" height={25} width={25} alt="" /><span>Call 108</span></div>
+
+          <a href={`tel:108`} className="flex inline-block bg-white text-red-600 font-bold py-3 px-12 rounded-full text-lg 
+          hover:bg-red-50 transition-all duration-300 transform hover:scale-105">
+            <div
+             className="flex gap-1"><img src="https://i.pinimg.com/1200x/7e/21/b9/7e21b9661c85d61676143a8ae2c9a73b.jpg" height={25} width={25} alt="" />
+              <span>Call 108</span>
+            </div>
           </a>
+
         </div>
       </div>
     </div>
+
   );
 };
 

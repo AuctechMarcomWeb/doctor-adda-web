@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
-const HospitalReviewForm = ({ open, onClose, hospitalId, onReviewAdded }) => {
+const HospitalReviewForm = ({ open, onClose, hospitalId, onReviewAdded,setUpdateReview }) => {
   const [rating, setRating] = useState(1);
   const [hoverRating, setHoverRating] = useState(null);
   const [comment, setComment] = useState("");
@@ -45,6 +45,7 @@ const HospitalReviewForm = ({ open, onClose, hospitalId, onReviewAdded }) => {
         setRating(1);
         if (onReviewAdded) onReviewAdded(data?.data);
         toast.success("Review submitted!");
+        setUpdateReview(prev => !prev); 
         setTimeout(() => {
           setSuccess(false);
           onClose();

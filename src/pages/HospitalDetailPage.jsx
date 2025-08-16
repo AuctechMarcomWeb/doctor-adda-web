@@ -18,6 +18,7 @@ import {
   ArrowRight,
   Navigation,
   StarHalf,
+  PlusCircle
 } from "lucide-react";
 import { getRequest } from "../Helpers";
 import { useParams, useNavigate } from "react-router-dom";
@@ -33,7 +34,7 @@ const HospitalDetailPage = () => {
 
   const [isTimeSelection, setIsTimeSelection] = useState(false)
   const [isAppointmentFlow, setIsAppointmentFlow] = useState(false)
-
+    const [updateReview, setUpdateReview] = useState(false)
   const [activeTab, setActiveTab] = useState("about")
   const { id } = useParams()
   const navigate = useNavigate();
@@ -59,7 +60,6 @@ const HospitalDetailPage = () => {
     }
   };
 
-
   console.log("  hospital?.registeredDoctor ", hospital?.registeredDoctor)
 
 
@@ -71,10 +71,6 @@ const HospitalDetailPage = () => {
     }
   }
 
-
-
-
-
   const handleAddReview = () => {
     setOpenReviewPopup(true);
   };
@@ -84,7 +80,7 @@ const HospitalDetailPage = () => {
     if (id) {
       fetchHospitalDetails(id);
     }
-  }, []);
+  }, [updateReview, id]);
 
   // Function to return correct icon based on facility name
   const getFacilityIcon = (name = "") => {
@@ -215,7 +211,7 @@ const HospitalDetailPage = () => {
                   }}
                   className="bg-gradient-to-r from-red-500 to-red-600 text-white py-4 px-6 rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-300 flex items-center justify-center gap-3 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1">
                   <PhoneCall className="w-5 h-5" />
-                  Emergency Call
+                  Call Now
                 </button>
 
                 {/* <button onClick={() => setIsTimeSelection(true)} className="bg-gradient-to-r from-green-500 to-green-600 text-white py-4 px-6 rounded-xl hover:from-green-600 hover:to-green-700 transition-all duration-300 flex items-center justify-center gap-3 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1">
@@ -446,11 +442,16 @@ const HospitalDetailPage = () => {
                     Customer Reviews
                   </h2>
 
-                  <button
+
+                   <div className="text-right">
+                    <button
                     onClick={() => handleAddReview()}
-                    className="bg-[#00659d] text-white px-8 py-4 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl">
-                    Add Review
-                  </button>
+                    className="group bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-8 py-4 rounded-full hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 font-semibold flex items-center gap-3 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                    >
+                      <PlusCircle className="w-5 h-5 group-hover:animate-spin" />
+                      Share Your Experience
+                    </button>
+                  </div>
 
 
                 </div>
@@ -519,11 +520,7 @@ const HospitalDetailPage = () => {
             CityCare Hospital
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            {/* <button 
-             onClick={() => setIsTimeSelection(true)}
-            className="bg-white text-[#00659d] px-8 py-4 rounded-xl font-bold hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl">
-              Book Appointment Now
-            </button> */}
+
             <button
               onClick={() => {
                 window.location.href = `tel:${hospital?.phone}`
@@ -531,6 +528,7 @@ const HospitalDetailPage = () => {
               className="border-2 cursor-pointer border-white text-white px-8 py-4 rounded-xl font-bold hover:bg-white hover:text-[#00659d] transition-all duration-300">
               {hospital?.phone}
             </button>
+
           </div>
         </div>
 
@@ -540,6 +538,7 @@ const HospitalDetailPage = () => {
           onClose={() => setOpenReviewPopup(false)}
           hospitalId={id}
           onReviewAdded={review => setReviews([...reviews, review])}
+          setUpdateReview={setUpdateReview}
         />
 
         <HospitalTimeSelection
