@@ -31,6 +31,8 @@ const AppointmentFlow = ({
   const [clinicData, setClinicData] = useState(null);
   const [doctor, setDoctor] = useState(null);
   const [step, setStep] = useState(1);
+  const [bookingData, setBookingData] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [selectedFor, setSelectedFor] = useState(null);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const selectedClinic = clinicData || {};
@@ -38,12 +40,8 @@ const AppointmentFlow = ({
   // Get user profile data from Redux
   const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
   const UserId = userProfileData?._id;
-  console.log("user profile data from redux in navbar", userProfileData);
-  console.log("isLoggedIn from redux", isLoggedIn);
-
   const [patients, setPatients] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(null);
-
   const otherPatients = patients.length > 0 ? patients : otherPatientDetails;
 
   // Extract appointment data
@@ -60,6 +58,7 @@ const AppointmentFlow = ({
     : otherPatientDetails;
 
   const handleConfirmBooking = async () => {
+    setLoading(true);
     try {
       setOtherPatientDetails({ patient: selectedPatient });
 
@@ -72,9 +71,13 @@ const AppointmentFlow = ({
       });
       console.log("Booking confirmed", res?.data?.data);
       setDoctor(res?.data?.data);
+      setBookingData(res?.data?.data);   // ✅ store complete booking details
       setStep(4);
     } catch (error) {
       console.log("Error booking appointment", error);
+    }
+    finally{
+      setLoading(false);//stop loader
     }
   };
 
@@ -301,9 +304,10 @@ const AppointmentFlow = ({
                 </button>
                 <button
                   onClick={handleConfirmBooking}
+                  disabled={loading}
                   className="w-full px-4 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-all duration-200"
                 >
-                  Yes, Book
+  {loading ? "Booking..." : "Yes, Book"}
                 </button>
               </div>
             </>
@@ -314,17 +318,17 @@ const AppointmentFlow = ({
             <div className="max-h-[80vh] sm:max-h-[85vh] md:max-h-[90vh] overflow-y-auto px-2">
 
             <>
-              <Dialog.Title className="text-2xl font-bold text-center text-green-700 mb-8">
+              <Dialog.Title className="text-2xl font-bold text-center text-green-700 mb-4">
                 My Appointment
               </Dialog.Title>
 
               {/* Status */}
-              <div className="bg-red-50 border border-red-200 text-red-600 font-semibold text-sm rounded-xl px-4 py-2 mb-6 shadow-sm text-center">
+              <div className="bg-red-50 border border-red-200 text-red-600 font-semibold text-sm rounded-xl px-2 py-2 mb-2 shadow-sm text-center">
                 ⏳ Awaiting Confirmation
               </div>
 
               {/* Doctor Info */}
-              <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-6">
+              <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-4">
                 <div className="flex items-center gap-4 sm:gap-5">
                   <img
                     src="https://i.pinimg.com/736x/92/eb/b8/92ebb8868a7d96bb48184758f0a76e9f.jpg"
@@ -345,14 +349,14 @@ const AppointmentFlow = ({
               </div>
 
               {/* Appointment Time */}
-              <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-6">
-                <h4 className="text-base font-semibold text-gray-800 mb-4">
+              <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-2">
+                <h4 className="text-base font-semibold text-gray-800 mb-2">
                   Scheduled Appointment
                 </h4>
                 <p className="text-sm text-gray-500 mb-2">
                   Appointment ID:{" "}
                   <span className="font-semibold text-gray-700">
-                    {appointmentId || "NA"}
+  {bookingData?.appointmentId || appointmentId || "N/A"}
                   </span>
                 </p>
                 <div className="flex items-center gap-2 text-sm text-gray-700 mb-1">
@@ -371,8 +375,8 @@ const AppointmentFlow = ({
               </div>
 
               {/* Patient Info */}
-              <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-6 w-full max-w-md mx-auto">
-                <h4 className="text-base font-semibold text-gray-800 mb-4">
+              <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-4 w-full max-w-md mx-auto">
+                <h4 className="text-base font-semibold text-gray-800 mb-2">
                   Patient Information
                 </h4>
                 {selectedFor === "self" ? (
@@ -415,7 +419,7 @@ const AppointmentFlow = ({
               </div>
 
               {/* Fee */}
-              <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-6">
+              <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-4">
                 <div className="flex justify-between items-center text-base">
                   <span className="flex items-center gap-2 text-blue-700 font-medium">
                     <CreditCard className="w-5 h-5" /> Consultation Fee
@@ -427,7 +431,7 @@ const AppointmentFlow = ({
               </div>
 
               {/* Actions */}
-              <div className="mt-6 flex justify-between text-sm text-blue-700 font-medium">
+              <div className="mt-4 flex justify-between text-sm text-blue-700 font-medium">
                 <a href="tel:+108">
                   <button
                     onClick={() => alert("Calling clinic...")}
@@ -452,7 +456,7 @@ const AppointmentFlow = ({
               </div>
 
               {/* Continue */}
-              <div className="mt-8">
+              <div className="mt-6">
                 <button
                   onClick={handleClose}
                   className="w-full px-6 py-3 bg-[#006fab] hover:from-blue-700 hover:to-blue-800 text-white font-semibold text-base rounded-full transition-all duration-200"
