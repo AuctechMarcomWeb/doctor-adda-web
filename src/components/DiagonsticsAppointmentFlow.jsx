@@ -7,6 +7,7 @@ import { getRequest, postRequest } from "../Helpers";
 import { useSelector } from "react-redux";
 import { AppointmentDateFormat } from "../Utils";
 import toast from "react-hot-toast";
+import RenderRazorPay from "../components/RenderRazorPay";
 
 const DiagonsticsAppointmentFlow = ({
   open,
@@ -22,24 +23,21 @@ const DiagonsticsAppointmentFlow = ({
   const [bookingData, setBookingData] = useState(null);
   const [selectedFor, setSelectedFor] = useState(null);
   const [selectedPayment, setSelectedPayment] = useState(null);
-  const userProfileData = useSelector((state) => state.user.userProfileData);
-  const UserId = userProfileData?._id;
-  console.log("UserId", UserId);
-  console.log("userProfileData:", userProfileData);
-
   const [patients, setPatients] = useState([]);
-
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [loading, setLoading] = useState(false);
+  // Razorpay state
+  const [showRazorpay, setShowRazorpay] = useState(false);
+  const [orderId, setOrderId] = useState("");
 
+  const userProfileData = useSelector((state) => state.user.userProfileData || {});
+  const UserId = userProfileData?._id;
 
   const otherPatients = patients.length > 0 ? patients : otherPatientDetails;
 
   // Extract appointment data
   const { diagnostic, slots, amount, appointmentId, date } =
     appointmentData || {};
-
-  console.log("appointmentData====>", appointmentData);
 
   // Show patient info based on selectedFor
   const isSelf = selectedFor === "self";
@@ -55,8 +53,9 @@ const DiagonsticsAppointmentFlow = ({
     setStep(1);
     setSelectedFor(null);
     setSelectedPayment(null);
+    setShowRazorpay(false);
+    setOrderId("");
     onClose();
-    // onOpenManagePatients();
   };
 
   const fetchDiagnosticsDetails = async () => {
@@ -67,39 +66,6 @@ const DiagonsticsAppointmentFlow = ({
       console.error("Error fetching diagnostics:", error);
     }
   };
-  useEffect(() => {
-    if (id) {
-      fetchDiagnosticsDetails();
-    }
-  }, [id]);
-
- 
-  const handleConfirmBooking = async () => {
-      setLoading(true); // Start loader
-    try {
-          setOtherPatientDetails({ patient: selectedPatient }); // ensure UI syncs
-
-      const res = await postRequest({
-        url: `diagnosticBooking/add`,
-        cred: { ...appointmentData, otherPatientDetails: { patient: selectedPatient } }
-      });
-      console.log("Booking success:", res?.data?.data);
-      setDiagnostics(res?.data?.data?.diagnostic || null);
-      setBookingData(res?.data?.data);   // ✅ store complete booking details
-      setStep(4); // Success step
-    } catch (error) {
-      console.error("Booking failed:", error);
-      toast.error(
-        error?.response?.data?.message || "Failed to book appointment"
-      );
-    }finally {
-    setLoading(false); // Stop loader after API success/error
-  }
-  };
-
-  useEffect(() => {
-    console.log("Step changed:", step);
-  }, [step]);
 
   const fetchPatients = async () => {
     if (!UserId) return;
@@ -113,8 +79,67 @@ const DiagonsticsAppointmentFlow = ({
   };
 
   useEffect(() => {
+    if (id) {
+      fetchDiagnosticsDetails();
+    }
+  }, [id]);
+
+  useEffect(() => {
     fetchPatients();
   }, [UserId]);
+
+  const handleConfirmBooking = async () => {
+    setLoading(true); // Start loader
+    try {
+      setOtherPatientDetails({ patient: selectedPatient }); 
+      const res = await postRequest({
+        url: `diagnosticBooking/add`,
+        cred: {
+          ...appointmentData,
+          otherPatientDetails: { patient: selectedPatient },
+        },
+      });
+      console.log("Booking success:", res?.data?.data);
+      setDiagnostics(res?.data?.data?.diagnostic || null);
+      setBookingData(res?.data?.data); // ✅ store complete booking details
+      setStep(4); // Success step
+    } catch (error) {
+      console.error("Booking failed:", error);
+      toast.error(
+        error?.response?.data?.message || "Failed to book appointment"
+      );
+    } finally {
+      setLoading(false); // Stop loader after API success/error
+    }
+  };
+
+  // Razorpay integration
+  const handlePayOnline = async () => {
+      if (!selectedPayment || selectedPayment !== "online") return;
+  try {
+    const res = await postRequest({
+      url: `diagnosticBooking/payment`,
+      cred: {
+       ...appointmentData,
+      },
+    });
+    console.log("payment success:", res?.data?.data?.appointment);
+    
+    if (res && res.data?.orderId) {
+      setOrderId(res?.data?.orderId);
+      console.log("orderId",res?.data?.data?.orderId);
+      
+      setShowRazorpay(true);
+    }
+  } catch (error) {
+    console.error("Error creating order:", error);
+    toast.error(error?.response?.data?.message || "Failed to initiate payment");
+  }
+};
+
+  useEffect(() => {
+    console.log("Step changed:", step);
+  }, [step]);
 
   return (
     <Dialog open={open} onClose={handleClose} className="relative z-50">
@@ -163,11 +188,10 @@ const DiagonsticsAppointmentFlow = ({
                               ? "border-blue-600 bg-blue-50"
                               : "border-gray-200"
                           }`}
-                          onClick={() =>{ setSelectedPatient(p);
+                          onClick={() => {
+                            setSelectedPatient(p);
                             setOtherPatientDetails({ patient: p }); // update parent state
                           }}
-                              
-
                         >
                           {p.name} , {p.gender}, {p.age}{" "}
                           {p.weight ? p.weight + "yrs" : ""}
@@ -264,8 +288,8 @@ const DiagonsticsAppointmentFlow = ({
                       setStep(3); // Diagnostics payment → directly go to step 3
                     } else if (selectedPayment === "online") {
                       console.log("Pay Online");
-                      alert("Redirecting to Online Payment");
                       // Yaha payment gateway ka code aa sakta hai
+                      handlePayOnline();
                     }
                   }}
                   disabled={!selectedPayment}
@@ -304,7 +328,7 @@ const DiagonsticsAppointmentFlow = ({
                   disabled={loading}
                   className="w-full px-4 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg"
                 >
-  {loading ? "Booking..." : "Yes, Book"}
+                  {loading ? "Booking..." : "Yes, Book"}
                 </button>
               </div>
             </>
@@ -313,134 +337,145 @@ const DiagonsticsAppointmentFlow = ({
           {/* Step 4: Final Appointment Details */}
           {step === 4 && (
             <div className="max-h-[80vh] sm:max-h-[85vh] md:max-h-[90vh] overflow-y-auto px-2">
+              <>
+                <Dialog.Title className="text-2xl font-bold text-center text-green-700 mb-4">
+                  My Appointment
+                </Dialog.Title>
 
-            <>
-              <Dialog.Title className="text-2xl font-bold text-center text-green-700 mb-4">
-                My Appointment
-              </Dialog.Title>
+                <div className="bg-red-50 border border-red-200 text-red-600 font-semibold text-sm rounded-xl px-2 py-2 mb-2 text-center">
+                  ⏳ Awaiting Confirmation
+                </div>
 
-              <div className="bg-red-50 border border-red-200 text-red-600 font-semibold text-sm rounded-xl px-2 py-2 mb-2 text-center">
-                ⏳ Awaiting Confirmation
-              </div>
+                {/* Diagnostic Info */}
+                <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-4">
+                  <div className="flex items-center gap-4 sm:gap-5">
+                    <img
+                      src={diagnostics?.profileImage}
+                      alt="Diagnostic"
+                      className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover border border-gray-200"
+                    />
+                    <div>
+                      <h3 className="text-base sm:text-lg font-semibold text-gray-900">
+                        {diagnostics?.name}
+                      </h3>
+                      <p className="text-sm text-gray-500">
+                        {diagnostics?.address}
+                      </p>
+                    </div>
+                  </div>
+                </div>
 
-              {/* Diagnostic Info */}
-              <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-4">
-                <div className="flex items-center gap-4 sm:gap-5">
-                  <img
-                    src={diagnostics?.profileImage}
-                    alt="Diagnostic"
-                    className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover border border-gray-200"
-                  />
-                  <div>
-                    <h3 className="text-base sm:text-lg font-semibold text-gray-900">
-                      {diagnostics?.name}
-                    </h3>
-                    <p className="text-sm text-gray-500">
-                      {diagnostics?.address}
+                {/* Appointment Time */}
+                <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-2">
+                  <h4 className="text-base font-semibold text-gray-800 mb-2">
+                    Scheduled Appointment
+                  </h4>
+                  <p className="text-sm text-gray-500 mb-2">
+                    Appointment ID:
+                    <strong className="text-gray-700">
+                      {bookingData?.appointmentId || appointmentId || "N/A"}
+                    </strong>
+                  </p>
+                  <div className="flex items-center gap-2 text-sm text-gray-700 mb-1">
+                    <Calendar className="w-5 h-5 text-blue-600" />
+                    <strong>{AppointmentDateFormat(date) || "N/A"}</strong>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
+                    <Clock className="w-5 h-5 text-blue-600" />
+                    <strong>
+                      {slots?.startTime || "N/A"} - {slots?.endTime || "N/A"}
+                    </strong>
+                  </div>
+                  <span className="inline-block mt-4 px-4 py-1 text-xs bg-blue-100 text-blue-700 rounded-full font-medium">
+                    {selectedFor?.toUpperCase() || "MYSELF"}
+                  </span>
+                </div>
+
+                {/* Patient Info */}
+                <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-4 w-full max-w-md mx-auto">
+                  <h4 className="text-base  font-semibold text-gray-800 mb-2">
+                    Patient Information
+                  </h4>
+
+                  <div className="space-y-1 text-sm text-gray-700">
+                    <p className="flex flex-wrap">
+                      <strong className="mr-1">Name:</strong>
+                      <span>
+                        {otherPatientDetails?.patient?.name ||
+                          patientDetails?.name ||
+                          "N/A"}
+                      </span>
+                    </p>
+                    <p className="flex flex-wrap">
+                      <strong className="mr-1">Gender:</strong>
+                      <span>
+                        {otherPatientDetails?.patient?.gender ||
+                          patientDetails?.gender ||
+                          "N/A"}
+                      </span>
+                    </p>
+                    <p className="flex flex-wrap">
+                      <strong className="mr-1">Contact:</strong>
+                      <span>
+                        {otherPatientDetails?.patient?.phone ||
+                          patientDetails?.phone ||
+                          "N/A"}
+                      </span>
                     </p>
                   </div>
                 </div>
-              </div>
 
-              {/* Appointment Time */}
-              <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-2">
-                <h4 className="text-base font-semibold text-gray-800 mb-2">
-                  Scheduled Appointment
-                </h4>
-                <p className="text-sm text-gray-500 mb-2">
-                  Appointment ID:
-                  <strong className="text-gray-700">
-  {bookingData?.appointmentId || appointmentId || "N/A"}
-                  </strong>
-                </p>
-                <div className="flex items-center gap-2 text-sm text-gray-700 mb-1">
-                  <Calendar className="w-5 h-5 text-blue-600" />
-                  <strong>{AppointmentDateFormat(date) || "N/A"}</strong>
+                {/* Fee */}
+                <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-4">
+                  <div className="flex justify-between items-center text-base">
+                    <span className="flex items-center gap-2 text-blue-700 font-medium">
+                      <CreditCard className="w-5 h-5" /> Consultation Fee
+                    </span>
+                    <span className="font-semibold text-blue-700 text-lg">
+                      ₹{amount || "N/A"}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-700">
-                  <Clock className="w-5 h-5 text-blue-600" />
-                  <strong>
-                    {slots?.startTime || "N/A"} - {slots?.endTime || "N/A"}
-                  </strong>
+
+                {/* Actions */}
+                <div className="mt-4 flex justify-between text-sm text-blue-700 font-medium">
+                  <button
+                    onClick={() => alert("Calling clinic...")}
+                    className="hover:underline hover:text-blue-800 flex items-center gap-2"
+                  >
+                    <Phone className="w-4 h-4" /> Call Diagnostic
+                  </button>
+                  <button
+                    onClick={() => alert("Opening map...")}
+                    className="hover:underline hover:text-blue-800 flex items-center gap-2"
+                  >
+                    <MapPin className="w-4 h-4" /> Get Location
+                  </button>
                 </div>
-                <span className="inline-block mt-4 px-4 py-1 text-xs bg-blue-100 text-blue-700 rounded-full font-medium">
-                  {selectedFor?.toUpperCase() || "MYSELF"}
-                </span>
-              </div>
 
-              {/* Patient Info */}
-              <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-4 w-full max-w-md mx-auto">
-  <h4 className="text-base  font-semibold text-gray-800 mb-2">
-    Patient Information
-  </h4>
-
-  <div className="space-y-1 text-sm text-gray-700">
-    <p className="flex flex-wrap">
-      <strong className="mr-1">Name:</strong>
-      <span>
-        {otherPatientDetails?.patient?.name ||
-          patientDetails?.name ||
-          "N/A"}
-      </span>
-    </p>
-    <p className="flex flex-wrap">
-      <strong className="mr-1">Gender:</strong>
-      <span>
-        {otherPatientDetails?.patient?.gender ||
-          patientDetails?.gender ||
-          "N/A"}
-      </span>
-    </p>
-    <p className="flex flex-wrap">
-      <strong className="mr-1">Contact:</strong>
-      <span>
-        {otherPatientDetails?.patient?.phone ||
-          patientDetails?.phone ||
-          "N/A"}
-      </span>
-    </p>
-  </div>
-</div>
-
-              {/* Fee */}
-              <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-4">
-                <div className="flex justify-between items-center text-base">
-                  <span className="flex items-center gap-2 text-blue-700 font-medium">
-                    <CreditCard className="w-5 h-5" /> Consultation Fee
-                  </span>
-                  <span className="font-semibold text-blue-700 text-lg">
-                    ₹{amount || "N/A"}
-                  </span>
+                {/* Final CTA */}
+                <div className="mt-6">
+                  <button
+                    onClick={handleClose}
+                    className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold text-base rounded-full"
+                  >
+                    Go to Appointments →
+                  </button>
                 </div>
-              </div>
-
-              {/* Actions */}
-              <div className="mt-4 flex justify-between text-sm text-blue-700 font-medium">
-                <button
-                  onClick={() => alert("Calling clinic...")}
-                  className="hover:underline hover:text-blue-800 flex items-center gap-2"
-                >
-                  <Phone className="w-4 h-4" /> Call Diagnostic
-                </button>
-                <button
-                  onClick={() => alert("Opening map...")}
-                  className="hover:underline hover:text-blue-800 flex items-center gap-2"
-                >
-                  <MapPin className="w-4 h-4" /> Get Location
-                </button>
-              </div>
-
-              {/* Final CTA */}
-              <div className="mt-6">
-                <button
-                  onClick={handleClose}
-                  className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold text-base rounded-full"
-                >
-                  Go to Appointments →
-                </button>
-              </div>
-            </>
+              </>
             </div>
+          )}
+        {/* Razorpay Component */}
+          {showRazorpay && orderId && (
+            <RenderRazorPay
+              orderId={orderId}
+              currency="INR"
+              amount={appointmentData?.amount * 100 || 0} // paisa
+              setUpdateStatus={() => {
+                setStep(3); // payment success → next step
+                setShowRazorpay(false);
+              }}
+            />
           )}
 
         </Dialog.Panel>
