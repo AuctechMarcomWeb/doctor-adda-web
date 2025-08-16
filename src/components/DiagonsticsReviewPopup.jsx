@@ -18,10 +18,11 @@ const DiagonsticsReviewPopup = ({
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  // console.log("error=====",error);
+
   const [successMessage, setSuccessMessage] = useState("");
 
   const navigate = useNavigate();
-  //const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const userProfileData = useSelector((state) => state.user.userProfileData);
   if (!open) return null;
 
@@ -48,7 +49,7 @@ const DiagonsticsReviewPopup = ({
         cred: { rating, comment },
       });
       const data = res.data;
-      console.log("data in review popup", data);
+      console.log("data in review popup", res);
 
       if (data.success) {
         setUpdateStatus((prev) => !prev);
@@ -62,11 +63,11 @@ const DiagonsticsReviewPopup = ({
           onClose();
         }, 1500);
       } else {
-        setError(error?.response?.data?.message);
+        setError(data?.message);
+        console.log("gfereg", data?.message);
       }
     } catch (error) {
-      setError(error?.response?.data?.message || "Failed to submit review");
-
+      console.log("error=========", error);
     } finally {
       setLoading(false);
     }
@@ -127,8 +128,10 @@ const DiagonsticsReviewPopup = ({
           </div>
 
           {/* Response message above button */}
-{error && <div className="text-red-500 text-sm">{error}</div>}
-          {successMessage && <div className="text-green-600 text-sm">{successMessage}</div>}
+          {error && <div className="text-red-500 text-sm">{error}</div>}
+          {successMessage && (
+            <div className="text-green-600 text-sm">{successMessage}</div>
+          )}
 
           {/* Submit button */}
           <button

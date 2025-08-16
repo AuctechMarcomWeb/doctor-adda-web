@@ -3,6 +3,7 @@ import { deleteCookie } from "../Hooks/cookie";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { confirmDialog } from "primereact/confirmdialog";
+import toast from "react-hot-toast";
 
 // FETCHING TOKEN FROM COOKIE
 export const token = Cookies.get("DoctorAddaPanel");
@@ -87,6 +88,7 @@ export const postRequest = async (props) => {
     return response;
   } catch (error) {
     console.log(123, error);
+    toast.error(error?.response?.data?.message);
   }
 };
 
