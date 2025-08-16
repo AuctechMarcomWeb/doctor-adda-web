@@ -70,7 +70,7 @@ const ProfessionalImagePopup = ({data}) => {
 
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-black/80 via-black/70 to-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4 animate-fadeIn">
-      <div className=" rounded-3xl  max-w-3xl w-full relative overflow-hidden transform animate-slideUp">
+      <div className=" rounded-3xl relative overflow-hidden transform animate-slideUp">
         {/* Header */}
         <div className="absolute top-0 left-0 right-0 z-20 bg-gradient-to-b from-black/60 to-transparent p-6">
           <div className="flex items-center justify-between">
@@ -87,7 +87,7 @@ const ProfessionalImagePopup = ({data}) => {
 
         {/* Main Content */}
         {/* Main Content */}
-        <div className="rounded-3xl relative h-96 md:h-[28rem] overflow-hidden">
+        <div className="rounded-3xl relative  md:h-[28rem]  overflow-hidden">
           {/* Loading Skeleton */}
           {isLoading && (
             <div className=" absolute inset-0 bg-white animate-pulse" />
@@ -98,7 +98,7 @@ const ProfessionalImagePopup = ({data}) => {
             <img
               src={data[currentSlide]?.imageUrl}
               alt={images[currentSlide]?.title}
-              className="w-full h-full bg-white object-contain transition-all duration-700 ease-in-out"
+              className="w-full h-[95%] bg-white object-contain transition-all duration-700 ease-in-out"
               onLoad={handleImageLoad}
             />
 
