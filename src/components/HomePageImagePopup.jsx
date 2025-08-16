@@ -87,7 +87,7 @@ const ProfessionalImagePopup = ({data}) => {
 
         {/* Main Content */}
         {/* Main Content */}
-        <div className="rounded-3xl relative h-96 md:h-[28rem] overflow-hidden">
+        <div className="rounded-3xl relative  md:h-[28rem]  overflow-hidden">
           {/* Loading Skeleton */}
           {isLoading && (
             <div className=" absolute inset-0 bg-white animate-pulse" />

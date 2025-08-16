@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import PharmacyCard from "../components/PharmacyCard"; // Assuming you have a separate card component
+import PharmacyCard from "../components/PharmacyCard"; 
 import { getRequest } from "../Helpers";
 
 const PharmacyPage = () => {
@@ -24,35 +24,7 @@ const PharmacyPage = () => {
     fetchPharmacies();
   }, []);
 
-  // const pharmacyData = [
-  //   {
-  //     name: "HealthPlus Pharmacy",
-  //     type: "24/7",
-  //     storetiming: "9:00 AM - 8:00 PM",
-  //     contact :"1234567890",
-  //     location: "Hazratganj, Lucknow",
-  //     rating: 4.5,
-  //     image: "https://i.pinimg.com/736x/6f/ee/63/6fee63ba6f6ffa494e5b634517df342d.jpg"
-  //   },
-  //   {
-  //     name: "CareWell Chemist",
-  //     type: "Generic Medicine",
-  //     storetiming: "9:00 AM - 8:00 PM",
-  //     contact :"1234567890",
-  //     location: "Gomti Nagar Extension",
-  //     rating: 4.2,
-  //     image: "https://i.pinimg.com/736x/ac/6e/e6/ac6ee6b196afb06732df7037ec4bf146.jpg"
-  //   },
-  //   {
-  //     name: "MediMart",
-  //     type: "Home Delivery",
-  //     storetiming: "9:00 AM - 8:00 PM",
-  //     contact :"1234567890",
-  //     location: "Indira Nagar, Lucknow",
-  //     rating: 4.0,
-  //     image: "https://i.pinimg.com/1200x/72/59/6e/72596e499f868bdfce8220559315fcf5.jpg"
-  //   }
-  // ];
+
 
   const filteredData = pharmacyData.filter((pharmacy) => {
     const matchesSearch =
@@ -66,14 +38,14 @@ const PharmacyPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
-      {/* Enhanced Hero Banner with Animations and Images */}
+      {/*  Hero Banner with Animations and Images */}
       <div
-        className="relative text-white overflow-hidden min-h-[600px]"
+        className="relative text-white overflow-hidden min-h-[360px]"
         style={{
           background:
             "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
         }}
-      >
+        >
         {/* Animated Background Elements */}
         <div className="absolute inset-0 bg-black/10"></div>
 
@@ -124,15 +96,13 @@ const PharmacyPage = () => {
           ></div>
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 py-16 sm:py-20">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="relative sm:w-full lg:w-[80%] xl:w-[80%] 2xl:w-[70%] mx-auto  pt-24 px-4 md:px-4 md:pt-36 md:pb-18 ">
+          <div className="grid grid-cols-2 lg:grid-cols-2 md:gap-12 items-center">
             {/* Left Content */}
-            <div className="text-center lg:text-left">
-              <div className="inline-flex items-center justify-center w-24 h-24 bg-white/20 rounded-full mb-8 backdrop-blur-sm animate-pulse">
-                <span className="text-5xl"></span>
-              </div>
+            <div className=" lg:text-left">
+              
 
-              <h2 className="text-4xl md:text-4xl lg:text-5xl font-bold mb-6 animate-fadeIn">
+              <h2 className="text-xl md:text-2xl lg:text-4xl font-bold mb-2 md:mb-6 animate-fadeIn">
                 <span className="block">Pharmacy &</span>
                 <span className="block bg-gradient-to-r from-cyan-200 to-green-200 bg-clip-text text-transparent">
                   Medicine
@@ -140,29 +110,29 @@ const PharmacyPage = () => {
               </h2>
 
               <p
-                className="text-white/90 text-lg mb-8 max-w-2xl animate-fadeIn"
+                className="text-white/90 text-sm sm:text-base md:mb-8 max-w-2xl animate-fadeIn"
                 style={{ animationDelay: "0.3s" }}
               >
                 Fast, genuine and accessible medication for you and your loved
                 ones.
-                <span className="block mt-2 text-cyan-200 font-medium">
+                <span className="block mt-2 text-cyan-200 ">
                   Available 24/7 with home delivery
                 </span>
               </p>
 
               <div
-                className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center mb-8 animate-fadeIn"
+                className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center md:mb-8 animate-fadeIn"
                 style={{ animationDelay: "0.6s" }}
               >
-                <div className="flex items-center gap-3 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 transform hover:scale-105 transition-all duration-300">
+                <div className="flex items-center gap-3 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 transform hover:scale-105 transition-all duration-300 hidden md:block">
                   <span className="text-green-400 text-xl">✓</span>
                   <span className="text-sm font-medium">Open 24/7</span>
                 </div>
-                <div className="flex items-center gap-3 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 transform hover:scale-105 transition-all duration-300">
+                <div className="flex items-center gap-3 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 transform hover:scale-105 transition-all duration-300 hidden md:block">
                   <span className="text-green-400 text-xl">✓</span>
                   <span className="text-sm font-medium">Home Delivery</span>
                 </div>
-                <div className="flex items-center gap-3 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 transform hover:scale-105 transition-all duration-300">
+                <div className="flex items-center gap-3 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 transform hover:scale-105 transition-all duration-300 hidden md:block">
                   <span className="text-green-400 text-xl">✓</span>
                   <span className="text-sm font-medium">Affordable Rates</span>
                 </div>
@@ -170,14 +140,14 @@ const PharmacyPage = () => {
 
               {/* CTA Buttons */}
               <div
-                className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fadeIn"
+                className="flex flex-col sm:flex-row gap-4  lg:justify-start animate-fadeIn"
                 style={{ animationDelay: "0.9s" }}
               >
                 <a
                   href="https://play.google.com/store/apps/details?id=com.doctors.adda"
                   target="_blank"
                 >
-                  <button className="bg-white text-[#0074b2] font-bold py-4 px-6 rounded-full text-lg hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 shadow-lg cursor-pointer">
+                  <button className="bg-white text-[#0074b2] font-bold mt-2 md:mt-0 md:py-4 md:px-6 py-1 px-2 rounded-full text-xs md:text-base  hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 shadow-lg cursor-pointer">
                     Download App Now
                   </button>
                 </a>
@@ -197,14 +167,14 @@ const PharmacyPage = () => {
                 <img
                   src="https://i.pinimg.com/1200x/22/5f/72/225f7235a14637546d64444531eafee2.jpg"
                   alt="Modern Pharmacy"
-                  className="w-full h-80 object-cover rounded-3xl shadow-2xl"
+                  className="lg:w-full lg:h-80 md:w-full md:h-60 w-full h-50 object-cover rounded-3xl shadow-2xl"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-3xl"></div>
               </div>
 
               {/* Floating Medicine Cards */}
               <div
-                className="absolute -top-6 -left-6 bg-white rounded-2xl p-4 shadow-xl animate-bounce"
+                className="absolute -top-6 -left-6 bg-white rounded-2xl p-4 shadow-xl animate-bounce hidden md:block"
                 style={{ animationDelay: "1s", animationDuration: "3s" }}
               >
                 <div className="flex items-center gap-3">
@@ -228,10 +198,10 @@ const PharmacyPage = () => {
               </div>
 
               <div
-                className="absolute -bottom-6 -right-6 bg-white rounded-2xl p-4 shadow-xl animate-bounce"
+                className="absolute -bottom-6 -right-6 bg-white rounded-2xl p-4 shadow-xl animate-bounce hidden md:block"
                 style={{ animationDelay: "2s", animationDuration: "2.5s" }}
-              >
-                <div className="flex items-center gap-3">
+                >
+                <div className="flex items-center gap-3 ">
                   <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
                     <span className="text-2xl">
                       <img
@@ -252,10 +222,10 @@ const PharmacyPage = () => {
               </div>
 
               <div
-                className="absolute top-1/2 -left-8 bg-white rounded-2xl p-3 shadow-xl animate-bounce"
+                className="absolute top-1/2 -left-8 bg-white rounded-2xl p-3 shadow-xl animate-bounce hidden md:block"
                 style={{ animationDelay: "0.5s", animationDuration: "4s" }}
               >
-                <div className="text-center">
+                <div className="text-center ">
                   <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-2">
                     <span className="text-lg">
                       <img
@@ -281,7 +251,7 @@ const PharmacyPage = () => {
         </div>
 
         {/* Enhanced Wave divider with animation */}
-        <div className="absolute bottom-0 left-0 w-full overflow-hidden">
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden ">
           <svg
             className="relative block w-full h-12 animate-pulse"
             viewBox="0 0 1200 120"
@@ -324,18 +294,18 @@ const PharmacyPage = () => {
       `}</style>
 
       {/* Search and Filters */}
-      <div className="max-w-7xl mx-auto  py-8">
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-gray-100">
-          <div className="flex flex-col md:flex-row gap-4">
-            <input
+      <div className="sm:w-full lg:w-[80%]  xl:w-[80%] 2xl:w-[70%] mx-auto px-2  py-8">
+        <div className="bg-white rounded-2xl shadow-lg p-2 md:p-6 mb-8 border border-gray-100">
+          <div className="flex flex-row items-center md:flex-row gap-4">
+            <input 
               type="text"
               placeholder="Search by name or location..."
-              className="w-full pl-4 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+              className=" w-full pl-4 pr-4 md:py-3 py-1 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
             <select
-              className="bg-white border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+              className="bg-white border border-gray-300 rounded-xl px-4 md:py-3 py-1 pr-8 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
             >
@@ -349,7 +319,7 @@ const PharmacyPage = () => {
 
         {/* Results */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-3xl font-bold text-gray-800 text-center text-gray-800 mb-10">
+          <h2 className="text-xl  md:text-2xl lg:text-3xl font-bold text-gray-800 text-center text-gray-800">
             Available{" "}
             <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
               Pharmacies{" "}
@@ -389,8 +359,8 @@ const PharmacyPage = () => {
 
       {/* why choose us */}
       {/* Why Choose Section */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <h2 className="text-3xl font-bold text-gray-800 text-center text-gray-800 mb-10">
+      <div className="sm:w-full lg:w-[80%]  xl:w-[80%] 2xl:w-[70%] mx-auto px-4 md:py-8">
+        <h2 className="text-xl  md:text-2xl lg:text-3xl font-bold text-gray-800 text-center text-gray-800 md:mb-10">
           Why Choose{" "}
           <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
             Our Pharmacy Services?
