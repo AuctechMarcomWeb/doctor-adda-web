@@ -69,7 +69,7 @@ const Home = () => {
       {/* <HealthScansSection/> */}
       <DoctorAddaLanding />
       <WhyChooseUs />
-      <Carousel />
+      {/* <Carousel /> */}
       <AboutUsSection />
       {/* <TestimonialsSection/> */}
       
