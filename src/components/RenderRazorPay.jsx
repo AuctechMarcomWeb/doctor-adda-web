@@ -12,7 +12,7 @@ const loadScript = (src) =>
     document.body.appendChild(script);
   });
 
-const RenderRazorPay = ({ orderId, currency, amount, setUpdateStatus }) => {
+const RenderRazorPay = ({ orderId, currency, amount, setUpdateStatus, onPaymentSuccess }) => {
   const rzp1 = useRef(null);
 
   const displayRazorpay = async () => {
@@ -23,13 +23,16 @@ const RenderRazorPay = ({ orderId, currency, amount, setUpdateStatus }) => {
     }
 
     const options = {
-key: 'rzp_test_wHiuJBhFZCkHSf', // Your Razorpay key
+     key: 'rzp_test_wHiuJBhFZCkHSf', // Your Razorpay key
        amount,
       currency,
       name: "QuickBid Systems Pvt. Ltd",
       order_id: orderId,
       handler: function (response) {
         console.log("Payment success:", response);
+        if (onPaymentSuccess) {
+          onPaymentSuccess(response);
+        }
         setUpdateStatus(true); // move to next step
       },
       modal: {
