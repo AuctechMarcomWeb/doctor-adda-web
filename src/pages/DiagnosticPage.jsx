@@ -271,14 +271,14 @@ const DiagnosticPage = () => {
           />
         </div>
 
-        <div className="relative sm:w-full lg:w-[80%] xl:w-[80%] 2xl:w-[70%] mx-auto px-6 py-24">
+        <div className="relative sm:w-full lg:w-[80%] xl:w-[80%] 2xl:w-[70%] mx-auto px-4 pt-6 pb-14  md:px-6 md:pt-24 md:pb-22">
           <div className="grid grid-cols-2 md:gap-16 items-center">
             {/* Left Content - Enhanced with Animations */}
-            <div className="text-white space-y-8 animate-slide-left">
+            <div className="text-white space-y-4 md:space-y-8 animate-slide-left">
               
 
               {/* Main Heading */}
-              <div className="space-y-4">
+              <div className="">
                 <h2 className="text-xl md:text-2xl lg:text-4xl font-bold leading-tight">
                   <span className="block animate-fade-up">Diagnostic</span>
                   <span
@@ -292,19 +292,26 @@ const DiagnosticPage = () => {
 
               {/* Description */}
               <p
-                className="text-white/90 text-sm sm:text-base leading-relaxed max-w-2xl animate-fade-up"
+                className="text-white/90 text-sm sm:text-base leading-relaxed max-w-2xl animate-fade-up hidden md:block"
                 style={{ animationDelay: "0.6s" }}
               >
                 Experience world-class diagnostic services with cutting-edge
                 technology, expert medical professionals, and comprehensive
                 health solutions tailored for your needs.
               </p>
+              <p
+                className="text-white/90 text-sm sm:text-base leading-relaxed max-w-2xl animate-fade-up  md:hidden"
+                style={{ animationDelay: "0.6s" }}
+              >
+                Experience world-class diagnostic services with cutting-edge
+                technology.
+              </p>
 
               {/* Enhanced Stats Grid */}
 
               {/* CTA Buttons */}
               <div
-                className="flex flex-col sm:flex-row gap-4 pt-6 animate-fade-up"
+                className="flex flex-col sm:flex-row gap-4 md:pt-6 animate-fade-up"
                 style={{ animationDelay: "1.6s" }}
               >
                 <button className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-bold py-4 px-8 rounded-full text-xs md:text-base transition-all duration-300 transform hover:scale-105 animate-pulse-glow cursor-pointer hidden md:block">
@@ -331,13 +338,13 @@ const DiagnosticPage = () => {
 
               {/* Main Image Container */}
               <div className="relative z-10">
-                <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 animate-pulse-glow">
+                <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-2 md:p-8 animate-pulse-glow">
                   {/* Primary Diagnostic Image */}
-                  <div className="relative overflow-hidden rounded-2xl mb-6">
+                  <div className="relative overflow-hidden rounded-2xl md:mb-6">
                     <img
                       src="https://i.pinimg.com/736x/01/39/fc/0139fcb41a7ffb94ee6a3cb21b709116.jpg"
                       alt="Modern Diagnostic Equipment"
-                      className="w-full h-64 object-cover transform hover:scale-110 transition-transform duration-700"
+                      className="w-full h-32 md:h-64 object-cover transform hover:scale-110 transition-transform duration-700"
                     />
                     <div className=""></div>
 
@@ -346,7 +353,7 @@ const DiagnosticPage = () => {
                       <Stethoscope className="w-6 h-6 text-blue-600" />
                     </div>
                     <div
-                      className="absolute bottom-4 left-4 bg-green-400/90 rounded-full p-3 animate-float"
+                      className="absolute bottom-4 left-4 bg-green-400/90 rounded-full p-3 animate-float "
                       style={{ animationDelay: "2s" }}
                     >
                       <Heart className="w-6 h-6 text-white" />
@@ -403,7 +410,7 @@ const DiagnosticPage = () => {
           <svg
             viewBox="0 0 1200 120"
             preserveAspectRatio="none"
-            className="w-full h-12 fill-white"
+            className="w-full md:h-12 h-8 fill-white"
           >
             <path
               d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z"
@@ -419,11 +426,12 @@ const DiagnosticPage = () => {
       </div>
 
       {/* Rest of the component stays the same... */}
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="sm:w-full lg:w-[80%]  xl:w-[80%] 2xl:w-[70%] mx-auto px-6 py-8">
         {/* Search and Filter Section */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-gray-100">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1 relative">
+        <div className="bg-white rounded-2xl shadow-lg p-2 md:p-6 mb-8 border border-gray-100">
+          <div className="flex flex-row items-center md:flex-row gap-4">
+           {/* Search Bar */}
+            <div className="flex-1 relative ">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <svg
                   className="h-5 w-5 text-gray-400"
@@ -442,35 +450,27 @@ const DiagnosticPage = () => {
               <input
                 type="text"
                 placeholder="Search by name or location..."
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+                className="w-full pl-10 pr-4 md:py-3 py-1 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-
+            
+            {/* Filter Dropdown */}
             <div className="relative">
               <select
-                className="appearance-none bg-white border border-gray-300 rounded-xl px-4 py-3 pr-8 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+                className="appearance-none bg-white border border-gray-300 rounded-xl px-4 md:py-3 py-1 pr-8 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
                 value={filterType}
                 onChange={(e) => setFilterType(e.target.value)}
               >
                 <option value="all">All Types</option>
+                <option value="icu">ICU</option>
+                <option value="emergency">Emergency</option>
                 <option value="24/7">24/7</option>
-                <option value="non-emergency">Non-Emergency</option>
               </select>
               <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                <svg
-                  className="h-4 w-4 text-gray-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
+                <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
             </div>
@@ -479,10 +479,10 @@ const DiagnosticPage = () => {
 
         {/* Results Header */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-800">
-            Available Diagnostics
-            <span className="ml-2 text-lg text-gray-500">
-              ({filteredData.length})
+          <h2 className="text-xl  md:text-2xl lg:text-3xl font-bold text-gray-800 text-center text-gray-800">
+            Available{" "}
+            <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+              Diagnostic{" "}
             </span>
           </h2>
           <div className="flex items-center gap-2 text-sm text-gray-600">
@@ -519,8 +519,8 @@ const DiagnosticPage = () => {
 
       {/* WHY CHOOSE US */}
       {/* Why Choose Us Section */}
-      <div className="max-w-7xl mx-auto px-6 py-16">
-        <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12 animate-fade-up">
+      <div className="sm:w-full lg:w-[80%]  xl:w-[80%] 2xl:w-[70%] mx-auto px-6 py-16">
+        <h2 className="text-xl  md:text-2xl lg:text-3xl font-bold text-center text-gray-800 mb-12 animate-fade-up">
           Why Choose <span className="gradient-text">Our Diagnostics</span>?
         </h2>
 
