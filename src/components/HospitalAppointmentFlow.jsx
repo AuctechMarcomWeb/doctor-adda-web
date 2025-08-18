@@ -14,6 +14,7 @@ import {
 import { getRequest, postRequest } from "../Helpers";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import RenderRazorPay from "./RenderRazorPay";
 
 const HospitalAppointmentFlow = ({ open, onClose, slotDetails, doctorType }) => {
   const [step, setStep] = useState(1);
@@ -27,9 +28,51 @@ const HospitalAppointmentFlow = ({ open, onClose, slotDetails, doctorType }) => 
   const [otherpatients, setOtherpatients] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(null);
 
-  console.log("  selectedPatient ======", selectedPatient)
+  const [payementInfo, setPayementInfo] = useState(null);
 
-  const { userProfileData } = useSelector((state) => state.user);
+  // Payment verification effect
+  useEffect(() => {
+    const verifyPayment = async () => {
+      if (
+        payementInfo &&
+        payementInfo.razorpay_order_id &&
+        payementInfo.razorpay_payment_id &&
+        payementInfo.razorpay_signature
+      ) {
+        try {
+          const res = await postRequest({
+            url: 'hospitalAppointment/verifyPayment',
+            cred: {
+              razorpay_order_id: payementInfo.razorpay_order_id,
+              razorpay_payment_id: payementInfo.razorpay_payment_id,
+              razorpay_signature: payementInfo.razorpay_signature,
+            },
+          });
+          console.log('Payment verification response:', res);
+          toast.success('Payment verified successfully!');
+          setStep(4); 
+          close();
+        } catch (error) {
+          console.error('Payment verification failed:', error);
+          toast.error(error?.response?.data?.message || 'Payment verification failed');
+        }
+      }
+    };
+    verifyPayment();
+  }, [payementInfo]);
+
+
+  console.log("paymentInfo   :", payementInfo);
+
+
+    // Razorpay state
+    const [showRazorpay, setShowRazorpay] = useState(false);
+    const [orderId, setOrderId] = useState("");
+
+    console.log( "  orderId ======", orderId )
+    console.log( "  showRazorpay ======", showRazorpay )
+
+  const { userProfileData } = useSelector( (state) => state.user );
   const userId = userProfileData?._id;
   console.log("  userId   :", userId)
   const navigate = useNavigate();
@@ -73,26 +116,117 @@ const HospitalAppointmentFlow = ({ open, onClose, slotDetails, doctorType }) => 
     return start || "";
   };
 
-  // Data derived from confirmed appointment (fallbacks to selection)
-  const dummyData = {
-    doctorName: slotDetails?.doctor?.name || "Doctor",
-    specialization: slotDetails?.specialization || slotDetails?.doctorId?.category?.name || "General",
-    hospitalName: appointmentConfirmData?.hospital?.name || slotDetails?.hospitalDetails?.name || "N/A",
-    hospitalAddress: appointmentConfirmData?.hospital?.address || slotDetails?.hospitalDetails?.address || "",
-    selectedDate: formatDateLabel(appointmentConfirmData?.date || slotDetails?.date),
-    selectedTime: formatTimeRange(
-      appointmentConfirmData?.slots?.startTime || deriveSelectedSlot()?.startTime || slotDetails?.time,
-      appointmentConfirmData?.slots?.endTime || deriveSelectedSlot()?.endTime || ""
-    ),
-    consultationFee: appointmentConfirmData?.fee ?? slotDetails?.doctor?.fee,
-    appointmentId: appointmentConfirmData?.appointmentId || ("APT" + Math.random().toString(36).substr(2, 9).toUpperCase()),
-    patient: {
-      name: appointmentConfirmData?.patientId?.name || "",
-      gender: appointmentConfirmData?.patientId?.gender || "",
-      phone: appointmentConfirmData?.patientId?.phone || "",
-    },
-    isSelf: typeof appointmentConfirmData?.isSelf === "boolean" ? appointmentConfirmData.isSelf : selectedFor === "self",
-  };
+ const dummyData = {
+  doctorName: slotDetails?.doctor?.name || "Doctor",
+  specialization:
+    slotDetails?.specialization ||
+    slotDetails?.doctorId?.category?.name ||
+    "General",
+  hospitalName:
+    appointmentConfirmData?.hospital?.name ||
+    slotDetails?.hospitalDetails?.name ||
+    "N/A",
+  hospitalAddress:
+    appointmentConfirmData?.hospital?.address ||
+    slotDetails?.hospitalDetails?.address ||
+    "",
+  selectedDate: formatDateLabel(
+    appointmentConfirmData?.date || slotDetails?.date
+  ),
+  selectedTime: formatTimeRange(
+    appointmentConfirmData?.slots?.startTime ||
+      deriveSelectedSlot()?.startTime ||
+      slotDetails?.time,
+    appointmentConfirmData?.slots?.endTime ||
+      deriveSelectedSlot()?.endTime ||
+      ""
+  ),
+  consultationFee:
+    appointmentConfirmData?.fee ?? slotDetails?.doctor?.fee,
+  appointmentId:
+    appointmentConfirmData?.appointmentId ||
+    "APT" +
+      Math.random().toString(36).substr(2, 9).toUpperCase(),
+
+  // 👇 Patient details based on selectedFor
+  patient:
+    selectedFor === "self"
+      ? {
+          name:
+            appointmentConfirmData?.patientId?.name ||
+            patientName ||
+            "Not specified",
+          age: appointmentConfirmData?.patientId?.age || "",
+          gender: appointmentConfirmData?.patientId?.gender || "",
+          phone: appointmentConfirmData?.patientId?.phone || "",
+        }
+      : {
+          name: selectedPatient?.name || "Not specified",
+          age: selectedPatient?.age || "",
+          gender: selectedPatient?.gender || "",
+          phone: selectedPatient?.phone || "",
+        },
+
+  isSelf:
+    typeof appointmentConfirmData?.isSelf === "boolean"
+      ? appointmentConfirmData.isSelf
+      : selectedFor === "self",
+};
+
+  // Razorpay integration
+  const handlePayOnline = async () => {
+      if (!selectedPayment || selectedPayment !== "online") return;
+      const hospitalId = slotDetails?.hospitalDetails?._id;
+      const doctor = slotDetails?.doctor || {};
+      const selectedSlot = deriveSelectedSlot();
+  try {
+      const payload = {
+        hospital: hospitalId,
+        doctorType: doctorType, // "Internal" | "Registered"
+        // doctor id depending on type
+        ...(doctorType === "Internal"
+          ? { internalDoctorId: doctor?._id }
+          : { registeredDoctorId: doctor?._id }),
+        patientId: userId,
+        fee: doctor?.fee,
+        isSelf: selectedFor === "self",
+        ...(selectedFor === "other"
+          ? {
+              otherPatientDetails: {
+                name: patientName || "",
+                age: 22,
+                gender: patientGender || "",
+                type: "Relative",
+              },
+            }
+          : {}),
+        date: slotDetails?.date ? new Date(slotDetails.date).toISOString() : new Date().toISOString(),       
+        slots: {
+          startTime: selectedSlot?.startTime || "",               
+          endTime: selectedSlot?.endTime || "",                   
+        }
+      };
+
+    const res = await postRequest({
+      url: `hospitalAppointment/payment`,
+      cred: 
+       payload
+      
+    });
+    console.log("payment success: data ", res.data?.data?.orderId);
+
+    
+    if (res && res.data?.data?.orderId) {
+      setOrderId(res.data?.data?.orderId);
+      console.log("orderId data",res.data);
+      
+      setShowRazorpay(true);
+    }
+  } catch (error) {
+    console.error("Error creating order:", error);
+    toast.error(error?.response?.data?.message || "Failed to initiate payment");
+  }
+};
 
   const handleClose = () => {
     setStep(1);
@@ -238,6 +372,7 @@ const HospitalAppointmentFlow = ({ open, onClose, slotDetails, doctorType }) => 
                          setPatientName(p?.name || "");
                          setPatientGender(p?.gender || "");
                          setPatientPhone(p?.phone || "");
+                        
                        }}
                      >
                        {p.name} , {p.gender}, {p.age}
@@ -258,7 +393,7 @@ const HospitalAppointmentFlow = ({ open, onClose, slotDetails, doctorType }) => 
                   Cancel
                 </button>
 
-                <button
+                {/* <button
                   onClick={() => {
                     if (selectedFor === "self") {
                       setStep(2);
@@ -277,6 +412,52 @@ const HospitalAppointmentFlow = ({ open, onClose, slotDetails, doctorType }) => 
                     ? "Continue as Self"
                     : "Manage Patients"}
                 </button>
+
+                {selectedFor === "other" && (
+                  <button >
+                    Continue as Other
+                  </button>)} */}
+
+
+                     {/* Buttons logic: */}
+                {selectedFor === "self" && (
+                  <button
+                    onClick={() => setStep(2)}
+                    disabled={!selectedFor}
+                    className={`w-full px-4 py-3 font-medium rounded-lg transition-all duration-200 ${
+                      selectedFor
+                        ? "bg-[#006fab] hover:bg-blue-700 text-white"
+                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    }`}
+                  >
+                    Continue as Self
+                  </button>
+                )}
+
+                {selectedFor === "other" && (
+                  <>
+                    {selectedPatient ? (
+                      // If patient selected, show Continue button
+                      <button
+                        onClick={() => setStep(2)}
+                        className="w-full px-4 py-3 bg-[#006fab] hover:bg-blue-700 text-white font-medium rounded-lg transition-all duration-200"
+                      >
+                        Continue as Other
+                      </button>
+                    ) : (
+                      // No patient selected, show Manage Patients button
+                      <button
+                        onClick={() => {
+                          onClose();
+                          onOpenManagePatients();
+                        }}
+                        className="w-full px-4 py-3 bg-gray-300 text-gray-700 font-medium rounded-lg transition-all duration-200 hover:bg-gray-400"
+                      >
+                        Manage Patients
+                      </button>
+                    )}
+                  </>
+                )}
 
               </div>
             </>
@@ -308,7 +489,27 @@ const HospitalAppointmentFlow = ({ open, onClose, slotDetails, doctorType }) => 
                 ))}
               </div>
 
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-4">
+              <button
+                  onClick={() => {
+                    if (selectedPayment === "clinic") {
+                      setStep(3); // Diagnostics payment → directly go to step 3
+                    } else if (selectedPayment === "online") {
+                      console.log("Pay Online");
+                      // Yaha payment gateway ka code aa sakta hai
+                      handlePayOnline();
+                    }
+                  }}
+                  disabled={!selectedPayment}
+                  className={`w-full px-4 py-3 font-medium rounded-lg transition-all duration-200 ${
+                    selectedPayment
+                      ? "bg-[#006fab] hover:bg-blue-700 text-white"
+                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  }`}
+                >
+                  Continue
+                </button>
+
+              {/* <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-4">
                 <div className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-green-600" />
                   <span className="text-sm text-green-800">
@@ -336,7 +537,7 @@ const HospitalAppointmentFlow = ({ open, onClose, slotDetails, doctorType }) => 
                 >
                   Continue
                 </button>
-              </div>
+              </div> */}
             </>
           )}
 
@@ -466,13 +667,13 @@ const HospitalAppointmentFlow = ({ open, onClose, slotDetails, doctorType }) => 
                 </h4>
                 <div className="space-y-1 text-sm text-gray-700">
                   <p>
-                    <strong>Name:</strong> {dummyData.patient?.name || "User"}
+                    <strong>Name:</strong> {dummyData.patient?.name }
                   </p>
                   <p>
-                    <strong>Gender:</strong> {dummyData.patient?.gender || "User"}
+                    <strong>Gender:</strong> {dummyData.patient?.gender }
                   </p>
                   <p>
-                    <strong>Contact:</strong> {dummyData.patient?.phone || "User"}
+                    <strong>Contact:</strong> {dummyData.patient?.phone }
                   </p>
                 </div>
               </div>
@@ -517,6 +718,22 @@ const HospitalAppointmentFlow = ({ open, onClose, slotDetails, doctorType }) => 
               </div>
             </div>
           )}
+
+            {/* Razorpay Component */}
+                    {showRazorpay && orderId && (
+                      <RenderRazorPay
+                        orderId={orderId}
+                        currency="INR"
+                        amount={slotDetails?.doctor?.fee * 100 || 0} // paisa
+                        setUpdateStatus={() => {
+                          setStep(3); // payment success → next step
+                          setShowRazorpay(false);
+                        }}
+                        onPaymentSuccess={(response) => {
+                        setPayementInfo(response);
+                        }}
+                      />
+                    )}
           
         </Dialog.Panel>
       </div>
