@@ -54,6 +54,7 @@ const HospitalPage = () => {
   return (
 
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
+
       {/* Hero Banner */}
       {/* Enhanced Hero Banner */}
       <div className="relative text-white overflow-hidden" style={{
@@ -383,6 +384,7 @@ const HospitalPage = () => {
 
         </div>
       </div>
+
     </div>
 
   );

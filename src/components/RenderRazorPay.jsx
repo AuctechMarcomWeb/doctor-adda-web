@@ -23,7 +23,7 @@ const RenderRazorPay = ({ orderId, currency, amount, setUpdateStatus }) => {
     }
 
     const options = {
-key: 'rzp_test_wHiuJBhFZCkHSf', // Your Razorpay key
+     key: 'rzp_test_wHiuJBhFZCkHSf', // Your Razorpay key
        amount,
       currency,
       name: "QuickBid Systems Pvt. Ltd",
