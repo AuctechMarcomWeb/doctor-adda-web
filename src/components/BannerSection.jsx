@@ -55,10 +55,16 @@ const BannerSection = () => {
       <div className="max-w-7xl  py-2 sm:py-12 ">
         <h2 className="text-lg md:text-4xl font-bold">Your Health,One Tap Away</h2>
 
-        <div className="flex items-center gap-4 mt-6">
+        <div className="flex items-center gap-4 md:mt-6">
           <span className="hidden sm:grid text-3xl text-xl flex items-center font-bold">
             Smart Healthcare Access – Anytime, Anywhere
           </span>
+          <p
+                className="text-white/90 text-sm sm:text-base mb-2 mt-2  leading-relaxed animate-fade-in-up md:hidden "
+                style={{ animationDelay: "0.5s" }}
+              >
+               Connect with world-class doctors.
+              </p>
           <button className="hidden sm:grid bg-Blue-400 border text-xs md:text-base border-white text-white font-semibold px-4 py-2 rounded-lg hover:bg-white hover:text-[#0074b2] transition cursor-pointer">
             Book Now
           </button>
@@ -121,7 +127,7 @@ const BannerSection = () => {
           </div>
         </div>
 
-        <div className=" flex items-center gap-4 md:mt-6  mt-2">
+        <div className=" flex items-center gap-4 md:mt-6  md:mb-0 mt-2 mb-2">
           <button className="hidden sm:grid bg-Blue-400 border border-white text-white font-semibold px-4 py-2 rounded-lg hover:bg-white hover:text-[#0074b2] transition cursor-pointer">
             Book Appointment
           </button>
