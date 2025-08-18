@@ -11,6 +11,7 @@ import {
 } from "react-icons/fa";
 import { useEffect } from "react";
 import { getRequest } from "../Helpers/index";
+import banner from "../assets/1.jpg";
 
 const BannerSection = () => {
   const [searchResults, setSearchResults] = useState([]);
@@ -135,8 +136,8 @@ const BannerSection = () => {
       {/* Right Image */}
       <div className="md:w-1/3 mt-6 md:mt-0 md:mb-0 mb-6">
         <img
-          src="https://images.unsplash.com/photo-1581056771107-24ca5f033842?w=400&h=300&fit=crop"
-          alt="Health Package Promotion"
+          src={banner}
+          alt="banner"
           className="w-full max-h-80 object-contain rounded-2xl shadow-lg"
         />
       </div>
