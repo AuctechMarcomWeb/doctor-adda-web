@@ -52,7 +52,7 @@ const [updateStatus, setUpdateStatus] = useState(false);
   };
 
   return (
-    <div className="max-w-7xl mx-auto  py-10 space-y-8 pt-40">
+    <div className="sm:w-full lg:w-[80%]  xl:w-[80%] 2xl:w-[70%] mx-auto  py-10 space-y-8 pt-24 md:pt-40 ">
       {/* Heading */}
       <div className="flex flex-col md:flex-row gap-4 items-stretch">
         {/* Left Side - Image */}
@@ -60,7 +60,7 @@ const [updateStatus, setUpdateStatus] = useState(false);
           <img
             src={ambulance?.profilepic || "N/A"}
             alt="Ambulance"
-            className="w-full h-130 object-cover object-center"
+            className="w-full h-70 md:h-130  object-cover object-center"
           />
         </div>
 
@@ -77,43 +77,43 @@ const [updateStatus, setUpdateStatus] = useState(false);
           </div>
 
           <div className="bg-white rounded-xl shadow-md p-5 grid grid-cols-2 gap-4 text-sm text-gray-700">
-            <p>
-              <strong>Price:</strong> {ambulance?.price || "N/A"}
+            <p className="">
+              <strong  className="text-[#00679f]">Price:</strong> {ambulance?.price || "N/A"}
             </p>
             <p>
-              <strong>Capacity:</strong> {ambulance?.capacity || "N/A"} Patients
+              <strong  className="text-[#00679f]">Capacity:</strong> {ambulance?.capacity || "N/A"} Patients
             </p>
             <p>
-              <strong>Status:</strong>{" "}
+              <strong className="text-[#00679f]">Status:</strong>{" "}
               <span className="text-green-600 font-medium">
                 {ambulance?.availabilityStatus || "N/A"}
               </span>
             </p>
             <p>
-              <strong>Approval:</strong>{" "}
+              <strong  className="text-[#00679f]">Approval:</strong>{" "}
               <BadgeCheck className="inline w-4 h-4 text-blue-500" />{" "}
               {ambulance?.isApprove || "N/A"}
             </p>
             <p>
-              <strong>Operating Hours:</strong>{" "}
+              <strong  className="text-[#00679f]">Operating Hours:</strong>{" "}
               {ambulance?.operatingHours || "N/A"}
             </p>
           </div>
 
           <div className="bg-white rounded-xl shadow-md p-5 space-y-2 text-sm">
             <p>
-              <strong>Driver:</strong> {ambulance?.driverInfo?.name || "N/A"}
+              <strong className="text-[#00679f]">Driver:</strong> {ambulance?.driverInfo?.name || "N/A"}
             </p>
             <p>
-              <strong>Mobile No:</strong>{" "}
+              <strong className="text-[#00679f]">Mobile No:</strong>{" "}
               {ambulance?.driverInfo?.mobile || "N/A"}{" "}
             </p>
             <p>
-              <strong>License No:</strong>{" "}
+              <strong className="text-[#00679f]">License No:</strong>{" "}
               {ambulance?.driverInfo?.licenseNumber || "N/A"}
             </p>
             <p>
-              <strong>Emergency Contact:</strong>{" "}
+              <strong className="text-[#00679f]">Emergency Contact:</strong>{" "}
               {ambulance?.driverInfo?.emergencyContact || "N/A"}
             </p>
           </div>
@@ -121,35 +121,11 @@ const [updateStatus, setUpdateStatus] = useState(false);
           <div className="bg-white rounded-xl shadow-md p-4">
             <button
               onClick={handleClick}
-              className="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition duration-200 text-sm font-medium flex justify-center items-center gap-2"
+              className="w-full bg-[#9f004e] text-white py-2 rounded-lg hover:bg-red-700 transition duration-200 text-sm font-medium flex justify-center items-center gap-2"
             >
               <PhoneCall className="w-4 h-4" /> Call Now
             </button>
-            {/* {showFallback && !isMobile && (
-        <div className="absolute top-full mt-2 bg-white border border-gray-300 rounded-lg shadow-lg p-3 z-50 w-64">
-          <p className="text-sm mb-2">Call failed. Try using:</p>
-          <button
-            onClick={() => (window.location.href = `msteams://call/0/${phoneNumber}`)}
-            className="w-full text-left px-3 py-2 rounded hover:bg-gray-100"
-          >
-            📞 Microsoft Teams
-          </button>
-          <button
-            onClick={() => (window.location.href = `skype:${phoneNumber}?call`)}
-            className="w-full text-left px-3 py-2 rounded hover:bg-gray-100"
-          >
-            📞 Skype
-          </button>
-          <button
-            onClick={() =>
-              window.open(`https://wa.me/${phoneNumber.replace(/\D/g, "")}`, "_blank")
-            }
-            className="w-full text-left px-3 py-2 rounded hover:bg-gray-100"
-          >
-            💬 WhatsApp Web
-          </button>
-        </div>
-      )} */}
+            
           </div>
         </div>
       </div>
@@ -185,7 +161,7 @@ const [updateStatus, setUpdateStatus] = useState(false);
         {activeTab === "about" && (
           <div className="space-y-4 text-sm text-gray-700 leading-relaxed">
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">
+              <h3 className="text-lg font-semibold text-[#00679f] mb-3">
                 About {ambulance?.name || "N/A"}
               </h3>
               <p className="text-gray-700 text-justify">
@@ -201,10 +177,10 @@ const [updateStatus, setUpdateStatus] = useState(false);
         {/* Review Section */}
         {activeTab === "review" && (
           <div className="space-y-8">
-            <div className="flex items-center justify-between w-full">
+            <div className="flex  justify-between  w-full">
               {/* Left side: Reviews */}
               <div className="text-left">
-                <h3 className="text-3xl font-bold text-gray-900 mb-4">
+                <h3 className="text-lg font-semibold text-[#00679f] mb-3">
                   What Our Patients Say
                 </h3>
                 <div className="flex items-center gap-2 mb-4">
@@ -214,27 +190,27 @@ const [updateStatus, setUpdateStatus] = useState(false);
                       if (i + 1 <= rating) {
                         // Full star
                         return (
-                          <Star key={i} className="w-6 h-6 fill-current" />
+                          <Star key={i} className="w-4 h-4 md:w-6 md:h-6 fill-current" />
                         );
                       } else if (i < rating && rating < i + 1) {
                         // Half star
                         return (
-                          <StarHalf key={i} className="w-6 h-6 fill-current" />
+                          <StarHalf key={i} className="md:w-6 md:h-6 fill-current" />
                         );
                       } else {
                         // Empty star
                         return (
-                          <Star key={i} className="w-6 h-6 text-gray-300" />
+                          <Star key={i} className="md:w-6 md:h-6 text-gray-300" />
                         );
                       }
                     })}
                   </div>
 
-                  <span className="text-2xl font-bold text-gray-900 ml-2">
+                  <span className="text-xs md:text-base font-bold text-gray-900 ml-2">
                     {ambulance?.averageRating?.toFixed(1) || "0.0"}
                   </span>
 
-                  <span className="ml-2 text-gray-500 text-sm">
+                  <span className="ml-2 text-gray-500 text-xs md:text-base">
                     ({ambulance?.reviews?.length || 0} reviews)
                   </span>
                 </div>
@@ -243,7 +219,7 @@ const [updateStatus, setUpdateStatus] = useState(false);
               <div className="text-right">
                 <button
                   onClick={() => setShowReviewPopup(true)}
-                  className="group bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-8 py-4 rounded-full hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 font-semibold flex items-center gap-3 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                  className="group bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-2 py-2 md:px-8 md:py-4 rounded-full hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 text-xs md:text-base font-semibold flex items-center gap-1 md:gap-3 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                 >
                   <PlusCircle className="w-5 h-5 group-hover:animate-spin" />
                   Share Your Experience
@@ -264,7 +240,7 @@ const [updateStatus, setUpdateStatus] = useState(false);
                           "https://ui-avatars.com/api/?name=Anonymous&background=random"
                         }
                         alt={review?.user?.name}
-                        className="w-16 h-16 rounded-full object-cover border-4 border-white shadow-lg"
+                        className="h-12 w-12  md:w-16 md:h-16 rounded-full object-cover border-4 border-white shadow-lg"
                       />
                       <div className="absolute -bottom-1 -right-1 bg-blue-500 rounded-full p-1">
                         <BadgeCheck className="w-4 h-4 text-white" />
@@ -273,14 +249,14 @@ const [updateStatus, setUpdateStatus] = useState(false);
 
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-3">
-                        <h4 className="font-bold text-gray-900 text-lg">
+                        <h4 className="font-bold text-sm text-gray-900 ">
                           {review?.user?.name}
                         </h4>
                         <div className="flex text-yellow-400">
                           {[...Array(5)].map((_, i) => (
                             <Star
                               key={i}
-                              className={`w-5 h-5 ${
+                              className={`w-4 h-4 md:w-5 md:h-5 ${
                                 i < review.rating
                                   ? "fill-current"
                                   : "text-gray-300"
@@ -289,7 +265,7 @@ const [updateStatus, setUpdateStatus] = useState(false);
                           ))}
                         </div>
                       </div>
-                      <p className="text-gray-700 leading-relaxed italic">
+                      <p className="text-xs md:text-base text-gray-700 leading-relaxed italic">
                         "{review?.comment}"
                       </p>
                     </div>
