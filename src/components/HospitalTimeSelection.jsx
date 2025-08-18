@@ -9,6 +9,7 @@ const HospitalTimeSelection = ({ isOpen, onClose, slotDetails, onSlotSelected })
   const [selectedTime, setSelectedTime] = useState(null);
 
   console.log('time selection slotDetails :', slotDetails)
+  
   // const navigate = useNavigate()
   // const isLoggedIn = useSelector((state) => state.user.isLoggedIn)
 

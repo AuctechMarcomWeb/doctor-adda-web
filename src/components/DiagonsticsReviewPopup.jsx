@@ -76,7 +76,7 @@ const DiagonsticsReviewPopup = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md relative">
+      <div className="bg-white rounded-xl shadow-2xl p-8 w-sm md:w-md  relative">
         <button
           className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-xl"
           onClick={onClose}
@@ -84,14 +84,14 @@ const DiagonsticsReviewPopup = ({
         >
           &times;
         </button>
-        <h2 className="text-2xl font-bold mb-4 text-gray-900">
+        <h2 className="text-lg md:text-2xl font-bold mb-4 text-gray-900">
           Add Your Review
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Rating */}
           <div>
-            <label className="block mb-2 font-medium text-gray-700">
+            <label className="block mb-2 text-base  md:text-lg font-medium text-gray-700">
               Rating
             </label>
             <div className="flex gap-2">
@@ -114,7 +114,7 @@ const DiagonsticsReviewPopup = ({
 
           {/* Comment */}
           <div>
-            <label className="block mb-1 font-medium text-gray-700">
+            <label className="block mb-1 text-base md:text-lg font-medium text-gray-700">
               Comment
             </label>
             <textarea
