@@ -15,7 +15,9 @@ import {
 } from "lucide-react";
 import { getRequest, postRequest } from "../Helpers";
 import { useSelector } from "react-redux";
-
+import RenderRazorPay from "../components/RenderRazorPay";
+import toast from "react-hot-toast";
+ 
 const AppointmentFlow = ({
   open,
   onClose,
@@ -45,7 +47,7 @@ const AppointmentFlow = ({
   const otherPatients = patients.length > 0 ? patients : otherPatientDetails;
 
   // Extract appointment data
-  const { appointmentId, slots } = appointmentData || {};
+  const { appointmentId, slots, status } = appointmentData || {};
 
   // Show patient info based on selectedFor
   const isSelf = selectedFor === "self";
@@ -56,6 +58,12 @@ const AppointmentFlow = ({
         phone: userProfileData?.phone,
       }
     : otherPatientDetails;
+
+  //payment state
+  // Razorpay state
+  const [showRazorpay, setShowRazorpay] = useState(false);
+  const [orderId, setOrderId] = useState("");
+  const [paymentLoading, setPaymentLoading] = useState(false);
 
   const handleConfirmBooking = async () => {
     setLoading(true);
@@ -71,13 +79,12 @@ const AppointmentFlow = ({
       });
       console.log("Booking confirmed", res?.data?.data);
       setDoctor(res?.data?.data);
-      setBookingData(res?.data?.data);   // ✅ store complete booking details
+      setBookingData(res?.data?.data); // ✅ store complete booking details
       setStep(4);
     } catch (error) {
       console.log("Error booking appointment", error);
-    }
-    finally{
-      setLoading(false);//stop loader
+    } finally {
+      setLoading(false); //stop loader
     }
   };
 
@@ -116,6 +123,80 @@ const AppointmentFlow = ({
         console.log("error", error);
       });
   }, [id]);
+
+  // Razorpay integration
+  const handlePayOnline = async () => {
+    if (!selectedPayment || selectedPayment !== "online") return;
+    setPaymentLoading(true); // start loader
+    try {
+      const res = await postRequest({
+        url: `appointment/payment`,
+        cred: {
+          ...appointmentData,
+        },
+      });
+      console.log("payment success:", res?.data?.data?.appointment);
+
+      const orderIdFromApi = res?.data?.data?.orderId; // ✅ adjust according to API
+      if (orderIdFromApi) {
+        setOrderId(orderIdFromApi);
+
+        console.log("orderId", orderIdFromApi);
+
+        setShowRazorpay(true);
+      }
+    } catch (error) {
+      console.error("Error creating order:", error);
+      toast.error(
+        error?.response?.data?.message || "Failed to initiate payment"
+      );
+      setPaymentLoading(false); // stop loader on error
+    }
+  };
+
+  // Razorpay verifyPayment
+  const handlePayment = async (paymentResponse) => {
+    console.log("paymentResponse", paymentResponse);
+
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+      paymentResponse;
+
+    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+      toast.error("Invalid payment response");
+      return;
+    }
+
+    const payload = {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+    };
+
+    try {
+      setPaymentLoading(true);
+
+      // ✅ Correct payload key
+      const verifyRes = await postRequest({
+        url: `appointment/verifyPayment`,
+        cred: { ...payload },
+      });
+
+      console.log("Verify Payment API Response:", verifyRes?.data?.data);
+      setBookingData(verifyRes?.data?.data); // ✅ store complete booking details
+
+      if (verifyRes?.data?.success) {
+        toast.success("Payment Verified Successfully");
+      } else {
+        toast.error("Payment Verification Failed");
+      }
+    } catch (err) {
+      console.error("Error verifying payment:", err);
+      toast.error("Error verifying payment");
+    } finally {
+      setPaymentLoading(false);
+      setShowRazorpay(false);
+    }
+  };
 
   return (
     <Dialog open={open} onClose={handleClose} className="relative z-50">
@@ -267,18 +348,18 @@ const AppointmentFlow = ({
                       setStep(3);
                     } else {
                       console.log("Pay Online");
-                      alert("Pay Online");
                       // setStep(3); // Can later redirect online payment step here if needed
+                      handlePayOnline();
                     }
                   }}
-                  disabled={!selectedPayment}
+                  disabled={!selectedPayment || paymentLoading}
                   className={`w-full px-4 py-3 font-medium rounded-lg transition-all duration-200 ${
-                    selectedPayment
+                    selectedPayment && !paymentLoading
                       ? "bg-[#006fab] hover:bg-blue-700 text-white"
                       : "bg-gray-300 text-gray-500 cursor-not-allowed"
                   }`}
                 >
-                  Continue
+                  {paymentLoading ? "Processing..." : "Continue"}
                 </button>
               </div>
             </>
@@ -307,7 +388,7 @@ const AppointmentFlow = ({
                   disabled={loading}
                   className="w-full px-4 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-all duration-200"
                 >
-  {loading ? "Booking..." : "Yes, Book"}
+                  {loading ? "Booking..." : "Yes, Book"}
                 </button>
               </div>
             </>
@@ -316,157 +397,174 @@ const AppointmentFlow = ({
           {/* Step 4: Final Appointment Details */}
           {step === 4 && (
             <div className="max-h-[80vh] sm:max-h-[85vh] md:max-h-[90vh] overflow-y-auto px-2">
+              <>
+                <Dialog.Title className="text-2xl font-bold text-center text-green-700 mb-4">
+                  My Appointment
+                </Dialog.Title>
 
-            <>
-              <Dialog.Title className="text-2xl font-bold text-center text-green-700 mb-4">
-                My Appointment
-              </Dialog.Title>
+                {/* Status */}
+                <div className="bg-red-50 border border-red-200 text-red-600 font-semibold text-sm rounded-xl px-2 py-2 mb-2 shadow-sm text-center">
+                  {bookingData?.status || status || "N/A"}
+                </div>
 
-              {/* Status */}
-              <div className="bg-red-50 border border-red-200 text-red-600 font-semibold text-sm rounded-xl px-2 py-2 mb-2 shadow-sm text-center">
-                ⏳ Awaiting Confirmation
-              </div>
+                {/* Doctor Info */}
+                <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-4">
+                  <div className="flex items-center gap-4 sm:gap-5">
+                    <img
+                      src="https://i.pinimg.com/736x/92/eb/b8/92ebb8868a7d96bb48184758f0a76e9f.jpg"
+                      alt="Doctor"
+                      className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover border border-gray-200 shadow-sm"
+                    />
+                    <div>
+                      <h3 className="text-base sm:text-lg font-semibold text-gray-900">
+                        {doctor?.clinicName}
+                      </h3>
 
-              {/* Doctor Info */}
-              <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-4">
-                <div className="flex items-center gap-4 sm:gap-5">
-                  <img
-                    src="https://i.pinimg.com/736x/92/eb/b8/92ebb8868a7d96bb48184758f0a76e9f.jpg"
-                    alt="Doctor"
-                    className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover border border-gray-200 shadow-sm"
-                  />
-                  <div>
-                    <h3 className="text-base sm:text-lg font-semibold text-gray-900">
-                      {doctor?.clinicName}
-                    </h3>
-
-                    <p className="text-sm text-gray-500">
-                      {" "}
-                      {selectedClinic.clinicAddress}
-                    </p>
+                      <p className="text-sm text-gray-500">
+                        {" "}
+                        {selectedClinic.clinicAddress}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Appointment Time */}
-              <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-2">
-                <h4 className="text-base font-semibold text-gray-800 mb-2">
-                  Scheduled Appointment
-                </h4>
-                <p className="text-sm text-gray-500 mb-2">
-                  Appointment ID:{" "}
-                  <span className="font-semibold text-gray-700">
-  {bookingData?.appointmentId || appointmentId || "N/A"}
-                  </span>
-                </p>
-                <div className="flex items-center gap-2 text-sm text-gray-700 mb-1">
-                  <Calendar className="w-5 h-5 text-blue-600" />
-                  <strong>{selectedDate}</strong>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-gray-700">
-                  <Clock className="w-5 h-5 text-blue-600" />
-                  <strong>
-                    {slots?.startTime} - {slots?.endTime}
-                  </strong>
-                </div>
-                <span className="inline-block mt-4 px-4 py-1 text-xs bg-blue-100 text-blue-700 rounded-full font-medium">
-                  {selectedFor?.toUpperCase() || "MYSELF"}
-                </span>
-              </div>
-
-              {/* Patient Info */}
-              <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-4 w-full max-w-md mx-auto">
-                <h4 className="text-base font-semibold text-gray-800 mb-2">
-                  Patient Information
-                </h4>
-                {selectedFor === "self" ? (
-                  <div className="space-y-1 text-sm text-gray-700">
-                    <p className="flex flex-wrap">
-                      <strong className="mr-1">Name:</strong>{" "}
-                      {userProfileData?.name || "N/A"}
-                    </p>
-                    <p className="flex flex-wrap">
-                      <strong className="mr-1">Gender:</strong>{" "}
-                      {userProfileData?.gender || "N/A"}
-                    </p>
-                    <p className="flex flex-wrap">
-                      <strong className="mr-1">Contact:</strong>{" "}
-                      {userProfileData?.phone || "N/A"}
-                    </p>
+                {/* Appointment Time */}
+                <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-2">
+                  <h4 className="text-base font-semibold text-gray-800 mb-2">
+                    Scheduled Appointment
+                  </h4>
+                  <p className="text-sm text-gray-500 mb-2">
+                    Appointment ID:{" "}
+                    <span className="font-semibold text-gray-700">
+                      {bookingData?.appointmentId || appointmentId || "N/A"}
+                    </span>
+                  </p>
+                  <div className="flex items-center gap-2 text-sm text-gray-700 mb-1">
+                    <Calendar className="w-5 h-5 text-blue-600" />
+                    <strong>{selectedDate}</strong>
                   </div>
-                ) : (
-                  <div className="space-y-1 text-sm text-gray-700">
-                    <p className="flex flex-wrap">
-                      <strong className="mr-1">Name:</strong>{" "}
-                      {selectedPatient?.name ||
-                        otherPatientDetails?.patient?.name ||
-                        "N/A"}
-                    </p>
-                    <p className="flex flex-wrap">
-                      <strong className="mr-1">Gender:</strong>{" "}
-                      {selectedPatient?.gender ||
-                        otherPatientDetails?.patient?.gender ||
-                        "N/A"}
-                    </p>
-                    <p className="flex flex-wrap">
-                      <strong className="mr-1">Contact:</strong>{" "}
-                      {selectedPatient?.phone ||
-                        otherPatientDetails?.patient?.phone ||
-                        "N/A"}
-                    </p>
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
+                    <Clock className="w-5 h-5 text-blue-600" />
+                    <strong>
+                      {slots?.startTime} - {slots?.endTime}
+                    </strong>
                   </div>
-                )}
-              </div>
-
-              {/* Fee */}
-              <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-4">
-                <div className="flex justify-between items-center text-base">
-                  <span className="flex items-center gap-2 text-blue-700 font-medium">
-                    <CreditCard className="w-5 h-5" /> Consultation Fee
-                  </span>
-                  <span className="font-semibold text-blue-700 text-lg">
-                    {selectedClinic.consultationFee}
+                  <span className="inline-block mt-4 px-4 py-1 text-xs bg-blue-100 text-blue-700 rounded-full font-medium">
+                    {selectedFor?.toUpperCase() || "MYSELF"}
                   </span>
                 </div>
-              </div>
 
-              {/* Actions */}
-              <div className="mt-4 flex justify-between text-sm text-blue-700 font-medium">
-                <a href="tel:+108">
-                  <button
-                    onClick={() => alert("Calling clinic...")}
-                    className="hover:underline hover:text-blue-800 transition-all flex items-center  gap-2"
+                {/* Patient Info */}
+                <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-4 w-full max-w-md mx-auto">
+                  <h4 className="text-base font-semibold text-gray-800 mb-2">
+                    Patient Information
+                  </h4>
+                  {selectedFor === "self" ? (
+                    <div className="space-y-1 text-sm text-gray-700">
+                      <p className="flex flex-wrap">
+                        <strong className="mr-1">Name:</strong>{" "}
+                        {userProfileData?.name || "N/A"}
+                      </p>
+                      <p className="flex flex-wrap">
+                        <strong className="mr-1">Gender:</strong>{" "}
+                        {userProfileData?.gender || "N/A"}
+                      </p>
+                      <p className="flex flex-wrap">
+                        <strong className="mr-1">Contact:</strong>{" "}
+                        {userProfileData?.phone || "N/A"}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-1 text-sm text-gray-700">
+                      <p className="flex flex-wrap">
+                        <strong className="mr-1">Name:</strong>{" "}
+                        {selectedPatient?.name ||
+                          otherPatientDetails?.patient?.name ||
+                          "N/A"}
+                      </p>
+                      <p className="flex flex-wrap">
+                        <strong className="mr-1">Gender:</strong>{" "}
+                        {selectedPatient?.gender ||
+                          otherPatientDetails?.patient?.gender ||
+                          "N/A"}
+                      </p>
+                      <p className="flex flex-wrap">
+                        <strong className="mr-1">Contact:</strong>{" "}
+                        {selectedPatient?.phone ||
+                          otherPatientDetails?.patient?.phone ||
+                          "N/A"}
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Fee */}
+                <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-4">
+                  <div className="flex justify-between items-center text-base">
+                    <span className="flex items-center gap-2 text-blue-700 font-medium">
+                      <CreditCard className="w-5 h-5" /> Consultation Fee
+                    </span>
+                    <span className="font-semibold text-blue-700 text-lg">
+                      {selectedClinic.consultationFee}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="mt-4 flex justify-between text-sm text-blue-700 font-medium">
+                  <a href="tel:+108">
+                    <button
+                      onClick={() => alert("Calling clinic...")}
+                      className="hover:underline hover:text-blue-800 transition-all flex items-center  gap-2"
+                    >
+                      <Phone className="w-4 h-4" /> Call Clinic
+                    </button>
+                  </a>
+
+                  <a
+                    href="https://maps.app.goo.gl/jb3Koe47X8UqEUXm8"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    <Phone className="w-4 h-4" /> Call Clinic
-                  </button>
-                </a>
+                    <button
+                      onClick={() => alert("Opening map...")}
+                      className="hover:underline hover:text-blue-800 transition-all flex items-center  gap-2"
+                    >
+                      <MapPin className="w-4 h-4" /> Get Location
+                    </button>
+                  </a>
+                </div>
 
-                <a
-                  href="https://maps.app.goo.gl/jb3Koe47X8UqEUXm8"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                {/* Continue */}
+                <div className="mt-6">
                   <button
-                    onClick={() => alert("Opening map...")}
-                    className="hover:underline hover:text-blue-800 transition-all flex items-center  gap-2"
+                    onClick={handleClose}
+                    className="w-full px-6 py-3 bg-[#006fab] hover:from-blue-700 hover:to-blue-800 text-white font-semibold text-base rounded-full transition-all duration-200"
                   >
-                    <MapPin className="w-4 h-4" /> Get Location
+                    Go to Appointments →
                   </button>
-                </a>
-              </div>
-
-              {/* Continue */}
-              <div className="mt-6">
-                <button
-                  onClick={handleClose}
-                  className="w-full px-6 py-3 bg-[#006fab] hover:from-blue-700 hover:to-blue-800 text-white font-semibold text-base rounded-full transition-all duration-200"
-                >
-                  Go to Appointments →
-                </button>
-              </div>
-            </>
+                </div>
+              </>
             </div>
           )}
+          {/* Razorpay Component */}
+          {showRazorpay && orderId && (
+  <RenderRazorPay
+    orderId={orderId}
+    currency="INR"
+    amount={appointmentData?.amount * 100 || 0}
+    setUpdateStatus={async (response) => {
+      console.log("🔄 Payment verified", response);
+      await handlePayment(response); // backend verify
+      setShowRazorpay(false);
+
+      // Trigger Step 4 only after modal fully closes
+      setTimeout(() => setStep(4), 100);
+    }}
+    onClose={() => setShowRazorpay(false)}
+  />
+)}
+
         </Dialog.Panel>
       </div>
     </Dialog>

@@ -1,3 +1,5 @@
+/* eslint-disable no-dupe-keys */
+"use client";
 import { useEffect, useRef } from "react";
 
 const loadScript = (src) =>
@@ -6,49 +8,58 @@ const loadScript = (src) =>
     script.src = src;
     script.onload = () => resolve(true);
     script.onerror = () => {
-      console.log("Error loading Razorpay SDK");
+      console.log("❌ Razorpay SDK failed to load");
       resolve(false);
     };
     document.body.appendChild(script);
   });
 
-const RenderRazorPay = ({ orderId, currency, amount, setUpdateStatus, onPaymentSuccess }) => {
-  const rzp1 = useRef(null);
+const RenderRazorPay = ({ orderId, currency, amount, setUpdateStatus, onSuccess, onClose }) => {
+  const rzpInstance = useRef(null);
 
   const displayRazorpay = async () => {
-    const res = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
-    if (!res) {
-      console.log("Failed to load Razorpay script");
+    const sdkLoaded = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
+    if (!sdkLoaded || !window.Razorpay) {
+      console.log("❌ Razorpay SDK not available");
       return;
     }
 
     const options = {
-     key: 'rzp_test_wHiuJBhFZCkHSf', // Your Razorpay key
-       amount,
+      key: "rzp_test_wHiuJBhFZCkHSf",
+      amount,
       currency,
-      name: "QuickBid Systems Pvt. Ltd",
+      name: "Doctor adda",
       order_id: orderId,
-      handler: function (response) {
-        console.log("Payment success:", response);
-        if (onPaymentSuccess) {
-          onPaymentSuccess(response);
-        }
-        setUpdateStatus(true); // move to next step
+      handler: (response) => {
+        console.log("✅ Payment succeeded", response);
+
+        // Notify parent about success
+        setUpdateStatus({ status: "success", ...response });
+
+        if (typeof onSuccess === "function") onSuccess(response);
+
+        // Force close the modal to clean up
+        rzpInstance.current?.close();
       },
-      modal: {
-        confirm_close: true,
-        ondismiss: function () {
-          console.log("Payment cancelled");
-        },
+      ondismiss: () => {
+        console.log("🚫 Razorpay modal dismissed");
+        if (typeof onClose === "function") onClose();
       },
+      theme: { color: "#3399cc" },
     };
 
-    rzp1.current = new window.Razorpay(options);
-    rzp1.current.open();
+    rzpInstance.current = new window.Razorpay(options);
+
+    // Small delay ensures DOM ready
+    setTimeout(() => rzpInstance.current?.open(), 50);
   };
 
   useEffect(() => {
-    if (orderId) displayRazorpay(); // only open when orderId is set
+    if (orderId) displayRazorpay();
+    // Only cleanup on unmount
+    return () => {
+      rzpInstance.current?.close();
+    };
   }, [orderId]);
 
   return null;

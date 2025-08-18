@@ -29,14 +29,17 @@ const DiagonsticsAppointmentFlow = ({
   // Razorpay state
   const [showRazorpay, setShowRazorpay] = useState(false);
   const [orderId, setOrderId] = useState("");
+  const [paymentLoading, setPaymentLoading] = useState(false);
 
-  const userProfileData = useSelector((state) => state.user.userProfileData || {});
+  const userProfileData = useSelector(
+    (state) => state.user.userProfileData || {}
+  );
   const UserId = userProfileData?._id;
 
   const otherPatients = patients.length > 0 ? patients : otherPatientDetails;
 
   // Extract appointment data
-  const { diagnostic, slots, amount, appointmentId, date } =
+  const { diagnostic, slots, amount, appointmentId, date, status } =
     appointmentData || {};
 
   // Show patient info based on selectedFor
@@ -91,7 +94,7 @@ const DiagonsticsAppointmentFlow = ({
   const handleConfirmBooking = async () => {
     setLoading(true); // Start loader
     try {
-      setOtherPatientDetails({ patient: selectedPatient }); 
+      setOtherPatientDetails({ patient: selectedPatient });
       const res = await postRequest({
         url: `diagnosticBooking/add`,
         cred: {
@@ -115,25 +118,73 @@ const DiagonsticsAppointmentFlow = ({
 
   // Razorpay integration
   const handlePayOnline = async () => {
-      if (!selectedPayment || selectedPayment !== "online") return;
-  try {
-    const res = await postRequest({
-      url: `diagnosticBooking/payment`,
-      cred: {
-       ...appointmentData,
-      },
-    });
-    console.log("payment success:", res?.data?.data?.appointment);
-    
-    if (res && res.data?.orderId) {
-      setOrderId(res?.data?.orderId);
-      console.log("orderId",res?.data?.data?.orderId);
-      
-      setShowRazorpay(true);
+    console.log("handlePayOnline triggered ✅");
+    if (!selectedPayment || selectedPayment !== "online") {
+      console.log("Payment condition failed ❌");
+      return;
     }
-  } catch (error) {
-    console.error("Error creating order:", error);
-    toast.error(error?.response?.data?.message || "Failed to initiate payment");
+    setPaymentLoading(true);
+
+    try {
+      const res = await postRequest({
+        url: `diagnosticBooking/payment`,
+        cred: { ...appointmentData },
+      });
+
+      console.log("Payment API Response ✅:", res);
+
+      const orderIdFromApi = res?.data?.data?.orderId;
+      if (orderIdFromApi) {
+        setOrderId(orderIdFromApi);
+        console.log("OrderId Received:", orderIdFromApi);
+        setShowRazorpay(true);
+      }
+    } catch (error) {
+      console.error("Error creating order:", error);
+      toast.error(
+        error?.response?.data?.message || "Failed to initiate payment"
+      );
+      setPaymentLoading(false);
+    }
+  };
+
+  // Razorpay verifyPayment
+const handlePayment = async (paymentResponse) => {
+  console.log("paymentResponse", paymentResponse);
+
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = paymentResponse;
+
+  if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+    toast.error("Invalid payment response");
+    return;
+  }
+
+  const payload = { razorpay_order_id, razorpay_payment_id, razorpay_signature };
+
+  try {
+    setPaymentLoading(true);
+
+    // ✅ Correct payload key
+    const verifyRes = await postRequest({
+      url: `diagnosticBooking/verifyPayment`,
+      cred: {...payload}, 
+    });
+
+    console.log("Verify Payment API Response:", verifyRes?.data?.data);
+    setBookingData(verifyRes?.data?.data); // ✅ store complete booking details
+
+    if (verifyRes?.data?.success) {
+      toast.success("Payment Verified Successfully");
+    } else {
+      toast.error("Payment Verification Failed");
+    }
+
+  } catch (err) {
+    console.error("Error verifying payment:", err);
+    toast.error("Error verifying payment");
+  } finally {
+    setPaymentLoading(false);
+    setShowRazorpay(false);
   }
 };
 
@@ -146,6 +197,7 @@ const DiagonsticsAppointmentFlow = ({
       <div className="fixed inset-0 bg-black/30 backdrop-blur-sm" />
       <div className="fixed inset-0 flex items-center justify-center p-4 sm:p-6">
         <Dialog.Panel className="bg-white p-5 sm:p-6 rounded-xl shadow-2xl w-full max-w-sm sm:max-w-md lg:max-w-lg">
+          
           {/* Step 1: Who is this appointment for */}
           {step === 1 && (
             <>
@@ -292,14 +344,14 @@ const DiagonsticsAppointmentFlow = ({
                       handlePayOnline();
                     }
                   }}
-                  disabled={!selectedPayment}
+                  disabled={!selectedPayment || paymentLoading}
                   className={`w-full px-4 py-3 font-medium rounded-lg transition-all duration-200 ${
-                    selectedPayment
+                    selectedPayment && !paymentLoading
                       ? "bg-[#006fab] hover:bg-blue-700 text-white"
                       : "bg-gray-300 text-gray-500 cursor-not-allowed"
                   }`}
                 >
-                  Continue
+                  {paymentLoading ? "Processing..." : "Continue"}
                 </button>
               </div>
             </>
@@ -343,7 +395,7 @@ const DiagonsticsAppointmentFlow = ({
                 </Dialog.Title>
 
                 <div className="bg-red-50 border border-red-200 text-red-600 font-semibold text-sm rounded-xl px-2 py-2 mb-2 text-center">
-                  ⏳ Awaiting Confirmation
+                      {bookingData?.status  || "N/A"}
                 </div>
 
                 {/* Diagnostic Info */}
@@ -378,22 +430,30 @@ const DiagonsticsAppointmentFlow = ({
                   </p>
                   <div className="flex items-center gap-2 text-sm text-gray-700 mb-1">
                     <Calendar className="w-5 h-5 text-blue-600" />
-                    <strong>{AppointmentDateFormat(date) || "N/A"}</strong>
+                    <strong>
+                      {AppointmentDateFormat(bookingData?.date || date) ||
+                        "N/A"}
+                    </strong>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-700">
                     <Clock className="w-5 h-5 text-blue-600" />
                     <strong>
-                      {slots?.startTime || "N/A"} - {slots?.endTime || "N/A"}
+                      {bookingData?.slots?.startTime ||
+                        slots?.startTime ||
+                        "N/A"}{" "}
+                      - {bookingData?.slots?.endTime || slots?.endTime || "N/A"}
                     </strong>
                   </div>
                   <span className="inline-block mt-4 px-4 py-1 text-xs bg-blue-100 text-blue-700 rounded-full font-medium">
-                    {selectedFor?.toUpperCase() || "MYSELF"}
+                    {bookingData?.selectedFor?.toUpperCase() ||
+                      selectedFor?.toUpperCase() ||
+                      "MYSELF"}
                   </span>
                 </div>
 
                 {/* Patient Info */}
                 <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 mb-4 w-full max-w-md mx-auto">
-                  <h4 className="text-base  font-semibold text-gray-800 mb-2">
+                  <h4 className="text-base font-semibold text-gray-800 mb-2">
                     Patient Information
                   </h4>
 
@@ -401,7 +461,9 @@ const DiagonsticsAppointmentFlow = ({
                     <p className="flex flex-wrap">
                       <strong className="mr-1">Name:</strong>
                       <span>
-                        {otherPatientDetails?.patient?.name ||
+                        {bookingData?.otherPatientDetails?.patient?.name ||
+                          bookingData?.patientDetails?.name ||
+                          otherPatientDetails?.patient?.name ||
                           patientDetails?.name ||
                           "N/A"}
                       </span>
@@ -409,7 +471,9 @@ const DiagonsticsAppointmentFlow = ({
                     <p className="flex flex-wrap">
                       <strong className="mr-1">Gender:</strong>
                       <span>
-                        {otherPatientDetails?.patient?.gender ||
+                        {bookingData?.otherPatientDetails?.patient?.gender ||
+                          bookingData?.patientDetails?.gender ||
+                          otherPatientDetails?.patient?.gender ||
                           patientDetails?.gender ||
                           "N/A"}
                       </span>
@@ -417,7 +481,9 @@ const DiagonsticsAppointmentFlow = ({
                     <p className="flex flex-wrap">
                       <strong className="mr-1">Contact:</strong>
                       <span>
-                        {otherPatientDetails?.patient?.phone ||
+                        {bookingData?.otherPatientDetails?.patient?.phone ||
+                          bookingData?.patientDetails?.phone ||
+                          otherPatientDetails?.patient?.phone ||
                           patientDetails?.phone ||
                           "N/A"}
                       </span>
@@ -432,7 +498,7 @@ const DiagonsticsAppointmentFlow = ({
                       <CreditCard className="w-5 h-5" /> Consultation Fee
                     </span>
                     <span className="font-semibold text-blue-700 text-lg">
-                      ₹{amount || "N/A"}
+                      ₹{bookingData?.paymentDetails?.amount || amount || "N/A"}
                     </span>
                   </div>
                 </div>
@@ -466,21 +532,26 @@ const DiagonsticsAppointmentFlow = ({
             </div>
           )}
 
-          
-        {/* Razorpay Component */}
-          {showRazorpay && orderId && (
-            <RenderRazorPay
-              orderId={orderId}
-              currency="INR"
-              amount={appointmentData?.amount * 100 || 0} // paisa
-              setUpdateStatus={() => {
-                setStep(3); // payment success → next step
-                setShowRazorpay(false);
-              }}
-            />
-          )}
+{showRazorpay && orderId && (
+  <RenderRazorPay
+    orderId={orderId}
+    currency="INR"
+    amount={appointmentData?.amount * 100 || 0}
+    setUpdateStatus={async (response) => {
+      console.log("🔄 Payment verified", response);
+      await handlePayment(response); // backend verify
+      setShowRazorpay(false);
 
-        </Dialog.Panel>
+      // Trigger Step 4 only after modal fully closes
+      setTimeout(() => setStep(4), 100);
+    }}
+    onClose={() => setShowRazorpay(false)}
+  />
+)}
+
+
+
+</Dialog.Panel>
       </div>
     </Dialog>
   );
