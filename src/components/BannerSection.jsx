@@ -12,6 +12,7 @@ import {
 import { useEffect } from "react";
 import { getRequest } from "../Helpers/index";
 import banner from "../assets/Header.png";
+import hero from "../assets/dr-adda-website.png";
 
 const BannerSection = () => {
   const [searchResults, setSearchResults] = useState([]);
@@ -50,7 +51,7 @@ const BannerSection = () => {
       }}
       >
       {/* Left Content */}
-      <div className="max-w-7xl  pt-8 mb-2  ">
+      <div className="max-w-7xl pt-12 md:pt-8 md:mb-2  ">
         <h2 className="text-lg lg:text-2xl xl:text-3xl 2xl:text-4xl font-bold">Your Health,One Tap Away</h2>
 
         <div className="flex items-center gap-4 lg:mt-6">
@@ -137,11 +138,18 @@ const BannerSection = () => {
       </div>
 
       {/* Right Image */}
-      <div className=" flex flex-col-reverse md:mt-0 md:mb-0">
+      <div className="hidden  2xl:grid flex flex-col-reverse md:mt-0 md:mb-0">
         <img
           src={banner}
           alt="banner"
           className="w-full max-h-80 md:max-h-100 object-contain rounded-2xl "
+        />
+      </div>
+      <div className=" flex flex-col-reverse md:mt-0 md:mb-0 2xl:hidden">
+        <img
+          src={hero}
+          alt="hero"
+          className="w-full max-h-100 object-contain rounded-2xl "
         />
       </div>
     </div>
