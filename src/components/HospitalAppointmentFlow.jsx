@@ -14,6 +14,7 @@ import {
 import { getRequest, postRequest } from "../Helpers";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import RenderRazorPay from "./RenderRazorPay";
 
 const HospitalAppointmentFlow = ({ open, onClose, slotDetails, doctorType }) => {
   const [step, setStep] = useState(1);
@@ -27,11 +28,51 @@ const HospitalAppointmentFlow = ({ open, onClose, slotDetails, doctorType }) => 
   const [otherpatients, setOtherpatients] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(null);
 
-  
+  const [payementInfo, setPayementInfo] = useState(null);
 
-  console.log("  selectedPatient ======", selectedPatient)
+  // Payment verification effect
+  useEffect(() => {
+    const verifyPayment = async () => {
+      if (
+        payementInfo &&
+        payementInfo.razorpay_order_id &&
+        payementInfo.razorpay_payment_id &&
+        payementInfo.razorpay_signature
+      ) {
+        try {
+          const res = await postRequest({
+            url: 'hospitalAppointment/verifyPayment',
+            cred: {
+              razorpay_order_id: payementInfo.razorpay_order_id,
+              razorpay_payment_id: payementInfo.razorpay_payment_id,
+              razorpay_signature: payementInfo.razorpay_signature,
+            },
+          });
+          console.log('Payment verification response:', res);
+          toast.success('Payment verified successfully!');
+          setStep(4); 
+          close();
+        } catch (error) {
+          console.error('Payment verification failed:', error);
+          toast.error(error?.response?.data?.message || 'Payment verification failed');
+        }
+      }
+    };
+    verifyPayment();
+  }, [payementInfo]);
 
-  const { userProfileData } = useSelector((state) => state.user);
+
+  console.log("paymentInfo   :", payementInfo);
+
+
+    // Razorpay state
+    const [showRazorpay, setShowRazorpay] = useState(false);
+    const [orderId, setOrderId] = useState("");
+
+    console.log( "  orderId ======", orderId )
+    console.log( "  showRazorpay ======", showRazorpay )
+
+  const { userProfileData } = useSelector( (state) => state.user );
   const userId = userProfileData?._id;
   console.log("  userId   :", userId)
   const navigate = useNavigate();
@@ -135,21 +176,52 @@ const HospitalAppointmentFlow = ({ open, onClose, slotDetails, doctorType }) => 
   // Razorpay integration
   const handlePayOnline = async () => {
       if (!selectedPayment || selectedPayment !== "online") return;
+      const hospitalId = slotDetails?.hospitalDetails?._id;
+      const doctor = slotDetails?.doctor || {};
+      const selectedSlot = deriveSelectedSlot();
   try {
+      const payload = {
+        hospital: hospitalId,
+        doctorType: doctorType, // "Internal" | "Registered"
+        // doctor id depending on type
+        ...(doctorType === "Internal"
+          ? { internalDoctorId: doctor?._id }
+          : { registeredDoctorId: doctor?._id }),
+        patientId: userId,
+        fee: doctor?.fee,
+        isSelf: selectedFor === "self",
+        ...(selectedFor === "other"
+          ? {
+              otherPatientDetails: {
+                name: patientName || "",
+                age: 22,
+                gender: patientGender || "",
+                type: "Relative",
+              },
+            }
+          : {}),
+        date: slotDetails?.date ? new Date(slotDetails.date).toISOString() : new Date().toISOString(),       
+        slots: {
+          startTime: selectedSlot?.startTime || "",               
+          endTime: selectedSlot?.endTime || "",                   
+        }
+      };
+
     const res = await postRequest({
       url: `hospitalAppointment/payment`,
-      cred: {
-       ...dummyData,
-      },
-    });
-    console.log("payment success: ", res?.data?.data?.appointment);
-    
-    // if (res && res.data?.orderId) {
-    //   setOrderId(res?.data?.orderId);
-    //   console.log("orderId",res?.data?.data?.orderId);
+      cred: 
+       payload
       
-    //   setShowRazorpay(true);
-    // }
+    });
+    console.log("payment success: data ", res.data?.data?.orderId);
+
+    
+    if (res && res.data?.data?.orderId) {
+      setOrderId(res.data?.data?.orderId);
+      console.log("orderId data",res.data);
+      
+      setShowRazorpay(true);
+    }
   } catch (error) {
     console.error("Error creating order:", error);
     toast.error(error?.response?.data?.message || "Failed to initiate payment");
@@ -646,6 +718,22 @@ const HospitalAppointmentFlow = ({ open, onClose, slotDetails, doctorType }) => 
               </div>
             </div>
           )}
+
+            {/* Razorpay Component */}
+                    {showRazorpay && orderId && (
+                      <RenderRazorPay
+                        orderId={orderId}
+                        currency="INR"
+                        amount={slotDetails?.doctor?.fee * 100 || 0} // paisa
+                        setUpdateStatus={() => {
+                          setStep(3); // payment success → next step
+                          setShowRazorpay(false);
+                        }}
+                        onPaymentSuccess={(response) => {
+                        setPayementInfo(response);
+                        }}
+                      />
+                    )}
           
         </Dialog.Panel>
       </div>

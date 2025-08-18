@@ -12,7 +12,7 @@ const loadScript = (src) =>
     document.body.appendChild(script);
   });
 
-const RenderRazorPay = ({ orderId, currency, amount, setUpdateStatus }) => {
+const RenderRazorPay = ({ orderId, currency, amount, setUpdateStatus, onPaymentSuccess }) => {
   const rzp1 = useRef(null);
 
   const displayRazorpay = async () => {
@@ -30,6 +30,9 @@ const RenderRazorPay = ({ orderId, currency, amount, setUpdateStatus }) => {
       order_id: orderId,
       handler: function (response) {
         console.log("Payment success:", response);
+        if (onPaymentSuccess) {
+          onPaymentSuccess(response);
+        }
         setUpdateStatus(true); // move to next step
       },
       modal: {

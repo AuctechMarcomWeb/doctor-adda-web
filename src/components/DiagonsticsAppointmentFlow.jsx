@@ -465,6 +465,8 @@ const DiagonsticsAppointmentFlow = ({
               </>
             </div>
           )}
+
+          
         {/* Razorpay Component */}
           {showRazorpay && orderId && (
             <RenderRazorPay
