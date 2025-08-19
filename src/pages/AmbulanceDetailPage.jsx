@@ -25,7 +25,7 @@ const [updateStatus, setUpdateStatus] = useState(false);
       });
   }, [id,updateStatus]);
 
-  const phoneNumber = "102";
+  const phoneNumber = "108";
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   const [showFallback, setShowFallback] = useState(false);
   const tryTelLink = () => {

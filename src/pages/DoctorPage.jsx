@@ -15,7 +15,10 @@ import { getRequest } from "../Helpers/index";
 
 const SpecialtyCard = ({ id, name, imageUrl, onViewDoctors }) => {
   return (
-    <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-105 overflow-hidden border border-gray-100"  onClick={() => onViewDoctors(id)}>
+    <div
+      className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-105 overflow-hidden border border-gray-100"
+      onClick={() => onViewDoctors(id)}
+    >
       {/* Image Section */}
       <div className="relative h-48 overflow-hidden">
         <img
@@ -25,7 +28,9 @@ const SpecialtyCard = ({ id, name, imageUrl, onViewDoctors }) => {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
         <div className="absolute bottom-4 left-4 right-4">
-          <h3 className="text-white font-bold text-base md:text-xl mb-1">{name}</h3>
+          <h3 className="text-white font-bold text-base md:text-xl mb-1">
+            {name}
+          </h3>
         </div>
       </div>
 
@@ -50,7 +55,9 @@ const FeatureCard = ({ icon, title, description }) => (
     <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-200 transition-colors">
       {icon}
     </div>
-    <h3 className="font-bold text-base md:text-lg mb-2 text-gray-800">{title}</h3>
+    <h3 className="font-bold text-base md:text-lg mb-2 text-gray-800">
+      {title}
+    </h3>
     <p className="text-gray-600  text-sm">{description}</p>
   </div>
 );
@@ -77,33 +84,29 @@ const DoctorPage = () => {
     { icon: Video, text: "Video Consults" },
     { icon: Calendar, text: "Instant Booking" },
   ];
-  
 
   const specialtyData = [
     {
       _id: "1",
       name: "Dentistry",
-      imageUrl:
-        "https://images.unsplash.com/photo-1606811971618-4486d14f3eab",
+      imageUrl: "https://images.unsplash.com/photo-1606811971618-4486d14f3eab",
       description: "Oral health, teeth, gums and dental care",
     },
     {
       _id: "2",
       name: "Cardiology",
-      imageUrl:
-        "https://images.unsplash.com/photo-1580281657521-3b2f2b4417d1",
+      imageUrl: "https://images.unsplash.com/photo-1580281657521-3b2f2b4417d1",
       description: "Heart specialists and cardiovascular treatments",
     },
     {
       _id: "3",
       name: "Neurology",
-      imageUrl:
-        "https://images.unsplash.com/photo-1588776814546-512b39d88a5c",
+      imageUrl: "https://images.unsplash.com/photo-1588776814546-512b39d88a5c",
       description: "Brain, nerves and neurological disorders",
     },
   ];
 
-   // Fetch categories from API
+  // Fetch categories from API
   const fetchCategories = async () => {
     try {
       const response = await getRequest("category");
@@ -124,9 +127,7 @@ const DoctorPage = () => {
     navigate(`/doctorlist/${id}`);
   };
 
-  
-
-   const filteredData = categories.filter(
+  const filteredData = categories.filter(
     (cat) =>
       cat.name.toLowerCase().includes(search.toLowerCase()) ||
       (cat.description || "").toLowerCase().includes(search.toLowerCase())
@@ -204,8 +205,6 @@ const DoctorPage = () => {
           <div className="flex flex-row lg:flex-row items-center justify-between md:gap-12 gap-2">
             {/* Left Content - Enhanced */}
             <div className="flex-1  lg:text-left max-w-2xl">
-              
-
               <h2 className="text-xl md:text-2xl lg:text-4xl font-bold md:mb-6 mb-4 leading-tight">
                 <span className="block bg-gradient-to-r from-white via-cyan-100 to-white bg-clip-text text-transparent animate-text-shimmer">
                   Your Health,
@@ -230,7 +229,8 @@ const DoctorPage = () => {
                 className="text-white/90 text-sm sm:text-base mb-4  leading-relaxed animate-fade-in-up md:hidden "
                 style={{ animationDelay: "0.5s" }}
               >
-               Connect with world-class doctors, and book instant consultations.
+                Connect with world-class doctors, and book instant
+                consultations.
               </p>
 
               {/* Enhanced Feature Pills */}
@@ -245,7 +245,9 @@ const DoctorPage = () => {
                       className=" w-4 h-4 animate-pulse "
                       style={{ animationDelay: `${index * 0.2}s` }}
                     />
-                    <span className="text-sm sm:text-base font-medium">{feature.text}</span>
+                    <span className="text-sm sm:text-base font-medium">
+                      {feature.text}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -270,7 +272,6 @@ const DoctorPage = () => {
                     </div>
                   </button>
                 </a>
-
               </div>
             </div>
 
@@ -516,32 +517,32 @@ const DoctorPage = () => {
 
       {/* Search and Filter Section */}
       <div className="flex items-center justify-center">
-          <div className="p-6 sm:w-full lg:w-[80%] xl:w-[80%] 2xl:w-[70%] ">
-            {/* Search Bar */}
-            <div className="mb-6 flex justify-center">
-              <input
-                type="text"
-                placeholder="Search for a specialty..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full max-w-lg border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              />
-            </div>
+        <div className="p-6 sm:w-full lg:w-[80%] xl:w-[80%] 2xl:w-[70%] ">
+          {/* Search Bar */}
+          <div className="mb-6 flex justify-center">
+            <input
+              type="text"
+              placeholder="Search for a specialty..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full max-w-lg border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
 
-            {/* Specialty Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-              {filteredData.map((category) => (
-                <SpecialtyCard
-                  key={category._id}
-                  id={category._id}
-                  name={category.name}
-                  imageUrl={category.imageUrl}
-                  onViewDoctors={handleViewDetails}
-                />
-              ))}
-            </div>
+          {/* Specialty Cards */}
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            {filteredData.map((category) => (
+              <SpecialtyCard
+                key={category._id}
+                id={category._id}
+                name={category.name}
+                imageUrl={category.imageUrl}
+                onViewDoctors={handleViewDetails}
+              />
+            ))}
+          </div>
         </div>
-     </div>
+      </div>
 
       {/* Features Section */}
       <div className="lg:w-[70%] sm:w-full xl:w-[70%] mx-auto px-4 ">

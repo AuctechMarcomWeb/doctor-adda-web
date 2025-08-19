@@ -64,9 +64,7 @@ const BannerSection = () => {
               >
                Connect with world-class doctors.
               </p>
-          <button className="hidden lg:grid bg-Blue-400 border text-xs md:text-base border-white text-white font-semibold py-2 px-4  md:px-4 md:py-2 rounded-lg hover:bg-white hover:text-[#0074b2] transition cursor-pointer">
-            Book Now
-          </button>
+          
         </div>
 
         {/* Search Bar */}
@@ -126,9 +124,9 @@ const BannerSection = () => {
         </div>
 
         <div className=" flex items-center gap-4 lg:mt-6  md:mb-0 mt-2 mb-2">
-          <button className="hidden sm:grid bg-Blue-400 border border-white text-white  text-xs md:text-base font-semibold py-2 px-4  md:px-4 md:py-2 rounded-lg hover:bg-white hover:text-[#0074b2] transition cursor-pointer">
+          {/* <button className="hidden sm:grid bg-Blue-400 border border-white text-white  text-xs md:text-base font-semibold py-2 px-4  md:px-4 md:py-2 rounded-lg hover:bg-white hover:text-[#0074b2] transition cursor-pointer">
             Book Appointment
-          </button>
+          </button> */}
           <a href="https://play.google.com/store/apps/details?id=com.doctors.adda">
             <button className="bg-white text-[#0074b2]   text-xs md:text-base  font-semibold py-2 px-4  md:px-4 md:py-2 rounded-lg  hover:text-black transition cursor-pointer">
               Download App

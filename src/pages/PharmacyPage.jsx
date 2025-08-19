@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import PharmacyCard from "../components/PharmacyCard"; 
 import { getRequest } from "../Helpers";
+import { Download } from "lucide-react";
 
 const PharmacyPage = () => {
+  const [hoveredButton, setHoveredButton] = useState(null);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
   const [pharmacyData, setPharmacyData] = useState([]);
@@ -143,14 +146,25 @@ const PharmacyPage = () => {
                 className="flex flex-col sm:flex-row gap-4  lg:justify-start animate-fadeIn"
                 style={{ animationDelay: "0.9s" }}
               >
-                <a
-                  href="https://play.google.com/store/apps/details?id=com.doctors.adda"
-                  target="_blank"
+                <a href="https://play.google.com/store/apps/details?id=com.doctors.adda">
+                <button
+                  onMouseEnter={() => setHoveredButton("download")}
+                  onMouseLeave={() => setHoveredButton(null)}
+                  className="group relative bg-white text-gray-900 px-8 py-4 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105 transition-all duration-300 overflow-hidden animate-slide-in-left cursor-pointer"
+                  style={{ animationDelay: "1s" }}
                 >
-                  <button className="bg-white text-[#0074b2] font-bold mt-2 md:mt-0 md:py-4 md:px-6 py-1 px-2 rounded-full text-xs md:text-base  hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 shadow-lg cursor-pointer">
-                    Download App Now
-                  </button>
-                </a>
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                  <div className="relative z-10 flex items-center gap-3 group-hover:text-white transition-colors duration-300">
+                    <Download className="w-5 h-5 group-hover:animate-bounce" />
+                    Download App
+                    {hoveredButton === "download" && (
+                      <div className="absolute -right-2 -top-2 w-3 h-3 bg-green-400 rounded-full animate-ping"></div>
+                    )}
+                  </div>
+                </button>
+              </a>
+
                 {/* <button className="border-2 border-white text-white font-bold py-4 px-6 rounded-full text-lg hover:bg-white hover:text-blue-600 transition-all duration-300 transform hover:scale-105 cursor-pointer">
                   Book Appointment
                 </button> */}
