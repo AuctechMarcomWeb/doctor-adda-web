@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { X, ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { getRequest } from "../Helpers";
+import { Skeleton } from "antd";
 
 const ProfessionalImagePopup = ({data}) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(true); // for skeleton
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoplay, setIsAutoplay] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
@@ -95,11 +97,18 @@ const ProfessionalImagePopup = ({data}) => {
 
           {/* Image Display */}
           <div className="relative w-full h-full">
+            {loading && (
+                      <Skeleton.Image
+                        active
+                         className="!w-[700px] !h-[200px] sm:!h-[300px] md:!h-[500px] !rounded-xl"
+                      />
+                    )}
             <img
               src={data[currentSlide]?.imageUrl}
               alt={images[currentSlide]?.title}
-              className="w-full h-[95%] bg-white object-contain transition-all duration-700 ease-in-out"
-              onLoad={handleImageLoad}
+              className="w-full h-[100%] bg-white object-contain transition-all duration-700 ease-in-out"
+              
+              onLoad={() => setLoading(false)}
             />
 
             {/* Gradient Overlay */}
