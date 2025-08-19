@@ -1,6 +1,8 @@
-import React from "react";
-
+import React, { useState } from "react";
+import { Download } from "lucide-react";
 const AmbulanceBanner = () => {
+  const [hoveredButton, setHoveredButton] = useState(null);
+
   return (
     <div
       className="relative overflow-hidden"
@@ -56,25 +58,27 @@ const AmbulanceBanner = () => {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row sm:gap-4 animate-fade-in-up delay-900">
-              <a
-                href="https://play.google.com/store/apps/details?id=com.doctors.adda"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <button className="group bg-white text-[#0074b2] text-xs md:text-base font-semibold py-2 px-4 md:px-4 md:py-2 rounded-lg hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center xl:gap-3 mb-4 cursor-pointer">
-                  <span className="text-xs md:text-base group-hover:scale-110 transition-transform ">
-                    <img
-                      width="30"
-                      height="30"
-                      src="https://img.icons8.com/ios/50/iphone14-pro.png"
-                      alt="iphone14-pro"
-                    />
-                  </span>
-                  Download App
+            <div className="flex flex-col sm:flex-row sm:gap-4 mb-6">
+              <a href="https://play.google.com/store/apps/details?id=com.doctors.adda">
+                <button
+                  onMouseEnter={() => setHoveredButton("download")}
+                  onMouseLeave={() => setHoveredButton(null)}
+                  className="group relative bg-white text-gray-900 px-8 py-4 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105 transition-all duration-300 overflow-hidden animate-slide-in-left cursor-pointer"
+                  style={{ animationDelay: "1s" }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                  <div className="relative z-10 flex items-center gap-3 group-hover:text-white transition-colors duration-300">
+                    <Download className="w-5 h-5 group-hover:animate-bounce" />
+                    Download App
+                    {hoveredButton === "download" && (
+                      <div className="absolute -right-2 -top-2 w-3 h-3 bg-green-400 rounded-full animate-ping"></div>
+                    )}
+                  </div>
                 </button>
               </a>
-              <a href="#emergency">
+
+              {/* <a href="#emergency">
                 <button
                   className="group bg-red-500 hover:bg-red-600 text-white border border-white  text-xs md:text-base font-semibold py-2 px-4 md:px-4 md:py-2 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center xl:gap-3 mb-4 cursor-pointer  "
                   style={{
@@ -92,7 +96,7 @@ const AmbulanceBanner = () => {
                   </span>
                   Emergency Call
                 </button>
-              </a>
+              </a> */}
             </div>
           </div>
 

@@ -12,40 +12,37 @@ import {
   Users,
   Smartphone,
   Download,
-  Briefcase 
+  Briefcase,
+  Home,
 } from "lucide-react";
 
 import { useNavigate, useParams } from "react-router-dom";
 import { getRequest } from "../Helpers";
 
-const DoctorCard = ({data,modeFilter}) => {
+const DoctorCard = ({ data, modeFilter }) => {
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
 
   const handleViewDetails = (id) => {
-
-    console.log("id",id);
-    
-
+    console.log("id", id);
 
     navigate(`/doctordetail/${id?._id}?modeFilter=${modeFilter}`);
   };
 
-  
   return (
     <div
-
       className={`bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden group ${
         isHovered ? "scale-105" : ""
       }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-
-      <div onClick={()=>handleViewDetails(data)}  className="p-6 relative cursor-pointer">
-
+      <div
+        onClick={() => handleViewDetails(data)}
+        className="p-6 relative cursor-pointer"
+      >
         {/* Doctor Image with Animation */}
-        <div  className="flex items-start gap-4 mb-4">
+        <div className="flex items-start gap-4 mb-4">
           <div className="relative">
             <div className="w-16 h-16 rounded-full overflow-hidden ring-4 ring-white shadow-lg group-hover:ring-blue-200 transition-all duration-300">
               <img
@@ -85,13 +82,13 @@ const DoctorCard = ({data,modeFilter}) => {
         {/* Details */}
         <div className="space-y-3 mb-6">
           <div className="flex items-center gap-3 text-gray-600">
-<MapPin className="w-[18px] h-[18px] text-blue-500 stroke-[1.5] shrink-0" />
-  <span className="text-sm">{data?.clinics[0]?.clinicAddress}</span>
-</div>
-<div className="flex items-center gap-3 text-gray-600">
-<Briefcase className="w-[18px] h-[18px] text-blue-500 stroke-[1.5] shrink-0" />
-  <span className="text-sm">Service Type: {modeFilter}</span>
-</div>
+            <MapPin className="w-[18px] h-[18px] text-blue-500 stroke-[1.5] shrink-0" />
+            <span className="text-sm">{data?.clinics[0]?.clinicAddress}</span>
+          </div>
+          <div className="flex items-center gap-3 text-gray-600">
+            <Briefcase className="w-[18px] h-[18px] text-blue-500 stroke-[1.5] shrink-0" />
+            <span className="text-sm">Service Type: {modeFilter}</span>
+          </div>
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -121,7 +118,6 @@ const DoctorCard = ({data,modeFilter}) => {
         {/* Action Buttons */}
         <div className="flex gap-3">
           <button
-            
             className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-xl font-medium hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer"
             style={{
               background:
@@ -145,30 +141,64 @@ const DoctorList = () => {
 
   console.log("id", id);
 
-
   const [modeFilter, setModeFilter] = useState("In-clinic");
   const [isLoaded, setIsLoaded] = useState(false);
-
   const [doctors, setDoctors] = useState([]);
-
+  const [isVeterinary, setIsVeterinary] = useState(false);
+  console.log("isVeterinary====", isVeterinary);
   console.log("res doctors ===========>", doctors);
 
-
-
-
   useEffect(() => {
-  if (!id || !modeFilter) return;
+    if (!id) return;
 
-  getRequest(`doctor/doctors?category=${id}&serviceType=${modeFilter}`)
-    .then((res) => {
-      setDoctors(res?.data?.data?.doctors || []);
-    })
-    .catch((error) => {
-      console.log("error", error);
-    });
+    const fetchDoctors = async () => {
+      try {
+        const catRes = await getRequest(`category`);
+        const categories = catRes?.data?.data?.categories || [];
 
-  setIsLoaded(true);
-}, [id, modeFilter]);
+        // Find current category by id
+        const currentCategory = categories.find((cat) => cat._id === id);
+        const isVet = currentCategory?.name === "Veterinary";
+        setIsVeterinary(isVet);
+        console.log("isVeterinary?", isVet);
+
+        let serviceType = modeFilter;
+
+        // Ensure valid modeFilter for Veterinary or normal
+        if (isVet && !["In-clinic", "Home Visit"].includes(modeFilter)) {
+          serviceType = "In-clinic";
+          setModeFilter("In-clinic");
+        } else if (
+          !isVet &&
+          !["In-clinic", "Video Consultation"].includes(modeFilter)
+        ) {
+          serviceType = "In-clinic";
+          setModeFilter("In-clinic");
+        }
+
+        // Use veterinaryServiceType for Veterinary, serviceType for others
+        const queryParam = isVet
+          ? `veterinaryServiceType=${serviceType}`
+          : `serviceType=${serviceType}`; // <-- just use modeFilter value
+
+        // Fetch doctors based on current modeFilter
+        const res = await getRequest(
+          `doctor/doctors?category=${id}&${queryParam}`
+        );
+        const fetchedDoctors = res?.data?.data?.doctors || [];
+        setDoctors(fetchedDoctors);
+        setIsLoaded(true);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+
+    fetchDoctors();
+  }, [id, modeFilter]); // Added modeFilter here
+
+  const handleTabChange = (tabKey) => {
+    setModeFilter(tabKey);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 relative overflow-hidden">
@@ -285,30 +315,45 @@ const DoctorList = () => {
       {/* Main Content */}
       <div className=" mx-auto px-4 py-12 lg:w-[70%] sm:w-full xl:w-[70%]">
         {/* Mode Filter Tabs */}
-        <div className="flex justify-center gap-2 mb-12">
-          {[
-            {
-              key: "In-clinic",
-              label: "In-Clinic Appointment",
-              icon: Calendar,
-            },
-            { key: "Video Consultation", label: "Video Consultation", icon: Video },
-          ].map((tab) => (
-            <button
-              key={tab.key}
-              onClick={() => setModeFilter(tab.key)}
-              className={`flex items-center gap-2 px-6 py-3 rounded-2xl font-medium transition-all duration-300 transform hover:scale-105 ${
-                modeFilter === tab.key
-                  ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
-                  : "bg-white text-gray-700 hover:bg-gray-50 shadow-md"
-              }`}
-            >
-              <tab.icon className="w-5 h-5" />
-              {tab.label}
-            </button>
-          ))}
-        </div>
-
+        {isLoaded && (
+          <div className="flex justify-center gap-2 mb-12">
+            {(isVeterinary
+              ? [
+                  {
+                    key: "In-clinic",
+                    label: "In-Clinic Appointment",
+                    icon: Calendar,
+                  },
+                  { key: "Home Visit", label: "Home Visit", icon: Home },
+                ]
+              : [
+                  {
+                    key: "In-clinic",
+                    label: "In-Clinic Appointment",
+                    icon: Calendar,
+                  },
+                  {
+                    key: "Video Consultation",
+                    label: "Video Consultation",
+                    icon: Video,
+                  },
+                ]
+            ).map((tab) => (
+              <button
+                key={tab?.key}
+                onClick={() => handleTabChange(tab?.key)}
+                className={`flex items-center gap-2 px-6 py-3 rounded-2xl font-medium transition-all duration-300 transform hover:scale-105 ${
+                  modeFilter === tab?.key
+                    ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
+                    : "bg-white text-gray-700 hover:bg-gray-50 shadow-md"
+                }`}
+              >
+                <tab.icon className="w-5 h-5" />
+                {tab?.label}
+              </button>
+            ))}
+          </div>
+        )}
         {/* Results Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
@@ -339,7 +384,14 @@ const DoctorList = () => {
             ))
           ) : (
             <div className="col-span-full text-center py-16">
-              <div className="text-8xl mb-6 animate-bounce flex justify-center"><img width="100" height="100" src="https://img.icons8.com/pin/100/search.png" alt="search"/></div>
+              <div className="text-8xl mb-6 animate-bounce flex justify-center">
+                <img
+                  width="100"
+                  height="100"
+                  src="https://img.icons8.com/pin/100/search.png"
+                  alt="search"
+                />
+              </div>
               <h3 className="text-2xl font-bold text-gray-700 mb-3">
                 No doctors found
               </h3>
