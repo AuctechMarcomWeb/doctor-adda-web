@@ -32,6 +32,7 @@ import ManagePatients from "./components/ManagePatients";
 import ManagePets from "./components/ManagePets";
 import AppointmentSelection from "./components/AppointmentSelection";
 import DoctorAppointmentsPage from "./components/DoctorAppointmentsPage";
+import PopularSearch from "./components/PopularSearch";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -99,6 +100,7 @@ function App() {
                 <Route path="/user-details" element={<UserDetails />} />
                 <Route path="/bloodbank" element={<AmbulancePage />} />
                 <Route path="/ambulance" element={<AmbulancePage />} />
+                <Route path="/popular" element={<PopularSearch />} />
                 <Route
                   path="/ambulance/:id"
                   element={<AmbulanceDetailPage />}
