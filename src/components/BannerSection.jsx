@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import { getRequest } from "../Helpers/index";
 import banner from "../assets/Header.png";
 import hero from "../assets/dr-adda-website.png";
+import DoctorSearch from "./DoctorSearch";
 
 const BannerSection = () => {
   const [searchResults, setSearchResults] = useState([]);
@@ -71,29 +72,7 @@ const BannerSection = () => {
 
         {/* Search Bar */}
 
-        <div className="hidden md:grid mt-8 w-full max-w-xl mx-auto text-black">
-          <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between w-full">
-            {/* Search Input */}
-            <input
-              type="text"
-              placeholder="Search doctors, specialties, or locations"
-              className="w-full md:flex-1 px-4 py-2 text-sm 2xl:text-base rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
-            />
-
-            {/* Dropdown */}
-            <select className="w-full md:w-1/3 px-4 py-2 text-sm 2xl:text-base rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white">
-              <option>All Specialties</option>
-              <option>Radiology</option>
-              <option>Cardiology</option>
-              <option>Neurology</option>
-            </select>
-
-            {/* Search Button */}
-            <button className="w-full md:w-auto px-6 py-2 bg-[#297cff] text-sm 2xl:text-base text-white font-semibold rounded-md hover:bg-blue-700 transition">
-              SEARCH
-            </button>
-          </div>
-        </div>
+        <DoctorSearch />
 
         {/* Features */}
         <div className="hidden lg:grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6 text-sm">
