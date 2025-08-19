@@ -103,13 +103,9 @@ const BannerSection = () => {
           </div>
         </div>
 
-<<<<<<< HEAD
         <div className=" flex items-center gap-4 lg:mt-6  md:mb-0 mt-2 mb-2">
           {/* <button className="hidden sm:grid bg-Blue-400 border border-white text-white  text-xs md:text-base font-semibold py-2 px-4  md:px-4 md:py-2 rounded-lg hover:bg-white hover:text-[#0074b2] transition cursor-pointer">
-=======
-        <div className="flex items-center gap-4 lg:mt-6 md:mb-0 mt-2 mb-2">
-          <button className="hidden sm:grid bg-Blue-400 border border-white text-white text-xs md:text-base font-semibold py-2 px-4 md:px-4 md:py-2 rounded-lg hover:bg-white hover:text-[#0074b2] transition cursor-pointer">
->>>>>>> f07898e519691f85792f55f0f27b490ab5f703ac
+
             Book Appointment
           </button> */}
           <a href="https://play.google.com/store/apps/details?id=com.doctors.adda">

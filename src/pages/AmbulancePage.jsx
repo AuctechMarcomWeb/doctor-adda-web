@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import AmbulanceCard from "../components/AmbulanceCard";
 import { getRequest } from "../Helpers";
 import AmbulanceBanner from "../components/AmbulanceBanner";
+import { Skeleton, Card } from "antd";
 
 const AmbulancePage = () => {
   useEffect(() => {
@@ -14,16 +15,19 @@ const AmbulancePage = () => {
   const [location, setLocation] = useState({
     radius: "8000",
   });
+    const [loading, setLoading] = useState(true); // 👈 loading state
 
-  useEffect(() => {
+ useEffect(() => {
     const fetchAmbulances = async () => {
       try {
+        setLoading(true); // start skeleton
         const res = await getRequest(`ambulance?radius=${location?.radius}`);
-        console.log(" Ambulance Lists:", res?.data?.data?.ambulances || []);
         setAmbulanceData(res?.data?.data?.ambulances || []);
       } catch (error) {
         console.error(" Error fetching ambulances:", error);
         setAmbulanceData([]);
+      } finally {
+        setLoading(false); // stop skeleton
       }
     };
 
@@ -150,8 +154,16 @@ const AmbulancePage = () => {
         </div>
 
         {/* Ambulance Cards */}
+        {/* Ambulance Cards OR Skeleton */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {filteredData.length > 0 ? (
+          {loading ? (
+            // 🔹 Skeleton grid (shows 4 placeholders)
+            Array.from({ length: 4 }).map((_, i) => (
+              <Card key={i} className="rounded-2xl shadow-md">
+                <Skeleton active avatar paragraph={{ rows: 3 }} />
+              </Card>
+            ))
+          ) : filteredData.length > 0 ? (
             filteredData.map((data, index) => (
               <div
                 key={index}
