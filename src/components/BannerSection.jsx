@@ -63,14 +63,12 @@ const BannerSection = () => {
             Smart Healthcare Access – Anytime, Anywhere
           </span>
           <p
-            className="text-white/90 text-sm sm:text-base mb-2 mt-2 leading-relaxed animate-fade-in-up lg:hidden"
-            style={{ animationDelay: "0.5s" }}
-          >
-            Connect with world-class doctors.
-          </p>
-          <button className="hidden lg:grid bg-Blue-400 border text-xs md:text-base border-white text-white font-semibold py-2 px-4 md:px-4 md:py-2 rounded-lg hover:bg-white hover:text-[#0074b2] transition cursor-pointer">
-            Book Now
-          </button>
+                className="text-white/90 text-sm sm:text-base mb-2 mt-2  leading-relaxed animate-fade-in-up lg:hidden "
+                style={{ animationDelay: "0.5s" }}
+              >
+               Connect with world-class doctors.
+              </p>
+          
         </div>
 
         {/* Search Bar */}
@@ -105,10 +103,15 @@ const BannerSection = () => {
           </div>
         </div>
 
+<<<<<<< HEAD
+        <div className=" flex items-center gap-4 lg:mt-6  md:mb-0 mt-2 mb-2">
+          {/* <button className="hidden sm:grid bg-Blue-400 border border-white text-white  text-xs md:text-base font-semibold py-2 px-4  md:px-4 md:py-2 rounded-lg hover:bg-white hover:text-[#0074b2] transition cursor-pointer">
+=======
         <div className="flex items-center gap-4 lg:mt-6 md:mb-0 mt-2 mb-2">
           <button className="hidden sm:grid bg-Blue-400 border border-white text-white text-xs md:text-base font-semibold py-2 px-4 md:px-4 md:py-2 rounded-lg hover:bg-white hover:text-[#0074b2] transition cursor-pointer">
+>>>>>>> f07898e519691f85792f55f0f27b490ab5f703ac
             Book Appointment
-          </button>
+          </button> */}
           <a href="https://play.google.com/store/apps/details?id=com.doctors.adda">
             <button className="bg-white text-[#0074b2] text-xs md:text-base font-semibold py-2 px-4 md:px-4 md:py-2 rounded-lg hover:text-black transition cursor-pointer">
               Download App

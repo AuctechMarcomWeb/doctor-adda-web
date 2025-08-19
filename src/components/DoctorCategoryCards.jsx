@@ -22,7 +22,7 @@ const DoctorCategoryCards = () => {
   const fetchCategories = async () => {
     try {
       const response = await getRequest("category");
-      //console.log("fetched category", response);
+      console.log("fetched category", response);
       setCategories(response?.data?.data?.categories || []);
     } catch (error) {
       // console.error(error);

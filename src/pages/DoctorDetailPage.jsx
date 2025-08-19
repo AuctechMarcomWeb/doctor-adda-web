@@ -201,6 +201,10 @@ const DoctorDetailPage = () => {
 const handleOpenManagePatients = () => {
     navigate("/manage-patients");
   };
+  const handleOpenManagePets = () => {
+    navigate("/pets");
+  };
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -626,6 +630,8 @@ const handleOpenManagePatients = () => {
         otherPatientDetails={otherPatientDetails}
         setOtherPatientDetails={setOtherPatientDetails}
         onOpenManagePatients={handleOpenManagePatients}
+                onOpenManagePets={handleOpenManagePets}
+
       />
     </div>
   );
