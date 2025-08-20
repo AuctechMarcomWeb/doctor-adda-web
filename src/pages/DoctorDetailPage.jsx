@@ -630,7 +630,7 @@ const handleOpenManagePatients = () => {
         otherPatientDetails={otherPatientDetails}
         setOtherPatientDetails={setOtherPatientDetails}
         onOpenManagePatients={handleOpenManagePatients}
-                onOpenManagePets={handleOpenManagePets}
+        onOpenManagePets={handleOpenManagePets}
 
       />
     </div>
