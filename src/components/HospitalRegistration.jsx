@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect } from "react";
 import {
   Plus,
   Upload,
@@ -9,29 +10,117 @@ import {
   User,
   FileText,
 } from "lucide-react";
+import { getRequest, postRequest } from "../Helpers/index";
+import { useSelector } from "react-redux";
 
 const HospitalRegistration = () => {
-  const [profilePic, setProfilePic] = useState(null);
-  const [facilities, setFacilities] = useState([{ name: "", description: "" }]);
-  const [formData, setFormData] = useState({
-    hospitalName: "",
-    officialEmail: "",
-    officialContact: "",
-    category: "",
-    healthCard: "",
-    description: "",
-    address: "",
-    ownerName: "",
-    gstNumber: "",
-    phoneNumber: "",
-  });
-
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
+  const userId = userProfileData?._id;
+  // Profile Image states
+  const [profileFile, setProfileFile] = useState(null);
+  console.log("profileFile",profileFile);
+  
+  const [profilePreview, setProfilePreview] = useState(null);
 
-  const handleProfilePic = (e) => {
-   
+  const [facilities, setFacilities] = useState([
+    { name: "fdgdf", discription: "" },
+  ]);
+  const [formData, setFormData] = useState({
+    name: "jhgjg",
+    address: "dfd",
+    email: "ddf@gmail.com",
+    phone: "7654456765",
+    categories: "",
+    accountType: "Hospital",
+    //healthCard: "Both ",
+    ownerName: "df",
+    gstNumber: "123432343223456",
+    phoneNumber: "7654456765",
+    profileImage: "",
+    description: "gfdfgd",
+    latitude: "28.6139",
+    longitude: "77.2090",
+  });
+  console.log("formData", formData);
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await getRequest("category");
+        console.log("fetched category", response?.data?.data?.categories);
+        setCategories(response?.data?.data?.categories || []);
+      } catch (err) {
+        console.error("Error fetching categories:", err);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+const uploadImage = async (profileFile) => {
+  try {
+    const formData = new FormData();
+    formData.append("file", profileFile?.name);
+
+    const response = await postRequest({
+      url: "upload/uploadImage",
+      cred: formData, // 🔹 yahi body jayegi
+    });
+      console.log("Image uploaded successfully:", response);
+      return response?.data?.imageUrl
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    return null;
+  }
+};
+
+  
+  const handleSubmit = async () => {
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+    setErrors({});
+    setLoading(true);
+
+    try {
+            let imageUrl = formData?.profileImage;
+
+      // Agar user ne naya file select kiya hai
+      if (profileFile) {
+        imageUrl = await uploadImage(profileFile);
+      }
+
+      const payload = { ...formData, facilities };
+
+      // API call (await zaroori hai)
+      const response = await postRequest({
+        url: `hospital/registerHospital/${userId}`,
+        cred: payload,
+      });
+
+      console.log("Hospital Register Response:", response);
+
+      // success tab dikhana hai jab API success de
+      setShowSuccess(true);
+    } catch (err) {
+      console.error("Error Registering Hospital:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Profile Pic Handler
+const handleProfilePic = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setProfileFile(file);
+      setProfilePreview(URL.createObjectURL(file)); // preview
+    }
   };
 
   const handleInputChange = (name, value) => {
@@ -56,33 +145,17 @@ const HospitalRegistration = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.hospitalName) newErrors.hospitalName = "Hospital name is required";
-    if (!formData.officialEmail) newErrors.officialEmail = "Email is required";
-    if (!formData.officialContact) newErrors.officialContact = "Contact number is required";
-    if (!formData.category) newErrors.category = "Please select a category";
-    if (!formData.healthCard) newErrors.healthCard = "Please select health card type";
+    if (!formData.name) newErrors.name = "Hospital name is required";
+    if (!formData.email) newErrors.email = "Email is required";
+    if (!formData.phone) newErrors.phone = "Contact number is required";
+    if (!formData.categories) newErrors.categories = "Please select a category";
+   // if (!formData.healthCard)
+     // newErrors.healthCard = "Please select health card type";
     if (!formData.address) newErrors.address = "Address is required";
     if (!formData.ownerName) newErrors.ownerName = "Owner name is required";
-    if (!formData.phoneNumber) newErrors.phoneNumber = "Verification phone is required";
+    if (!formData.phoneNumber)
+      newErrors.phoneNumber = "Verification phone is required";
     return newErrors;
-  };
-
-  const handleSubmit = () => {
-    const validationErrors = validateForm();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-    setErrors({});
-    setLoading(true);
-
-    const data = { ...formData, facilities, profilePic };
-    console.log("Form Submitted:", data);
-
-    setTimeout(() => {
-      setLoading(false);
-      setShowSuccess(true);
-    }, 1500);
   };
 
   return (
@@ -96,7 +169,9 @@ const HospitalRegistration = () => {
           <h1 className="text-xl  md:text-2xl lg:text-4xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
             Hospital Registration
           </h1>
-          <p className="text-sm sm:text-base text-gray-600 mt-2">Join our healthcare network today</p>
+          <p className="text-sm sm:text-base text-gray-600 mt-2">
+            Join our healthcare network today
+          </p>
         </div>
 
         {/* Success Message */}
@@ -121,7 +196,9 @@ const HospitalRegistration = () => {
                   ></path>
                 </svg>
               </div>
-              <h3 className="text-2xl font-bold text-green-600 mb-2">Success!</h3>
+              <h3 className="text-2xl font-bold text-green-600 mb-2">
+                Success!
+              </h3>
               <p className="text-gray-600">Hospital registered successfully!</p>
             </div>
           </div>
@@ -139,17 +216,18 @@ const HospitalRegistration = () => {
                 </label>
               </div>
               <div className="flex items-center gap-6">
-                <div className="relative">
+                <div className="relative w-24 h-24">
                   <input
                     type="file"
+                    id="profilePic"
                     accept="image/*"
                     onChange={handleProfilePic}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                   />
                   <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-green-100 rounded-full border-4 border-dashed border-blue-300 flex items-center justify-center hover:border-blue-500 transition-colors duration-300 cursor-pointer group-hover:scale-105 transform transition-transform">
-                    {profilePic ? (
+                    {profilePreview ? (
                       <img
-                        src=""
+                        src={profilePreview}
                         alt="Preview"
                         className="w-full h-full object-cover rounded-full"
                       />
@@ -174,15 +252,13 @@ const HospitalRegistration = () => {
                 </label>
                 <input
                   type="text"
-                  value={formData.hospitalName}
-                  onChange={(e) =>
-                    handleInputChange("hospitalName", e.target.value)
-                  }
+                  value={formData?.name}
+                  onChange={(e) => handleInputChange("name", e.target.value)}
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500"
                   placeholder="Enter hospital name"
                 />
-                {errors.hospitalName && (
-                  <p className="text-red-500 text-xs">{errors.hospitalName}</p>
+                {errors.name && (
+                  <p className="text-red-500 text-xs">{errors?.name}</p>
                 )}
               </div>
 
@@ -193,15 +269,13 @@ const HospitalRegistration = () => {
                 </label>
                 <input
                   type="email"
-                  value={formData.officialEmail}
-                  onChange={(e) =>
-                    handleInputChange("officialEmail", e.target.value)
-                  }
+                  value={formData?.email}
+                  onChange={(e) => handleInputChange("email", e.target.value)}
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500"
                   placeholder="hospital@example.com"
                 />
                 {errors.officialEmail && (
-                  <p className="text-red-500 text-xs">{errors.officialEmail}</p>
+                  <p className="text-red-500 text-xs">{errors?.email}</p>
                 )}
               </div>
             </div>
@@ -211,21 +285,17 @@ const HospitalRegistration = () => {
               <div className="space-y-2 group">
                 <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
                   <Phone className="w-4 h-4 text-purple-600" />
-                 Officail Hospital Contact Number
+                  Officail Hospital Contact Number
                 </label>
                 <input
-                  type="tel"
-                  value={formData.officialContact}
-                  onChange={(e) =>
-                    handleInputChange("officialContact", e.target.value)
-                  }
+                  type="number"
+                  value={formData?.phone}
+                  onChange={(e) => handleInputChange("phone", e.target.value)}
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-purple-500"
                   placeholder="+91 12345 67890"
                 />
-                {errors.officialContact && (
-                  <p className="text-red-500 text-xs">
-                    {errors.officialContact}
-                  </p>
+                {errors?.phone && (
+                  <p className="text-red-500 text-xs">{errors?.phone}</p>
                 )}
               </div>
 
@@ -234,19 +304,21 @@ const HospitalRegistration = () => {
                   Category
                 </label>
                 <select
-                  value={formData.category}
-                  onChange={(e) => handleInputChange("category", e.target.value)}
+                  value={formData?.categories[0] || ""}
+                  onChange={
+                    (e) => handleInputChange("categories", [e.target.value]) // ✅ array me bhejna
+                  }
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="" disabled>
-                    Select Category
-                  </option>
-                  <option value="General">General</option>
-                  <option value="Specialized">Specialized</option>
-                  <option value="Multispecialty">Multispecialty</option>
+                  <option value="">Select Category</option>
+                  {categories.map((cat) => (
+                    <option key={cat._id} value={cat._id}>
+                      {cat.name}
+                    </option>
+                  ))}
                 </select>
-                {errors.category && (
-                  <p className="text-red-500 text-xs">{errors.category}</p>
+                {errors?.categories && (
+                  <p className="text-red-500 text-xs">{errors?.category}</p>
                 )}
               </div>
 
@@ -255,7 +327,7 @@ const HospitalRegistration = () => {
                   Health Card
                 </label>
                 <select
-                  value={formData.healthCard}
+                  value={formData?.healthCard}
                   onChange={(e) =>
                     handleInputChange("healthCard", e.target.value)
                   }
@@ -268,10 +340,30 @@ const HospitalRegistration = () => {
                   <option value="Private">Private</option>
                   <option value="Both">Both</option>
                 </select>
-                {errors.healthCard && (
-                  <p className="text-red-500 text-xs">{errors.healthCard}</p>
+                {errors?.healthCard && (
+                  <p className="text-red-500 text-xs">{errors?.healthCard}</p>
                 )}
               </div>
+            </div>
+
+            {/* Decription */}
+            <div className="space-y-2 group">
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                <FileText className="w-4 h-4 text-red-600" />
+                Decription
+              </label>
+              <input
+                type="text"
+                value={formData?.description}
+                onChange={(e) =>
+                  handleInputChange("description", e.target.value)
+                }
+                className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
+                placeholder="Complete hospital address"
+              />
+              {errors?.description && (
+                <p className="text-red-500 text-xs">{errors?.description}</p>
+              )}
             </div>
 
             {/* Address */}
@@ -282,13 +374,13 @@ const HospitalRegistration = () => {
               </label>
               <input
                 type="text"
-                value={formData.address}
+                value={formData?.address}
                 onChange={(e) => handleInputChange("address", e.target.value)}
                 className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
                 placeholder="Complete hospital address"
               />
-              {errors.address && (
-                <p className="text-red-500 text-xs">{errors.address}</p>
+              {errors?.address && (
+                <p className="text-red-500 text-xs">{errors?.address}</p>
               )}
             </div>
 
@@ -301,15 +393,15 @@ const HospitalRegistration = () => {
                 </label>
                 <input
                   type="text"
-                  value={formData.ownerName}
+                  value={formData?.ownerName}
                   onChange={(e) =>
                     handleInputChange("ownerName", e.target.value)
                   }
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-gray-500"
                   placeholder="Full name"
                 />
-                {errors.ownerName && (
-                  <p className="text-red-500 text-xs">{errors.ownerName}</p>
+                {errors?.ownerName && (
+                  <p className="text-red-500 text-xs">{errors?.ownerName}</p>
                 )}
               </div>
 
@@ -318,8 +410,8 @@ const HospitalRegistration = () => {
                   GST Number
                 </label>
                 <input
-                  type="text"
-                  value={formData.gstNumber}
+                  type="number"
+                  value={formData?.gstNumber}
                   onChange={(e) =>
                     handleInputChange("gstNumber", e.target.value)
                   }
@@ -333,16 +425,16 @@ const HospitalRegistration = () => {
                   Verification Phone
                 </label>
                 <input
-                  type="tel"
-                  value={formData.phoneNumber}
+                  type="number"
+                  value={formData?.phoneNumber}
                   onChange={(e) =>
                     handleInputChange("phoneNumber", e.target.value)
                   }
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-teal-500"
                   placeholder="+91 98765 43210"
                 />
-                {errors.phoneNumber && (
-                  <p className="text-red-500 text-xs">{errors.phoneNumber}</p>
+                {errors?.phoneNumber && (
+                  <p className="text-red-500 text-xs">{errors?.phoneNumber}</p>
                 )}
               </div>
             </div>
@@ -372,7 +464,7 @@ const HospitalRegistration = () => {
                     <input
                       type="text"
                       placeholder="Facility name (e.g., ICU, X-Ray)"
-                      value={facility.name}
+                      value={facility?.name}
                       onChange={(e) =>
                         handleFacilityChange(index, "name", e.target.value)
                       }
@@ -382,11 +474,11 @@ const HospitalRegistration = () => {
                       <input
                         type="text"
                         placeholder="Description"
-                        value={facility.description}
+                        value={facility?.discription}
                         onChange={(e) =>
                           handleFacilityChange(
                             index,
-                            "description",
+                            "discription",
                             e.target.value
                           )
                         }
