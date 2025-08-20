@@ -17,7 +17,7 @@ import { getRequest, postRequest } from "../Helpers";
 import { useSelector } from "react-redux";
 import RenderRazorPay from "../components/RenderRazorPay";
 import toast from "react-hot-toast";
- 
+
 const AppointmentFlow = ({
   open,
   onClose,
@@ -45,7 +45,9 @@ const AppointmentFlow = ({
   const UserId = userProfileData?._id;
   const [patients, setPatients] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(null);
-    const [selectedPet, setSelectedPet] = useState(null);
+
+  const [pets, setPets] = useState([]); // empty array initially
+  const [selectedPet, setSelectedPet] = useState(null);
 
   const otherPatients = patients.length > 0 ? patients : otherPatientDetails;
 
@@ -67,7 +69,7 @@ const AppointmentFlow = ({
   const [showRazorpay, setShowRazorpay] = useState(false);
   const [orderId, setOrderId] = useState("");
   const [paymentLoading, setPaymentLoading] = useState(false);
-const isVeterinary = doctor?.category?.name === "Veterinary";
+  const isVeterinary = doctor?.category?.name === "Veterinary";
 
   const handleConfirmBooking = async () => {
     setLoading(true);
@@ -107,20 +109,19 @@ const isVeterinary = doctor?.category?.name === "Veterinary";
   }, [UserId]);
 
   // Fetch pets from API
-    const fetchPets = async () => {
-      try {
-        const res = await getRequest(`auth/getpets/${UserId}`);
-        console.log("Fetch Pets ===", res?.data?.data);
-        setPets(res?.data?.data || []);
-      } catch (error) {
-        console.error("Error fetching pets:", error);
-      }
-    };
-  
-    useEffect(() => {
-      if (UserId) fetchPets();
-    }, [UserId]);
-  
+  const fetchPets = async () => {
+    try {
+      const res = await getRequest(`auth/getpets/${UserId}`);
+      console.log("Fetch Pets ===", res?.data?.data);
+      setPets(res?.data?.data || []);
+    } catch (error) {
+      console.error("Error fetching pets:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (UserId) fetchPets();
+  }, [UserId]);
 
   const handleClose = () => {
     setStep(1);
@@ -229,205 +230,195 @@ const isVeterinary = doctor?.category?.name === "Veterinary";
         <Dialog.Panel className="bg-white p-5 sm:p-6 rounded-xl shadow-2xl w-full max-w-sm sm:max-w-md lg:max-w-lg">
           {/* Step 1: Who for */}
           {step === 1 && (
-  <>
-    <Dialog.Title className="text-xl sm:text-2xl font-semibold text-center text-gray-800 mb-6">
-      Who is this appointment for?
-    </Dialog.Title>
+            <>
+              <Dialog.Title className="text-xl sm:text-2xl font-semibold text-center text-gray-800 mb-6">
+                Who is this appointment for?
+              </Dialog.Title>
 
-    {isVeterinary ? (
-      <>
-        {/* Only Pet Button */}
-        <div className="space-y-4">
-          <button
-            className={`w-full px-4 py-3 border rounded-xl shadow-sm transition-all duration-200 font-medium text-sm sm:text-base ${
-              selectedFor === "pet"
-                ? "bg-blue-100 border-blue-600 text-blue-800"
-                : "border-gray-300 hover:bg-blue-50 hover:border-blue-600 text-gray-700"
-            }`}
-            onClick={() => {
-              setSelectedFor("pet");
-
-           }}
-          >
-            Pet
-          </button>
-        </div>
-
-        {/* Pet List */}
-        {selectedFor === "pet" && (
-          <div className="mt-4">
-            <h4 className="text-sm font-medium text-gray-700 mb-2">Your Pets:</h4>
-            {otherPatients.length > 0 ? (
-              <ul className="space-y-2 text-sm text-gray-700 max-h-40 overflow-auto">
-                {otherPatients.map((p, i) => (
-                  <li
-                    key={i}
-                    className={`border rounded-lg p-2 shadow-sm cursor-pointer ${
-                      selectedPet?.name === p.name
-                        ? "border-blue-600 bg-blue-50"
-                        : "border-gray-200"
-                    }`}
-                    onClick={() => {
-                      setSelectedPet(p);
-                    }}
-                  >
-                    {p.name}, {p.gender}, {p.age} yrs
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-sm text-gray-500">No pets found</p>
-            )}
-
-            {/* Action Buttons */}
-            <div className="mt-4 flex flex-col sm:flex-row justify-between gap-4">
-              {otherPatients.length === 0 ? (
+              {isVeterinary ? (
                 <>
-                  <button
-                    onClick={handleClose}
-                    className="w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-all duration-200"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={() => {
-                      onClose();
-                      onOpenManagePets(); // Open Manage Pets modal
-                    }}
-                    className="w-full px-4 py-3 bg-gray-300 text-gray-700 font-medium rounded-lg transition-all duration-200 hover:bg-gray-400"
-                  >
-                    Manage Pets
-                  </button>
-                </>
-              ) : selectedPet ? (
-                <button
-                  onClick={() => setStep(2)}
-                  className="w-full px-4 py-3 bg-[#006fab] hover:bg-blue-700 text-white font-medium rounded-lg transition-all duration-200"
-                >
-                  Continue
-                </button>
-              ) :(
-                      // No patient selected, show Manage Patients button
-                      <button
-                        onClick={() => {
-                          onClose();
-                          onOpenManagePets();
-                        }}
-                        className="w-full px-4 py-3 bg-gray-300 text-gray-700 font-medium rounded-lg transition-all duration-200 hover:bg-gray-400"
-                      >
-                        Manage Pets
-                      </button>
-                    )}
-            </div>
-          </div>
-        )}
-      </>
-    ) : (
-      <>
-        {/* Normal self/other buttons for non-veterinary */}
-         <div className="space-y-4">
-                {["self", "other"].map((option) => (
-                  <button
-                    key={option}
-                    className={`w-full px-4 py-3 border rounded-xl shadow-sm transition-all duration-200 font-medium text-sm sm:text-base ${
-                      selectedFor === option
-                        ? "bg-blue-100 border-blue-600 text-blue-800"
-                        : "border-gray-300 hover:bg-blue-50 hover:border-blue-600 text-gray-700"
-                    }`}
-                    onClick={() => {
-                      setSelectedFor(option);
-                      setSelectedPatient(null); // Reset selected patient when option changes
-                    }}
-                  >
-                    {option === "self" ? "Self" : "Other"}
-                  </button>
-                ))}
-              </div>
+                  {/* Single Pet Button */}
+                  <div className="space-y-4">
+                    <button
+                      className={`w-full px-4 py-3 border rounded-xl shadow-sm transition-all duration-200 font-medium text-sm sm:text-base ${
+                        selectedFor === "pet"
+                          ? "bg-blue-100 border-blue-600 text-blue-800"
+                          : "border-gray-300 hover:bg-blue-50 hover:border-blue-600 text-gray-700"
+                      }`}
+                      onClick={() => {
+                        setSelectedFor("pet");
+                        setSelectedPet(null); // reset pet selection
+                      }}
+                    >
+                      Pet
+                    </button>
+                  </div>
 
-              {/* If 'Other' selected show patients list */}
-              {selectedFor === "other" && (
-                <div className="mt-4">
-                  <h4 className="text-sm font-medium text-gray-700 mb-2">
-                    Other Patients:
-                  </h4>
-                  {otherPatients.length > 0 ? (
-                    <ul className="space-y-2 text-sm text-gray-700 max-h-40 overflow-auto">
-                      {otherPatients.map((p, i) => (
-                        <li
-                          key={i}
-                          className={`border rounded-lg p-2 shadow-sm cursor-pointer ${
-                            selectedPatient?.name === p.name
-                              ? "border-blue-600 bg-blue-50"
-                              : "border-gray-200"
-                          }`}
-                          onClick={() => {
-                            setSelectedPatient(p);
-                            setOtherPatientDetails({ patient: p }); // update parent state
-                          }}
+                  {/* Pet List */}
+                  {selectedFor === "pet" && (
+                    <div className="mt-4">
+                      <h4 className="text-sm font-medium text-gray-700 mb-2">
+                        Your Pets:
+                      </h4>
+                      {pets.length > 0 ? (
+                        <ul className="space-y-2 text-sm text-gray-700 max-h-40 overflow-auto">
+                          {pets.map((p, i) => (
+                            <li
+                              key={i}
+                              className={`border rounded-lg p-2 shadow-sm cursor-pointer ${
+                                selectedPet?.name === p.name
+                                  ? "border-blue-600 bg-blue-50"
+                                  : "border-gray-200"
+                              }`}
+                              onClick={() => setSelectedPet(p)}
+                            >
+                              {p.name}, {p.gender}, {p.age} yrs
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-sm text-gray-500">No pets found</p>
+                      )}
+
+                      {/* Action Buttons */}
+                      <div className="mt-4 flex flex-col sm:flex-row justify-between gap-4">
+                        <button
+                          onClick={handleClose}
+                          className="w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-all duration-200"
                         >
-                          {p.name} , {p.gender}, {p.age}{" "}
-                          {p.weight ? p.weight + "yrs" : ""}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="text-sm text-gray-500">No data available</p>
+                          Cancel
+                        </button>
+
+                        {selectedPet ? (
+                          <button
+                            onClick={() => setStep(2)}
+                            className="w-full px-4 py-3 bg-[#006fab] hover:bg-blue-700 text-white font-medium rounded-lg transition-all duration-200"
+                          >
+                            Continue
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              onClose();
+                              onOpenManagePets();
+                            }}
+                            className="w-full px-4 py-3 bg-gray-300 text-gray-700 font-medium rounded-lg transition-all duration-200 hover:bg-gray-400"
+                          >
+                            Manage Pets
+                          </button>
+                        )}
+                      </div>
+                    </div>
                   )}
-                </div>
-              )}
+                </>
+              ) : (
+                <>
+                  {/* Normal self/other buttons for non-veterinary */}
+                  <div className="space-y-4">
+                    {["self", "other"].map((option) => (
+                      <button
+                        key={option}
+                        className={`w-full px-4 py-3 border rounded-xl shadow-sm transition-all duration-200 font-medium text-sm sm:text-base ${
+                          selectedFor === option
+                            ? "bg-blue-100 border-blue-600 text-blue-800"
+                            : "border-gray-300 hover:bg-blue-50 hover:border-blue-600 text-gray-700"
+                        }`}
+                        onClick={() => {
+                          setSelectedFor(option);
+                          setSelectedPatient(null); // Reset selected patient when option changes
+                        }}
+                      >
+                        {option === "self" ? "Self" : "Other"}
+                      </button>
+                    ))}
+                  </div>
 
-              <div className="mt-8 flex flex-col sm:flex-row justify-between gap-4">
-                <button
-                  onClick={handleClose}
-                  className="w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-all duration-200"
-                >
-                  Cancel
-                </button>
+                  {/* If 'Other' selected show patients list */}
+                  {selectedFor === "other" && (
+                    <div className="mt-4">
+                      <h4 className="text-sm font-medium text-gray-700 mb-2">
+                        Other Patients:
+                      </h4>
+                      {otherPatients.length > 0 ? (
+                        <ul className="space-y-2 text-sm text-gray-700 max-h-40 overflow-auto">
+                          {otherPatients.map((p, i) => (
+                            <li
+                              key={i}
+                              className={`border rounded-lg p-2 shadow-sm cursor-pointer ${
+                                selectedPatient?.name === p.name
+                                  ? "border-blue-600 bg-blue-50"
+                                  : "border-gray-200"
+                              }`}
+                              onClick={() => {
+                                setSelectedPatient(p);
+                                setOtherPatientDetails({ patient: p }); // update parent state
+                              }}
+                            >
+                              {p.name} , {p.gender}, {p.age}{" "}
+                              {p.weight ? p.weight + "yrs" : ""}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-sm text-gray-500">
+                          No data available
+                        </p>
+                      )}
+                    </div>
+                  )}
 
-                {/* Buttons logic: */}
-                {selectedFor === "self" && (
-                  <button
-                    onClick={() => setStep(2)}
-                    disabled={!selectedFor}
-                    className={`w-full px-4 py-3 font-medium rounded-lg transition-all duration-200 ${
-                      selectedFor
-                        ? "bg-[#006fab] hover:bg-blue-700 text-white"
-                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                    }`}
-                  >
-                    Continue as Self
-                  </button>
-                )}
+                  <div className="mt-8 flex flex-col sm:flex-row justify-between gap-4">
+                    <button
+                      onClick={handleClose}
+                      className="w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-all duration-200"
+                    >
+                      Cancel
+                    </button>
 
-                {selectedFor === "other" && (
-                  <>
-                    {selectedPatient ? (
-                      // If patient selected, show Continue button
+                    {/* Buttons logic: */}
+                    {selectedFor === "self" && (
                       <button
                         onClick={() => setStep(2)}
-                        className="w-full px-4 py-3 bg-[#006fab] hover:bg-blue-700 text-white font-medium rounded-lg transition-all duration-200"
+                        disabled={!selectedFor}
+                        className={`w-full px-4 py-3 font-medium rounded-lg transition-all duration-200 ${
+                          selectedFor
+                            ? "bg-[#006fab] hover:bg-blue-700 text-white"
+                            : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        }`}
                       >
-                        Continue as Other
-                      </button>
-                    ) : (
-                      // No patient selected, show Manage Patients button
-                      <button
-                        onClick={() => {
-                          onClose();
-                          onOpenManagePatients();
-                        }}
-                        className="w-full px-4 py-3 bg-gray-300 text-gray-700 font-medium rounded-lg transition-all duration-200 hover:bg-gray-400"
-                      >
-                        Manage Patients
+                        Continue as Self
                       </button>
                     )}
-                  </>
-                )}
-              </div>
-      </>
-    )}
-  </>
-)}
+
+                    {selectedFor === "other" && (
+                      <>
+                        {selectedPatient ? (
+                          // If patient selected, show Continue button
+                          <button
+                            onClick={() => setStep(2)}
+                            className="w-full px-4 py-3 bg-[#006fab] hover:bg-blue-700 text-white font-medium rounded-lg transition-all duration-200"
+                          >
+                            Continue as Other
+                          </button>
+                        ) : (
+                          // No patient selected, show Manage Patients button
+                          <button
+                            onClick={() => {
+                              onClose();
+                              onOpenManagePatients();
+                            }}
+                            className="w-full px-4 py-3 bg-gray-300 text-gray-700 font-medium rounded-lg transition-all duration-200 hover:bg-gray-400"
+                          >
+                            Manage Patients
+                          </button>
+                        )}
+                      </>
+                    )}
+                  </div>
+                </>
+              )}
+            </>
+          )}
 
           {/* Step 2: Payment */}
           {step === 2 && (
@@ -573,6 +564,7 @@ const isVeterinary = doctor?.category?.name === "Veterinary";
                   <h4 className="text-base font-semibold text-gray-800 mb-2">
                     Patient Information
                   </h4>
+
                   {selectedFor === "self" ? (
                     <div className="space-y-1 text-sm text-gray-700">
                       <p className="flex flex-wrap">
@@ -588,7 +580,7 @@ const isVeterinary = doctor?.category?.name === "Veterinary";
                         {userProfileData?.phone || "N/A"}
                       </p>
                     </div>
-                  ) : (
+                  ) : selectedFor === "other" ? (
                     <div className="space-y-1 text-sm text-gray-700">
                       <p className="flex flex-wrap">
                         <strong className="mr-1">Name:</strong>{" "}
@@ -609,7 +601,28 @@ const isVeterinary = doctor?.category?.name === "Veterinary";
                           "N/A"}
                       </p>
                     </div>
-                  )}
+                  ) : selectedFor === "pet" ? (
+                    <div className="space-y-1 text-sm text-gray-700">
+                      <p className="flex flex-wrap">
+                        <strong className="mr-1">Name:</strong>{" "}
+                        {selectedPet?.name || "N/A"}
+                      </p>
+                      <p className="flex flex-wrap">
+                        <strong className="mr-1">Gender:</strong>{" "}
+                        {selectedPet?.gender || "N/A"}
+                      </p>
+                      <p className="flex flex-wrap">
+                        <strong className="mr-1">Age:</strong>{" "}
+                        {selectedPet?.age ? `${selectedPet.age} yrs` : "N/A"}
+                      </p>
+                      {selectedPet?.weight && (
+                        <p className="flex flex-wrap">
+                          <strong className="mr-1">Weight:</strong>{" "}
+                          {selectedPet.weight}
+                        </p>
+                      )}
+                    </div>
+                  ) : null}
                 </div>
 
                 {/* Fee */}
@@ -663,22 +676,21 @@ const isVeterinary = doctor?.category?.name === "Veterinary";
           )}
           {/* Razorpay Component */}
           {showRazorpay && orderId && (
-  <RenderRazorPay
-    orderId={orderId}
-    currency="INR"
-    amount={appointmentData?.amount * 100 || 0}
-    setUpdateStatus={async (response) => {
-      console.log("🔄 Payment verified", response);
-      await handlePayment(response); // backend verify
-      setShowRazorpay(false);
+            <RenderRazorPay
+              orderId={orderId}
+              currency="INR"
+              amount={appointmentData?.amount * 100 || 0}
+              setUpdateStatus={async (response) => {
+                console.log("🔄 Payment verified", response);
+                await handlePayment(response); // backend verify
+                setShowRazorpay(false);
 
-      // Trigger Step 4 only after modal fully closes
-      setTimeout(() => setStep(4), 100);
-    }}
-    onClose={() => setShowRazorpay(false)}
-  />
-)}
-
+                // Trigger Step 4 only after modal fully closes
+                setTimeout(() => setStep(4), 100);
+              }}
+              onClose={() => setShowRazorpay(false)}
+            />
+          )}
         </Dialog.Panel>
       </div>
     </Dialog>
