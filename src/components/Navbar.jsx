@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef } from "react";
 import {
   Menu,
@@ -33,6 +34,15 @@ const Navbar = () => {
 
   console.log("user profile data from redux in navbar", userProfileData);
   console.log("isLoggedIn from redux", isLoggedIn);
+  // Extract upgrade info
+const { upgradeAccountId, upgradeAccountType, upgradeAccountApproveStatus } =
+  userProfileData ?? {};
+
+  // Determine if user is upgraded
+  const isUpgraded =
+    upgradeAccountId && upgradeAccountType && upgradeAccountApproveStatus;
+
+   console.log("isUpgraded", isUpgraded);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -209,15 +219,14 @@ const Navbar = () => {
                           Settings
                         </button>
                       </Link>
-                      <Link
-                        onClick={() => setDropdownOpen(false)}
-                        to="/"
-                      >
-                        <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
-                          <User className="w-4 h-4" />
-                          Upgrade Profile
-                        </button>
-                      </Link>
+                         <Link onClick={() => setDropdownOpen(false)} to={isUpgraded ? "/dashboard" : "/upgrade-profile"}>
+      <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
+        <User className="w-4 h-4" />
+        {isUpgraded ? "Dashboard" : "Upgrade Profile"}
+      </button>
+    </Link>
+
+
                     </div>
                   )}
                 </div>
