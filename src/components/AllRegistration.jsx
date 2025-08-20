@@ -101,7 +101,7 @@ const AllRegistration = () => {
               iconText: "text-blue-600",
               hoverOverlay: "bg-blue-600",
             }}
-            onClick={() => navigate("/doctor-appointments")}
+            onClick={() => navigate("/hospital-registration")}
           />
           <AppointmentTypeCard
             icon={Microscope}
