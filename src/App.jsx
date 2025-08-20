@@ -33,6 +33,8 @@ import ManagePets from "./components/ManagePets";
 import AppointmentSelection from "./components/AppointmentSelection";
 import DoctorAppointmentsPage from "./components/DoctorAppointmentsPage";
 import PopularSearch from "./components/PopularSearch";
+import UpgradeProfile from "./pages/UpgradeProfile";
+import AllRegistration from "./components/AllRegistration";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -90,6 +92,9 @@ function App() {
                 <Route path="/profile" element={<UserProfile />} />
                 <Route path="/appointments" element={<AppointmentSelection />} />
                 <Route path="/doctor-appointments" element={<DoctorAppointmentsPage />} />
+                
+                <Route path="/upgrade-profile" element={<UpgradeProfile />} />
+                <Route path="/all-registration" element={<AllRegistration />} />
 
 
                 <Route
