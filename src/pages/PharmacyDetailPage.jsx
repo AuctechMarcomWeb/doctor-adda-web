@@ -100,7 +100,7 @@ const PharmacyDetailPage = () => {
 
   // Services from API
   const services = pharmacy.services && pharmacy.services.length > 0
-    ? pharmacy.services.map(s => ({ name: s.name, icon: "💊" }))
+    ? pharmacy.services.map(s => ({ name: s.name, icon: <img width="50" height="50" src="https://img.icons8.com/3d-fluency/94/pill.png" alt="pill"/> }))
     : [
         { name: "Prescription Medicines", icon: "💊" },
         { name: "Health Supplements", icon: "🌿" },
@@ -111,7 +111,7 @@ const PharmacyDetailPage = () => {
       ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 pt-28" >
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 md:pt-28" >
       {/* Hero Section */}
       <div className="relative">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-indigo-600/10 backdrop-blur-sm"></div>

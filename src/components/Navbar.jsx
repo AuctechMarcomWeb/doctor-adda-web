@@ -137,7 +137,7 @@ const { upgradeAccountId, upgradeAccountType, upgradeAccountApproveStatus } =
                       Customer Support
                     </span>
                     <span className="md:text-xs xl:text-sm font-semibold text-gray-800">
-                      1800-572-0005 
+                       1800-572-0005
                     </span>
                   </div>
                 </div>
@@ -148,13 +148,13 @@ const { upgradeAccountId, upgradeAccountType, upgradeAccountApproveStatus } =
             <div className="h-5 w-px bg-gray-300 hidden md:block" />
 
             {/* Corporate Bookings */}
-            <a href="tel:+931-125-387-5">
+            <a href="tel:919450180033">
               <div className="text-gray-600 hidden md:block ">
                 <span className="text-xs block text-gray-500">
                   For Appointment Bookings/Enquiry
                 </span>
                 <span className="md:text-xs xl:text-sm font-semibold text-gray-800">
-                  +91 9838075493
+                  +91 9450180033
                 </span>
               </div>
             </a>
