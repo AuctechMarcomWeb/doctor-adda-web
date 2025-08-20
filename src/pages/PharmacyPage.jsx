@@ -135,12 +135,12 @@ const PharmacyPage = () => {
               </h2>
 
               <p
-                className="text-white/90 text-sm sm:text-base md:mb-8 max-w-2xl animate-fadeIn"
+                className="text-white/90 text-sm sm:text-base mb-4 md:mb-8 max-w-2xl animate-fadeIn"
                 style={{ animationDelay: "0.3s" }}
               >
                 Fast, genuine and accessible medication for you and your loved
                 ones.
-                <span className="block mt-2 text-cyan-200 ">
+                <span className="block mt-2 text-cyan-200 hidden md:block ">
                   Available 24/7 with home delivery
                 </span>
               </p>
@@ -165,19 +165,19 @@ const PharmacyPage = () => {
 
               {/* CTA Buttons */}
               <div
-                className="flex flex-col sm:flex-row gap-4  lg:justify-start animate-fadeIn"
+                className="flex flex-col sm:flex-row gap-4  lg:justify-start animate-fadeIn "
                 style={{ animationDelay: "0.9s" }}
               >
                 <a href="https://play.google.com/store/apps/details?id=com.doctors.adda">
                 <button
                   onMouseEnter={() => setHoveredButton("download")}
                   onMouseLeave={() => setHoveredButton(null)}
-                  className="group relative bg-white text-gray-900 px-8 py-4 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105 transition-all duration-300 overflow-hidden animate-slide-in-left cursor-pointer"
+                  className="group relative bg-white text-gray-900 md:px-6 md:py-4 px-3 py-2 md:rounded-2xl rounded-lg font-bold   text-xs md:text-base lg:text-lg hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105 transition-all duration-300 overflow-hidden animate-slide-in-left cursor-pointer"
                   style={{ animationDelay: "1s" }}
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-                  <div className="relative z-10 flex items-center gap-3 group-hover:text-white transition-colors duration-300">
+                  <div className="relative z-10 flex items-center md:gap-3 gap-1 group-hover:text-white transition-colors duration-300">
                     <Download className="w-5 h-5 group-hover:animate-bounce" />
                     Download App
                     {hoveredButton === "download" && (
