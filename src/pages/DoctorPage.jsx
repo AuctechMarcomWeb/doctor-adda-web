@@ -12,6 +12,7 @@ import {
 import DownloadAppSection from "../components/DownloadAppSection";
 import { useNavigate } from "react-router-dom";
 import { getRequest } from "../Helpers/index";
+import { Skeleton, Card } from "antd";
 
 const SpecialtyCard = ({ id, name, imageUrl, onViewDoctors }) => {
   return (
@@ -69,6 +70,7 @@ const DoctorPage = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
@@ -109,18 +111,23 @@ const DoctorPage = () => {
   // Fetch categories from API
   const fetchCategories = async () => {
     try {
+      setLoading(true);
+
       const response = await getRequest("category");
       const apiCategories = response?.data?.data?.categories || [];
       setCategories(apiCategories.length > 0 ? apiCategories : specialtyData);
     } catch (error) {
       console.error(error);
       setCategories(specialtyData); // fallback
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchCategories();
   }, []);
+
 
   // Navigate to doctors list page
   const handleViewDetails = (id) => {
@@ -140,9 +147,8 @@ const DoctorPage = () => {
       {/* Download App Banner */}
 
       <div
-        className={`relative overflow-hidden text-white rounded-3xl shadow-2xl transform transition-all duration-1000 ${
-          isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
-        }`}
+        className={`relative overflow-hidden text-white rounded-3xl shadow-2xl transform transition-all duration-1000 ${isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+          }`}
         style={{
           background:
             "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 50%, rgb(0, 101, 157) 100%)",
@@ -531,15 +537,27 @@ const DoctorPage = () => {
 
           {/* Specialty Cards */}
           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            {filteredData.map((category) => (
-              <SpecialtyCard
-                key={category._id}
-                id={category._id}
-                name={category.name}
-                imageUrl={category.imageUrl}
-                onViewDoctors={handleViewDetails}
-              />
-            ))}
+            {loading ? (
+              // 🔹 Skeleton grid (shows 4 placeholders)
+              Array.from({ length: 6 }).map((_, i) => (
+                <div className="flex flex-col items-center w-full h-full " key={i}>
+                <Skeleton.Image active  />
+                  {/* <br /> */}
+                  < Skeleton.Input className=" mt-2" />
+                {/* <Card key={i} className="rounded-2xl shadow-md">
+                </Card> */}
+                </div>
+              ))
+            ) :
+              filteredData.map((category) => (
+                <SpecialtyCard
+                  key={category._id}
+                  id={category._id}
+                  name={category.name}
+                  imageUrl={category.imageUrl}
+                  onViewDoctors={handleViewDetails}
+                />
+              ))}
           </div>
         </div>
       </div>

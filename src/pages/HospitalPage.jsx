@@ -1,8 +1,9 @@
-import React, {useEffect, useState } from "react";
-import {  Download, } from "lucide-react";
-import HospitalCard from "../components/HospitalCard"
-import { getRequest } from "../Helpers"
-import { useDebounce } from "../Hooks/useDebounce"
+import React, { useEffect, useState } from "react";
+import { Download, } from "lucide-react";
+import HospitalCard from "../components/HospitalCard";
+import { getRequest } from "../Helpers";
+import { useDebounce } from "../Hooks/useDebounce";
+import { Skeleton, Card } from "antd";
 
 
 
@@ -14,8 +15,9 @@ const HospitalPage = () => {
   const [error, setError] = useState(null);
   const [filterType, setFilterType] = useState("all");
   const [hoveredButton, setHoveredButton] = useState(null);
-  
+
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
+
 
 
   // Fetch hospitals data from API
@@ -23,10 +25,11 @@ const HospitalPage = () => {
     const fetchHospitals = async () => {
       try {
         setLoading(true);
+
         const response = await getRequest(`hospital?search=${debouncedSearchTerm}`)
 
         const data = response?.data?.data?.hospitals
-        
+
         if (data) {
           setHospitals(data);
         } else {
@@ -43,13 +46,13 @@ const HospitalPage = () => {
   }, [debouncedSearchTerm]);
 
 
-  
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
- 
+
 
   return (
 
@@ -62,17 +65,17 @@ const HospitalPage = () => {
       }}>
         {/* Animated background overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/20"></div>
-        
+
         {/* Floating medical icons */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute top-20 left-10 w-16 h-16 bg-white/10 rounded-full animate-bounce delay-300 flex items-center justify-center">
-            
+
           </div>
           <div className="absolute top-32 right-20 w-20 h-20 bg-white/10 rounded-full animate-pulse delay-150 flex items-center justify-center">
-            
+
           </div>
           <div className="absolute bottom-20 left-1/4 w-12 h-12 bg-white/10 rounded-full animate-spin delay-500 flex items-center justify-center">
-           
+
           </div>
           <div className="absolute top-40 left-1/2 w-14 h-14 bg-white/10 rounded-full animate-pulse delay-700 flex items-center justify-center">
             <svg className="w-7 h-7 text-white/70" fill="currentColor" viewBox="0 0 20 20">
@@ -80,33 +83,33 @@ const HospitalPage = () => {
             </svg>
           </div>
         </div>
-        
+
         {/* Main content */}
         <div className="relative sm:w-full lg:w-[80%] xl:w-[80%] 2xl:w-[70%] mx-auto px-4 pt-24 pb-10 md:pt-32 flex items-center">
           <div className="grid grid-cols-2 gap-4 md:gap-12 items-center w-full">
-            
+
             {/* Left content */}
             <div className="text-left space-y-6">
-             
-              
+
+
               <div className="space-y-4">
                 <h2 className="text-xl md:text-2xl lg:text-4xl font-bold md:mb-6 mb-4 leading-tight">
-                <span className="block bg-gradient-to-r from-white via-cyan-100 to-white bg-clip-text text-transparent animate-text-shimmer">
-                  Find Trusted
-                </span>
-                <span className="relative inline-block mt-2">
-                  <span className="bg-gradient-to-r from-yellow-200 via-pink-200 to-cyan-200 bg-clip-text text-transparent animate-color-shift">
-                    Hospitals & Clinics
+                  <span className="block bg-gradient-to-r from-white via-cyan-100 to-white bg-clip-text text-transparent animate-text-shimmer">
+                    Find Trusted
                   </span>
-                  <div className="absolute -bottom-3 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 via-pink-400 to-cyan-400 rounded-full transform scale-x-0 animate-scale-x-delayed"></div>
-                </span>
-              </h2>
-                
+                  <span className="relative inline-block mt-2">
+                    <span className="bg-gradient-to-r from-yellow-200 via-pink-200 to-cyan-200 bg-clip-text text-transparent animate-color-shift">
+                      Hospitals & Clinics
+                    </span>
+                    <div className="absolute -bottom-3 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 via-pink-400 to-cyan-400 rounded-full transform scale-x-0 animate-scale-x-delayed"></div>
+                  </span>
+                </h2>
+
                 <p className="text-blue-100 text-white/90 text-sm sm:text-base md:mb-8 max-w-xl animate-fadeInUp animation-delay-300">
                   Discover quality healthcare facilities near you with 24/7 emergency services and specialized medical care
                 </p>
               </div>
-              
+
               <div className=" hidden md:flex flex flex-wrap gap-4 animate-fadeInUp animation-delay-500">
                 <div className="flex items-center gap-3 bg-white/20 backdrop-blur-sm rounded-full px-6 py-3 transform hover:scale-105 transition-transform duration-300">
                   <div className="w-3 h-3 bg-green-400 rounded-full animate-ping"></div>
@@ -121,7 +124,7 @@ const HospitalPage = () => {
                   <span className="text-sm font-medium">Advanced Equipment</span>
                 </div>
               </div>
-              
+
               {/* <div className="pt-6 animate-fadeInUp animation-delay-700">
                 <button
                  onClick={() => {
@@ -157,18 +160,18 @@ const HospitalPage = () => {
 
               </div>
             </div>
-            
+
             {/* Right image */}
             <div className="relative animate-fadeInRight">
               <div className="relative">
-                <img 
-                  src="https://i.pinimg.com/736x/cb/68/63/cb68636c31e597f6c4c90102138abd24.jpg" 
-                  alt="Modern Hospital Building" 
+                <img
+                  src="https://i.pinimg.com/736x/cb/68/63/cb68636c31e597f6c4c90102138abd24.jpg"
+                  alt="Modern Hospital Building"
                   className="rounded-3xl shadow-2xl w-full md:h-96 h-50 object-cover transform hover:scale-105 transition-transform duration-500"
                 />
                 <div className=""></div>
               </div>
-              
+
               {/* Floating stats cards */}
               <div className=" hidden md:flex absolute -top-6 -left-6 bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-xl animate-bounce delay-500">
                 <div className="flex items-center gap-3">
@@ -183,7 +186,7 @@ const HospitalPage = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div className=" hidden md:flex absolute -bottom-6 -right-6 bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-xl animate-bounce delay-700">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
@@ -200,15 +203,15 @@ const HospitalPage = () => {
             </div>
           </div>
         </div>
-        
+
         {/* Enhanced wave divider with animation */}
         <div className="absolute bottom-0 left-0 w-full overflow-hidden">
           <svg className="relative block w-full md:h-12 h-8 animate-pulse" viewBox="0 0 1200 120" preserveAspectRatio="none">
             <defs>
               <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style={{stopColor: 'rgba(255,255,255,0.1)'}} />
-                <stop offset="50%" style={{stopColor: 'rgba(255,255,255,0.3)'}} />
-                <stop offset="100%" style={{stopColor: 'rgba(255,255,255,0.1)'}} />
+                <stop offset="0%" style={{ stopColor: 'rgba(255,255,255,0.1)' }} />
+                <stop offset="50%" style={{ stopColor: 'rgba(255,255,255,0.3)' }} />
+                <stop offset="100%" style={{ stopColor: 'rgba(255,255,255,0.1)' }} />
               </linearGradient>
             </defs>
             <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" fill="url(#waveGradient)"></path>
@@ -216,7 +219,7 @@ const HospitalPage = () => {
             <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" fill="currentColor"></path>
           </svg>
         </div>
-        
+
         {/* Add custom CSS for animations */}
         <style jsx>{`
           @keyframes fadeInUp {
@@ -267,7 +270,7 @@ const HospitalPage = () => {
       <div className="sm:w-full lg:w-[80%]  xl:w-[80%] 2xl:w-[70%] mx-auto  px-2 py-8">
         <div className="bg-white rounded-2xl shadow-lg p-2 md:p-6 mb-8 border border-gray-100">
           <div className="flex flex-row items-center md:flex-row gap-4">
-           {/* Search Bar */}
+            {/* Search Bar */}
             <div className="flex-1 relative ">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <svg
@@ -292,7 +295,7 @@ const HospitalPage = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            
+
             {/* Filter Dropdown */}
             <div className="relative">
               <select
@@ -315,7 +318,7 @@ const HospitalPage = () => {
         </div>
 
         {/* Stats Section */}
-        
+
 
         {/* Results Header */}
         <div className="flex items-center justify-between mb-6">
@@ -343,10 +346,17 @@ const HospitalPage = () => {
 
         {/* Hospital Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {hospitals.length > 0 ? (
+          {loading ? (
+            // 🔹 Skeleton grid (shows 4 placeholders)
+            Array.from({ length: 4 }).map((_, i) => (
+              <Card key={i} className="rounded-2xl shadow-md">
+                <Skeleton active avatar paragraph={{ rows: 3 }} />
+              </Card>
+            ))
+          ) : hospitals.length > 0 ? (
             hospitals.map((data, index) => (
               <div key={index} className="animate-fadeIn" style={{ animationDelay: `${index * 0.1}s` }}>
-                    <HospitalCard data={data} />
+                <HospitalCard data={data} />
               </div>
             ))
           ) : (
@@ -361,9 +371,10 @@ const HospitalPage = () => {
 
       {/* Emergency Contact Banner */}
       <div className=" text-white py-8 mt-12" style={{
-    background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"}}>
+        background: "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)"
+      }}>
         <div className="max-w-4xl mx-auto px-4 text-center">
-          
+
           <div className="flex items-center justify-center gap-4 mb-4">
             <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
               <span className="text-2xl"><img src="src/assets/alert.png" height={50} width={50} alt="" /></span>
@@ -377,7 +388,7 @@ const HospitalPage = () => {
           <a href={`tel:108`} className="flex inline-block bg-white text-red-600 font-bold py-3 px-12 rounded-full text-lg 
           hover:bg-red-50 transition-all duration-300 transform hover:scale-105">
             <div
-             className="flex gap-1"><img src="https://i.pinimg.com/1200x/7e/21/b9/7e21b9661c85d61676143a8ae2c9a73b.jpg" height={25} width={25} alt="" />
+              className="flex gap-1"><img src="https://i.pinimg.com/1200x/7e/21/b9/7e21b9661c85d61676143a8ae2c9a73b.jpg" height={25} width={25} alt="" />
               <span>Call 108</span>
             </div>
           </a>

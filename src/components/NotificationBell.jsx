@@ -119,9 +119,9 @@ const NotificationBell = () => {
   return (
     <div className="relative hidden md:block" ref={bellRef}>
       {/* Notification Bell Button */}
-      <div className="relative">
+      <div className="relative ">
         <button
-          className="relative bg-[#3c83f8] hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 text-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 cursor-pointer"
+          className=" relative bg-[#3c83f8] hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 text-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 cursor-pointer"
           onClick={() => setIsOpen(!isOpen)}
         >
           <Bell className={`  md:w-4 md:h-4  xl:w-6 xl:h-6 ${isOpen ? 'animate-pulse' : ''}`} />
@@ -142,9 +142,9 @@ const NotificationBell = () => {
 
       {/* Notification Dropdown */}
       {isOpen && (
-        <div className="absolute right-0 mt-3 w-96 bg-white shadow-2xl rounded-xl border border-gray-200 overflow-hidden z-50 animate-in slide-in-from-top-2 duration-200">
+        <div className="absolute z-100 right-0 mt-3 w-96 bg-white shadow-2xl rounded-xl border border-gray-200 overflow-hidden z-50 animate-in slide-in-from-top-2 duration-200">
           {/* Header */}
-          <div className="px-6 py-4 pt-14 bg-gradient-to-r from-indigo-50 to-purple-50 border-b border-gray-200">
+          <div className="px-6 py-4  bg-gradient-to-r from-indigo-50 to-purple-50 border-b border-gray-200">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="font-semibold text-gray-900 text-lg">Notifications</h3>

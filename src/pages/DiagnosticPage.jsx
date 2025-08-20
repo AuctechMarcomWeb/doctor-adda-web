@@ -13,6 +13,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { getRequest } from "../Helpers";
 import { Download } from "lucide-react";
+import { Skeleton, Card } from "antd";
 
 // Mock DiagnosticCard component for demonstration
 
@@ -107,6 +108,7 @@ const DiagnosticPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
   const [diagnosticData, setDiagnosticData] = useState([]);
+   const [loading, setLoading] = useState(true); // 👈 loading state
   const [location, setLocation] = useState({
     radius: "5000",
     latitude: "",
@@ -118,6 +120,7 @@ const DiagnosticPage = () => {
     const fetchDiagostic = async () => {
       const url = `diagnostics?longitude=${location?.longitude}&latitude=${location?.latitude}&radius=${location?.radius}&page=${location?.page}`;
       try {
+         setLoading(true); // start skeleton
         const response = await getRequest(url);
         if (response) {
           console.log(
@@ -128,11 +131,14 @@ const DiagnosticPage = () => {
         }
       } catch (error) {
         console.error("Error in Diagnostic Search:", error);
-      }
+      }finally {
+          setLoading(false); // stop skeleton
+        }
     };
 
     fetchDiagostic();
   }, [location]); // ✅ Add dependency here
+  
 
   const filteredData = diagnosticData.filter((diagnostic) => {
     const matchesSearch =
@@ -507,11 +513,18 @@ const DiagnosticPage = () => {
 
         {/* Diagnostic Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {filteredData.length > 0 ? (
+          {loading ? (
+            // 🔹 Skeleton grid (shows 4 placeholders)
+            Array.from({ length: 4 }).map((_, i) => (
+              <Card key={i} className="rounded-2xl shadow-md">
+                <Skeleton active avatar paragraph={{ rows: 3 }} />
+              </Card>
+            ))
+          ) : filteredData.length > 0 ? (
             filteredData.map((data, index) => (
               <div
                 key={index}
-                className="animate-fade-up"
+                className="animate-fadeIn"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <DiagnosticCard {...data} />
@@ -521,7 +534,7 @@ const DiagnosticPage = () => {
             <div className="col-span-full text-center py-12">
               <div className="text-6xl mb-4">🔍</div>
               <h3 className="text-xl font-semibold text-gray-700 mb-2">
-                No diagnostics found
+                No ambulances found
               </h3>
               <p className="text-gray-500">
                 Try adjusting your search or filter criteria
