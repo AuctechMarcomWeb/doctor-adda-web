@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import PharmacyCard from "../components/PharmacyCard"; 
 import { getRequest } from "../Helpers";
 import { Download } from "lucide-react";
+import { Skeleton, Card } from "antd";
 
 const PharmacyPage = () => {
   const [hoveredButton, setHoveredButton] = useState(null);
@@ -9,6 +10,7 @@ const PharmacyPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
   const [pharmacyData, setPharmacyData] = useState([]);
+   const [loading, setLoading] = useState(true); // 👈 loading state
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -16,17 +18,37 @@ const PharmacyPage = () => {
   useEffect(() => {
     const fetchPharmacies = async () => {
       try {
+         setLoading(true); // start skeleton
         const response = await getRequest(`pharmacy`);
         console.log("Pharmacies Lists:", response?.data?.data?.pharmacies || []);
         setPharmacyData(response?.data?.data?.pharmacies || []);
       } catch (error) {
         console.error("Error Fetching Pharmacies:", error);
         setPharmacyData([]);
-      }
+      }finally {
+          setLoading(false); // stop skeleton
+        }
     };
     fetchPharmacies();
   }, []);
 
+
+  //  useEffect(() => {
+  //     const fetchAmbulances = async () => {
+  //       try {
+  //         setLoading(true); // start skeleton
+  //         const res = await getRequest(`ambulance?radius=${location?.radius}`);
+  //         setAmbulanceData(res?.data?.data?.ambulances || []);
+  //       } catch (error) {
+  //         console.error(" Error fetching ambulances:", error);
+  //         setAmbulanceData([]);
+  //       } finally {
+  //         setLoading(false); // stop skeleton
+  //       }
+  //     };
+  
+  //     fetchAmbulances();
+  //   }, [location?.radius]);
 
 
   const filteredData = pharmacyData.filter((pharmacy) => {
@@ -347,7 +369,14 @@ const PharmacyPage = () => {
         {/* Stats Section */}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {filteredData.length > 0 ? (
+          {loading ? (
+            // 🔹 Skeleton grid (shows 4 placeholders)
+            Array.from({ length: 4 }).map((_, i) => (
+              <Card key={i} className="rounded-2xl shadow-md">
+                <Skeleton active avatar paragraph={{ rows: 3 }} />
+              </Card>
+            ))
+          ) : filteredData.length > 0 ? (
             filteredData.map((data, index) => (
               <div
                 key={index}
