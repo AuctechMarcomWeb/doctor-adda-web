@@ -16,7 +16,9 @@ const ServicesSection2 = () => {
         setServices(res?.data?.data?.services || []);
       } catch (error) {
         console.error("Error fetching services:", error);
-      }
+      }finally {
+      setLoading(false);
+    }
     };
     fetchServices();
   }, []);
@@ -39,7 +41,18 @@ const ServicesSection2 = () => {
 
         {/* Grid Services */}
         <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-6">
-          {services.map((service) => (
+          {loading ? (
+                        // 🔹 Skeleton grid (shows 4 placeholders)
+                        Array.from({ length: 6 }).map((_, i) => (
+                          <div className="flex flex-col items-center " key={i}>
+                          <Skeleton.Image active  />
+                            
+                            < Skeleton.Input className=" mt-2" />
+                       
+                          </div>
+                        ))
+                      ) :
+          services.map((service) => (
             <div
               key={service.id}
               className="group cursor-pointer transition-all duration-300"
@@ -54,19 +67,12 @@ const ServicesSection2 = () => {
             >
               {/* Image */}
               <div className="w-full h-20 sm:h-36 lg:h-30 2xl:h-40 rounded-2xl overflow-hidden shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-105">
-                {loading && (
-                          <Skeleton.Image
-                            active
-                            style={{  width: "100%",
-                        height: "100%",
-                        borderRadius: "16px", }}
-                          />
-                        )}
+                
                 <img
                   src={service.imageUrl}
                   alt={service.name}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                   onLoad={() => setLoading(false)}
+                  
                 />
               </div>
 

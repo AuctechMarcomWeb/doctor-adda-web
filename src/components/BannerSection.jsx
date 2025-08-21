@@ -111,7 +111,7 @@ const BannerSection = () => {
                 style={{ animationDelay: "1.6s" }}
               >
 
-                <a href="https://play.google.com/store/apps/details?id=com.doctors.adda">
+                <a href="https://play.google.com/store/apps/details?id=com.doctors.adda" target="_blank" >
                   <button
                     onMouseEnter={() => setHoveredButton("download")}
                     onMouseLeave={() => setHoveredButton(null)}
