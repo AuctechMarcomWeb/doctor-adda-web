@@ -18,6 +18,7 @@ import {
 
 import { useNavigate, useParams } from "react-router-dom";
 import { getRequest } from "../Helpers";
+import { Skeleton, Card } from "antd";
 
 const DoctorCard = ({ data, modeFilter }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -31,9 +32,8 @@ const DoctorCard = ({ data, modeFilter }) => {
 
   return (
     <div
-      className={`bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden group ${
-        isHovered ? "scale-105" : ""
-      }`}
+      className={`bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden group ${isHovered ? "scale-105" : ""
+        }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -145,6 +145,7 @@ const DoctorList = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [doctors, setDoctors] = useState([]);
   const [isVeterinary, setIsVeterinary] = useState(false);
+  const [loading, setLoading] = useState(true); // for skeleton
   console.log("isVeterinary====", isVeterinary);
   console.log("res doctors ===========>", doctors);
 
@@ -190,6 +191,8 @@ const DoctorList = () => {
         setIsLoaded(true);
       } catch (error) {
         console.log("error", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -231,13 +234,21 @@ const DoctorList = () => {
         </div>
 
         <div
-          className={`relative lg:w-[70%] sm:w-full xl:w-[70%] flex items-center  flex-col md:flex-row mx-auto py-8 px-2 pb-2 text-center transition-all duration-1000 ${
-            isLoaded ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
-          }`}
+          className="relative lg:w-[70%] sm:w-full xl:w-[70%] flex items-center  flex-col md:flex-row mx-auto py-8 px-2 pb-2 text-center transition-all duration-1000 
+            "
+
         >
           <div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4  bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
-              {doctors[0]?.category?.name}
+              {loading ? (
+                // 🔹 Skeleton grid 
+                <div className="flex flex-col items-center">
+                  <Skeleton.Input className="mt-2" active />
+                </div>
+
+              ) : (
+                <span>{doctors[0]?.category?.name}</span>
+              )}
             </h2>
 
             <div className="flex flex-wrap justify-center gap-2 mb-12">
@@ -315,45 +326,44 @@ const DoctorList = () => {
       {/* Main Content */}
       <div className=" mx-auto px-4 py-12 lg:w-[70%] sm:w-full xl:w-[70%]">
         {/* Mode Filter Tabs */}
-        {isLoaded && (
+      
           <div className="flex justify-center gap-2 mb-12">
             {(isVeterinary
               ? [
-                  {
-                    key: "In-clinic",
-                    label: "In-Clinic Appointment",
-                    icon: Calendar,
-                  },
-                  { key: "Home Visit", label: "Home Visit", icon: Home },
-                ]
+                {
+                  key: "In-clinic",
+                  label: "In-Clinic Appointment",
+                  icon: Calendar,
+                },
+                { key: "Home Visit", label: "Home Visit", icon: Home },
+              ]
               : [
-                  {
-                    key: "In-clinic",
-                    label: "In-Clinic Appointment",
-                    icon: Calendar,
-                  },
-                  {
-                    key: "Video Consultation",
-                    label: "Video Consultation",
-                    icon: Video,
-                  },
-                ]
+                {
+                  key: "In-clinic",
+                  label: "In-Clinic Appointment",
+                  icon: Calendar,
+                },
+                {
+                  key: "Video Consultation",
+                  label: "Video Consultation",
+                  icon: Video,
+                },
+              ]
             ).map((tab) => (
               <button
                 key={tab?.key}
                 onClick={() => handleTabChange(tab?.key)}
-                className={`flex items-center gap-2 px-6 py-3 rounded-2xl font-medium transition-all duration-300 transform hover:scale-105 ${
-                  modeFilter === tab?.key
+                className={`flex items-center gap-2 px-6 py-3 rounded-2xl font-medium transition-all duration-300 transform hover:scale-105 ${modeFilter === tab?.key
                     ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
                     : "bg-white text-gray-700 hover:bg-gray-50 shadow-md"
-                }`}
+                  }`}
               >
                 <tab.icon className="w-5 h-5" />
                 {tab?.label}
               </button>
             ))}
           </div>
-        )}
+       
         {/* Results Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
@@ -372,34 +382,42 @@ const DoctorList = () => {
 
         {/* Doctor Cards Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {doctors?.length > 0 ? (
-            doctors?.map((doctor, index) => (
-              <div
-                key={index}
-                className="animate-fadeInUp"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <DoctorCard data={doctor} modeFilter={modeFilter} />
-              </div>
+          {loading ? (
+            // 🔹 Skeleton grid (shows 4 placeholders)
+           Array.from({ length: 4 }).map((_, i) => (
+              <Card key={i} className="rounded-2xl shadow-md">
+                <Skeleton active avatar paragraph={{ rows: 3 }} />
+              </Card>
             ))
-          ) : (
-            <div className="col-span-full text-center py-16">
-              <div className="text-8xl mb-6 animate-bounce flex justify-center">
-                <img
-                  width="100"
-                  height="100"
-                  src="https://img.icons8.com/pin/100/search.png"
-                  alt="search"
-                />
+          ) :
+            doctors?.length > 0 ? (
+              doctors?.map((doctor, index) => (
+                <div
+                  key={index}
+                  className="animate-fadeInUp"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <DoctorCard data={doctor} modeFilter={modeFilter} />
+                </div>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-16">
+                <div className="text-8xl mb-6 animate-bounce flex justify-center">
+                  <img
+                    width="100"
+                    height="100"
+                    src="https://img.icons8.com/pin/100/search.png"
+                    alt="search"
+                  />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-700 mb-3">
+                  No doctors found
+                </h3>
+                <p className="text-gray-500 text-lg">
+                  Try adjusting your search or filter criteria
+                </p>
               </div>
-              <h3 className="text-2xl font-bold text-gray-700 mb-3">
-                No doctors found
-              </h3>
-              <p className="text-gray-500 text-lg">
-                Try adjusting your search or filter criteria
-              </p>
-            </div>
-          )}
+            )}
         </div>
       </div>
 

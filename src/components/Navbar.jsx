@@ -163,7 +163,8 @@ const { upgradeAccountId, upgradeAccountType, upgradeAccountApproveStatus } =
             {isLoggedIn && userProfileData ? (
               (console.log("userProfileData navbar", userProfileData.name),
               (
-                <div className="relative hidden md:block" ref={dropdownRef}>
+                <div className="relative " ref={dropdownRef}>
+                  {/* hidden md:block */}
                   <div
                     className="flex items-center gap-2 cursor-pointer"
                     onClick={() => setDropdownOpen(!dropdownOpen)}

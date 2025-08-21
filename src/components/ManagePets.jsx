@@ -145,7 +145,7 @@ const handleDelete = async (petId) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 font-sans">
-      <div className="max-w-7xl mx-auto p-6 pt-42">
+      <div className="max-w-7xl mx-auto p-6 md:pt-42">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar */}
           <SidebarNav activeTab="pets"
@@ -156,7 +156,7 @@ const handleDelete = async (petId) => {
           <main className="flex-1 p-8 bg-white rounded-3xl shadow-lg">
             {/* Header */}
             <div className="flex justify-between items-center mb-8">
-              <h1 className="text-3xl font-extrabold text-gray-900 flex items-center gap-3">
+              <h1 className="md:text-2xl text-xl font-bold text-gray-900 flex items-center gap-3">
                 <PawPrint size={30} className="text-[#006ca7]" />
                 Manage Pets
               </h1>

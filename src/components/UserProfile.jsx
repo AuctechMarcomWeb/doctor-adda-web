@@ -169,7 +169,7 @@ const UserProfile = () => {
   };
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-      <div className="max-w-7xl mx-auto p-6 pt-42">
+      <div className="max-w-7xl mx-auto p-6 md:pt-42">
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Sidebar */}
           <SidebarNav
@@ -183,17 +183,17 @@ const UserProfile = () => {
           <main className="flex-1">
             <div className="bg-white shadow-xl rounded-2xl overflow-hidden">
               {/* Header */}
-              <div className="bg-[#006ca7] p-6 text-white">
+              <div className="bg-[#006ca7] p-8 text-white">
                 <div className="flex justify-between items-center">
                   <div>
-                    <h1 className="text-2xl font-bold">Profile Information</h1>
+                    <h1 className=" md:text-2xl text-xl font-bold">Profile Information</h1>
                     <p className="text-blue-100 mt-1">
                       Manage your personal details
                     </p>
                   </div>
                   {!editMode && (
                     <button
-                      className="px-6 py-2 bg-white/20 backdrop-blur-sm text-white rounded-full hover:bg-white/30 transition-all border border-white/30 cursor-pointer"
+                      className="md:px-6 md:py-2 px-4 py-1  bg-white/20 backdrop-blur-sm text-white rounded-full hover:bg-white/30 transition-all border border-white/30 cursor-pointer"
                       onClick={handleEdit}
                     >
                       <Edit3 size={16} className="inline mr-2" />
@@ -204,11 +204,11 @@ const UserProfile = () => {
               </div>
 
               {/* Profile Content */}
-              <div className="p-8">
+              <div className="md:p-8 p-4">
                 {/* Profile Picture Section */}
-                <div className="flex items-center gap-6 mb-8 p-6 bg-gray-50 rounded-xl">
+                <div className="flex items-center gap-6 mb-8 md:p-6 bg-gray-50 rounded-xl">
                   <div className="relative">
-                    <div className="w-24 h-24 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center text-4xl text-white font-bold shadow-lg">
+                    <div className="md:w-24 md:h-24 h-18 w-18 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center text-4xl text-white font-bold shadow-lg">
                       {formData.profileImage ? (
                         <img
                           src={formData.profileImage}
@@ -232,10 +232,10 @@ const UserProfile = () => {
                     )}
                   </div>
                   <div>
-                    <h3 className="text-3xl font-bold text-gray-800">
+                    <h3 className="md:text-2xl  text-xl font-bold text-gray-800">
                       Hi, {formData.name}!
                     </h3>
-                    <p className="text-gray-600 mt-1">{formData.email}</p>
+                    <p className="text-gray-600 mt-1 ">{formData.email}</p>
                     <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
                       <span className="flex items-center gap-1">
                         <User size={14} />
@@ -253,7 +253,7 @@ const UserProfile = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Name */}
                   <div className="space-y-2">
-                    <label className="block font-semibold text-gray-700">
+                    <label className="block text-sm md:text-base font-semibold text-gray-700">
                       Full Name
                     </label>
                     {editMode ? (
@@ -276,7 +276,7 @@ const UserProfile = () => {
                         )}
                       </div>
                     ) : (
-                      <div className="px-4 py-3 bg-gray-50 rounded-lg border-2 border-transparent">
+                      <div className="px-4 py-3 text-sm md:text-base bg-gray-50 rounded-lg border-2 border-transparent">
                         {formData.name}
                       </div>
                     )}
@@ -284,10 +284,10 @@ const UserProfile = () => {
 
                   {/* Mobile */}
                   <div className="space-y-2">
-                    <label className="block font-semibold text-gray-700">
+                    <label className="block text-sm md:text-base font-semibold text-gray-700">
                       Mobile Number
                     </label>
-                    <div className="px-4 py-3 bg-gray-100 rounded-lg border-2 border-transparent text-gray-500">
+                    <div className="px-4 py-3 text-sm md:text-base bg-gray-100 rounded-lg border-2 border-transparent text-gray-500">
                       <Phone size={16} className="inline mr-2" />
                       +91 {formData?.phone}
                     </div>
@@ -295,10 +295,10 @@ const UserProfile = () => {
 
                   {/* Email */}
                   <div className="space-y-2">
-                    <label className="block font-semibold text-gray-700">
+                    <label className="block text-sm md:text-base font-semibold text-gray-700">
                       Email Address
                     </label>
-                    <div className="px-4 py-3 bg-gray-100 rounded-lg border-2 border-transparent text-gray-500">
+                    <div className="px-4 py-3 bg-gray-100 text-sm md:text-base rounded-lg border-2 border-transparent text-gray-500">
                       <Mail size={16} className="inline mr-2" />
                       {formData?.email|| "abc@gmail.com"}
                     </div>
@@ -306,15 +306,15 @@ const UserProfile = () => {
 
                   {/* Gender */}
                   <div className="space-y-2">
-                    <label className="block font-semibold text-gray-700">
+                    <label className="block text-sm md:text-base font-semibold text-gray-700">
                       Gender
                     </label>
                     {editMode ? (
-                      <div className="flex gap-6 px-4 py-3">
+                      <div className="flex text-sm md:text-base gap-6 px-4 py-3">
                         {["Male", "Female", "Other"].map((gender) => (
                           <label
                             key={gender}
-                            className="flex items-center gap-2 cursor-pointer"
+                            className="flex items-center text-sm md:text-base gap-2 cursor-pointer"
                           >
                             <input
                               type="radio"
@@ -323,15 +323,15 @@ const UserProfile = () => {
                               onChange={(e) =>
                                 handleChange("gender", e.target.value)
                               }
-                              className="w-4 h-4 text-blue-600"
+                              className="w-4 h-4 text-sm md:text-base text-blue-600"
                             />
-                            <span className="text-gray-700">{gender}</span>
+                            <span className=" text-sm md:text-base text-gray-700">{gender}</span>
                           </label>
                         ))}
                       </div>
                     ) : (
-                      <div className="px-4 py-3 bg-gray-50 rounded-lg border-2 border-transparent">
-                        <User size={16} className="inline mr-2" />
+                      <div className="px-4 py-3 bg-gray-50 text-sm md:text-base rounded-lg border-2 border-transparent">
+                        <User size={16} className=" inline mr-2" />
                         {formData?.gender}
                       </div>
                     )}
@@ -339,7 +339,7 @@ const UserProfile = () => {
 
                   {/* Date of Birth */}
                   <div className="space-y-2">
-                    <label className="block font-semibold text-gray-700">
+                    <label className="block text-sm md:text-base font-semibold text-gray-700">
                       Date of Birth
                     </label>
                     {editMode ? (
@@ -348,20 +348,20 @@ const UserProfile = () => {
                           type="date"
                           value={formData.dob || "11/8/1998" }
                           onChange={(e) => handleChange("dob", e.target.value)}
-                          className={`w-full px-4 py-3 rounded-lg border-2 outline-none transition-all ${
+                          className={`w-full px-4 py-3 text-sm md:text-base rounded-lg border-2 outline-none transition-all ${
                             errors.dob
                               ? "border-red-500 bg-red-50"
                               : "border-gray-200 focus:border-blue-500"
                           }`}
                         />
                         {errors.dob && (
-                          <p className="text-red-500 text-sm mt-1">
+                          <p className="text-red-500  text-sm mt-1">
                             {errors.dob}
                           </p>
                         )}
                       </div>
                     ) : (
-                      <div className="px-4 py-3 bg-gray-50 rounded-lg border-2 border-transparent">
+                      <div className="px-4 py-3 bg-gray-50 text-sm md:text-base rounded-lg border-2 border-transparent">
                         <Calendar size={16} className="inline mr-2" />
                         {formatDate(formData.dob)}
                       </div>
@@ -370,7 +370,7 @@ const UserProfile = () => {
 
                   {/* Age */}
                   <div className="space-y-2">
-                    <label className="block font-semibold text-gray-700">
+                    <label className="block text-sm md:text-base font-semibold text-gray-700">
                       Age
                     </label>
                     {editMode ? (
@@ -397,7 +397,7 @@ const UserProfile = () => {
                         )}
                       </div>
                     ) : (
-                      <div className="px-4 py-3 bg-gray-50 rounded-lg border-2 border-transparent">
+                      <div className="px-4 py-3 text-sm md:text-base bg-gray-50 rounded-lg border-2 border-transparent">
                         {formData?.age || 24} years
                       </div>
                     )}
