@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getRequest } from "../Helpers";
-import { Skeleton } from "antd";
+import { Skeleton } from "antd"; 
+// gkhky
 
 const ServicesSection2 = () => {
   const navigation = useNavigate();
@@ -13,6 +14,7 @@ const ServicesSection2 = () => {
     const fetchServices = async () => {
       try {
         const res = await getRequest("services?page=1&limit=10");
+         console.log(" services:", res?.data?.data?.services);
         setServices(res?.data?.data?.services || []);
       } catch (error) {
         console.error("Error fetching services:", error);
@@ -61,7 +63,7 @@ const ServicesSection2 = () => {
                 else if (service?.name === "Ambulance") navigation("/ambulance");
                 else if (service?.name === "Pharmacies") navigation("/pharmacy");
                 else if (service?.name === "Diagnostic") navigation("/diagnostic");
-                else if (service?.name === "Doctor & Specialists") navigation("/doctor");
+                else if (service?.name === "Doctors & Specialists") navigation("/doctor"); 
                 else if (service?.name === "Hospitals & Clinics") navigation("/hospital");
               }}
             >

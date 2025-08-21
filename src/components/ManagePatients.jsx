@@ -10,8 +10,8 @@ import toast from "react-hot-toast";
 
 const ManagePatients = () => {
   useEffect(() => {
-      window.scrollTo(0, 0);
-    }, []);
+    window.scrollTo(0, 0);
+  }, []);
   const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
   const UserId = userProfileData?._id;
   console.log("UserId", UserId);
@@ -20,10 +20,10 @@ const ManagePatients = () => {
   const [activeTab, setActiveTab] = useState("patients");
 
   const [showAddModal, setShowAddModal] = useState(false);
-  console.log("showAddModal",showAddModal);
-  
+  console.log("showAddModal", showAddModal);
+
   const [showEditModal, setShowEditModal] = useState(false);
-console.log("showEditModal",showEditModal);
+  console.log("showEditModal", showEditModal);
 
   const [newPatient, setNewPatient] = useState({
     name: "",
@@ -36,8 +36,8 @@ console.log("showEditModal",showEditModal);
 
   const [editPatient, setEditPatient] = useState(null);
 
-  console.log("editPatient",editPatient);
-  
+  console.log("editPatient", editPatient);
+
   //Fetch Patients API
   const fetchPatients = async () => {
     try {
@@ -56,98 +56,98 @@ console.log("showEditModal",showEditModal);
 
   //add api
   const handleAddPatient = async () => {
-  if (!newPatient.name || !newPatient.age || !newPatient.email || !newPatient.gender || !newPatient.oderingFor) {
-    alert("Please fill all fields");
-    return;
-  }
-  try {
-    const response = await postRequest({
-      url: `auth/addMember/${UserId}`,
-      cred: newPatient,
-    });
+    if (!newPatient.name || !newPatient.age || !newPatient.email || !newPatient.gender || !newPatient.oderingFor) {
+      alert("Please fill all fields");
+      return;
+    }
+    try {
+      const response = await postRequest({
+        url: `auth/addMember/${UserId}`,
+        cred: newPatient,
+      });
 
-    console.log("✅ Patient added successfully:", response?.data?.data);
+      console.log("✅ Patient added successfully:", response?.data?.data);
 
-    await fetchPatients(); // ✅ Refresh from API
-    setShowAddModal(false);
-    setNewPatient({ name: "", age: "", email: "", gender: "", oderingFor: "" });
-    toast.success("Patient added successfully!");
-  } catch (error) {
-    console.error("Error adding patient:", error);
-    toast.error(" Failed to add patient");
-  }
-};
+      await fetchPatients(); // ✅ Refresh from API
+      setShowAddModal(false);
+      setNewPatient({ name: "", age: "", email: "", gender: "", oderingFor: "" });
+      toast.success("Patient added successfully!");
+    } catch (error) {
+      console.error("Error adding patient:", error);
+      toast.error(" Failed to add patient");
+    }
+  };
 
   //edit api
-const handleUpdatePatient = async () => {
-  if (!editPatient?.name || !editPatient.age || !editPatient.email || !editPatient.gender || !editPatient.oderingFor) {
-    alert("Please fill all fields");
-    return;
-  }
-  try {
-     const res =await patchRequest({
-      url: `auth/updateMember/${UserId}/${editPatient._id}`,
-      cred: editPatient,
-    });
-    console.log("✅ Patient added successfully:", res?.data?.data);
-
-    await fetchPatients(); 
-    setShowEditModal(false);
-    setEditPatient(null);
-    toast.success("Patient updated successfully!");
-  } catch (error) {
-    console.error("Error updating patient:", error);
-  }
-};
-
-//delete api
-const handleDeletePatient = async (patientId) => {
-  console.log("patientId", patientId);
-
-  Swal.fire({
-    title: "Are you sure?",
-    text: "This patient will be permanently deleted!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#d33",
-    cancelButtonColor: "#3085d6",
-    confirmButtonText: "Yes, delete it!",
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      try {
-        const res = await deleteRequest(`auth/deleteMember/${UserId}/${patientId}`);
-        console.log("✅ Patient deleted successfully:", res?.data?.data);
-
-        await fetchPatients();
-
-        Swal.fire({
-          title: "Deleted!",
-          text: "The patient has been deleted.",
-          icon: "success",
-          timer: 2000,
-          showConfirmButton: false
-        });
-      } catch (error) {
-        console.error("Error deleting patient:", error);
-        Swal.fire("Error", "Something went wrong while deleting!", "error");
-      }
+  const handleUpdatePatient = async () => {
+    if (!editPatient?.name || !editPatient.age || !editPatient.email || !editPatient.gender || !editPatient.oderingFor) {
+      alert("Please fill all fields");
+      return;
     }
-  });
-};
+    try {
+      const res = await patchRequest({
+        url: `auth/updateMember/${UserId}/${editPatient._id}`,
+        cred: editPatient,
+      });
+      console.log("✅ Patient added successfully:", res?.data?.data);
+
+      await fetchPatients();
+      setShowEditModal(false);
+      setEditPatient(null);
+      toast.success("Patient updated successfully!");
+    } catch (error) {
+      console.error("Error updating patient:", error);
+    }
+  };
+
+  //delete api
+  const handleDeletePatient = async (patientId) => {
+    console.log("patientId", patientId);
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This patient will be permanently deleted!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await deleteRequest(`auth/deleteMember/${UserId}/${patientId}`);
+          console.log("✅ Patient deleted successfully:", res?.data?.data);
+
+          await fetchPatients();
+
+          Swal.fire({
+            title: "Deleted!",
+            text: "The patient has been deleted.",
+            icon: "success",
+            timer: 2000,
+            showConfirmButton: false
+          });
+        } catch (error) {
+          console.error("Error deleting patient:", error);
+          Swal.fire("Error", "Something went wrong while deleting!", "error");
+        }
+      }
+    });
+  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 font-sans">
-      <div className="max-w-7xl mx-auto p-6 pt-42">
+      <div className="max-w-7xl mx-auto p-6 md:pt-42">
         <div className="flex flex-col lg:flex-row gap-8">
-          
+
           {/* Sidebar */}
           <SidebarNav activeTab="patients"
-          formData={userProfileData}
-           />
+            formData={userProfileData}
+          />
 
           {/* Patients Section */}
-          <div className="flex-1 bg-white rounded-3xl shadow-lg p-8">
+          <div className="flex-1 bg-white rounded-3xl shadow-lg md:p-8 p-4">
             <div className="flex justify-between items-center mb-8">
-              <h2 className="text-3xl font-extrabold text-gray-900 flex items-center gap-3">
+              <h2 className="md:text-2xl  text-xl font-bold  text-gray-900 flex items-center gap-3">
                 <User size={28} className="text-[#006ca7]" /> Manage Patients
               </h2>
               <button
@@ -169,8 +169,8 @@ const handleDeletePatient = async (patientId) => {
                 patients?.map((patient) => (
                   <div
                     key={patient._id}
-                    className="flex items-center justify-between p-5 border border-gray-200 rounded-2xl bg-white shadow-sm hover:shadow-lg transition-shadow duration-300 transform hover:scale-[1.02]"
-                  >
+                    className="flex items-center justify-between md:p-5 p-2 border border-gray-200 rounded-2xl bg-white shadow-sm hover:shadow-lg transition-shadow duration-300 transform hover:scale-[1.02]"
+                    >
                     <div className="flex items-center gap-5">
                       <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center shadow-inner">
                         <User size={24} className="text-[#006ca7]" />
@@ -180,31 +180,29 @@ const handleDeletePatient = async (patientId) => {
                           {patient?.name}
                         </h3>
                         <p className="text-sm text-gray-600 mt-1">
-                          Age: {patient?.age} | Gender: {patient?.gender}
+                          {patient?.age} |  {patient?.gender}
                         </p>
                         <p className="text-sm text-gray-600 mt-0.5">
                           Email: {patient?.email}
                         </p>
-                        <p className="text-sm text-gray-600 mt-0.5">
-                          Order for: {patient?.oderingFor}
-                        </p>
+
                       </div>
                     </div>
-                    <div className="flex gap-4">
+                    <div className="flex  gap-4">
                       <button
-  onClick={() => {
-    console.log("Editing patient:", patient); // 🔍 check current data
-    setEditPatient(patient);
-    setShowEditModal(true);
-  }}
-  className="flex items-center gap-1 text-[#006ca7] font-semibold hover:text-[#004a70] transition-colors"
-  aria-label={`Edit ${patient?.name}`}
->
-  <Edit3 size={18} /> Edit
-</button>
+                        onClick={() => {
+                          console.log("Editing patient:", patient); // 🔍 check current data
+                          setEditPatient(patient);
+                          setShowEditModal(true);
+                        }}
+                        className="flex items-center gap-1 text-[#006ca7] font-semibold hover:text-[#004a70] transition-colors"
+                        aria-label={`Edit ${patient?.name}`}
+                      >
+                        <Edit3 size={18} /> Edit
+                      </button>
 
                       <button
-                          onClick={() => handleDeletePatient(patient._id)}
+                        onClick={() => handleDeletePatient(patient._id)}
                         className="flex items-center gap-1 text-red-600 font-semibold hover:text-red-700 transition-colors"
                         aria-label={`Remove ${patient?.name}`}
                       >
