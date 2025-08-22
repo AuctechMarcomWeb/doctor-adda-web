@@ -145,13 +145,13 @@ const ManagePatients = () => {
           />
 
           {/* Patients Section */}
-          <div className="flex-1 bg-white rounded-3xl shadow-lg md:p-8 p-4">
+          <div className="flex-1 bg-white rounded-3xl shadow-lg md:p-8 p-4 pt-8">
             <div className="flex justify-between items-center mb-8">
               <h2 className="md:text-2xl  text-xl font-bold  text-gray-900 flex items-center gap-3">
                 <User size={28} className="text-[#006ca7]" /> Manage Patients
               </h2>
               <button
-                className="inline-flex items-center gap-2 px-6 py-3 bg-[#006ca7] text-white rounded-full shadow-lg hover:bg-[#005b8d] transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#004a70]"
+                className="inline-flex items-center md:gap-2 md:px-6 md:py-3 px-4 py-2 bg-[#006ca7] text-white rounded-full shadow-lg hover:bg-[#005b8d] transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#004a70]"
                 onClick={() => setShowAddModal(true)}
                 aria-label="Add Patient"
               >
@@ -169,7 +169,7 @@ const ManagePatients = () => {
                 patients?.map((patient) => (
                   <div
                     key={patient._id}
-                    className="flex items-center justify-between md:p-5 p-2 border border-gray-200 rounded-2xl bg-white shadow-sm hover:shadow-lg transition-shadow duration-300 transform hover:scale-[1.02]"
+                    className="flex  items-center justify-between md:p-5 p-2 border border-gray-200 rounded-2xl bg-white shadow-sm hover:shadow-lg transition-shadow duration-300 transform hover:scale-[1.02]"
                     >
                     <div className="flex items-center gap-5">
                       <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center shadow-inner">
@@ -183,12 +183,12 @@ const ManagePatients = () => {
                           {patient?.age} |  {patient?.gender}
                         </p>
                         <p className="text-sm text-gray-600 mt-0.5">
-                          Email: {patient?.email}
+                          {patient?.email}
                         </p>
 
                       </div>
                     </div>
-                    <div className="flex  gap-4">
+                    <div className="flex  flex-col md:flex-row gap-4">
                       <button
                         onClick={() => {
                           console.log("Editing patient:", patient); // 🔍 check current data

@@ -162,7 +162,7 @@ const handleDelete = async (petId) => {
               </h1>
               <button
                 onClick={() => openModal()}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-[#006ca7] text-white rounded-full shadow-lg hover:bg-[#005a8c] transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#004a70]"
+                className="inline-flex items-center gap-2 md:px-6 md:py-3 px-4 py-2 bg-[#006ca7] text-white rounded-full shadow-lg hover:bg-[#005a8c] transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#004a70]"
                 aria-label="Add Pet"
               >
                 <Plus size={20} />
@@ -180,11 +180,11 @@ const handleDelete = async (petId) => {
                 {pets.map((pet) => (
                   <article
                     key={pet._id}
-                    className="flex items-center justify-between p-6 bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300"
+                    className="flex items-center  justify-between md:p-6 p-2 bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300"
                   >
                     {/* Left: Icon + Info */}
-                    <div className="flex items-center gap-6">
-                      <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center rounded-full shadow-inner">
+                    <div className="flex items-center gap-2 md:gap-6">
+                      <div className="md:w-16 md:h-16 h-14 w-14 bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center rounded-full shadow-inner">
                         <PawPrint size={30} className="text-[#006ca7]" />
                       </div>
                       <div>
@@ -192,17 +192,17 @@ const handleDelete = async (petId) => {
                           {pet.name}
                         </h2>
                         <p className="text-sm text-gray-600 mt-1">
-                          Age: <span className="font-medium">{pet.age}</span> | Type:{" "}
-                          <span className="font-medium">{pet.type}</span>
+                          Age: <span className="font-medium">{pet?.age}</span> | {" "}
+                          <span className="font-medium">{pet?.type}</span>
                         </p>
                         <p className="text-sm text-gray-600 mt-0.5">
-                          Weight: <span className="font-medium">{pet.weight}</span>
+                          Weight: <span className="font-medium">{pet?.weight}</span>
                         </p>
                       </div>
                     </div>
 
                     {/* Right: Actions */}
-                    <div className="flex gap-5">
+                    <div className="flex  flex-col md:flex-row gap-5">
                       <button
                         onClick={() => openModal(pet)}
                         className="flex items-center gap-2 text-[#006ca7] font-semibold hover:text-[#004a70] transition-colors"
