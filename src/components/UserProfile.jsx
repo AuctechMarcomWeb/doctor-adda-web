@@ -193,7 +193,7 @@ const UserProfile = () => {
                   </div>
                   {!editMode && (
                     <button
-                      className="md:px-6 md:py-2 px-4 py-1  bg-white/20 backdrop-blur-sm text-white rounded-full hover:bg-white/30 transition-all border border-white/30 cursor-pointer"
+                      className="md:px-6 md:py-2 px- py-1  bg-white/20 backdrop-blur-sm text-white rounded-full hover:bg-white/30 transition-all border border-white/30 cursor-pointer"
                       onClick={handleEdit}
                     >
                       <Edit3 size={16} className="inline mr-2" />

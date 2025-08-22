@@ -156,10 +156,10 @@ const handleDelete = async (petId) => {
           <main className="flex-1 p-8 bg-white rounded-3xl shadow-lg">
             {/* Header */}
             <div className="flex justify-between items-center mb-8">
-              <h1 className="md:text-2xl text-xl font-bold text-gray-900 flex items-center gap-3">
+              <h2 className="md:text-2xl text-xl font-bold text-gray-800 flex items-center gap-3">
                 <PawPrint size={30} className="text-[#006ca7]" />
                 Manage Pets
-              </h1>
+              </h2>
               <button
                 onClick={() => openModal()}
                 className="inline-flex items-center gap-2 md:px-6 md:py-3 px-4 py-2 bg-[#006ca7] text-white rounded-full shadow-lg hover:bg-[#005a8c] transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#004a70]"
@@ -188,7 +188,7 @@ const handleDelete = async (petId) => {
                         <PawPrint size={30} className="text-[#006ca7]" />
                       </div>
                       <div>
-                        <h2 className="text-xl font-semibold text-gray-900">
+                        <h2 className="text-base md:text-lg font-semibold text-gray-800">
                           {pet.name}
                         </h2>
                         <p className="text-sm text-gray-600 mt-1">
@@ -205,7 +205,7 @@ const handleDelete = async (petId) => {
                     <div className="flex  flex-col md:flex-row gap-5">
                       <button
                         onClick={() => openModal(pet)}
-                        className="flex items-center gap-2 text-[#006ca7] font-semibold hover:text-[#004a70] transition-colors"
+                        className="flex items-center gap-2 text-[#006ca7] font-semibold text-sm md:text-base hover:text-[#004a70] transition-colors"
                         aria-label={`Edit ${pet.name}`}
                       >
                         <Edit size={18} />
@@ -213,7 +213,7 @@ const handleDelete = async (petId) => {
                       </button>
                       <button
                         onClick={() => handleDelete(pet._id)}
-                        className="flex items-center gap-2 text-red-600 font-semibold hover:text-red-700 transition-colors"
+                        className="flex items-center gap-2 text-red-600 font-semibold text-sm md:text-base hover:text-red-700 transition-colors"
                         aria-label={`Remove ${pet.name}`}
                       >
                         <Trash2 size={18} />
