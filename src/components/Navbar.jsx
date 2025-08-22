@@ -177,7 +177,8 @@ const { upgradeAccountId, upgradeAccountType, upgradeAccountApproveStatus } =
                       alt="User Avatar"
                       className="w-8 h-8 rounded-full object-cover"
                     />
-                    <span className="text-sm font-semibold text-gray-800 hidden lg:block">
+                    <span className="text-sm font-semibold text-gray-800 ">
+                      {/* hidden lg:block */}
                       {userProfileData?.name || "User"}
                     </span>
                     <span className="text-gray-500">▾</span>
