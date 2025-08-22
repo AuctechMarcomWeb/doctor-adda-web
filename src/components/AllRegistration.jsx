@@ -114,6 +114,7 @@ const AllRegistration = () => {
               iconText: "text-emerald-600",
               hoverOverlay: "bg-emerald-600",
             }}
+            onClick={() => navigate("/pharmacy-registration")}
           />
           <AppointmentTypeCard
             icon={Home}
