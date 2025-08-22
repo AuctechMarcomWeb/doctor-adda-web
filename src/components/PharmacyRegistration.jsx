@@ -13,18 +13,17 @@ import {
 import { getRequest, postRequest } from "../Helpers/index";
 import { useSelector } from "react-redux";
 
-const HospitalRegistration = () => {
+const PharmacyRegistration = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [categories, setCategories] = useState([]);
   const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
   const userId = userProfileData?._id;
   // Profile Image states
   const [profileFile, setProfileFile] = useState(null);
   const [uploadProfileImage, setUploadProfileImage] = useState(""); 
   const [profilePreview, setProfilePreview] = useState(null);
-  const [facilities, setFacilities] = useState([
+  const [services, setservices] = useState([
     { name: "fdgdf", discription: "" },
   ]);
   const [formData, setFormData] = useState({
@@ -32,8 +31,8 @@ const HospitalRegistration = () => {
     address: "dfd",
     email: "ddf@gmail.com",
     phone: "7654456765",
-    categories: "",
-    accountType: "Hospital",
+    storeTiming: "9:00 a.m.",
+    accountType: "Pharmacy",
     //healthCard: "Both ",
     ownerName: "df",
     gstNumber: "123432343223456",
@@ -44,19 +43,6 @@ const HospitalRegistration = () => {
     longitude: "77.2090",
   });
   console.log("formData", formData);
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await getRequest("category");
-        console.log("fetched category", response?.data?.data?.categories);
-        setCategories(response?.data?.data?.categories || []);
-      } catch (err) {
-        console.error("Error fetching categories:", err);
-      }
-    };
-
-    fetchCategories();
-  }, []);
 
   const uploadImage = async (file) => {
   try {
@@ -93,17 +79,17 @@ const HospitalRegistration = () => {
   setLoading(true);
 
   try {
-    const payload = { ...formData, facilities };
+    const payload = { ...formData, services };
     console.log("Final payload before submit:", payload);
     const response = await postRequest({
-      url: `hospital/registerHospital/${userId}`,
+      url: `pharmacy/registerPharmacy/${userId}`,
       cred: payload,
     });
 
-    console.log("Hospital Register Response:", response?.data?.data);
+    console.log("Pharmacy Register Response:", response?.data?.data);
     setShowSuccess(true);
   } catch (err) {
-    console.error(" Error Registering Hospital:", err);
+    console.error(" Error Registering Pharmacy:", err);
   } finally {
     console.log(" Finally block executed");
     setLoading(false);
@@ -124,19 +110,20 @@ const handleProfilePic = (e) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFacilityChange = (index, field, value) => {
-    const updated = [...facilities];
+
+  const handleServiceChange = (index, field, value) => {
+    const updated = [...services];
     updated[index][field] = value;
-    setFacilities(updated);
+    setservices(updated);
   };
 
-  const addFacility = () => {
-    setFacilities([...facilities, { name: "", description: "" }]);
+  const addService = () => {
+    setservices([...services, { name: "", description: "" }]);
   };
 
-  const removeFacility = (index) => {
-    if (facilities.length > 1) {
-      setFacilities(facilities.filter((_, i) => i !== index));
+  const removeService = (index) => {
+    if (services.length > 1) {
+      setservices(services.filter((_, i) => i !== index));
     }
   };
 
@@ -145,7 +132,7 @@ const handleProfilePic = (e) => {
     if (!formData.name) newErrors.name = "Hospital name is required";
     if (!formData.email) newErrors.email = "Email is required";
     if (!formData.phone) newErrors.phone = "Contact number is required";
-    if (!formData.categories) newErrors.categories = "Please select a category";
+    if (!formData.storeTiming) newErrors.storeTiming = "Please select a storeTiming";
    // if (!formData.healthCard)
      // newErrors.healthCard = "Please select health card type";
     if (!formData.address) newErrors.address = "Address is required";
@@ -164,7 +151,7 @@ const handleProfilePic = (e) => {
             <Building2 className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-xl  md:text-2xl lg:text-4xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
-            Hospital Registration
+            Pharmacy Registration
           </h1>
           <p className="text-sm sm:text-base text-gray-600 mt-2">
             Join our healthcare network today
@@ -196,7 +183,7 @@ const handleProfilePic = (e) => {
               <h3 className="text-2xl font-bold text-green-600 mb-2">
                 Success!
               </h3>
-              <p className="text-gray-600">Hospital registered successfully!</p>
+              <p className="text-gray-600">Pharmacy registered successfully!</p>
             </div>
           </div>
         )}
@@ -245,7 +232,7 @@ const handleProfilePic = (e) => {
               <div className="space-y-2 group">
                 <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
                   <Building2 className="w-4 h-4 text-blue-600" />
-                  Hospital Name
+                  Pharmacy Name
                 </label>
                 <input
                   type="text"
@@ -258,8 +245,27 @@ const handleProfilePic = (e) => {
                   <p className="text-red-500 text-xs">{errors?.name}</p>
                 )}
               </div>
+               <div className="space-y-2 group">
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                  <Phone className="w-4 h-4 text-purple-600" />
+                  Phone Number
+                </label>
+                <input
+                  type="number"
+                  value={formData?.phone}
+                  onChange={(e) => handleInputChange("phone", e.target.value)}
+                  className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-purple-500"
+                  placeholder="+91 12345 67890"
+                />
+                {errors?.phone && (
+                  <p className="text-red-500 text-xs">{errors?.phone}</p>
+                )}
+              </div>
+            </div>
 
-              <div className="space-y-2 group">
+            {/* Email & Description */}
+            <div className="grid md:grid-cols-2 gap-6">
+             <div className="space-y-2 group">
                 <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
                   <Mail className="w-4 h-4 text-green-600" />
                   Official Email
@@ -275,76 +281,8 @@ const handleProfilePic = (e) => {
                   <p className="text-red-500 text-xs">{errors?.email}</p>
                 )}
               </div>
-            </div>
 
-            {/* Contact & Category */}
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="space-y-2 group">
-                <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                  <Phone className="w-4 h-4 text-purple-600" />
-                  Officail Hospital Contact Number
-                </label>
-                <input
-                  type="number"
-                  value={formData?.phone}
-                  onChange={(e) => handleInputChange("phone", e.target.value)}
-                  className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-purple-500"
-                  placeholder="+91 12345 67890"
-                />
-                {errors?.phone && (
-                  <p className="text-red-500 text-xs">{errors?.phone}</p>
-                )}
-              </div>
-
-              <div className="space-y-2 group">
-                <label className="text-sm font-medium text-gray-700">
-                  Category
-                </label>
-                <select
-                  value={formData?.categories[0] || ""}
-                  onChange={
-                    (e) => handleInputChange("categories", [e.target.value]) // ✅ array me bhejna
-                  }
-                  className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Select Category</option>
-                  {categories.map((cat) => (
-                    <option key={cat._id} value={cat._id}>
-                      {cat.name}
-                    </option>
-                  ))}
-                </select>
-                {errors?.categories && (
-                  <p className="text-red-500 text-xs">{errors?.category}</p>
-                )}
-              </div>
-
-              <div className="space-y-2 group">
-                <label className="text-sm font-medium text-gray-700">
-                  Health Card
-                </label>
-                <select
-                  value={formData?.healthCard}
-                  onChange={(e) =>
-                    handleInputChange("healthCard", e.target.value)
-                  }
-                  className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500"
-                >
-                  <option value="" disabled>
-                    Select Type
-                  </option>
-                  <option value="Ayushman">Ayushman Bharat</option>
-                  <option value="Private">Private</option>
-                  <option value="Both">Both</option>
-                </select>
-                {errors?.healthCard && (
-                  <p className="text-red-500 text-xs">{errors?.healthCard}</p>
-                )}
-              </div>
-            </div>
-
-            {/* Decription */}
-            <div className="space-y-2 group">
+               <div className="space-y-2 group">
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
                 <FileText className="w-4 h-4 text-red-600" />
                 Decription
@@ -363,7 +301,11 @@ const handleProfilePic = (e) => {
               )}
             </div>
 
-            {/* Address */}
+            </div>
+
+           
+            {/* Address & timings*/}
+        <div className="grid md:grid-cols-2 gap-6">
             <div className="space-y-2 group">
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
                 <MapPin className="w-4 h-4 text-red-600" />
@@ -380,8 +322,86 @@ const handleProfilePic = (e) => {
                 <p className="text-red-500 text-xs">{errors?.address}</p>
               )}
             </div>
+            <div className="space-y-2 group">
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                <MapPin className="w-4 h-4 text-red-600" />
+                Store Timings
+              </label>
+              <input
+                type="text"
+                value={formData?.storeTiming}
+                onChange={(e) => handleInputChange("address", e.target.value)}
+                className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
+                placeholder="Ex: 9:00 AM - 9:00 PM"
+              />
+              {errors?.storeTiming && (
+                <p className="text-red-500 text-xs">{errors?.storeTiming}</p>
+              )}
+            </div>
+        </div>
 
-            {/* Owner Details */}
+
+            {/* services Section */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-800">
+                    Services Offered
+                </h3>
+                <button
+                  type="button"
+                  onClick={addService}
+                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-green-600 text-white rounded-lg hover:from-blue-700 hover:to-green-700"
+                >
+                  <Plus className="w-4 h-4" />
+                  Add More
+                </button>
+              </div>
+
+              <div className="space-y-3">
+                {services.map((Service, index) => (
+                  <div
+                    key={index}
+                    className="grid md:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-xl"
+                  >
+                    <input
+                      type="text"
+                      placeholder="Services Offered Name"
+                      value={Service?.name}
+                      onChange={(e) =>
+                        handleServiceChange(index, "name", e.target.value)
+                      }
+                      className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                    />
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        placeholder="Services Offered Description"
+                        value={Service?.discription}
+                        onChange={(e) =>
+                          handleServiceChange(
+                            index,
+                            "discription",
+                            e.target.value
+                          )
+                        }
+                        className="flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                      />
+                      {services.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeService(index)}
+                          className="px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg"
+                        >
+                          ×
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+         {/* Owner Details */}
             <div className="grid md:grid-cols-3 gap-6">
               <div className="space-y-2 group">
                 <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
@@ -436,65 +456,68 @@ const handleProfilePic = (e) => {
               </div>
             </div>
 
-            {/* Facilities Section */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-800">
-                  Facilities & Services
-                </h3>
-                <button
-                  type="button"
-                  onClick={addFacility}
-                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-green-600 text-white rounded-lg hover:from-blue-700 hover:to-green-700"
-                >
-                  <Plus className="w-4 h-4" />
-                  Add Facility
-                </button>
-              </div>
+      <div className="space-y-2 group">
+  <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+    COD Preference
+  </label>
+  <div className="flex gap-4">
+    <button
+      type="button"
+      onClick={() => handleInputChange("codPreference", "yes")}
+      className={`w-full px-4 py-3 border rounded-xl font-medium transition-all duration-200
+        ${formData?.codPreference === "yes" 
+          ? "bg-green-500 text-white border-green-500" 
+          : "bg-white text-gray-700 border-gray-300 hover:bg-green-50"}`}
+    >
+      Yes
+    </button>
+    <button
+      type="button"
+      onClick={() => handleInputChange("codPreference", "no")}
+      className={`w-full px-4 py-3 border rounded-xl font-medium transition-all duration-200
+        ${formData?.codPreference === "no" 
+          ? "bg-red-500 text-white border-red-500" 
+          : "bg-white text-gray-700 border-gray-300 hover:bg-red-50"}`}
+    >
+      No
+    </button>
+  </div>
+  {errors?.codPreference && (
+    <p className="text-red-500 text-xs">{errors?.codPreference}</p>
+  )}
+</div>
 
-              <div className="space-y-3">
-                {facilities.map((facility, index) => (
-                  <div
-                    key={index}
-                    className="grid md:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-xl"
-                  >
-                    <input
-                      type="text"
-                      placeholder="Facility name (e.g., ICU, X-Ray)"
-                      value={facility?.name}
-                      onChange={(e) =>
-                        handleFacilityChange(index, "name", e.target.value)
-                      }
-                      className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                    />
-                    <div className="flex gap-2">
-                      <input
-                        type="text"
-                        placeholder="Description"
-                        value={facility?.discription}
-                        onChange={(e) =>
-                          handleFacilityChange(
-                            index,
-                            "discription",
-                            e.target.value
-                          )
-                        }
-                        className="flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                      />
-                      {facilities.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => removeFacility(index)}
-                          className="px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg"
-                        >
-                          ×
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+<div className="space-y-2 group">
+  <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+    Online Payment
+  </label>
+  <div className="flex gap-4">
+    <button
+      type="button"
+      onClick={() => handleInputChange("onlinePayment", "yes")}
+      className={`flex-1 px-4 py-3 border rounded-xl font-medium transition-all duration-200
+        ${formData?.onlinePayment === "yes" 
+          ? "bg-green-500 text-white border-green-500" 
+          : "bg-white text-gray-700 border-gray-300 hover:bg-green-50"}`}
+    >
+      Yes
+    </button>
+    <button
+      type="button"
+      onClick={() => handleInputChange("onlinePayment", "no")}
+      className={`flex-1 px-4 py-3 border rounded-xl font-medium transition-all duration-200
+        ${formData?.onlinePayment === "no" 
+          ? "bg-red-500 text-white border-red-500" 
+          : "bg-white text-gray-700 border-gray-300 hover:bg-red-50"}`}
+    >
+      No
+    </button>
+  </div>
+  {errors?.onlinePayment && (
+    <p className="text-red-500 text-xs">{errors?.onlinePayment}</p>
+  )}
+</div>
+
 
             {/* Submit Button */}
             <div className="pt-6">
@@ -518,4 +541,4 @@ const handleProfilePic = (e) => {
   );
 };
 
-export default HospitalRegistration;
+export default PharmacyRegistration;

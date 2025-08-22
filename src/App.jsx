@@ -36,6 +36,8 @@ import PopularSearch from "./components/PopularSearch";
 import UpgradeProfile from "./pages/UpgradeProfile";
 import AllRegistration from "./components/AllRegistration";
 import HospitalRegistration from "./components/HospitalRegistration";
+import PharmacyRegistration from "./components/PharmacyRegistration";
+
 
 // Components
 import Navbar from "./components/Navbar";
@@ -97,6 +99,7 @@ function App() {
                 <Route path="/upgrade-profile" element={<UpgradeProfile />} />
                 <Route path="/all-registration" element={<AllRegistration />} />
                 <Route path="/hospital-registration" element={<HospitalRegistration />} />
+                <Route path="/pharmacy-registration" element={<PharmacyRegistration />} />
 
 
 
