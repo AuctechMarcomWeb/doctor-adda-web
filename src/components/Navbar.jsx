@@ -35,14 +35,14 @@ const Navbar = () => {
   console.log("user profile data from redux in navbar", userProfileData);
   console.log("isLoggedIn from redux", isLoggedIn);
   // Extract upgrade info
-const { upgradeAccountId, upgradeAccountType, upgradeAccountApproveStatus } =
-  userProfileData ?? {};
+  const { upgradeAccountId, upgradeAccountType, upgradeAccountApproveStatus } =
+    userProfileData ?? {};
 
   // Determine if user is upgraded
   const isUpgraded =
     upgradeAccountId && upgradeAccountType && upgradeAccountApproveStatus;
 
-   console.log("isUpgraded", isUpgraded);
+  console.log("isUpgraded", isUpgraded);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -137,7 +137,7 @@ const { upgradeAccountId, upgradeAccountType, upgradeAccountApproveStatus } =
                       Customer Support
                     </span>
                     <span className="md:text-xs xl:text-sm font-semibold text-gray-800">
-                       1800-572-0005
+                      1800-572-0005
                     </span>
                   </div>
                 </div>
@@ -162,77 +162,77 @@ const { upgradeAccountId, upgradeAccountType, upgradeAccountApproveStatus } =
             {/* User Profile */}
             {isLoggedIn && userProfileData ? (
               (console.log("userProfileData navbar", userProfileData.name),
-              (
-                <div className="relative " ref={dropdownRef}>
-                  {/* hidden md:block */}
-                  <div
-                    className="flex items-center gap-2 cursor-pointer"
-                    onClick={() => setDropdownOpen(!dropdownOpen)}
-                  >
-                    <img
-                      src={
-                        userProfileData.profileImage ||
-                        "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80"
-                      }
-                      alt="User Avatar"
-                      className="w-8 h-8 rounded-full object-cover"
-                    />
-                    <span className="text-sm font-semibold text-gray-800 ">
-                      {/* hidden lg:block */}
-                      {userProfileData?.name || "User"}
-                    </span>
-                    <span className="text-gray-500">▾</span>
-                  </div>
-
-                  {/* Dropdown Menu */}
-                  {dropdownOpen && (
-                    <div className="absolute z-100 right-0 mt-2 w-48  bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200  ">
-                      <button
-                        onClick={handleLogout}
-                        className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
-                      >
-                        <LogOut className="w-4 h-4" />
-                        Logout
-                      </button>
-                      <Link
-                        onClick={() => setDropdownOpen(false)}
-                        to="/profile"
-                      >
-                        <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
-                          <User className="w-4 h-4" />
-                          Profile
-                        </button>
-                      </Link>
-                      <Link
-                        onClick={() => setDropdownOpen(false)}
-                        to="/appointments"
-                      >
-                        <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
-                          <File className="w-4 h-4" />
-                          Appointments
-                        </button>
-                      </Link>
-                      <Link
-                        onClick={() => setDropdownOpen(false)}
-                        to="/"
-                      >
-                        <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
-                          <Settings className="w-4 h-4" />
-                          Settings
-                        </button>
-                      </Link>
-                         <Link onClick={() => setDropdownOpen(false)} to={isUpgraded ? "/dashboard" : "/upgrade-profile"}>
-      <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
-        <User className="w-4 h-4" />
-        {isUpgraded ? "Dashboard" : "Upgrade Profile"}
-      </button>
-    </Link>
-
-
+                (
+                  <div className="relative hidden md:block " ref={dropdownRef}>
+                    
+                    <div
+                      className="flex items-center gap-2 cursor-pointer"
+                      onClick={() => setDropdownOpen(!dropdownOpen)}
+                    >
+                      <img
+                        src={
+                          userProfileData.profileImage ||
+                          "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80"
+                        }
+                        alt="User Avatar"
+                        className="w-8 h-8 rounded-full object-cover"
+                      />
+                      <span className="text-sm font-semibold text-gray-800 ">
+                        {/* hidden lg:block */}
+                        {userProfileData?.name || "User"}
+                      </span>
+                      <span className="text-gray-500">▾</span>
                     </div>
-                  )}
-                </div>
-              ))
+
+                    {/* Dropdown Menu */}
+                    {dropdownOpen && (
+                      <div className="absolute z-100 right-0 mt-2 w-48  bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200  ">
+                        <button
+                          onClick={handleLogout}
+                          className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
+                        >
+                          <LogOut className="w-4 h-4" />
+                          Logout
+                        </button>
+                        <Link
+                          onClick={() => setDropdownOpen(false)}
+                          to="/profile"
+                        >
+                          <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
+                            <User className="w-4 h-4" />
+                            Profile
+                          </button>
+                        </Link>
+                        <Link
+                          onClick={() => setDropdownOpen(false)}
+                          to="/appointments"
+                        >
+                          <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
+                            <File className="w-4 h-4" />
+                            Appointments
+                          </button>
+                        </Link>
+                        <Link
+                          onClick={() => setDropdownOpen(false)}
+                          to="/"
+                        >
+                          <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
+                            <Settings className="w-4 h-4" />
+                            Settings
+                          </button>
+                        </Link>
+                        <Link onClick={() => setDropdownOpen(false)} to={isUpgraded ? "/dashboard" : "/upgrade-profile"}>
+                          <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
+                            <User className="w-4 h-4" />
+                            {isUpgraded ? "Dashboard" : "Upgrade Profile"}
+                          </button>
+                        </Link>
+
+
+                      </div>
+                    )}
+                  </div>
+                ))
             ) : (
               <>
                 <Link
@@ -271,6 +271,88 @@ const { upgradeAccountId, upgradeAccountType, upgradeAccountApproveStatus } =
         {isMenuOpen && (
           <div className="md:hidden bg-white border-t">
             <div className="px-2 pt-2 pb-3 space-y-1">
+              {isLoggedIn && userProfileData ? (
+                (console.log("userProfileData navbar", userProfileData.name),
+                  (
+                    <div className="relative " ref={dropdownRef}>
+                      {/* hidden md:block */}
+                      <div
+                        className="flex items-center gap-2 cursor-pointer w-full mt-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-2 rounded-full justify-center"
+                        onClick={() => setDropdownOpen(!dropdownOpen)}
+                      >
+                        <img
+                          src={
+                            userProfileData.profileImage ||
+                            "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80"
+                          }
+                          alt="User Avatar"
+                          className="w-8 h-8 rounded-full object-cover"
+                        />
+                        <span className="text-sm font-semibold  ">
+                          {/* hidden lg:block */}
+                          {userProfileData?.name || "User"}
+                        </span>
+                        <span className="text-gray-500">▾</span>
+                      </div>
+
+                      {/* Dropdown Menu */}
+                      {dropdownOpen && (
+                        <div className="absolute z-100 right-0 mt-2 w-full   bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200  ">
+                          <button
+                            onClick={handleLogout}
+                            className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
+                          >
+                            <LogOut className="w-4 h-4" />
+                            Logout
+                          </button>
+                          <Link
+                            onClick={() => setDropdownOpen(false)}
+                            to="/profile"
+                          >
+                            <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
+                              <User className="w-4 h-4" />
+                              Profile
+                            </button>
+                          </Link>
+                          <Link
+                            onClick={() => setDropdownOpen(false)}
+                            to="/appointments"
+                          >
+                            <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
+                              <File className="w-4 h-4" />
+                              Appointments
+                            </button>
+                          </Link>
+                          <Link
+                            onClick={() => setDropdownOpen(false)}
+                            to="/"
+                          >
+                            <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
+                              <Settings className="w-4 h-4" />
+                              Settings
+                            </button>
+                          </Link>
+                          <Link onClick={() => setDropdownOpen(false)} to={isUpgraded ? "/dashboard" : "/upgrade-profile"}>
+                            <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
+                              <User className="w-4 h-4" />
+                              {isUpgraded ? "Dashboard" : "Upgrade Profile"}
+                            </button>
+                          </Link>
+
+
+                        </div>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                <>
+                  <Link onClick={() => setIsMenuOpen(false)} to="/login">
+                    <button className="w-full mt-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-2 rounded-full">
+                      Login / SignUp
+                    </button>
+                  </Link>
+                </>
+              )}
               <Link
                 onClick={() => setIsMenuOpen(false)}
                 to="/"
@@ -321,11 +403,13 @@ const { upgradeAccountId, upgradeAccountType, upgradeAccountApproveStatus } =
                 Hospitals & Clinics
               </Link>
 
-              <Link onClick={() => setIsMenuOpen(false)} to="/login">
+              
+
+              {/* <Link onClick={() => setIsMenuOpen(false)} to="/login">
                 <button className="w-full mt-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-2 rounded-full">
                   Login / SignUp
                 </button>
-              </Link>
+              </Link> */}
             </div>
           </div>
         )}
