@@ -146,7 +146,7 @@ const handleDelete = async (petId) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 font-sans">
       <div className="max-w-7xl mx-auto p-6 md:pt-42">
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col md:flex-row gap-8">
           {/* Sidebar */}
           <SidebarNav activeTab="pets"
                   formData={userProfileData}

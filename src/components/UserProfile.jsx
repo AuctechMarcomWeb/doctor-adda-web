@@ -170,7 +170,7 @@ const UserProfile = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
       <div className="max-w-7xl mx-auto p-6 md:pt-42">
-        <div className="flex flex-col lg:flex-row gap-6">
+        <div className="flex flex-col md:flex-row gap-6">
           {/* Sidebar */}
           <SidebarNav
             formData={formData}
@@ -298,7 +298,7 @@ const UserProfile = () => {
                     <label className="block text-sm md:text-base font-semibold text-gray-700">
                       Email Address
                     </label>
-                    <div className="px-4 py-3 bg-gray-100 text-sm md:text-base rounded-lg border-2 border-transparent text-gray-500">
+                    <div className=" px-4 py-3 bg-gray-100  text-sm md:text-base rounded-lg border-2 border-transparent text-gray-500 overflow-x-hidden">
                       <Mail size={16} className="inline mr-2" />
                       {formData?.email|| "abc@gmail.com"}
                     </div>
