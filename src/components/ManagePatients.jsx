@@ -147,7 +147,7 @@ const ManagePatients = () => {
           {/* Patients Section */}
           <div className="flex-1 bg-white rounded-3xl shadow-lg md:p-8 p-4 pt-8">
             <div className="flex justify-between items-center mb-8">
-              <h2 className="md:text-2xl  text-xl font-bold  text-gray-900 flex items-center gap-3">
+              <h2 className="md:text-2xl  text-xl font-bold  text-gray-800 flex items-center gap-3">
                 <User size={28} className="text-[#006ca7]" /> Manage Patients
               </h2>
               <button
@@ -176,7 +176,7 @@ const ManagePatients = () => {
                         <User size={24} className="text-[#006ca7]" />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900 text-lg">
+                        <h3 className="font-semibold text-gray-800 text-base md:text-lg">
                           {patient?.name}
                         </h3>
                         <p className="text-sm text-gray-600 mt-1">
@@ -195,7 +195,7 @@ const ManagePatients = () => {
                           setEditPatient(patient);
                           setShowEditModal(true);
                         }}
-                        className="flex items-center gap-1 text-[#006ca7] font-semibold hover:text-[#004a70] transition-colors"
+                        className="flex items-center gap-1 text-[#006ca7] font-semibold  text-sm md:text-base hover:text-[#004a70] transition-colors"
                         aria-label={`Edit ${patient?.name}`}
                       >
                         <Edit3 size={18} /> Edit
@@ -203,7 +203,7 @@ const ManagePatients = () => {
 
                       <button
                         onClick={() => handleDeletePatient(patient._id)}
-                        className="flex items-center gap-1 text-red-600 font-semibold hover:text-red-700 transition-colors"
+                        className="flex items-center gap-1 text-red-600 font-semibold text-sm md:text-base hover:text-red-700 transition-colors"
                         aria-label={`Remove ${patient?.name}`}
                       >
                         <Trash2 size={18} /> Remove
