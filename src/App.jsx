@@ -37,6 +37,9 @@ import UpgradeProfile from "./pages/UpgradeProfile";
 import AllRegistration from "./components/AllRegistration";
 import HospitalRegistration from "./components/HospitalRegistration";
 import PharmacyRegistration from "./components/PharmacyRegistration";
+import DiagonsticRegistration from "./components/DiagonsticRegistration";
+import DoctorsRegistration from "./components/DoctorsRegistration";
+import AmbulanceRegistration from "./components/AmbulanceRegistration";
 
 
 // Components
@@ -100,8 +103,9 @@ function App() {
                 <Route path="/all-registration" element={<AllRegistration />} />
                 <Route path="/hospital-registration" element={<HospitalRegistration />} />
                 <Route path="/pharmacy-registration" element={<PharmacyRegistration />} />
-
-
+                <Route path="/diagonstics-registration" element={<DiagonsticRegistration />} />
+                <Route path="/doctors-registration" element={<DoctorsRegistration />} />
+                <Route path="/ambulance-registration" element={<AmbulanceRegistration />} />
 
                 <Route
                   path="/terms-and-conditions"

@@ -127,6 +127,7 @@ const AllRegistration = () => {
               iconText: "text-rose-600",
               hoverOverlay: "bg-rose-600",
             }}
+            onClick={() => navigate("/diagonstics-registration")}
           />
           <AppointmentTypeCard
             icon={Stethoscope}
@@ -139,6 +140,7 @@ const AllRegistration = () => {
               iconText: "text-rose-600",
               hoverOverlay: "bg-rose-600",
             }}
+            onClick={()=> navigate("/doctors-registration")}
           />
           <AppointmentTypeCard
             icon={Ambulance}
@@ -151,6 +153,7 @@ const AllRegistration = () => {
               iconText: "text-rose-600",
               hoverOverlay: "bg-rose-600",
             }}
+            onClick={()=> navigate("/ambulance-registration")}
           />
         </div>
 

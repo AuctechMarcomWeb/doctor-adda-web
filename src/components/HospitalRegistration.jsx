@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { getRequest, postRequest } from "../Helpers/index";
 import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
 
 const HospitalRegistration = () => {
   const [errors, setErrors] = useState({});
@@ -28,20 +29,21 @@ const HospitalRegistration = () => {
     { name: "fdgdf", discription: "" },
   ]);
   const [formData, setFormData] = useState({
-    name: "jhgjg",
-    address: "dfd",
-    email: "ddf@gmail.com",
-    phone: "7654456765",
-    categories: "",
-    accountType: "Hospital",
-    //healthCard: "Both ",
-    ownerName: "df",
-    gstNumber: "123432343223456",
-    phoneNumber: "7654456765",
-    profileImage: "",
-    description: "gfdfgd",
-    latitude: "28.6139",
-    longitude: "77.2090",
+  name: "AIIMS Hospital",
+  address: "Sri Aurobindo Marg, Ansari Nagar, New Delhi, Delhi 110029, India",
+  email: "info@aiims.edu",
+  phone: "1126588500",
+  categories: [],
+  accountType: "Hospital",
+  ownerName: "Government of India",
+  gstNumber: "4354546361834562",
+  phoneNumber: "1126588700",
+  profileImage:"https://www.aiims.edu/images/aiims-logo.png",
+  description: "All India Institute of Medical Sciences (AIIMS) New Delhi is a premier government hospital and medical research university in India.",
+  latitude: "28.5672",
+  longitude: "77.2100",
+
+
   });
   console.log("formData", formData);
   useEffect(() => {
@@ -70,7 +72,6 @@ const HospitalRegistration = () => {
     const uploadedUrl = response?.data?.data?.imageUrl;
     setUploadProfileImage(uploadedUrl);
     console.log("uploadedUrl",uploadedUrl);
-    
     setFormData((prev) => ({ ...prev, profileImage: uploadedUrl }));
     
   } catch (error) {
@@ -84,14 +85,12 @@ const HospitalRegistration = () => {
     setErrors(validationErrors);
     return;
   }
-
   if (!formData?.profileImage) {
     setErrors({ profileImage: "Please upload a profile image" });
     return;
   }
   setErrors({});
   setLoading(true);
-
   try {
     const payload = { ...formData, facilities };
     console.log("Final payload before submit:", payload);
@@ -101,9 +100,11 @@ const HospitalRegistration = () => {
     });
 
     console.log("Hospital Register Response:", response?.data?.data);
+    toast.success(response?.data?.message)
     setShowSuccess(true);
   } catch (err) {
     console.error(" Error Registering Hospital:", err);
+    toast.error(err?.respone?.data?.message)
   } finally {
     console.log(" Finally block executed");
     setLoading(false);
@@ -145,7 +146,9 @@ const handleProfilePic = (e) => {
     if (!formData.name) newErrors.name = "Hospital name is required";
     if (!formData.email) newErrors.email = "Email is required";
     if (!formData.phone) newErrors.phone = "Contact number is required";
-    if (!formData.categories) newErrors.categories = "Please select a category";
+  if (!formData.categories || formData.categories.length === 0 || !formData.categories[0]) {
+    newErrors.categories = "Please select a category";
+  }
    // if (!formData.healthCard)
      // newErrors.healthCard = "Please select health card type";
     if (!formData.address) newErrors.address = "Address is required";
@@ -315,7 +318,7 @@ const handleProfilePic = (e) => {
                   ))}
                 </select>
                 {errors?.categories && (
-                  <p className="text-red-500 text-xs">{errors?.category}</p>
+                  <p className="text-red-500 text-xs">{errors?.categories}</p>
                 )}
               </div>
 

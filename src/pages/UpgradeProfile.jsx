@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function UpgradeProfile({ onContinue }) {
   const [isVisible, setIsVisible] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setIsVisible(true);
@@ -9,7 +11,7 @@ export default function UpgradeProfile({ onContinue }) {
 
   const handleContinue = () => {
     if (typeof onContinue === "function") return onContinue();
-    window.location.href = "/all-registration";
+    navigate("/all-registration"); // ✅ client-side navigation
   };
 
   const features = [
