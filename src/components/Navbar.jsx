@@ -137,7 +137,7 @@ const Navbar = () => {
                       Customer Support
                     </span>
                     <span className="md:text-xs xl:text-sm font-semibold text-gray-800">
-                      1800-572-0005
+                      +91 9450180033
                     </span>
                   </div>
                 </div>
