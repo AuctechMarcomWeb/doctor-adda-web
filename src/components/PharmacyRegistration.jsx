@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { getRequest, postRequest } from "../Helpers/index";
 import { useSelector } from "react-redux";
+import LocationSearchInput from "./LocationSearchInput";
 
 const PharmacyRegistration = () => {
   const [errors, setErrors] = useState({});
@@ -129,7 +130,7 @@ const handleProfilePic = (e) => {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.name) newErrors.name = "Hospital name is required";
+    if (!formData.name) newErrors.name = "Pharmacy name is required";
     if (!formData.email) newErrors.email = "Email is required";
     if (!formData.phone) newErrors.phone = "Contact number is required";
     if (!formData.storeTiming) newErrors.storeTiming = "Please select a storeTiming";
@@ -221,7 +222,7 @@ const handleProfilePic = (e) => {
                   </div>
                 </div>
                 <div className="text-sm text-gray-600">
-                  <p>Click to upload hospital logo</p>
+                  <p>Click to upload Pharmacy logo</p>
                   <p className="text-xs">Max size: 5MB</p>
                 </div>
               </div>
@@ -239,7 +240,7 @@ const handleProfilePic = (e) => {
                   value={formData?.name}
                   onChange={(e) => handleInputChange("name", e.target.value)}
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter hospital name"
+                  placeholder="Enter Pharmacy name"
                 />
                 {errors.name && (
                   <p className="text-red-500 text-xs">{errors?.name}</p>
@@ -275,7 +276,7 @@ const handleProfilePic = (e) => {
                   value={formData?.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500"
-                  placeholder="hospital@example.com"
+                  placeholder="abc@example.com"
                 />
                 {errors.officialEmail && (
                   <p className="text-red-500 text-xs">{errors?.email}</p>
@@ -294,7 +295,7 @@ const handleProfilePic = (e) => {
                   handleInputChange("description", e.target.value)
                 }
                 className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
-                placeholder="Complete hospital address"
+                placeholder="Complete Pharmacy address"
               />
               {errors?.description && (
                 <p className="text-red-500 text-xs">{errors?.description}</p>
@@ -305,26 +306,26 @@ const handleProfilePic = (e) => {
 
            
             {/* Address & timings*/}
-        <div className="grid md:grid-cols-2 gap-6">
             <div className="space-y-2 group">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                <MapPin className="w-4 h-4 text-red-600" />
-                Search Address
-              </label>
-              <input
-                type="text"
-                value={formData?.address}
-                onChange={(e) => handleInputChange("address", e.target.value)}
-                className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
-                placeholder="Complete hospital address"
-              />
-              {errors?.address && (
-                <p className="text-red-500 text-xs">{errors?.address}</p>
-              )}
+                          <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                            <MapPin className="w-4 h-4 text-red-600" />
+                            Search Address
+                          </label>
+                          <LocationSearchInput
+                            value={formData.address}
+                            onSelect={
+                              (place) => setFormData({ ...formData, ...place }) // address + lat/lng update
+                            }
+                          />
+                          {errors?.address && (
+                            <p className="text-red-500 text-xs">{errors?.address}</p>
+                          )}
             </div>
+            
+
             <div className="space-y-2 group">
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                <MapPin className="w-4 h-4 text-red-600" />
+                {/* <MapPin className="w-4 h-4 text-red-600" /> */}
                 Store Timings
               </label>
               <input
@@ -338,7 +339,6 @@ const handleProfilePic = (e) => {
                 <p className="text-red-500 text-xs">{errors?.storeTiming}</p>
               )}
             </div>
-        </div>
 
 
             {/* services Section */}
@@ -531,7 +531,7 @@ const handleProfilePic = (e) => {
                     : "bg-gradient-to-r from-blue-600 via-purple-600 to-green-600 hover:from-blue-700 hover:via-purple-700 hover:to-green-700"
                 }`}
               >
-                {loading ? "Registering..." : "Register Hospital"}
+                {loading ? "Registering..." : "Register Pharmacy"}
               </button>
             </div>
           </div>

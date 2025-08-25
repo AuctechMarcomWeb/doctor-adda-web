@@ -13,6 +13,7 @@ import {
 import { getRequest, postRequest } from "../Helpers/index";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import LocationSearchInput from "./LocationSearchInput";
 
 const AmbulanceRegistration = () => {
   const [errors, setErrors] = useState({});
@@ -385,17 +386,16 @@ const AmbulanceRegistration = () => {
             </div>
 
             {/* Address */}
-            <div className="space-y-2 group">
+             <div className="space-y-2 group">
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
                 <MapPin className="w-4 h-4 text-red-600" />
                 Search Address
               </label>
-              <input
-                type="text"
-                value={formData?.address}
-                onChange={(e) => handleInputChange("address", e.target.value)}
-                className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
-                placeholder="Search or enter location address"
+              <LocationSearchInput
+                value={formData.address}
+                onSelect={
+                  (place) => setFormData({ ...formData, ...place }) // address + lat/lng update
+                }
               />
               {errors?.address && (
                 <p className="text-red-500 text-xs">{errors?.address}</p>
