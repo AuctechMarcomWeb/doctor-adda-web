@@ -13,6 +13,7 @@ import {
 import { getRequest, postRequest } from "../Helpers/index";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import LocationSearchInput from "./LocationSearchInput";
 
 const DiagonsticRegistration = () => {
   const [errors, setErrors] = useState({});
@@ -90,7 +91,7 @@ console.log("form data",formData);
     toast.success(response?.data?.message)
     setShowSuccess(true);
   } catch (err) {
-    console.error(" Error Registering Hospital:", err);
+    console.error(" Error Registering :", err);
     toast.error(err?.respone?.data?.message)
   } finally {
     console.log(" Finally block executed");
@@ -346,17 +347,16 @@ const validateForm = () => {
             </div>
 
             {/* Address */}
-            <div className="space-y-2 group">
+             <div className="space-y-2 group">
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
                 <MapPin className="w-4 h-4 text-red-600" />
                 Search Address
               </label>
-              <input
-                type="text"
-                value={formData?.address}
-                onChange={(e) => handleInputChange("address", e.target.value)}
-                className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
-                placeholder="Search or enter location address"
+              <LocationSearchInput
+                value={formData.address}
+                onSelect={
+                  (place) => setFormData({ ...formData, ...place }) // address + lat/lng update
+                }
               />
               {errors?.address && (
                 <p className="text-red-500 text-xs">{errors?.address}</p>
@@ -577,7 +577,7 @@ const validateForm = () => {
 
             <div className="space-y-2 group">
               <p className="text-gray-700 font-medium font-semibold">
-                Select Images to showcase your pharmacy
+                Select Images to showcase your 
               </p>
 
               {/* Preview Area */}

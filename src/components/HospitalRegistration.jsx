@@ -13,6 +13,7 @@ import {
 import { getRequest, postRequest } from "../Helpers/index";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import LocationSearchInput from "./LocationSearchInput";
 
 const HospitalRegistration = () => {
   const [errors, setErrors] = useState({});
@@ -23,27 +24,26 @@ const HospitalRegistration = () => {
   const userId = userProfileData?._id;
   // Profile Image states
   const [profileFile, setProfileFile] = useState(null);
-  const [uploadProfileImage, setUploadProfileImage] = useState(""); 
+  const [uploadProfileImage, setUploadProfileImage] = useState("");
   const [profilePreview, setProfilePreview] = useState(null);
   const [facilities, setFacilities] = useState([
     { name: "fdgdf", discription: "" },
   ]);
   const [formData, setFormData] = useState({
-  name: "AIIMS Hospital",
-  address: "Sri Aurobindo Marg, Ansari Nagar, New Delhi, Delhi 110029, India",
-  email: "info@aiims.edu",
-  phone: "1126588500",
-  categories: [],
-  accountType: "Hospital",
-  ownerName: "Government of India",
-  gstNumber: "4354546361834562",
-  phoneNumber: "1126588700",
-  profileImage:"https://www.aiims.edu/images/aiims-logo.png",
-  description: "All India Institute of Medical Sciences (AIIMS) New Delhi is a premier government hospital and medical research university in India.",
-  latitude: "28.5672",
-  longitude: "77.2100",
-
-
+    name: "AIIMS Hospital",
+    address: "",
+    email: "info@aiims.edu",
+    phone: "1126588500",
+    categories: [],
+    accountType: "Hospital",
+    ownerName: "Government of India",
+    gstNumber: "4354546361834562",
+    phoneNumber: "1126588700",
+    profileImage: "https://www.aiims.edu/images/aiims-logo.png",
+    description:
+      "All India Institute of Medical Sciences (AIIMS) New Delhi is a premier government hospital and medical research university in India.",
+    latitude: "",
+    longitude: "",
   });
   console.log("formData", formData);
   useEffect(() => {
@@ -61,62 +61,61 @@ const HospitalRegistration = () => {
   }, []);
 
   const uploadImage = async (file) => {
-  try {
-    const formDataData = new FormData();
-    formDataData.append("file", file);
-    const response = await postRequest({
-      url: `upload/uploadImage`,
-      cred: formDataData,
-    });
-    console.log("Image uploaded successfully:", response);
-    const uploadedUrl = response?.data?.data?.imageUrl;
-    setUploadProfileImage(uploadedUrl);
-    console.log("uploadedUrl",uploadedUrl);
-    setFormData((prev) => ({ ...prev, profileImage: uploadedUrl }));
-    
-  } catch (error) {
-    console.error("Error uploading image:", error);
-  }
-};
+    try {
+      const formDataData = new FormData();
+      formDataData.append("file", file);
+      const response = await postRequest({
+        url: `upload/uploadImage`,
+        cred: formDataData,
+      });
+      console.log("Image uploaded successfully:", response);
+      const uploadedUrl = response?.data?.data?.imageUrl;
+      setUploadProfileImage(uploadedUrl);
+      console.log("uploadedUrl", uploadedUrl);
+      setFormData((prev) => ({ ...prev, profileImage: uploadedUrl }));
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
+  };
 
   const handleSubmit = async () => {
-  const validationErrors = validateForm();
-  if (Object.keys(validationErrors).length > 0) {
-    setErrors(validationErrors);
-    return;
-  }
-  if (!formData?.profileImage) {
-    setErrors({ profileImage: "Please upload a profile image" });
-    return;
-  }
-  setErrors({});
-  setLoading(true);
-  try {
-    const payload = { ...formData, facilities };
-    console.log("Final payload before submit:", payload);
-    const response = await postRequest({
-      url: `hospital/registerHospital/${userId}`,
-      cred: payload,
-    });
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+    if (!formData?.profileImage) {
+      setErrors({ profileImage: "Please upload a profile image" });
+      return;
+    }
+    setErrors({});
+    setLoading(true);
+    try {
+      const payload = { ...formData, facilities };
+      console.log("Final payload before submit:", payload);
+      const response = await postRequest({
+        url: `hospital/registerHospital/${userId}`,
+        cred: payload,
+      });
 
-    console.log("Hospital Register Response:", response?.data?.data);
-    toast.success(response?.data?.message)
-    setShowSuccess(true);
-  } catch (err) {
-    console.error(" Error Registering Hospital:", err);
-    toast.error(err?.respone?.data?.message)
-  } finally {
-    console.log(" Finally block executed");
-    setLoading(false);
-  }
-};
+      console.log("Hospital Register Response:", response?.data?.data);
+      toast.success(response?.data?.message);
+      setShowSuccess(true);
+    } catch (err) {
+      console.error(" Error Registering Hospital:", err);
+      toast.error(err?.respone?.data?.message);
+    } finally {
+      console.log(" Finally block executed");
+      setLoading(false);
+    }
+  };
 
   // Profile Pic Handler
-const handleProfilePic = (e) => {
+  const handleProfilePic = (e) => {
     const file = e.target.files[0];
     if (file) {
       setProfileFile(file);
-      setProfilePreview(URL.createObjectURL(file)); 
+      setProfilePreview(URL.createObjectURL(file));
     }
     uploadImage(file);
   };
@@ -146,11 +145,15 @@ const handleProfilePic = (e) => {
     if (!formData.name) newErrors.name = "Hospital name is required";
     if (!formData.email) newErrors.email = "Email is required";
     if (!formData.phone) newErrors.phone = "Contact number is required";
-  if (!formData.categories || formData.categories.length === 0 || !formData.categories[0]) {
-    newErrors.categories = "Please select a category";
-  }
-   // if (!formData.healthCard)
-     // newErrors.healthCard = "Please select health card type";
+    if (
+      !formData.categories ||
+      formData.categories.length === 0 ||
+      !formData.categories[0]
+    ) {
+      newErrors.categories = "Please select a category";
+    }
+    // if (!formData.healthCard)
+    // newErrors.healthCard = "Please select health card type";
     if (!formData.address) newErrors.address = "Address is required";
     if (!formData.ownerName) newErrors.ownerName = "Owner name is required";
     if (!formData.phoneNumber)
@@ -359,7 +362,7 @@ const handleProfilePic = (e) => {
                   handleInputChange("description", e.target.value)
                 }
                 className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
-                placeholder="Complete hospital address"
+                placeholder="Complete pharmacy description"
               />
               {errors?.description && (
                 <p className="text-red-500 text-xs">{errors?.description}</p>
@@ -367,17 +370,17 @@ const handleProfilePic = (e) => {
             </div>
 
             {/* Address */}
+
             <div className="space-y-2 group">
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
                 <MapPin className="w-4 h-4 text-red-600" />
                 Search Address
               </label>
-              <input
-                type="text"
-                value={formData?.address}
-                onChange={(e) => handleInputChange("address", e.target.value)}
-                className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
-                placeholder="Complete hospital address"
+              <LocationSearchInput
+                value={formData.address}
+                onSelect={
+                  (place) => setFormData({ ...formData, ...place }) // address + lat/lng update
+                }
               />
               {errors?.address && (
                 <p className="text-red-500 text-xs">{errors?.address}</p>
