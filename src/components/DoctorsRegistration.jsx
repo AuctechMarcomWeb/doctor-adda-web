@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Plus,
   Upload,
@@ -11,149 +11,220 @@ import {
   FileText,
   Calendar,
 } from "lucide-react";
-import { getRequest, postRequest } from "../Helpers/index";
+import { fileUpload, getRequest, postRequest } from "../Helpers/index";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import LocationSearchInput from "./LocationSearchInput";
+import { Select } from "antd";
 
 const DoctorsRegistration = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [categories, setCategories] = useState([]);
-  const [hospitalList, setHospitalList] = useState([]);
+  const [category, setCategory] = useState([]);
+  const [hospital, setHospital] = useState([]);
   const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
   const userId = userProfileData?._id;
   // Profile Image states
   const [profileFile, setProfileFile] = useState(null);
   const [uploadProfileImage, setUploadProfileImage] = useState("");
   const [profilePreview, setProfilePreview] = useState(null);
+  const imageRef1 = useRef(null);
+
   // Add new states for documents
   const [galleryImages, setGalleryImages] = useState([]);
   const [galleryIndex, setGalleryIndex] = useState(0);
 
   const [documents, setDocuments] = useState([]);
   const [docIndex, setDocIndex] = useState(0);
-  // Clinic state
-  const [clinics, setClinics] = useState([
-    {
-      clinicName: "fghfgh",
-      clinicAddress: "fghf",
-      consultationFee: "200",
-      startTime: "6:00 am",
-      endTime: "7:00am",
-      duration: "",
-      videoStartTime: "6:00 PM",
-      videoEndTime: "6:15PM",
-      videoDuration: "",
-      location: {
-        type: "Point",
-        coordinates: [77.5946, 12.9716], // Static default (Bangalore)
-      },
-      availability: [
-        {
-          date: "24/08/2025",
-          isAvailable: true,
-          slots: [{ startTime: "", endTime: "", isBooked: false }],
-        },
-      ],
-      videoAvailability: [
-        {
-          date: "24/08/2025",
-          isAvailable: true,
-          slots: [{ startTime: "", endTime: "", isBooked: false }],
-        },
-      ],
-    },
-  ]);
-  console.log("clinic", clinics);
-
+  const [categoryName, setCategoryName] = useState("");
+  const [selectedHospital, setSelectedHospital] = useState("");
   const [formData, setFormData] = useState({
-    phone: "1153348863",
-    fullName: "Dr. Jane Doe",
+    phone: " ",
+    fullName: "",
+    email: "",
     gender: "",
     dob: "",
-    accountType: "Doctor",
-    email: "abc@gmail.com",
-    latitude: "26.8853856",
-    longitude: "80.99742805555556",
     profilepic: "",
-    experience: "10 years",
-    serviceType: "",
-    address: "123 Main Street, Bangalore",
-    about:
-      "Experienced physician with a focus on primary care and chronic disease management.",
-    education: "MBBS, MD",
-    category: [],
+    experience: "",
+    about: "",
+    education: "",
+    category: "",
+    accountType: "Doctor",
+    hospital: "",
     documentImage: [],
-    veterinaryserviceType: "",
+    veterinaryDoctorType: [],
+    serviceType: [],
+    veterinaryserviceType: [],
+    clinics: [
+      {
+        clinicName: "",
+        clinicAddress: "",
+        consultationFee: "",
+        startTime: "",
+        endTime: "",
+        duration: 30,
+        videoStartTime: "",
+        videoEndTime: "",
+        videoDuration: 30,
+        location: {
+          type: "Point",
+          coordinates: [0, 0],
+        },
+      },
+    ],
   });
   console.log("form data", formData);
 
+  // Fetch categories
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await getRequest("category");
-        console.log("fetched category", response?.data?.data?.categories);
-        setCategories(response?.data?.data?.categories || []);
-      } catch (err) {
-        console.error("Error fetching categories:", err);
-      }
-    };
+    getRequest(`category?isPagination=false`)
+      .then((res) => {
+        setCategory(res?.data?.data);
+        console.log("res?data0", res?.data?.data);
+        const filtrCategory = res?.data?.data?.filter(
+          (item) => String(item._id) === String(formData?.category)
+        );
 
-    fetchCategories();
+        console.log("filtrCategory", filtrCategory);
+
+        // Example: Set selected category name
+        if (filtrCategory.length > 0) {
+          setCategoryName(filtrCategory[0].name);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+    getRequest(`hospital?isPagination=false`)
+      .then((res) => {
+        setHospital(res?.data?.data?.hospitals);
+        console.log("Hospital", res?.data?.data?.hospitals);
+        const filterHospital = res?.data?.data?.hospitals?.filter(
+          (item) => String(item.name) === formData?.hospital
+        );
+
+        console.log("filterHospital", filterHospital);
+
+        // Example: Set selected category name
+        if (filterHospital.length == 0) {
+          setSelectedHospital("Other");
+          setFormData((prev) => ({
+            ...prev,
+            hospital: formData?.hospital,
+          }));
+        } else {
+          setSelectedHospital(filterHospital[0].name);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   }, []);
-  useEffect(() => {
-    const fetchHospitals = async () => {
-      try {
-        const response = await getRequest("hospital");
-        console.log("Fetched hospitals:", response?.data?.data?.hospitals);
-        setHospitalList(response?.data?.data?.hospitals || []);
-      } catch (error) {
-        console.error("Error fetching hospitals:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchHospitals();
-  }, []);
+  // category options
+
+  const serviceProvideOption = [
+    {
+      label: "Small Animal",
+      value: "Small Animal",
+    },
+    {
+      label: "Big Animal",
+      value: "Big Animal",
+    },
+  ];
+  const serviceType = [
+    {
+      label: "In-clinic",
+      value: "In-clinic",
+    },
+    {
+      label: "Video Consultation",
+      value: "Video Consultation",
+    },
+  ];
+  const veterinaryserviceType = [
+    {
+      label: "In-clinic",
+      value: "In-clinic",
+    },
+    {
+      label: "Home Visit",
+      value: "Home Visit",
+    },
+  ];
+  const selectData = (value) => {
+    setFormData((prev) => ({ ...prev, veterinaryDoctorType: value }));
+  };
+  const selectData1 = (value) => {
+    setFormData((prev) => ({ ...prev, veterinaryserviceType: value }));
+  };
+  const selectData2 = (value) => {
+    setFormData((prev) => ({ ...prev, serviceType: value }));
+  };
+
+  const categoryOption = category?.map((item, index) => {
+    return (
+      <option key={index} value={item._id}>
+        {item?.name}
+      </option>
+    );
+  });
+
+  //  hospital options
+  const hospitalOption = hospital?.map((item, index) => {
+    return (
+      <option key={index} value={item?.name}>
+        {item?.name}
+      </option>
+    );
+  });
 
   const handleSubmit = async () => {
-    console.log("start submit data");
+    console.log("🚀 Start submit data");
 
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
-    console.log("step 2");
+    console.log("✅ Step 2 passed (Validation done)");
 
     if (!formData?.profilepic) {
       setErrors({ profilepic: "Please upload a profile image" });
       return;
     }
+
     setErrors({});
     setLoading(true);
+
     try {
       const payload = {
         ...formData,
-        clinics,
-        documentImage: documents.map((doc) => doc.url),
       };
-      console.log("Final payload before submit:", payload);
+
+      console.log("📦 Final payload before submit:", payload);
+
       const response = await postRequest({
         url: `doctor/registers/${userId}`,
         cred: payload,
       });
 
-      console.log("Doctors Register Response:", response);
+      console.log("🎉 Doctors Register Response:", response);
       toast.success(response?.data?.message);
       setShowSuccess(true);
     } catch (err) {
-      console.error(" Error Registering Hospital:", err);
-      toast.error(err?.respone?.data?.message);
+      // ✅ Error handling with statusCode
+      const statusCode = err?.response?.status;
+      const errorMessage = err?.response?.data?.message;
+
+      console.error("❌ Error Registering Doctor:", err);
+      console.log("📌 Status Code:", statusCode);
+
+      toast.error(`Error ${statusCode || ""}: ${errorMessage}`);
+      setErrors({ api: `Error ${statusCode || ""}: ${errorMessage}` });
     } finally {
-      console.log(" Finally block executed");
+      console.log("🔄 Finally block executed");
       setLoading(false);
     }
   };
@@ -167,18 +238,23 @@ const DoctorsRegistration = () => {
     if (!formData.email) newErrors.email = "Email is required";
     if (!formData.gender) newErrors.gender = "Gender is required";
     if (!formData.dob) newErrors.dob = "Date of birth is required";
-    if (!formData.address) newErrors.address = "Address is required";
+
     if (!formData.category) newErrors.category = "Category is required";
-    // clinics.forEach((clinic, i) => {
-    //   if (!clinic.clinicName)
-    //     newErrors[`clinicName_${i}`] = "Clinic name is required";
-    //   if (!clinic.consultationFee)
-    //     newErrors[`consultationFee_${i}`] = "Consultation fee is required";
-    // });
-    if (
-      formData.serviceType === "In-clinic" ||
-      formData.serviceType === "Video Consultation"
-    )
+    if (!formData.hospital) newErrors.hospital = "Hospital is required";
+    if (!formData.profilepic)
+      newErrors.profilepic = "Profile image is required";
+    if (!formData.serviceType)
+      newErrors.serviceType = "Service type is required";
+    if (!formData.veterinaryserviceType)
+      newErrors.veterinaryserviceType = "Veterinary service type is required";
+    if (!formData.veterinaryDoctorType)
+      newErrors.veterinaryDoctorType = "Veterinary Doctor type is required";
+    if (!formData?.about) newErrors.about = "About is required";
+    if (!formData?.experience) newErrors.experience = "Experience is required";
+    if (!formData?.education) newErrors.education = "Education is required";
+
+    if (!formData?.mci) newErrors.mci = "MCI is required";
+
     console.log("step3", newErrors);
 
     return newErrors;
@@ -210,46 +286,38 @@ const DoctorsRegistration = () => {
     uploadImage(file);
   };
 
-  // handle input changes
-  const handleClinicChange = (index, field, value) => {
-    setClinics((prevClinics) => {
-      const updatedClinics = [...prevClinics];
-      updatedClinics[index] = { ...updatedClinics[index], [field]: value };
-      return updatedClinics;
-    });
-  };
-
-  // Add new clinic
-  const addClinic = () => {
-    setClinics([
-      ...clinics,
-      {
-        clinicName: "",
-        clinicAddress: "",
-        consultationFee: "",
-        startTime: "",
-        endTime: "",
-        duration: "",
-        videoStartTime: "",
-        videoEndTime: "",
-        videoDuration: "",
-        location: {
-          type: "Point",
-          coordinates: [],
-        },
-      },
-    ]);
-  };
-
   // Remove clinic
   const removeClinic = (index) => {
-    const updatedClinics = [...clinics];
+    const updatedClinics = [...formData.clinics];
     updatedClinics.splice(index, 1);
-    setClinics(updatedClinics);
+    setFormData((prev) => ({ ...prev, clinics: updatedClinics }));
   };
 
-  const handleInputChange = (name, value) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "category") {
+      const filtrCategory = category?.filter(
+        (item) => String(item._id) === String(value)
+      );
+
+      console.log("filtrCategory", filtrCategory);
+
+      // Example: Set selected category name
+      if (filtrCategory.length > 0) {
+        setCategoryName(filtrCategory[0].name);
+      }
+
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+        serviceType: [],
+        veterinaryserviceType: [],
+        veterinaryDoctorType: [],
+      }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   // Gallery handlers
@@ -271,29 +339,28 @@ const DoctorsRegistration = () => {
   };
 
   // Document handlers
-  const uploadDocument = async (file) => {
-    try {
-      const formDataData = new FormData();
-      formDataData.append("file", file);
+  const uploadDocument = (e) => {
+    const files = Array.from(e.target.files);
 
-      const response = await postRequest({
+    files.forEach((file) => {
+      fileUpload({
         url: `upload/uploadImage`,
-        cred: formDataData,
-      });
-      console.log("doc uploaded successfully:", response?.data?.data?.imageUrl);
-      const uploadedUrl = response?.data?.data?.imageUrl;
-      if (uploadedUrl) {
-        setDocuments((prev) => [
-          ...prev,
-          {
-            url: uploadedUrl, // make sure it's 'url' here
-            name: file.name,
-          },
-        ]);
-      }
-    } catch (error) {
-      console.error("Error uploading document:", error);
-    }
+        cred: { file },
+      })
+        .then((res) => {
+          const imageUrl = res.data?.data?.imageUrl;
+          if (imageUrl) {
+            setFormData((prev) => ({
+              ...prev,
+              documentImage: [...prev.documentImage, imageUrl],
+              // documentImage: [...prev.documentImage, { url: imageUrl }],
+            }));
+          }
+        })
+        .catch((error) => {
+          console.error("Image upload failed:", error);
+        });
+    });
   };
 
   // multiple upload handler
@@ -406,8 +473,9 @@ const DoctorsRegistration = () => {
                 </label>
                 <input
                   type="text"
+                  name="fullName"
                   value={formData?.fullName}
-                  onChange={(e) => handleInputChange("name", e.target.value)}
+                  onChange={handleInputChange}
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500"
                   placeholder="Enter diagnostic center name"
                 />
@@ -415,7 +483,7 @@ const DoctorsRegistration = () => {
                   <p className="text-red-500 text-xs">{errors?.fullName}</p>
                 )}
               </div>
-
+              {/*PHONE*/}
               <div className="space-y-2 group">
                 <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
                   <Phone className="w-4 h-4 text-purple-600" />
@@ -423,8 +491,9 @@ const DoctorsRegistration = () => {
                 </label>
                 <input
                   type="number"
+                  name="phone"
                   value={formData?.phone}
-                  onChange={(e) => handleInputChange("phone", e.target.value)}
+                  onChange={handleInputChange}
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-purple-500"
                   placeholder="+91 12345 67890"
                 />
@@ -432,6 +501,7 @@ const DoctorsRegistration = () => {
                   <p className="text-red-500 text-xs">{errors?.phone}</p>
                 )}
               </div>
+              {/* EMAIL*/}
               <div className="space-y-2 group">
                 <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
                   <Mail className="w-4 h-4 text-green-600" />
@@ -439,8 +509,9 @@ const DoctorsRegistration = () => {
                 </label>
                 <input
                   type="email"
+                  name="email"
                   value={formData?.email}
-                  onChange={(e) => handleInputChange("email", e.target.value)}
+                  onChange={handleInputChange}
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500"
                   placeholder="Enter your email address"
                 />
@@ -450,7 +521,6 @@ const DoctorsRegistration = () => {
               </div>
             </div>
 
-            {/* BIRTH Date*/}
             <div className="grid md:grid-cols-2 gap-6">
               {/* Birth Date */}
               <div className="space-y-2 group">
@@ -460,8 +530,9 @@ const DoctorsRegistration = () => {
                 </label>
                 <input
                   type="date"
+                  name="dob"
                   value={formData?.dob}
-                  onChange={(e) => handleInputChange("dob", e.target.value)}
+                  onChange={handleInputChange}
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
                 />
                 {errors?.dob && (
@@ -477,7 +548,8 @@ const DoctorsRegistration = () => {
                 </label>
                 <select
                   value={formData?.gender}
-                  onChange={(e) => handleInputChange("gender", e.target.value)}
+                  name="gender"
+                  onChange={handleInputChange}
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
                 >
                   <option value="">Select Gender</option>
@@ -497,20 +569,15 @@ const DoctorsRegistration = () => {
                   Select Your Specialization
                 </label>
                 <select
-                  value={formData?.category[0] || ""}
-                  onChange={(e) =>
-                    handleInputChange("category", [e.target.value])
-                  }
+                  name="category"
+                  value={formData?.category}
+                  onChange={handleInputChange}
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="" disabled>
+                  <option disabled value="">
                     Select Your Specialization
                   </option>
-                  {categories.map((cat) => (
-                    <option key={cat._id} value={cat._id}>
-                      {cat.name}
-                    </option>
-                  ))}
+                  {categoryOption}
                 </select>
 
                 {errors?.categories && (
@@ -518,27 +585,63 @@ const DoctorsRegistration = () => {
                 )}
               </div>
 
-              <div className="space-y-2 group">
-                <label className="text-sm font-medium text-gray-700">
-                  Provide Services
-                </label>
-                <select
-                  value={formData?.serviceType}
-                  onChange={(e) =>
-                    handleInputChange("serviceType", e.target.value)
-                  }
-                  className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500"
-                >
-                  <option value="" disabled>
+              {categoryName == "Veterinary" ? (
+                <div className="space-y-2 group">
+                  <label className="text-sm font-medium text-gray-700">
                     Provide Services
-                  </option>
-                  <option value="In-clinic">In-clinic</option>
-                  <option value="Video Consultation">Video Consultation</option>
-                </select>
-                {errors?.serviceType && (
-                  <p className="text-red-500 text-xs">{errors?.serviceType}</p>
-                )}
-              </div>
+                  </label>
+                  <Select
+                    mode="multiple"
+                    allowClear
+                    style={{ width: "100%" }}
+                    placeholder="Select Services"
+                    defaultValue={[]}
+                    onChange={selectData}
+                    size="large"
+                    options={serviceProvideOption}
+                    value={formData?.veterinaryDoctorType}
+                  />
+                  {errors?.serviceType && (
+                    <p className="text-red-500 text-xs">
+                      {errors?.serviceType}
+                    </p>
+                  )}
+                </div>
+              ) : (
+                ""
+              )}
+
+              {categoryName == "Veterinary" ? (
+                <div className="col-md-6">
+                  <label className="form-label">Service Type</label>
+                  <Select
+                    mode="multiple"
+                    allowClear
+                    style={{ width: "100%" }}
+                    placeholder="Please select"
+                    defaultValue={[]}
+                    onChange={selectData1}
+                    options={veterinaryserviceType}
+                    size="large"
+                    value={formData?.veterinaryserviceType} // Ensure selected categories are controlled by formData
+                  />
+                </div>
+              ) : (
+                <div className="col-md-6">
+                  <label className="form-label">Service Type</label>
+                  <Select
+                    mode="multiple"
+                    allowClear
+                    style={{ width: "100%" }}
+                    placeholder="Please select"
+                    defaultValue={[]}
+                    onChange={selectData2}
+                    options={serviceType}
+                    size="large"
+                    value={formData?.serviceType} // Ensure selected categories are controlled by formData
+                  />
+                </div>
+              )}
             </div>
 
             <div className="space-y-2 group">
@@ -548,10 +651,9 @@ const DoctorsRegistration = () => {
               </label>
               <input
                 type="text"
+                name="experience"
                 value={formData?.experience}
-                onChange={(e) =>
-                  handleInputChange("experience", e.target.value)
-                }
+                onChange={handleInputChange}
                 className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
                 placeholder="e.g.,5"
               />
@@ -566,7 +668,21 @@ const DoctorsRegistration = () => {
                 <h3 className="text-lg font-semibold text-gray-800">Clinics</h3>
                 <button
                   type="button"
-                  onClick={addClinic}
+                  onClick={() =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      clinics: [
+                        ...prev.clinics,
+                        {
+                          clinicName: "",
+                          clinicAddress: "",
+                          consultationFee: "",
+                          // availability: '',
+                          location: { type: "Point", coordinates: [0, 0] },
+                        },
+                      ],
+                    }))
+                  }
                   className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-green-600 text-white rounded-lg hover:from-blue-700 hover:to-green-700"
                 >
                   <Plus className="w-4 h-4" />
@@ -575,13 +691,12 @@ const DoctorsRegistration = () => {
               </div>
 
               <div className="space-y-3">
-                {clinics.map((clinic, index) => (
+                {formData?.clinics.map((clinic, index) => (
                   <div
                     key={index}
                     className="p-4 bg-gray-50 rounded-xl space-y-6 relative"
                   >
-                    {/* Remove button */}
-                    {clinics.length > 1 && (
+                    {formData.clinics.length > 1 && (
                       <button
                         type="button"
                         onClick={() => removeClinic(index)}
@@ -600,18 +715,17 @@ const DoctorsRegistration = () => {
                         type="text"
                         placeholder="Enter Clinic Name"
                         value={clinic?.clinicName}
-                        onChange={(e) =>
-                          handleClinicChange(
-                            index,
-                            "clinicName",
-                            e.target.value
-                          )
-                        }
+                        onChange={(e) => {
+                          const newClinics = [...formData.clinics];
+                          newClinics[index].clinicName = e.target.value;
+                          setFormData({ ...formData, clinics: newClinics });
+                        }}
                         className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
 
                     {/* Row 2 → Clinic Availability */}
+                    <p className="m-0 p-0">For In Clinc Availability</p>
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-gray-700">
                         Clinic Availability
@@ -620,34 +734,32 @@ const DoctorsRegistration = () => {
                         <input
                           type="time"
                           value={clinic?.startTime}
-                          onChange={(e) =>
-                            handleClinicChange(
-                              index,
-                              "startTime",
-                              e.target.value
-                            )
-                          }
+                          onChange={(e) => {
+                            const newClinics = [...formData.clinics];
+                            newClinics[index].startTime = e.target.value;
+                            setFormData({ ...formData, clinics: newClinics });
+                          }}
                           className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500"
                           placeholder="Select Time"
                         />
                         <input
                           type="time"
                           value={clinic?.endTime}
-                          onChange={(e) =>
-                            handleClinicChange(index, "endTime", e.target.value)
-                          }
+                          onChange={(e) => {
+                            const newClinics = [...formData.clinics];
+                            newClinics[index].endTime = e.target.value;
+                            setFormData({ ...formData, clinics: newClinics });
+                          }}
                           className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500"
                           placeholder="Select Time"
                         />
                         <select
                           value={clinic?.duration}
-                          onChange={(e) =>
-                            handleClinicChange(
-                              index,
-                              "duration",
-                              e.target.value
-                            )
-                          }
+                          onChange={(e) => {
+                            const newClinics = [...formData.clinics];
+                            newClinics[index].duration = e.target.value;
+                            setFormData({ ...formData, clinics: newClinics });
+                          }}
                           className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                         >
                           <option value="">Duration Per Patient</option>
@@ -670,38 +782,32 @@ const DoctorsRegistration = () => {
                         <input
                           type="time"
                           value={clinic?.videoStartTime}
-                          onChange={(e) =>
-                            handleClinicChange(
-                              index,
-                              "videoStartTime",
-                              e.target.value
-                            )
-                          }
+                          onChange={(e) => {
+                            const newClinics = [...formData.clinics];
+                            newClinics[index].videoStartTime = e.target.value;
+                            setFormData({ ...formData, clinics: newClinics });
+                          }}
                           className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                           placeholder="Select Time"
                         />
                         <input
                           type="time"
                           value={clinic?.videoEndTime}
-                          onChange={(e) =>
-                            handleClinicChange(
-                              index,
-                              "videoEndTime",
-                              e.target.value
-                            )
-                          }
+                          onChange={(e) => {
+                            const newClinics = [...formData.clinics];
+                            newClinics[index].videoEndTime = e.target.value;
+                            setFormData({ ...formData, clinics: newClinics });
+                          }}
                           className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                           placeholder="Select Time"
                         />
                         <select
                           value={clinic?.videoDuration}
-                          onChange={(e) =>
-                            handleClinicChange(
-                              index,
-                              "videoDuration",
-                              e.target.value
-                            )
-                          }
+                          onChange={(e) => {
+                            const newClinics = [...formData.clinics];
+                            newClinics[index].videoDuration = e.target.value;
+                            setFormData({ ...formData, clinics: newClinics });
+                          }}
                           className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                         >
                           <option value="">Duration Per Patient</option>
@@ -725,13 +831,11 @@ const DoctorsRegistration = () => {
                           type="number"
                           placeholder="₹ Fee"
                           value={clinic?.consultationFee}
-                          onChange={(e) =>
-                            handleClinicChange(
-                              index,
-                              "consultationFee",
-                              e.target.value
-                            )
-                          }
+                          onChange={(e) => {
+                            const newClinics = [...formData.clinics];
+                            newClinics[index].consultationFee = e.target.value;
+                            setFormData({ ...formData, clinics: newClinics });
+                          }}
                           className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"
                         />
                       </div>
@@ -745,16 +849,22 @@ const DoctorsRegistration = () => {
                           Search Address
                         </label>
                         <LocationSearchInput
-                          value={formData.address}
-                          onSelect={
-                            (place) => setFormData({ ...formData, ...place }) // address + lat/lng update
-                          }
+                          value={clinic.clinicAddress}
+                          onSelect={(place) => {
+                            const updatedClinics = [...formData.clinics];
+                            updatedClinics[index].clinicAddress = place.address; // sirf clinicAddress update karega
+                            setFormData({
+                              ...formData,
+                              clinics: updatedClinics,
+                            });
+                          }}
                         />
-                        {errors?.address && (
+
+                        {/* {errors?.address && (
                           <p className="text-red-500 text-xs">
                             {errors?.address}
                           </p>
-                        )}
+                        )} */}
                       </div>
                     </div>
                   </div>
@@ -767,24 +877,45 @@ const DoctorsRegistration = () => {
                 Affiliated Hospital
               </label>
               <select
-                value={formData?.hospitalId || ""}
-                onChange={(e) =>
-                  handleInputChange("hospitalId", e.target.value)
-                }
+                name="hospital"
+                value={selectedHospital}
                 className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-purple-500"
+                onChange={(e) => {
+                  if (e.target.value == "Other") {
+                    setSelectedHospital(e.target.value);
+                    setFormData((prev) => ({
+                      ...prev,
+                      hospital: "",
+                    }));
+                  } else {
+                    setSelectedHospital(e.target.value);
+
+                    setFormData((prev) => ({
+                      ...prev,
+                      hospital: e.target.value,
+                    }));
+                  }
+                }}
               >
                 <option value="" disabled>
                   Select Hospital
                 </option>
-                {hospitalList.map((hospital) => (
-                  <option key={hospital._id} value={hospital._id}>
-                    {hospital.name}
-                  </option>
-                ))}
+                {hospitalOption}
+                <option value="Other">Other</option>
               </select>
+              {selectedHospital === "Other" && (
+                <input
+                  type="text"
+                  name="hospital"
+                  value={formData?.hospital}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
+                  placeholder="Enter Hospital Name"
+                />
+              )}
 
-              {errors?.hospitalId && (
-                <p className="text-red-500 text-xs">{errors?.hospitalId}</p>
+              {errors?.hospital && (
+                <p className="text-red-500 text-xs">{errors?.hospital}</p>
               )}
             </div>
 
@@ -794,9 +925,10 @@ const DoctorsRegistration = () => {
                 About
               </label>
               <input
+                name="about"
                 type="text"
                 value={formData?.about}
-                onChange={(e) => handleInputChange("about", e.target.value)}
+                onChange={handleInputChange}
                 className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
                 placeholder="Tell us about yourself"
               />
@@ -812,8 +944,9 @@ const DoctorsRegistration = () => {
               </label>
               <input
                 type="text"
+                name="education"
                 value={formData?.education}
-                onChange={(e) => handleInputChange("education", e.target.value)}
+                onChange={handleInputChange}
                 className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
                 placeholder="Tell us about yourself"
               />
@@ -828,9 +961,10 @@ const DoctorsRegistration = () => {
                 MCI Registration Number
               </label>
               <input
+                name="mci"
                 type="number"
                 value={formData?.mci}
-                onChange={(e) => handleInputChange("mci", e.target.value)}
+                onChange={handleInputChange}
                 className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
                 placeholder="Tell us about yourself"
               />
@@ -883,53 +1017,88 @@ const DoctorsRegistration = () => {
                 <span className="flex items-center gap-2">➕ Add Images</span>
               </label>
             </div>
-
             <div className="space-y-2 group">
-              <p className="text-gray-700 font-medium font-semibold">
-                Upload Documents
-              </p>
-
-              {documents.length > 0 && (
-                <div className="relative w-full h-56 border rounded-lg flex items-center justify-center bg-gray-100 overflow-hidden">
-                  <img
-                    src={documents[docIndex].url}
-                    alt="document"
-                    className="h-full object-contain"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeDocument(docIndex)}
-                    className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-1"
-                  >
-                    ✕
-                  </button>
-                  <div className="absolute bottom-2 flex gap-2">
-                    {documents.map((_, i) => (
-                      <span
-                        key={i}
-                        onClick={() => setDocIndex(i)}
-                        className={`w-3 h-3 rounded-full cursor-pointer ${
-                          docIndex === i ? "bg-green-600" : "bg-gray-300"
-                        }`}
-                      ></span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <label className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg cursor-pointer hover:bg-green-700">
-                <input
-                  type="file"
-                  multiple
-                  accept="image/*"
-                  onChange={handleDocumentUpload}
-                  className="hidden"
-                />
-                <span className="flex items-center gap-2">
-                  📄 Upload Documents
-                </span>
-              </label>
+              <label className="form-label">Dcument Number</label>
+              <input
+                type="text"
+                name="documentNumber"
+                value={formData.documentNumber}
+                onChange={handleInputChange}
+                className="form-control"
+                placeholder="Document Number"
+              />
             </div>
+
+           <div className="space-y-2 group">
+  <p className="text-gray-700 font-semibold">Upload Documents</p>
+
+  {/* Image container */}
+  <div className="relative w-full h-56 border rounded-lg bg-gray-100 overflow-auto p-2">
+    {formData?.documentImage?.length > 0 && (
+      <div className="flex flex-wrap gap-2">
+        {formData?.documentImage?.map((img, index) => (
+          <div key={index} className="relative">
+            {/* Image clickable banayi */}
+            <a href={img} target="_blank" rel="noopener noreferrer">
+              <img
+                src={img}
+                alt={`doc-${index}`}
+                style={{
+                  width: "70px",
+                  height: "70px",
+                  objectFit: "cover",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                }}
+              />
+            </a>
+
+            {/* Remove button */}
+            <button
+              type="button"
+              onClick={() =>
+                setFormData((prev) => ({
+                  ...prev,
+                  documentImage: prev.documentImage.filter(
+                    (_, i) => i !== index
+                  ),
+                }))
+              }
+              style={{
+                position: "absolute",
+                top: "-6px",
+                right: "-6px",
+                background: "red",
+                color: "white",
+                border: "none",
+                borderRadius: "50%",
+                width: "20px",
+                height: "20px",
+                cursor: "pointer",
+                fontSize: "14px",
+                lineHeight: "18px",
+              }}
+            >
+              ×
+            </button>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+
+  {/* Upload Button */}
+  <label className="inline-flex items-center px-3 py-1.5 bg-green-600 text-white text-sm rounded-md cursor-pointer hover:bg-green-700">
+    <input
+      type="file"
+      multiple
+      accept="image/*"
+      onChange={uploadDocument}
+      className="hidden"
+    />
+    <span className="flex items-center gap-2">📄 Upload</span>
+  </label>
+</div>
 
             {/* Submit Button */}
             <div className="pt-6">
