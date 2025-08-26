@@ -567,8 +567,6 @@ const HospitalDetailPage = () => {
 
       </div>
 
-
-
     </div>
   );
 };
