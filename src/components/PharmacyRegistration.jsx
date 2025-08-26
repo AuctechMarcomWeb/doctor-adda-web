@@ -30,18 +30,16 @@ const PharmacyRegistration = () => {
   const [formData, setFormData] = useState({
     name: "jhgjg",
     address: "dfd",
-    email: "ddf@gmail.com",
-    phone: "7654456765",
-    storeTiming: "9:00 a.m.",
-    accountType: "Pharmacy",
-    //healthCard: "Both ",
-    ownerName: "df",
-    gstNumber: "123432343223456",
-    phoneNumber: "7654456765",
+    email: "",
+    phone: "",
+    address: "",
     profileImage: "",
-    description: "gfdfgd",
-    latitude: "28.6139",
-    longitude: "77.2090",
+    storeTiming: "",
+    services: [{ name: "", }],
+    description: "",
+    accountType: "Pharmacy",
+    latitude: "",
+    longitude: "",
   });
   console.log("formData", formData);
 
@@ -494,9 +492,9 @@ const handleProfilePic = (e) => {
   <div className="flex gap-4">
     <button
       type="button"
-      onClick={() => handleInputChange("onlinePayment", "yes")}
+      onClick={() => handleInputChange("onlinePayment", "true")}
       className={`flex-1 px-4 py-3 border rounded-xl font-medium transition-all duration-200
-        ${formData?.onlinePayment === "yes" 
+        ${formData?.onlinePayment === "true" 
           ? "bg-green-500 text-white border-green-500" 
           : "bg-white text-gray-700 border-gray-300 hover:bg-green-50"}`}
     >
@@ -504,9 +502,9 @@ const handleProfilePic = (e) => {
     </button>
     <button
       type="button"
-      onClick={() => handleInputChange("onlinePayment", "no")}
+      onClick={() => handleInputChange("onlinePayment", "false")}
       className={`flex-1 px-4 py-3 border rounded-xl font-medium transition-all duration-200
-        ${formData?.onlinePayment === "no" 
+        ${formData?.onlinePayment === "false" 
           ? "bg-red-500 text-white border-red-500" 
           : "bg-white text-gray-700 border-gray-300 hover:bg-red-50"}`}
     >
