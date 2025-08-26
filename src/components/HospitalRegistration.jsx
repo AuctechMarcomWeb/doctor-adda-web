@@ -14,52 +14,99 @@ import { getRequest, postRequest } from "../Helpers/index";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import LocationSearchInput from "./LocationSearchInput";
+import { Select } from "antd";
 
 const HospitalRegistration = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [categories, setCategories] = useState([]);
   const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
   const userId = userProfileData?._id;
   // Profile Image states
   const [profileFile, setProfileFile] = useState(null);
   const [uploadProfileImage, setUploadProfileImage] = useState("");
   const [profilePreview, setProfilePreview] = useState(null);
-  const [facilities, setFacilities] = useState([
-    { name: "fdgdf", discription: "" },
-  ]);
+  const [category, setCategory] = useState([])
+  const [doctors, setDoctor] = useState([])
+  const [healthCard, setHealthCard] = useState([])
+  const [doctorData, setDoctorData] = useState('')
   const [formData, setFormData] = useState({
-    name: "AIIMS Hospital",
-    address: "",
-    email: "info@aiims.edu",
-    phone: "1126588500",
-    categories: [],
-    accountType: "Hospital",
-    ownerName: "Government of India",
-    gstNumber: "4354546361834562",
-    phoneNumber: "1126588700",
-    profileImage: "https://www.aiims.edu/images/aiims-logo.png",
-    description:
-      "All India Institute of Medical Sciences (AIIMS) New Delhi is a premier government hospital and medical research university in India.",
-    latitude: "",
-    longitude: "",
-  });
+    name: '',
+          address: '',
+          profileImage: '',
+          phone: '',
+          email: '',
+          description: '',
+          accountType: 'Hospital',
+          categories: [],
+          healthCard: [],
+          latitude: '',
+          longitude: '',
+          facilities: [{ name: '', discription: '' }],
+          doctors: [
+            {
+              name: '',
+              email: '',
+              phone: '',
+              days: [],
+              availability: [],
+              specialization: '',
+              experience: '',
+              time: '',
+              fee: '',
+              schedules: [
+                {
+                  startTime: '',
+                  endTime: '',
+                },
+              ],
+            },
+          ],
+        },
+  );
   console.log("formData", formData);
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await getRequest("category");
-        console.log("fetched category", response?.data?.data?.categories);
-        setCategories(response?.data?.data?.categories || []);
-      } catch (err) {
-        console.error("Error fetching categories:", err);
-      }
-    };
 
-    fetchCategories();
-  }, []);
+  const categoryOption = category?.map((item, index) => ({
+    label: item?.name,
+    value: item._id,
+  }))
+  const healthCardOption = healthCard?.map((item, index) => ({
+    label: item?.name,
+    value: item._id,
+  }))
 
+  const selectCategory = (selectedValues) => {
+    console.log('selectedValues', selectedValues)
+    setFormData((prev) => ({
+      ...prev,
+      categories: selectedValues, // This will save only the selected category IDs
+    }))
+  }
+  const selectHealthCard = (selectedValues) => {
+    console.log('selectedValues', selectedValues)
+    setFormData((prev) => ({
+      ...prev,
+      healthCard: selectedValues,
+    }))
+  }
+
+  const handleFacilityChange = (e, index) => {
+    const { name, value } = e.target
+    const updatedFacilities = [...formData.facilities]
+
+    if (name.includes('Name')) {
+      updatedFacilities[index].name = value
+    } else if (name.includes('Description')) {
+      updatedFacilities[index].discription = value
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      facilities: updatedFacilities,
+    }))
+  }
+
+   
   const uploadImage = async (file) => {
     try {
       const formDataData = new FormData();
@@ -78,37 +125,53 @@ const HospitalRegistration = () => {
     }
   };
 
-  const handleSubmit = async () => {
-    const validationErrors = validateForm();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-    if (!formData?.profileImage) {
-      setErrors({ profileImage: "Please upload a profile image" });
-      return;
-    }
-    setErrors({});
-    setLoading(true);
-    try {
-      const payload = { ...formData, facilities };
-      console.log("Final payload before submit:", payload);
-      const response = await postRequest({
-        url: `hospital/registerHospital/${userId}`,
-        cred: payload,
-      });
+const handleSubmit = async () => {
+  const validationErrors = validateForm();
 
-      console.log("Hospital Register Response:", response?.data?.data);
-      toast.success(response?.data?.message);
+  if (Object.keys(validationErrors).length > 0) {
+    setErrors(validationErrors);
+    toast.error("Please fill all required fields");
+    return;
+  }
+
+  if (!formData?.profileImage) {
+    setErrors({ profileImage: "Please upload a profile image" });
+    toast.error("Please upload a profile image");
+    return;
+  }
+
+  setErrors({});
+  setLoading(true);
+
+  try {
+    const payload = { ...formData };
+    console.log("Final payload before submit:", payload);
+
+    const response = await postRequest({
+      url: `hospital/registerHospital/${userId}`,
+      cred: payload,
+    });
+
+    const statusCode = response?.status || response?.data?.statusCode;
+    const message = response?.data?.message || "Something went wrong";
+
+    if (statusCode === 200 || statusCode === 201) {
+      toast.success(message);
       setShowSuccess(true);
-    } catch (err) {
-      console.error(" Error Registering Hospital:", err);
-      toast.error(err?.respone?.data?.message);
-    } finally {
-      console.log(" Finally block executed");
-      setLoading(false);
+    } else {
+      toast.error(message);
     }
-  };
+
+  } catch (err) {
+    console.error("Error Registering Hospital:", err);
+    const message =
+      err?.response?.data?.message || "Failed to register hospital";
+    toast.error(message);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   // Profile Pic Handler
   const handleProfilePic = (e) => {
@@ -124,42 +187,63 @@ const HospitalRegistration = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFacilityChange = (index, field, value) => {
-    const updated = [...facilities];
-    updated[index][field] = value;
-    setFacilities(updated);
-  };
-
-  const addFacility = () => {
-    setFacilities([...facilities, { name: "", description: "" }]);
-  };
+    const addFacility = () => {
+    setFormData((prev) => ({
+      ...prev,
+      facilities: [...prev.facilities, { name: '', discription: '' }],
+    }))
+  }
 
   const removeFacility = (index) => {
-    if (facilities.length > 1) {
-      setFacilities(facilities.filter((_, i) => i !== index));
-    }
-  };
+    const updatedFacilities = formData.facilities.filter((_, i) => i !== index)
+    setFormData((prev) => ({
+      ...prev,
+      facilities: updatedFacilities,
+    }))
+  }
 
-  const validateForm = () => {
-    const newErrors = {};
-    if (!formData.name) newErrors.name = "Hospital name is required";
-    if (!formData.email) newErrors.email = "Email is required";
-    if (!formData.phone) newErrors.phone = "Contact number is required";
-    if (
-      !formData.categories ||
-      formData.categories.length === 0 ||
-      !formData.categories[0]
-    ) {
-      newErrors.categories = "Please select a category";
-    }
-    // if (!formData.healthCard)
-    // newErrors.healthCard = "Please select health card type";
-    if (!formData.address) newErrors.address = "Address is required";
-    if (!formData.ownerName) newErrors.ownerName = "Owner name is required";
-    if (!formData.phoneNumber)
-      newErrors.phoneNumber = "Verification phone is required";
-    return newErrors;
-  };
+  useEffect(() => {
+    getRequest(`category?isPagination=false`)
+      .then((res) => {
+        setCategory(res?.data?.data)
+        console.log('res?data0', res?.data?.data)
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error)
+      })
+    getRequest(`doctor/doctors?isPagination=false`)
+      .then((res) => {
+        setDoctor(res?.data?.data?.doctors)
+        console.log('setDoctor?data0==========???', res?.data?.data)
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error)
+      })
+    getRequest(`healthCard?isPagination=false`)
+      .then((res) => {
+        setHealthCard(res?.data?.data)
+        console.log('res?data0', res?.data?.data)
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error)
+      })
+  }, [])
+const validateForm = () => {
+  const newErrors = {};
+
+  if (!formData.name) newErrors.name = "Hospital name is required";
+  if (!formData.email) newErrors.email = "Email is required";
+  if (!formData.phone) newErrors.phone = "Contact number is required";
+  if (!formData.address) newErrors.address = "Address is required";
+  if (!formData.ownerName) newErrors.ownerName = "Owner name is required";
+  if (!formData.phoneNumber) newErrors.phoneNumber = "Verification phone is required";
+  if (!formData.categories || formData.categories.length === 0) {
+    newErrors.categories = "Please select at least one category";
+  }
+  if (!formData.description) newErrors.description = "Description is required";
+
+  return newErrors;
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 py-34 px-4">
@@ -306,20 +390,18 @@ const HospitalRegistration = () => {
                 <label className="text-sm font-medium text-gray-700">
                   Category
                 </label>
-                <select
-                  value={formData?.categories[0] || ""}
-                  onChange={
-                    (e) => handleInputChange("categories", [e.target.value]) // ✅ array me bhejna
-                  }
-                  className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Select Category</option>
-                  {categories.map((cat) => (
-                    <option key={cat._id} value={cat._id}>
-                      {cat.name}
-                    </option>
-                  ))}
-                </select>
+                 <Select
+                    mode="multiple"
+                    allowClear
+                    style={{ width: '100%' }}
+                    placeholder="Please select"
+                    defaultValue={[]}
+                    onChange={selectCategory}
+                    options={categoryOption}
+                    size="large"
+                    value={formData?.categories} // Ensure selected categories are controlled by formData
+                     className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500"
+                  />
                 {errors?.categories && (
                   <p className="text-red-500 text-xs">{errors?.categories}</p>
                 )}
@@ -329,20 +411,18 @@ const HospitalRegistration = () => {
                 <label className="text-sm font-medium text-gray-700">
                   Health Card
                 </label>
-                <select
-                  value={formData?.healthCard}
-                  onChange={(e) =>
-                    handleInputChange("healthCard", e.target.value)
-                  }
+                <Select
+                  mode="multiple"
+                    allowClear
+                    style={{ width: '100%' }}
+                    placeholder="Please select"
+                    defaultValue={[]}
+                    onChange={selectHealthCard}
+                    options={healthCardOption}
+                    size="large"
+                    value={formData?.healthCard} // Ensure selected categories are controlled by formData
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500"
-                >
-                  <option value="" disabled>
-                    Select Type
-                  </option>
-                  <option value="Ayushman">Ayushman Bharat</option>
-                  <option value="Private">Private</option>
-                  <option value="Both">Both</option>
-                </select>
+                />
                 {errors?.healthCard && (
                   <p className="text-red-500 text-xs">{errors?.healthCard}</p>
                 )}
@@ -459,46 +539,54 @@ const HospitalRegistration = () => {
               </div>
 
               <div className="space-y-3">
-                {facilities.map((facility, index) => (
-                  <div
-                    key={index}
-                    className="grid md:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-xl"
-                  >
-                    <input
-                      type="text"
-                      placeholder="Facility name (e.g., ICU, X-Ray)"
-                      value={facility?.name}
-                      onChange={(e) =>
-                        handleFacilityChange(index, "name", e.target.value)
-                      }
-                      className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                    />
-                    <div className="flex gap-2">
-                      <input
-                        type="text"
-                        placeholder="Description"
-                        value={facility?.discription}
-                        onChange={(e) =>
-                          handleFacilityChange(
-                            index,
-                            "discription",
-                            e.target.value
-                          )
-                        }
-                        className="flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                      />
-                      {facilities.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => removeFacility(index)}
-                          className="px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg"
-                        >
-                          ×
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                ))}
+               {formData?.facilities?.map((facility, index) => (
+  <div
+    key={index}
+    className="grid md:grid-cols-2 gap-4 p-4 mb-3 bg-gray-50 rounded-xl border"
+  >
+    {/* Facility Name */}
+    <div className="flex flex-col">
+      <label className="text-sm font-medium text-gray-700 mb-1">Name</label>
+      <input
+        type="text"
+        name={`facilityName_${index}`}
+        value={facility?.name}
+        onChange={(e) => handleFacilityChange(e, index)}
+        placeholder="Facility name (e.g., ICU, X-Ray)"
+        className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+      />
+    </div>
+
+    {/* Facility Description + Remove Button */}
+    <div className="flex gap-2">
+      <div className="flex flex-col flex-1">
+        <label className="text-sm font-medium text-gray-700 mb-1">
+          Description
+        </label>
+        <input
+          type="text"
+          name={`facilityDescription_${index}`}
+          value={facility?.discription}
+          onChange={(e) => handleFacilityChange(e, index)}
+          placeholder="Enter description"
+          className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+        />
+      </div>
+
+      {/* Remove Button */}
+      {formData?.facilities?.length > 1 && (
+        <button
+          type="button"
+          onClick={() => removeFacility(index)}
+          className="h-10 w-10 self-end flex items-center justify-center text-red-600 hover:bg-red-50 rounded-lg transition"
+        >
+          ×
+        </button>
+      )}
+    </div>
+  </div>
+))}
+
               </div>
             </div>
 
