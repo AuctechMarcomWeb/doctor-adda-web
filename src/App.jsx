@@ -93,7 +93,7 @@ function App() {
             <>
               <Navbar />
               <Routes>
-                <Route path="/" element={<Home />} />
+                <Route path="/home" element={<Home />} />
                 <Route path="/manage-patients" element={<ManagePatients />} />
                 <Route path="/pets" element={<ManagePets />} />
                 <Route path="/login" element={<LoginSignupFlow />} />

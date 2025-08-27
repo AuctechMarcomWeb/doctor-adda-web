@@ -1,311 +1,397 @@
-import React from "react"
-import { useState } from "react"
-import DashboardService from "./DashboardService"
-import DashboardWallet from "./DashboardWallet"
-import img from '../assets/doctor.jpg'
-import { Home, Briefcase, Wallet } from "lucide-react"
-import { useNavigate } from "react-router-dom"
-
+import React from "react";
+import { useState, useEffect } from "react";
+import {
+  Home,
+  Briefcase,
+  Wallet,
+  Bell,
+  Menu,
+  X,
+  Star,
+  TrendingUp,
+  ArrowRightLeft,
+} from "lucide-react";
+import DashboardService from "../components/DashboardService";
+import DashboardWallet from "../components/DashboardWallet";
+import dasboardlogo from "../assets/dashboard-logo.png";
 
 const Dashboard = () => {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [activeView, setActiveView] = useState("home");
-  const navigate = useNavigate();
+  const [activeView, setActiveView] = useState("mydashboard");
+
+  const statsData = [
+    {
+      label: "Total Orders",
+      value: "12",
+      icon: "https://img.icons8.com/ios/50/shopping-cart.png",
+      color: "from-blue-500 to-blue-600",
+      bg: "from-blue-50 to-blue-100",
+    },
+    {
+      label: "Total Customer",
+      value: "12",
+      icon: "https://img.icons8.com/ios/50/human-resources.png",
+      color: "from-emerald-500 to-emerald-600",
+      bg: "from-emerald-50 to-emerald-100",
+    },
+    {
+      label: "Accepted Orders",
+      value: "2",
+      icon: "https://img.icons8.com/color/48/verified-account--v1.png",
+      color: "from-purple-500 to-purple-600",
+      bg: "from-purple-50 to-purple-100",
+    },
+    {
+      label: "Pending Orders",
+      value: "2",
+      icon: "https://img.icons8.com/ios-glyphs/50/hourglass.png",
+      color: "from-amber-500 to-amber-600",
+      bg: "from-amber-50 to-amber-100",
+    },
+    {
+      label: "In Transit",
+      value: "1",
+      icon: "https://img.icons8.com/ios/50/semi-truck-side-view.png",
+      color: "from-orange-500 to-orange-600",
+      bg: "from-orange-50 to-orange-100",
+    },
+    {
+      label: "Delivered",
+      value: "5",
+      icon: "https://img.icons8.com/pulsar-gradient/48/shipped.png",
+      color: "from-teal-500 to-teal-600",
+      bg: "from-teal-50 to-teal-100",
+    },
+  ];
 
   return (
-
-    <div className="min-h-screen bg-gray-50">
-
-      {/* Top Navigation Bar */}
-      <div className="bg-white shadow-sm p-4 flex justify-between items-center lg:pl-80">
-
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      {/* Enhanced Top Navigation */}
+      <div className="bg-white/80 backdrop-blur-xl border-b border-white/20 shadow-lg p-4 flex justify-between items-center lg:pl-80">
         <div className="flex items-center">
-          <button className="mr-4 cursor-pointer lg:hidden" onClick={() => setIsSidebarOpen(true)}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-gray-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
+          <button
+            className="mr-4 p-2 hover:bg-gray-100 rounded-xl transition-colors lg:hidden"
+            onClick={() => setIsSidebarOpen(true)}
+          >
+            <Menu className="h-6 w-6 text-gray-700" />
           </button>
           <button
-            onClick={() => {
-              setActiveView("home");
-            }}
-            className="text-xl cursor-pointer font-bold text-gray-800"> Dashboard 
+            onClick={() => setActiveView("mydashboard")}
+            className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent hover:from-blue-700 hover:to-indigo-700 transition-all"
+          >
+            Dashboard
           </button>
         </div>
 
-        <div className="flex items-center">
-          <div className="relative mr-4">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-gray-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-              />
-            </svg>
-            <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500"></span>
+        <div className="flex items-center space-x-4">
+          <div className="relative">
+            <button className="p-2 hover:bg-blue-50 rounded-xl transition-all duration-300 group">
+              <Bell className="h-6 w-6 text-gray-600 group-hover:text-blue-600 transition-colors" />
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-red-500 to-pink-500 rounded-full animate-pulse"></div>
+            </button>
           </div>
-          {/* <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
+          <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
             N
-          </div> */}
+          </div>
         </div>
-
       </div>
 
-      {/* Sidebar Overlay (mobile only) */}
+      {/* Sidebar Overlay */}
       {isSidebarOpen && (
         <div
-          className="fixed inset-0  z-40 lg:hidden"
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 lg:hidden"
           onClick={() => setIsSidebarOpen(false)}
         ></div>
       )}
 
-      {/* Sidebar Drawer */}
+      {/* Enhanced Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full w-72 bg-white shadow-2xl z-50 transform transition-transform duration-300 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } lg:translate-x-0 lg:shadow-none lg:border-r lg:z-30`}
+        className={`fixed top-0 left-0 h-full w-72 bg-white/95 backdrop-blur-xl shadow-2xl z-50 transform transition-all duration-300 ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0 lg:shadow-xl lg:border-r lg:border-white/20`}
       >
-        <div className="p-5 border-b cursor-pointer">
+        <div>
+          <img className="bg-gradient-to-r from-blue-600 to-red-600 px-6 py-4" src={dasboardlogo} alt=""  />
+        </div>
+        <div className="p-6 border-b border-gray-100">
           <div className="flex items-center">
-            <div className="w-12 h-12 rounded-full bg-teal-100 flex items-center justify-center text-2xl mr-3">
-              🧪
-            </div>
-
-            <div 
-             onClick={() => { setIsSidebarOpen(false); navigate('/pharmacy-profile'); }} className="flex-1 ">
-              <p className="font-semibold text-gray-800 truncate">Nayatik pharmacy</p>
-              <button
-                className="text-sm text-teal-700 hover:underline"
-                onClick={() => { setIsSidebarOpen(false); navigate('/pharmacy-profile'); }}
-              >
+            {/* <div className="w-14 h-14 bg-gradient-to-br from-teal-400 to-cyan-500 rounded-2xl flex items-center justify-center text-2xl shadow-lg"> */}
+            <img
+              className="rounded-full"
+              width="80"
+              height="80"
+              src="https://i.pinimg.com/1200x/86/4d/e2/864de24af6de03ad0f3b2c7d19aeec61.jpg"
+              alt="doctor-male-skin-type-3"
+            />
+            {/* </div> */}
+            <div className="flex-1 ml-4">
+              <p className="font-bold text-gray-800">Nayatik Pharmacy</p>
+              <button className="text-sm text-teal-600 hover:text-teal-700 font-medium transition-colors">
                 Edit Profile
               </button>
             </div>
-
             <button
-              className="ml-2 text-gray-500 hover:text-gray-700 lg:hidden"
-              aria-label="Close sidebar"
+              className="p-1 text-gray-400 hover:text-gray-600 lg:hidden"
+              onClick={() => setIsSidebarOpen(false)}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
+              <X className="h-5 w-5" />
             </button>
-
           </div>
         </div>
 
-<nav className="p-5 space-y-4">
-  {/* Home */}
-  <button
-    onClick={() => {
-      setActiveView("home");
-      setIsSidebarOpen(false);
-    }}
-    className="w-full flex items-center cursor-pointer text-left px-3 py-3 rounded-lg hover:bg-gray-100"
-  >
-    <span className="mr-3 text-teal-700">
-      <Home className="h-6 w-6" strokeWidth={2.2} />
-    </span>
-    <span className="font-medium text-gray-800">Home</span>
-  </button>
-
-  {/* Services */}
-  <button
-    className="w-full flex items-center cursor-pointer text-left px-3 py-3 rounded-lg hover:bg-gray-100"
-    onClick={() => {
-      setActiveView("services");
-      setIsSidebarOpen(false);
-    }}
-  >
-    <span className="mr-3 text-teal-700">
-      <Briefcase className="h-6 w-6" strokeWidth={2.2} />
-    </span>
-    <span className="font-medium text-gray-800">Services</span>
-  </button>
-
-  {/* Wallet */}
-  <button
-    className="w-full cursor-pointer flex items-center text-left px-3 py-3 rounded-lg hover:bg-gray-100"
-    onClick={() => {
-      setActiveView("wallet");
-      setIsSidebarOpen(false);
-    }}
-  >
-    <span className="mr-3 text-teal-700">
-      <Wallet className="h-6 w-6" strokeWidth={2.2} />
-    </span>
-    <span className="font-medium text-gray-800">Your Wallet</span>
-  </button>
-</nav>
-
+        <nav className="p-6 space-y-2">
+          {[
+            { id: "mydashboard", icon: Home, label: "My Dashboard" },
+            { id: "services", icon: Briefcase, label: "Services" },
+            { id: "wallet", icon: Wallet, label: "Your Wallet" },
+            { id: "home", icon: ArrowRightLeft, label: "Home" },
+          ].map(({ id, icon: Icon, label }) => (
+            <button
+              key={id}
+              onClick={() => {
+                setActiveView(id);
+                setIsSidebarOpen(false);
+              }}
+              className={`w-full flex items-center px-4 py-3 rounded-xl transition-all duration-200 group ${
+                activeView === id
+                  ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg"
+                  : "text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+              }`}
+            >
+              <Icon
+                className={`h-5 w-5 mr-3 ${
+                  activeView === id ? "text-white" : "text-blue-500"
+                }`}
+              />
+              <span className="font-medium">{label}</span>
+            </button>
+          ))}
+        </nav>
       </div>
 
-      <div className="p-4 lg:pl-80">
+      <div className="p-6 lg:pl-80">
         {activeView === "services" ? (
           <DashboardService />
         ) : activeView === "wallet" ? (
           <DashboardWallet />
         ) : (
-          <>
+          <div className="space-y-8 p-6 bg-gradient-to-br from-slate-50 to-blue-50/30 min-h-screen">
+            {/* Premium Hero Section */}
+            <div className="relative overflow-hidden bg-gradient-to-br from-blue-700 via-indigo-700 to-purple-800 rounded-3xl p-6 text-white shadow-2xl border border-white/10">
+              {/* Animated Background Elements */}
+              <div className="absolute inset-0">
+                <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-white/20 to-transparent rounded-full -translate-y-48 translate-x-48 animate-pulse"></div>
+                <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-blue-400/20 to-transparent rounded-full translate-y-32 -translate-x-32"></div>
+                <div
+                  className="absolute top-1/2 left-1/2 w-32 h-32 bg-purple-400/10 rounded-full -translate-x-16 -translate-y-16 animate-bounce"
+                  style={{ animationDelay: "2s" }}
+                ></div>
+              </div>
 
-            {/* Greeting Section */}
-            <div className="relative mx-4 sm:mx-6 md:mx-10 lg:mx-16 xl:mx-24 bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-600 rounded-3xl ring-1 ring-white/10 shadow-xl p-6 md:p-8 text-white mb-8 transition-all duration-300 hover:shadow-2xl">
-  {/* Doctor Illustration (Right Center) */}
-  <div className="absolute top-1/2 right-6 -translate-y-1/2 w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 lg:w-40 lg:h-40 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-lg border-2 border-white/40 overflow-hidden transition-transform duration-300 hover:scale-105">
-    <img src={img} className="w-full h-full object-cover rounded-full" />
-  </div>
+              {/* Subtle Pattern Overlay */}
+              <div
+                className="absolute inset-0 opacity-10"
+                style={{
+                  backgroundImage:
+                    "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
+                  backgroundSize: "20px 20px",
+                }}
+              ></div>
 
-  {/* Left Content */}
-  <div className="pr-36"> {/* padding-right so text doesn't overlap image */}
-    <p className="text-yellow-300 font-semibold text-sm tracking-wide">Good Morning</p>
-    <h1 className="text-2xl md:text-3xl font-bold mt-1">Nayatik pharmacy store</h1>
-    <p className="text-sm md:text-base opacity-90 mt-1">
-      Wishing you a healthy and productive day ahead
-    </p>
-
-    {/* Points Section */}
-    <div className="flex mt-6">
-      <div className="flex items-center bg-white/90 backdrop-blur-sm rounded-full px-5 py-2.5 shadow-md text-blue-800 transition-shadow duration-300 hover:shadow-lg">
-        <span className="text-yellow-500 text-lg mr-2">💰</span>
-        <span className="text-sm font-semibold">15565 Points</span>
-      </div>
-    </div>
-
-  </div>
-
-</div>
-
-
-            {/* Avg Rating Card */}
-            <div className="mx-4 sm:mx-6 md:mx-10 lg:mx-16 xl:mx-24 bg-white/80 backdrop-blur border border-gray-100 rounded-2xl shadow p-5 md:p-6 mb-8 transition-shadow duration-300 hover:shadow-lg">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl flex items-center justify-center text-2xl">
-                    ⭐
+              <div className="relative z-20 flex justify-between items-center">
+                <div className="flex-1 pr-8">
+                  {/* Time-based Greeting */}
+                  <div className="inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-amber-400/30 to-yellow-400/20 rounded-full mb-6 border border-amber-300/30 backdrop-blur-sm">
+                    <div className="w-2 h-2 bg-amber-300 rounded-full mr-3 animate-pulse"></div>
+                    <span className="text-amber-100 text-sm font-semibold tracking-wide">
+                      Good Morning
+                    </span>
                   </div>
-                  <div>
-                    <p className="text-gray-900 font-semibold">Avg Rating</p>
-                    <div className="flex items-center mt-1">
-                      <svg className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                      <svg className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                      <svg className="w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                      <svg className="w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                      <svg className="w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
+
+                  <div className="mb-6">
+                    <h1 className="text-2xl font-bold mb-3 bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
+                      Nayatik Pharmacy Store
+                    </h1>
+                    <p className="text-blue-100/90 text-base leading-relaxed max-w-md">
+                      Wishing you a healthy and productive day ahead
+                    </p>
+                  </div>
+
+                  {/* Enhanced Points Display */}
+                  <div className="inline-flex items-center bg-white/15 backdrop-blur-md rounded-2xl px-3 py-2 border border-white/20 shadow-lg hover:bg-white/20 transition-all duration-300">
+                    <div className="w-6 h-6 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-xl flex items-center justify-center text-xl shadow-lg mr-4">
+                      <img
+                        width="48"
+                        height="48"
+                        src="https://img.icons8.com/emoji/48/coin-emoji.png"
+                        alt="coin-emoji"
+                      />
+                    </div>
+                    <div>
+                      {/* <span className="text-sm text-blue-100/80 uppercase tracking-wider font-medium">
+                        Reward Points
+                      </span> */}
+                      <div className="text-base font-bold text-white">
+                        15,565
+                      </div>
                     </div>
                   </div>
                 </div>
-                <span className="font-extrabold text-gray-800 text-2xl">2.5 / 5</span>
-              </div>
-            </div>
 
-            {/* Order Statistics */}
-            <div className="mx-4 sm:mx-6 md:mx-10 lg:mx-16 xl:mx-24 mb-8">
-              <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-500 mb-4">
-                Order Statistics
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
-                {/* Total Orders */}
-                <div className="group bg-white/90 backdrop-blur border border-gray-100 rounded-2xl shadow p-5 flex items-center transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5">
-                  <div className="w-12 h-12 flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl text-2xl mr-3">
-                    🛒
-                  </div>
-                  <div>
-                    <p className="text-gray-600 text-sm">Total Orders</p>
-                    <p className="text-xl font-bold text-gray-900">12</p>
-                  </div>
-                </div>
-
-                {/* Total Customers */}
-                <div className="group bg-white/90 backdrop-blur border border-gray-100 rounded-2xl shadow p-5 flex items-center transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5">
-                  <div className="w-12 h-12 flex items-center justify-center bg-gradient-to-br from-green-100 to-green-200 rounded-xl text-2xl mr-3">
-                    👥
-                  </div>
-                  <div>
-                    <p className="text-gray-600 text-sm">Total Customers</p>
-                    <p className="text-xl font-bold text-gray-900">12</p>
-                  </div>
-                </div>
-
-                {/* Accepted Orders */}
-                <div className="group bg-white/90 backdrop-blur border border-gray-100 rounded-2xl shadow p-5 flex items-center transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5">
-                  <div className="w-12 h-12 flex items-center justify-center bg-gradient-to-br from-purple-100 to-purple-200 rounded-xl text-2xl mr-3">
-                    ✅
-                  </div>
-                  <div>
-                    <p className="text-gray-600 text-sm">Accepted Orders</p>
-                    <p className="text-xl font-bold text-gray-900">2</p>
-                  </div>
-                </div>
-
-                {/* Pending Orders */}
-                <div className="group bg-white/90 backdrop-blur border border-gray-100 rounded-2xl shadow p-5 flex items-center transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5">
-                  <div className="w-12 h-12 flex items-center justify-center bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-xl text-2xl mr-3">
-                    ⏳
-                  </div>
-                  <div>
-                    <p className="text-gray-600 text-sm">Pending Orders</p>
-                    <p className="text-xl font-bold text-gray-900">2</p>
-                  </div>
-                </div>
-
-                {/* In Transit */}
-                <div className="group bg-white/90 backdrop-blur border border-gray-100 rounded-2xl shadow p-5 flex items-center transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5">
-                  <div className="w-12 h-12 flex items-center justify-center bg-gradient-to-br from-orange-100 to-orange-200 rounded-xl text-2xl mr-3">
-                    🚚
-                  </div>
-                  <div>
-                    <p className="text-gray-600 text-sm">In Transit</p>
-                    <p className="text-xl font-bold text-gray-900">1</p>
-                  </div>
-                </div>
-
-                {/* Delivered */}
-                <div className="group bg-white/90 backdrop-blur border border-gray-100 rounded-2xl shadow p-5 flex items-center transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5">
-                  <div className="w-12 h-12 flex items-center justify-center bg-gradient-to-br from-teal-100 to-teal-200 rounded-xl text-2xl mr-3">
-                    📦
-                  </div>
-                  <div>
-                    <p className="text-gray-600 text-sm">Delivered</p>
-                    <p className="text-xl font-bold text-gray-900">5</p>
+                {/* Professional Avatar */}
+                <div className="relative">
+                  {/* <div className="w-36 h-36 bg-gradient-to-br from-white/20 to-white/5 rounded-3xl flex items-center justify-center text-7xl backdrop-blur-md border border-white/20 shadow-2xl hover:scale-105 transition-transform duration-300"> */}
+                  <img
+                    className="rounded-full"
+                    width="120"
+                    height="120"
+                    src="https://i.pinimg.com/1200x/86/4d/e2/864de24af6de03ad0f3b2c7d19aeec61.jpg"
+                    alt="doctor-male-skin-type-3"
+                  />
+                  {/* </div> */}
+                  <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full border-4 border-white shadow-lg flex items-center justify-center">
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
                   </div>
                 </div>
               </div>
             </div>
 
-          </>
+            {/* Sophisticated Rating Card */}
+            <div className="bg-white/90 backdrop-blur-lg border border-white/30 rounded-2xl p-4 shadow-xl hover:shadow-2xl transition-all duration-300 group">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <div className="relative">
+                    <div className="w-12 h-12 bg-gradient-to-br from-amber-400 via-orange-400 to-red-400 rounded-2xl flex items-center justify-center text-3xl shadow-xl group-hover:scale-110 transition-transform duration-300">
+                      <img
+                        width="30"
+                        height="30"
+                        src="https://img.icons8.com/emoji/48/star-emoji.png"
+                        alt="star-emoji"
+                      />
+                    </div>
+                    <div className="absolute -top-1 -right-1 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-xs text-white font-bold shadow-lg">
+                      ✓
+                    </div>
+                  </div>
+                  <div className="ml-6">
+                    <h3 className="text-xl font-bold text-gray-800 mb-2">
+                      Customer Rating
+                    </h3>
+                    <div className="flex items-center space-x-1">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`w-6 h-6 transition-colors duration-200 ${
+                            i < 2
+                              ? "text-amber-400 fill-current drop-shadow-sm"
+                              : "text-gray-300"
+                          }`}
+                        />
+                      ))}
+                      <span className="ml-3 text-sm text-gray-500 font-medium">
+                        Based on 247 reviews
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
+                    2.5
+                  </div>
+                  <div className="text-sm text-gray-500 font-medium">
+                    out of 5.0
+                  </div>
+                  <div className="mt-2 px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-semibold">
+                    Needs Improvement
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Premium Statistics Grid */}
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
+                    <TrendingUp className="w-5 h-5 text-white" />
+                  </div>
+                  <h2 className="ml-4 text-xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 bg-clip-text text-transparent">
+                    Business Analytics
+                  </h2>
+                </div>
+                <div className="text-sm text-gray-500 bg-gray-100 px-4 py-2 rounded-full font-medium">
+                  Last 30 days
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                {statsData.map((stat, index) => (
+                  <div
+                    key={index}
+                    className="group relative overflow-hidden bg-white/95 backdrop-blur-lg border border-white/40 rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02]"
+                  >
+                    {/* Dynamic Background Gradient */}
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-br ${stat.bg} opacity-0 group-hover:opacity-10 transition-all duration-500`}
+                    ></div>
+
+                    {/* Subtle Pattern */}
+                    <div className="absolute top-0 right-0 w-32 h-32 opacity-5 group-hover:opacity-10 transition-opacity duration-500">
+                      <div
+                        className={`w-full h-full bg-gradient-to-br ${stat.color} rounded-full transform translate-x-16 -translate-y-16`}
+                      ></div>
+                    </div>
+
+                    <div className="relative flex items-start justify-between">
+                      <div className="flex-1">
+                        <div
+                          className={`w-14 h-14 bg-gradient-to-br ${stat.color} rounded-2xl flex items-center justify-center text-3xl shadow-xl text-white mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}
+                        >
+                          <img
+                            src={stat.icon}
+                            alt={stat.label}
+                            className="w-8 h-8"
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <p className="text-sm font-semibold text-gray-600 uppercase tracking-wider">
+                            {stat.label}
+                          </p>
+                          <p className="text-xl font-bold text-gray-900 group-hover:text-gray-800 transition-colors">
+                            {stat.value}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Trend Indicator */}
+                      <div className="flex items-center space-x-1 bg-green-50 text-green-700 px-2 py-1 rounded-full text-xs font-semibold">
+                        <div className="w-1 h-1 bg-green-500 rounded-full"></div>
+                        <span>+12%</span>
+                      </div>
+                    </div>
+
+                    {/* Progress Bar */}
+                    <div className="mt-6 relative">
+                      <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+                        <div
+                          className={`h-full bg-gradient-to-r ${stat.color} rounded-full transition-all duration-1000 group-hover:animate-pulse`}
+                          style={{ width: `${60 + index * 10}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         )}
       </div>
-
     </div>
-
-  )
-}
+  );
+};
 
 export default Dashboard;
