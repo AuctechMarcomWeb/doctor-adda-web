@@ -10,7 +10,7 @@ import {
   User,
   FileText,
 } from "lucide-react";
-import { getRequest, postRequest } from "../Helpers/index";
+import { fileUpload, getRequest, postRequest } from "../Helpers/index";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import LocationSearchInput from "./LocationSearchInput";
@@ -26,87 +26,67 @@ const HospitalRegistration = () => {
   const [profileFile, setProfileFile] = useState(null);
   const [uploadProfileImage, setUploadProfileImage] = useState("");
   const [profilePreview, setProfilePreview] = useState(null);
-  const [category, setCategory] = useState([])
-  const [doctors, setDoctor] = useState([])
-  const [healthCard, setHealthCard] = useState([])
-  const [doctorData, setDoctorData] = useState('')
+  const [category, setCategory] = useState([]);
+  const [doctors, setDoctor] = useState([]);
+  const [healthCard, setHealthCard] = useState([]);
+  const [doctorData, setDoctorData] = useState("");
   const [formData, setFormData] = useState({
-    name: '',
-          address: '',
-          profileImage: '',
-          phone: '',
-          email: '',
-          description: '',
-          accountType: 'Hospital',
-          categories: [],
-          healthCard: [],
-          latitude: '',
-          longitude: '',
-          facilities: [{ name: '', discription: '' }],
-          doctors: [
-            {
-              name: '',
-              email: '',
-              phone: '',
-              days: [],
-              availability: [],
-              specialization: '',
-              experience: '',
-              time: '',
-              fee: '',
-              schedules: [
-                {
-                  startTime: '',
-                  endTime: '',
-                },
-              ],
-            },
-          ],
-        },
-  );
+    name: "",
+    address: "",
+    profileImage: "",
+    phone: "",
+    email: "",
+    description: "",
+    accountType: "Hospital",
+    categories: [],
+    healthCard: [],
+    latitude: "",
+    longitude: "",
+    facilities: [{ name: "", discription: "" }],
+    profileImages:[],
+  });
   console.log("formData", formData);
 
   const categoryOption = category?.map((item, index) => ({
     label: item?.name,
     value: item._id,
-  }))
+  }));
   const healthCardOption = healthCard?.map((item, index) => ({
     label: item?.name,
     value: item._id,
-  }))
+  }));
 
   const selectCategory = (selectedValues) => {
-    console.log('selectedValues', selectedValues)
+    console.log("selectedValues", selectedValues);
     setFormData((prev) => ({
       ...prev,
       categories: selectedValues, // This will save only the selected category IDs
-    }))
-  }
+    }));
+  };
   const selectHealthCard = (selectedValues) => {
-    console.log('selectedValues', selectedValues)
+    console.log("selectedValues", selectedValues);
     setFormData((prev) => ({
       ...prev,
       healthCard: selectedValues,
-    }))
-  }
+    }));
+  };
 
   const handleFacilityChange = (e, index) => {
-    const { name, value } = e.target
-    const updatedFacilities = [...formData.facilities]
+    const { name, value } = e.target;
+    const updatedFacilities = [...formData.facilities];
 
-    if (name.includes('Name')) {
-      updatedFacilities[index].name = value
-    } else if (name.includes('Description')) {
-      updatedFacilities[index].discription = value
+    if (name.includes("Name")) {
+      updatedFacilities[index].name = value;
+    } else if (name.includes("Description")) {
+      updatedFacilities[index].discription = value;
     }
 
     setFormData((prev) => ({
       ...prev,
       facilities: updatedFacilities,
-    }))
-  }
+    }));
+  };
 
-   
   const uploadImage = async (file) => {
     try {
       const formDataData = new FormData();
@@ -125,53 +105,51 @@ const HospitalRegistration = () => {
     }
   };
 
-const handleSubmit = async () => {
-  const validationErrors = validateForm();
+  const handleSubmit = async () => {
+    const validationErrors = validateForm();
 
-  if (Object.keys(validationErrors).length > 0) {
-    setErrors(validationErrors);
-    toast.error("Please fill all required fields");
-    return;
-  }
-
-  if (!formData?.profileImage) {
-    setErrors({ profileImage: "Please upload a profile image" });
-    toast.error("Please upload a profile image");
-    return;
-  }
-
-  setErrors({});
-  setLoading(true);
-
-  try {
-    const payload = { ...formData };
-    console.log("Final payload before submit:", payload);
-
-    const response = await postRequest({
-      url: `hospital/registerHospital/${userId}`,
-      cred: payload,
-    });
-
-    const statusCode = response?.status || response?.data?.statusCode;
-    const message = response?.data?.message || "Something went wrong";
-
-    if (statusCode === 200 || statusCode === 201) {
-      toast.success(message);
-      setShowSuccess(true);
-    } else {
-      toast.error(message);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      toast.error("Please fill all required fields");
+      return;
     }
 
-  } catch (err) {
-    console.error("Error Registering Hospital:", err);
-    const message =
-      err?.response?.data?.message || "Failed to register hospital";
-    toast.error(message);
-  } finally {
-    setLoading(false);
-  }
-};
 
+    setErrors({});
+    setLoading(true);
+
+    try {
+      const payload = { ...formData };
+      console.log("Final payload before submit:", payload);
+
+      const response = await postRequest({
+        url: `hospital/registerHospital/${userId}`,
+        cred: payload,
+      });
+
+      // ✅ Sirf success hone par popup dikhao
+      if (
+        response?.status === 201 ||
+        response?.data?.statusCode === 201 ||
+        response?.data?.success === true
+      ) {
+        toast.success(
+          response?.data?.message || "Hospital registered successfully!"
+        );
+        setShowSuccess(true); // success popup trigger
+      } else {
+        toast.error(response?.data?.message || "Something went wrong!");
+      }
+
+    } catch (err) {
+      console.error("Error Registering Hospital:", err);
+      const message =
+        err?.response?.data?.message || "Failed to register hospital";
+      toast.error(message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Profile Pic Handler
   const handleProfilePic = (e) => {
@@ -187,63 +165,89 @@ const handleSubmit = async () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-    const addFacility = () => {
+  const addFacility = () => {
     setFormData((prev) => ({
       ...prev,
-      facilities: [...prev.facilities, { name: '', discription: '' }],
-    }))
-  }
+      facilities: [...prev.facilities, { name: "", discription: "" }],
+    }));
+  };
 
   const removeFacility = (index) => {
-    const updatedFacilities = formData.facilities.filter((_, i) => i !== index)
+    const updatedFacilities = formData.facilities.filter((_, i) => i !== index);
     setFormData((prev) => ({
       ...prev,
       facilities: updatedFacilities,
-    }))
-  }
+    }));
+  };
+
+  const uploadDocument = (e) => {
+    const files = Array.from(e.target.files);
+
+    files.forEach((file) => {
+      fileUpload({
+        url: `upload/uploadImage`,
+        cred: { file },
+      })
+        .then((res) => {
+          const imageUrl = res.data?.data?.imageUrl;
+          if (imageUrl) {
+            setFormData((prev) => ({
+              ...prev,
+              profileImages: [...prev.profileImages, imageUrl],
+              // documentImage: [...prev.documentImage, { url: imageUrl }],
+            }));
+          }
+        })
+        .catch((error) => {
+          console.error("Image upload failed:", error);
+        });
+    });
+  };
 
   useEffect(() => {
     getRequest(`category?isPagination=false`)
       .then((res) => {
-        setCategory(res?.data?.data)
-        console.log('res?data0', res?.data?.data)
+        setCategory(res?.data?.data);
+        console.log("res?data0", res?.data?.data);
       })
       .catch((error) => {
-        console.error('Error fetching data:', error)
-      })
+        console.error("Error fetching data:", error);
+      });
     getRequest(`doctor/doctors?isPagination=false`)
       .then((res) => {
-        setDoctor(res?.data?.data?.doctors)
-        console.log('setDoctor?data0==========???', res?.data?.data)
+        setDoctor(res?.data?.data?.doctors);
+        console.log("setDoctor?data0==========???", res?.data?.data);
       })
       .catch((error) => {
-        console.error('Error fetching data:', error)
-      })
+        console.error("Error fetching data:", error);
+      });
     getRequest(`healthCard?isPagination=false`)
       .then((res) => {
-        setHealthCard(res?.data?.data)
-        console.log('res?data0', res?.data?.data)
+        setHealthCard(res?.data?.data);
+        console.log("res?data0", res?.data?.data);
       })
       .catch((error) => {
-        console.error('Error fetching data:', error)
-      })
-  }, [])
-const validateForm = () => {
-  const newErrors = {};
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+  const validateForm = () => {
+    const newErrors = {};
 
-  if (!formData.name) newErrors.name = "Hospital name is required";
-  if (!formData.email) newErrors.email = "Email is required";
-  if (!formData.phone) newErrors.phone = "Contact number is required";
-  if (!formData.address) newErrors.address = "Address is required";
-  if (!formData.ownerName) newErrors.ownerName = "Owner name is required";
-  if (!formData.phoneNumber) newErrors.phoneNumber = "Verification phone is required";
-  if (!formData.categories || formData.categories.length === 0) {
-    newErrors.categories = "Please select at least one category";
-  }
-  if (!formData.description) newErrors.description = "Description is required";
+    if (!formData.name) newErrors.name = "Hospital name is required";
+    if (!formData.email) newErrors.email = "Email is required";
+    if (!formData.phone) newErrors.phone = "Contact number is required";
+    if (!formData.address) newErrors.address = "Address is required";
+    if (!formData.ownerName) newErrors.ownerName = "Owner name is required";
+    if (!formData.phoneNumber)
+      newErrors.phoneNumber = "Verification phone is required";
+    if (!formData.categories || formData.categories.length === 0) {
+      newErrors.categories = "Please select at least one category";
+    }
+    if (!formData.description)
+      newErrors.description = "Description is required";
 
-  return newErrors;
-};
+    return newErrors;
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 py-34 px-4">
@@ -390,18 +394,18 @@ const validateForm = () => {
                 <label className="text-sm font-medium text-gray-700">
                   Category
                 </label>
-                 <Select
-                    mode="multiple"
-                    allowClear
-                    style={{ width: '100%' }}
-                    placeholder="Please select"
-                    defaultValue={[]}
-                    onChange={selectCategory}
-                    options={categoryOption}
-                    size="large"
-                    value={formData?.categories} // Ensure selected categories are controlled by formData
-                     className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500"
-                  />
+                <Select
+                  mode="multiple"
+                  allowClear
+                  style={{ width: "100%" }}
+                  placeholder="Please select"
+                  defaultValue={[]}
+                  onChange={selectCategory}
+                  options={categoryOption}
+                  size="large"
+                  value={formData?.categories} // Ensure selected categories are controlled by formData
+                  className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500"
+                />
                 {errors?.categories && (
                   <p className="text-red-500 text-xs">{errors?.categories}</p>
                 )}
@@ -413,14 +417,14 @@ const validateForm = () => {
                 </label>
                 <Select
                   mode="multiple"
-                    allowClear
-                    style={{ width: '100%' }}
-                    placeholder="Please select"
-                    defaultValue={[]}
-                    onChange={selectHealthCard}
-                    options={healthCardOption}
-                    size="large"
-                    value={formData?.healthCard} // Ensure selected categories are controlled by formData
+                  allowClear
+                  style={{ width: "100%" }}
+                  placeholder="Please select"
+                  defaultValue={[]}
+                  onChange={selectHealthCard}
+                  options={healthCardOption}
+                  size="large"
+                  value={formData?.healthCard} // Ensure selected categories are controlled by formData
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500"
                 />
                 {errors?.healthCard && (
@@ -539,55 +543,126 @@ const validateForm = () => {
               </div>
 
               <div className="space-y-3">
-               {formData?.facilities?.map((facility, index) => (
-  <div
-    key={index}
-    className="grid md:grid-cols-2 gap-4 p-4 mb-3 bg-gray-50 rounded-xl border"
-  >
-    {/* Facility Name */}
-    <div className="flex flex-col">
-      <label className="text-sm font-medium text-gray-700 mb-1">Name</label>
-      <input
-        type="text"
-        name={`facilityName_${index}`}
-        value={facility?.name}
-        onChange={(e) => handleFacilityChange(e, index)}
-        placeholder="Facility name (e.g., ICU, X-Ray)"
-        className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-      />
-    </div>
+                {formData?.facilities?.map((facility, index) => (
+                  <div
+                    key={index}
+                    className="grid md:grid-cols-2 gap-4 p-4 mb-3 bg-gray-50 rounded-xl border"
+                  >
+                    {/* Facility Name */}
+                    <div className="flex flex-col">
+                      <label className="text-sm font-medium text-gray-700 mb-1">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        name={`facilityName_${index}`}
+                        value={facility?.name}
+                        onChange={(e) => handleFacilityChange(e, index)}
+                        placeholder="Facility name (e.g., ICU, X-Ray)"
+                        className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                      />
+                    </div>
 
-    {/* Facility Description + Remove Button */}
-    <div className="flex gap-2">
-      <div className="flex flex-col flex-1">
-        <label className="text-sm font-medium text-gray-700 mb-1">
-          Description
-        </label>
-        <input
-          type="text"
-          name={`facilityDescription_${index}`}
-          value={facility?.discription}
-          onChange={(e) => handleFacilityChange(e, index)}
-          placeholder="Enter description"
-          className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-        />
-      </div>
+                    {/* Facility Description + Remove Button */}
+                    <div className="flex gap-2">
+                      <div className="flex flex-col flex-1">
+                        <label className="text-sm font-medium text-gray-700 mb-1">
+                          Description
+                        </label>
+                        <input
+                          type="text"
+                          name={`facilityDescription_${index}`}
+                          value={facility?.discription}
+                          onChange={(e) => handleFacilityChange(e, index)}
+                          placeholder="Enter description"
+                          className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                        />
+                      </div>
 
-      {/* Remove Button */}
-      {formData?.facilities?.length > 1 && (
-        <button
-          type="button"
-          onClick={() => removeFacility(index)}
-          className="h-10 w-10 self-end flex items-center justify-center text-red-600 hover:bg-red-50 rounded-lg transition"
-        >
-          ×
-        </button>
-      )}
-    </div>
-  </div>
-))}
-
+                      {/* Remove Button */}
+                      {formData?.facilities?.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeFacility(index)}
+                          className="h-10 w-10 self-end flex items-center justify-center text-red-600 hover:bg-red-50 rounded-lg transition"
+                        >
+                          ×
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
               </div>
+            </div>
+
+            <div className="space-y-2 group">
+              <p className="text-gray-700 font-medium font-semibold">
+                Select Hospital Display images
+              </p>
+
+              {/* Image container */}
+              {formData?.profileImages?.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {formData?.profileImages?.map((img, index) => (
+                    <div key={index} className="relative">
+                      {/* Image clickable banayi */}
+                      <a href={img} target="_blank" rel="noopener noreferrer">
+                        <img
+                          src={img}
+                          alt={`doc-${index}`}
+                          style={{
+                            width: "70px",
+                            height: "70px",
+                            objectFit: "cover",
+                            borderRadius: "6px",
+                            cursor: "pointer",
+                          }}
+                        />
+                      </a>
+
+                      {/* Remove button */}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            profileImages: prev.profileImages.filter(
+                              (_, i) => i !== index
+                            ),
+                          }))
+                        }
+                        style={{
+                          position: "absolute",
+                          top: "-6px",
+                          right: "-6px",
+                          background: "red",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "50%",
+                          width: "20px",
+                          height: "20px",
+                          cursor: "pointer",
+                          fontSize: "14px",
+                          lineHeight: "18px",
+                        }}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <label className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg cursor-pointer hover:bg-green-700">
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={uploadDocument}
+                  className="hidden"
+                />
+                <span className="flex items-center gap-2">➕ Add Images</span>
+              </label>
             </div>
 
             {/* Submit Button */}

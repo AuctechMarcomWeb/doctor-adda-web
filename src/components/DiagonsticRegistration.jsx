@@ -10,7 +10,7 @@ import {
   User,
   FileText,
 } from "lucide-react";
-import { getRequest, postRequest } from "../Helpers/index";
+import { fileUpload, getRequest, postRequest } from "../Helpers/index";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import LocationSearchInput from "./LocationSearchInput";
@@ -35,16 +35,20 @@ const DiagonsticRegistration = () => {
   ]);
   const [services, setservices] = useState([{ name: "fdgdf" }]);
   const [formData, setFormData] = useState({
-    name: "City Diagnostic Center",
-    phone: "98765435680",
-    email: "citydiag@example.com",
-    address: "123 Health St, Medical Nagar",
-    profileImage: "https://example.com/images/diagnostic.png",
+    name: "",
+    phone: "",
+    email: "",
+    address: "",
+    profileImage: "",
     latitude: "28.6139",
     longitude: "77.2090",
     storeTiming: "8:00 am to 5:00 pm",
-    description: "A fully equipped diagnostic center in Delhi.",
+    description: "",
     accountType: "Diagnostic",
+    startTime:"",
+    endTime:"",
+    profileImages:[],
+    isBloodBank:true
   });
 console.log("form data",formData);
 
@@ -80,7 +84,7 @@ console.log("form data",formData);
   setErrors({});
   setLoading(true);
   try {
-    const payload = { ...formData, services };
+    const payload = { ...formData, services , packages};
     console.log("Final payload before submit:", payload);
     const response = await postRequest({
       url: `diagnostics/registerDiagnostic/${userId}`,
@@ -88,8 +92,18 @@ console.log("form data",formData);
     });
 
     console.log("Diagonstic Register Response:", response?.data?.data);
-    toast.success(response?.data?.message)
-    setShowSuccess(true);
+      if (
+        response?.status === 201 ||
+        response?.data?.statusCode === 201 ||
+        response?.data?.success === true
+      ) {
+        toast.success(
+          response?.data?.message || "Diagonstics registered successfully!"
+        );
+        setShowSuccess(true); // success popup trigger
+      } else {
+        toast.error(response?.data?.message || "Something went wrong!");
+      }
   } catch (err) {
     console.error(" Error Registering :", err);
     toast.error(err?.respone?.data?.message)
@@ -145,15 +159,27 @@ console.log("form data",formData);
   };
 
   const handleImageUpload = (e) => {
-    const files = Array.from(e.target.files);
-    if (!files.length) return;
-
-    const newImages = files.map((file) => ({
-      url: URL.createObjectURL(file),
-      name: file.name,
-    }));
-
-    setImages((prev) => [...prev, ...newImages]);
+        const files = Array.from(e.target.files);
+    
+        files.forEach((file) => {
+          fileUpload({
+            url: `upload/uploadImage`,
+            cred: { file },
+          })
+            .then((res) => {
+              const imageUrl = res.data?.data?.imageUrl;
+              if (imageUrl) {
+                setFormData((prev) => ({
+                  ...prev,
+                  profileImages: [...prev.profileImages, imageUrl],
+                  // documentImage: [...prev.documentImage, { url: imageUrl }],
+                }));
+              }
+            })
+            .catch((error) => {
+              console.error("Image upload failed:", error);
+            });
+        });
   };
 
   const removeImage = (index) => {
@@ -163,6 +189,7 @@ console.log("form data",formData);
       setCurrentIndex(0);
     }
   };
+
 const validateForm = () => {
   const newErrors = {};
 
@@ -176,8 +203,7 @@ const validateForm = () => {
   // Clinic timings
   if (!formData.startTime) newErrors.startTime = "Start time is required";
   if (!formData.endTime) newErrors.endTime = "End time is required";
-  // Optional: blood bank checkbox could be required
-  // if (!bloodBank) newErrors.bloodBank = "Please select blood bank availability";
+  if (!formData.isBloodBank) newErrors.isBloodBank = "Please select blood bank availability";
 
   return newErrors;
 };
@@ -379,7 +405,9 @@ const validateForm = () => {
                   }
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-gray-500"
                   placeholder="Select Time"
-                />
+                /> {errors?.startTime && (
+                <p className="text-red-500 text-xs">{errors?.startTime}</p>
+              )}
 
                 {/* End Time */}
                 <input
@@ -388,19 +416,13 @@ const validateForm = () => {
                   onChange={(e) => handleInputChange("endTime", e.target.value)}
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-gray-500"
                   placeholder="Select Time"
-                />
-              </div>
-
-              {/* Validation messages */}
-              {errors?.startTime && (
-                <p className="text-red-500 text-xs">{errors?.startTime}</p>
-              )}
-              {errors?.endTime && (
+                /> {errors?.endTime && (
                 <p className="text-red-500 text-xs">{errors?.endTime}</p>
               )}
+              </div>             
             </div>
 
-            {/* Service Duration per patient field */}
+             {/* Service Duration per patient field */}
             <div className="space-y-2 group">
               <label className="text-sm font-medium text-gray-700">
                 Service Duration Per Patient
@@ -427,6 +449,7 @@ const validateForm = () => {
               )}
             </div>
 
+           
             {/* Services Section */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
@@ -567,7 +590,7 @@ const validateForm = () => {
               <label className="flex items-center gap-2 text-gray-700">
                 <input
                   type="checkbox"
-                  checked={bloodBank}
+                  checked={formData.isBloodBank}
                   onChange={(e) => setBloodBank(e.target.checked)}
                   className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                 />
@@ -580,40 +603,59 @@ const validateForm = () => {
                 Select Images to showcase your 
               </p>
 
-              {/* Preview Area */}
-              {images.length > 0 && (
-                <div className="relative w-full h-56 border rounded-lg flex items-center justify-center bg-gray-100 overflow-hidden">
-                  {/* Current Image */}
-                  <img
-                    src={images[currentIndex].url}
-                    alt="preview"
-                    className="h-full object-contain"
-                  />
+             
+              {/* Image container */}
+              {formData?.profileImages?.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {formData?.profileImages?.map((img, index) => (
+                    <div key={index} className="relative">
+                      {/* Image clickable banayi */}
+                      <a href={img} target="_blank" rel="noopener noreferrer">
+                        <img
+                          src={img}
+                          alt={`doc-${index}`}
+                          style={{
+                            width: "70px",
+                            height: "70px",
+                            objectFit: "cover",
+                            borderRadius: "6px",
+                            cursor: "pointer",
+                          }}
+                        />
+                      </a>
 
-                  {/* Remove Button */}
-                  <button
-                    type="button"
-                    onClick={() => removeImage(currentIndex)}
-                    className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-1"
-                  >
-                    ✕
-                  </button>
-
-                  {/* Dots Indicator */}
-                  <div className="absolute bottom-2 flex gap-2">
-                    {images.map((_, i) => (
-                      <span
-                        key={i}
-                        onClick={() => setCurrentIndex(i)}
-                        className={`w-3 h-3 rounded-full cursor-pointer ${
-                          currentIndex === i ? "bg-green-600" : "bg-gray-300"
-                        }`}
-                      ></span>
-                    ))}
-                  </div>
+                      {/* Remove button */}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            profileImages: prev.profileImages.filter(
+                              (_, i) => i !== index
+                            ),
+                          }))
+                        }
+                        style={{
+                          position: "absolute",
+                          top: "-6px",
+                          right: "-6px",
+                          background: "red",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "50%",
+                          width: "20px",
+                          height: "20px",
+                          cursor: "pointer",
+                          fontSize: "14px",
+                          lineHeight: "18px",
+                        }}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
                 </div>
               )}
-
               {/* Upload Button */}
               <label className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg cursor-pointer hover:bg-green-700">
                 <input
@@ -626,6 +668,7 @@ const validateForm = () => {
                 <span className="flex items-center gap-2">➕ Add Images</span>
               </label>
             </div>
+
             {/* Submit Button */}
             <div className="pt-6">
               <button
