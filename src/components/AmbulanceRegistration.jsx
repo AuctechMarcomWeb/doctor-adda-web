@@ -10,7 +10,7 @@ import {
   User,
   FileText,
 } from "lucide-react";
-import { getRequest, postRequest } from "../Helpers/index";
+import { fileUpload, getRequest, postRequest } from "../Helpers/index";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import LocationSearchInput from "./LocationSearchInput";
@@ -22,6 +22,8 @@ const AmbulanceRegistration = () => {
   const [categories, setCategories] = useState([]);
   const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
   const userId = userProfileData?._id;
+  console.log("userId", userId);
+
   // Profile Image states
   const [profileFile, setProfileFile] = useState(null);
   const [uploadProfileImage, setUploadProfileImage] = useState("");
@@ -32,22 +34,24 @@ const AmbulanceRegistration = () => {
   const [drivers, setDrivers] = useState([
     { name: "", phone: "", licenseNumber: "" },
   ]);
-  const [services, setservices] = useState([{ name: "fdgdf" }]);
+  console.log("drivers", drivers);
+
   const [formData, setFormData] = useState({
-    name: "Fast Aid Ambulance",
-    phone: "9876543211",
-    address: "123 Emergency Lane, City Center",
+    name: "",
+    email:"",
+    phone: "",
+    address: "",
     latitude: "28.6139",
     longitude: "77.2090",
     capacity: 4,
     price: 1500,
-    description: "Fully equipped ambulance for emergencies.",
-    ambulanceType: "ICU",
-    ambulanceNumber: "DL01AB1234",
-
+    description: "",
+    ambulanceType: "",
+    ambulanceNumber: "",
     availabilityStatus: "Available",
     operatingHours: "24/7",
     emergencyContact: "911",
+    profileImages:[]
   });
   console.log("form data", formData);
 
@@ -75,28 +79,39 @@ const AmbulanceRegistration = () => {
       setErrors(validationErrors);
       return;
     }
-    if (!formData?.profileImage) {
-      setErrors({ profileImage: "Please upload a profile image" });
-      return;
-    }
     setErrors({});
     setLoading(true);
+
     try {
       const payload = { ...formData, drivers };
       console.log("Final payload before submit:", payload);
+
       const response = await postRequest({
         url: `ambulance/registerAmbulances/${userId}`,
         cred: payload,
       });
 
-      console.log("Ambulance Register Response:", response?.data?.data);
-      toast.success(response?.data?.message);
-      setShowSuccess(true);
+      console.log("Ambulance Register Response:", response?.data);
+
+      // ✅ Sirf success hone par popup dikhao
+      if (
+        response?.status === 201 ||
+        response?.data?.statusCode === 201 ||
+        response?.data?.success === true
+      ) {
+        toast.success(
+          response?.data?.message || "Ambulance registered successfully!"
+        );
+        setShowSuccess(true); // success popup trigger
+      } else {
+        toast.error(response?.data?.message || "Something went wrong!");
+      }
     } catch (err) {
-      console.error(" Error Registering Hospital:", err);
-      toast.error(err?.respone?.data?.message);
+      console.error("Error Registering Ambulance:", err);
+      toast.error(
+        err?.response?.data?.message || "Failed to register ambulance"
+      );
     } finally {
-      console.log(" Finally block executed");
       setLoading(false);
     }
   };
@@ -151,16 +166,61 @@ const AmbulanceRegistration = () => {
   };
   const validateForm = () => {
     const newErrors = {};
+     if (!profilePreview) {
+    newErrors.profilePic = "Profile picture is required";
+  }
 
-    // Basic Info
-    if (!formData.name) newErrors.name = "Diagnostic center name is required";
+    if (!formData.name) newErrors.name = "Ambulance name is required";
     if (!formData.phone) newErrors.phone = "Phone number is required";
     if (!formData.email) newErrors.email = "Email is required";
+    if (!formData.ambulanceType)
+      newErrors.ambulanceType = "Ambulance type is required";
+    if (!formData.ambulanceNumber)
+      newErrors.ambulanceNumber = "Ambulance number is required";
+    if (!formData.operatingHours)
+      newErrors.operatingHours = "Operating hours are required";
+    if (!formData.address) newErrors.address = "Address is required";
     if (!formData.description)
       newErrors.description = "Description is required";
-    if (!formData.address) newErrors.address = "Address is required";
 
+   // ✅ driver validation
+  const driverErrors = drivers.map((driver) => {
+    const dErrors = {};
+    if (!driver.name) dErrors.name = "Driver name is required";
+    if (!driver.phone) dErrors.phone = "Driver phone is required";
+    if (!driver.licenseNumber)
+      dErrors.licenseNumber = "License number is required";
+    return dErrors;
+  });
+
+  if (driverErrors.some((d) => Object.keys(d).length > 0)) {
+    newErrors.drivers = driverErrors;
+  }
     return newErrors;
+  };
+
+  const uploadDocument = (e) => {
+    const files = Array.from(e.target.files);
+
+    files.forEach((file) => {
+      fileUpload({
+        url: `upload/uploadImage`,
+        cred: { file },
+      })
+        .then((res) => {
+          const imageUrl = res.data?.data?.imageUrl;
+          if (imageUrl) {
+            setFormData((prev) => ({
+              ...prev,
+              profileImages: [...prev.profileImages, imageUrl],
+              // documentImage: [...prev.documentImage, { url: imageUrl }],
+            }));
+          }
+        })
+        .catch((error) => {
+          console.error("Image upload failed:", error);
+        });
+    });
   };
 
   return (
@@ -244,8 +304,13 @@ const AmbulanceRegistration = () => {
                   </div>
                 </div>
                 <div className="text-sm text-gray-600">
-                  <p>Click to upload Diagnostic logo</p>
+                  <p>Click to upload Ambulance logo</p>
                   <p className="text-xs">Max size: 5MB</p>
+                  {errors.profilePic && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.profilePic}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -255,14 +320,14 @@ const AmbulanceRegistration = () => {
               <div className="space-y-2 group">
                 <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
                   <Building2 className="w-4 h-4 text-blue-600" />
-                  Diagnostic Center Name
+                  Ambulance Center Name
                 </label>
                 <input
                   type="text"
                   value={formData?.name}
                   onChange={(e) => handleInputChange("name", e.target.value)}
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter diagnostic center name"
+                  placeholder="Enter Ambulance center name"
                 />
                 {errors.name && (
                   <p className="text-red-500 text-xs">{errors?.name}</p>
@@ -288,7 +353,7 @@ const AmbulanceRegistration = () => {
             </div>
 
             {/* Contact & Decription*/}
-            <div className="grid md:grid-cols-1 gap-6">
+            <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-2 group">
                 <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
                   <Mail className="w-4 h-4 text-green-600" />
@@ -303,6 +368,28 @@ const AmbulanceRegistration = () => {
                 />
                 {errors.email && (
                   <p className="text-red-500 text-xs">{errors?.email}</p>
+                )}
+              </div>
+
+              {/*Operating Hours*/}
+              <div className="space-y-2 group">
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                  Operating Hours
+                </label>
+                <input
+                  type="text"
+                  value={formData?.operatingHours}
+                  onChange={(e) =>
+                    handleInputChange("operatingHours", e.target.value)
+                  }
+                  className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-gray-500"
+                  placeholder="Operating Hours of ambulance service"
+                />
+                {/* Validation messages */}
+                {errors?.operatingHours && (
+                  <p className="text-red-500 text-xs">
+                    {errors?.operatingHours}
+                  </p>
                 )}
               </div>
             </div>
@@ -364,35 +451,14 @@ const AmbulanceRegistration = () => {
               </div>
             </div>
 
-            {/*Operating Hours*/}
-            <div className="space-y-2 group">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                Operating Hours
-              </label>
-
-              <input
-                type="text"
-                value={formData?.operatingHours}
-                onChange={(e) =>
-                  handleInputChange("operatingHours", e.target.value)
-                }
-                className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-gray-500"
-                placeholder="Operating Hours of ambulance service"
-              />
-              {/* Validation messages */}
-              {errors?.startTime && (
-                <p className="text-red-500 text-xs">{errors?.operatingHours}</p>
-              )}
-            </div>
-
             {/* Address */}
-             <div className="space-y-2 group">
+            <div className="space-y-2 group">
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
                 <MapPin className="w-4 h-4 text-red-600" />
                 Search Address
               </label>
               <LocationSearchInput
-                value={formData.address}
+                value={formData?.address}
                 onSelect={
                   (place) => setFormData({ ...formData, ...place }) // address + lat/lng update
                 }
@@ -408,15 +474,16 @@ const AmbulanceRegistration = () => {
                 <FileText className="w-4 h-4 text-red-600" />
                 Decription
               </label>
-              <input
-                type="text"
+              <textarea
                 value={formData?.description}
                 onChange={(e) =>
                   handleInputChange("description", e.target.value)
                 }
                 className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
-                placeholder="Brief about your diagonstic services"
+                placeholder="Brief about your Ambulance services"
+                rows={2}
               />
+
               {errors?.description && (
                 <p className="text-red-500 text-xs">{errors?.description}</p>
               )}
@@ -449,12 +516,17 @@ const AmbulanceRegistration = () => {
                       <input
                         type="text"
                         placeholder="Driver name"
-                        value={driver.name}
+                        value={driver?.name}
                         onChange={(e) =>
                           handleDriverChange(index, "name", e.target.value)
                         }
                         className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                       />
+                      {errors?.drivers?.[index]?.name && (
+                        <p className="text-red-500 text-xs">
+                          {errors.drivers[index].name}
+                        </p>
+                      )}
                     </div>
 
                     {/* Phone */}
@@ -471,9 +543,14 @@ const AmbulanceRegistration = () => {
                         }
                         className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                       />
+                      {errors?.drivers?.[index]?.phone && (
+                        <p className="text-red-500 text-xs">
+                          {errors.drivers[index].phone}
+                        </p>
+                      )}
                     </div>
 
-                    {/* License Number + Remove */}
+                    {/* License Number */}
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-gray-700">
                         License Number
@@ -502,19 +579,21 @@ const AmbulanceRegistration = () => {
                           </button>
                         )}
                       </div>
+                      {errors?.drivers?.[index]?.licenseNumber && (
+                        <p className="text-red-500 text-xs">
+                          {errors.drivers[index].licenseNumber}
+                        </p>
+                      )}
                     </div>
                   </div>
                 ))}
-
-               
               </div>
             </div>
 
             <div className="space-y-2 group">
               <p className="text-gray-700 font-medium font-semibold">
-                Select Images to showcase your pharmacy
+                Select Images to showcase your Ambulance
               </p>
-
               {/* Preview Area */}
               {images.length > 0 && (
                 <div className="relative w-full h-56 border rounded-lg flex items-center justify-center bg-gray-100 overflow-hidden">
@@ -548,14 +627,65 @@ const AmbulanceRegistration = () => {
                   </div>
                 </div>
               )}
+              {/* Image container */}
+              {formData?.profileImages?.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {formData?.profileImages?.map((img, index) => (
+                    <div key={index} className="relative">
+                      {/* Image clickable banayi */}
+                      <a href={img} target="_blank" rel="noopener noreferrer">
+                        <img
+                          src={img}
+                          alt={`doc-${index}`}
+                          style={{
+                            width: "70px",
+                            height: "70px",
+                            objectFit: "cover",
+                            borderRadius: "6px",
+                            cursor: "pointer",
+                          }}
+                        />
+                      </a>
 
+                      {/* Remove button */}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            profileImages: prev.profileImages.filter(
+                              (_, i) => i !== index
+                            ),
+                          }))
+                        }
+                        style={{
+                          position: "absolute",
+                          top: "-6px",
+                          right: "-6px",
+                          background: "red",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "50%",
+                          width: "20px",
+                          height: "20px",
+                          cursor: "pointer",
+                          fontSize: "14px",
+                          lineHeight: "18px",
+                        }}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
               {/* Upload Button */}
               <label className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg cursor-pointer hover:bg-green-700">
                 <input
                   type="file"
                   multiple
                   accept="image/*"
-                  onChange={handleImageUpload}
+                  onChange={uploadDocument}
                   className="hidden"
                 />
                 <span className="flex items-center gap-2">➕ Add Images</span>
