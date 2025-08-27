@@ -178,7 +178,7 @@ const Dashboard = () => {
         ) : activeView === "wallet" ? (
           <DashboardWallet />
         ) : (
-          <div className="space-y-8 p-6 bg-gradient-to-br from-slate-50 to-blue-50/30 min-h-screen">
+          <div className="space-y-8 md:p-6 bg-gradient-to-br from-slate-50 to-blue-50/30 min-h-screen">
             {/* Premium Hero Section */}
             <div className="relative overflow-hidden bg-gradient-to-br from-blue-700 via-indigo-700 to-purple-800 rounded-3xl p-6 text-white shadow-2xl border border-white/10">
               {/* Animated Background Elements */}
@@ -202,30 +202,29 @@ const Dashboard = () => {
               ></div>
 
               <div className="relative z-20 flex justify-between items-center">
-                <div className="flex-1 pr-8">
+                <div className="flex-1 md:pr-8">
                   {/* Time-based Greeting */}
-                  <div className="inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-amber-400/30 to-yellow-400/20 rounded-full mb-6 border border-amber-300/30 backdrop-blur-sm">
+                  <div className="inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-amber-400/30 to-yellow-400/20 rounded-full mb-2 md:mb-6 border border-amber-300/30 backdrop-blur-sm">
                     <div className="w-2 h-2 bg-amber-300 rounded-full mr-3 animate-pulse"></div>
-                    <span className="text-amber-100 text-sm font-semibold tracking-wide">
+                    <span className="text-amber-100 md:text-sm text-xs font-semibold tracking-wide">
                       Good Morning
                     </span>
                   </div>
 
-                  <div className="mb-6">
-                    <h1 className="text-2xl font-bold mb-3 bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
+                  <div className="mb-2 md:mb-6">
+                    <h1 className="text-xl md:text-2xl font-bold mb-2 md:mb-3 bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
                       Nayatik Pharmacy Store
                     </h1>
-                    <p className="text-blue-100/90 text-base leading-relaxed max-w-md">
+                    <p className="text-blue-100/90 text-sm md:text-base leading-relaxed max-w-md">
                       Wishing you a healthy and productive day ahead
                     </p>
                   </div>
 
                   {/* Enhanced Points Display */}
                   <div className="inline-flex items-center bg-white/15 backdrop-blur-md rounded-2xl px-3 py-2 border border-white/20 shadow-lg hover:bg-white/20 transition-all duration-300">
-                    <div className="w-6 h-6 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-xl flex items-center justify-center text-xl shadow-lg mr-4">
+                    <div className="w-4 h-4 md:w-6 md:h-6 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-xl flex items-center justify-center text-xl shadow-lg mr-4">
                       <img
-                        width="48"
-                        height="48"
+                       
                         src="https://img.icons8.com/emoji/48/coin-emoji.png"
                         alt="coin-emoji"
                       />
@@ -234,7 +233,7 @@ const Dashboard = () => {
                       {/* <span className="text-sm text-blue-100/80 uppercase tracking-wider font-medium">
                         Reward Points
                       </span> */}
-                      <div className="text-base font-bold text-white">
+                      <div className="md:text-base text-xs font-bold text-white">
                         15,565
                       </div>
                     </div>
@@ -277,27 +276,27 @@ const Dashboard = () => {
                     </div>
                   </div>
                   <div className="ml-6">
-                    <h3 className="text-xl font-bold text-gray-800 mb-2">
+                    <h3 className="text-base md:text-xl font-bold text-gray-800 mb-2">
                       Customer Rating
                     </h3>
                     <div className="flex items-center space-x-1">
                       {[...Array(5)].map((_, i) => (
                         <Star
                           key={i}
-                          className={`w-6 h-6 transition-colors duration-200 ${
+                          className={`md:w-6 md:h-6  w-3 h-3 transition-colors duration-200 ${
                             i < 2
                               ? "text-amber-400 fill-current drop-shadow-sm"
                               : "text-gray-300"
                           }`}
                         />
                       ))}
-                      <span className="ml-3 text-sm text-gray-500 font-medium">
+                      <span className="ml-3 text-xs md:text-sm text-gray-500 font-medium">
                         Based on 247 reviews
                       </span>
                     </div>
                   </div>
                 </div>
-                <div className="text-right">
+                <div className="hidden md:block text-right">
                   <div className="text-xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
                     2.5
                   </div>
@@ -318,7 +317,7 @@ const Dashboard = () => {
                   <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
                     <TrendingUp className="w-5 h-5 text-white" />
                   </div>
-                  <h2 className="ml-4 text-xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 bg-clip-text text-transparent">
+                  <h2 className="ml-4 md:text-xl text-base font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 bg-clip-text text-transparent">
                     Business Analytics
                   </h2>
                 </div>
@@ -327,11 +326,11 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+              <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-8">
                 {statsData.map((stat, index) => (
                   <div
                     key={index}
-                    className="group relative overflow-hidden bg-white/95 backdrop-blur-lg border border-white/40 rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02]"
+                    className="group relative  overflow-hidden bg-white/95 backdrop-blur-lg border border-white/40 rounded-3xl md:p-8  p-4 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02]"
                   >
                     {/* Dynamic Background Gradient */}
                     <div
@@ -358,7 +357,7 @@ const Dashboard = () => {
                         </div>
 
                         <div className="space-y-2">
-                          <p className="text-sm font-semibold text-gray-600 uppercase tracking-wider">
+                          <p className="md:text-sm font-semibold text-xs text-gray-600 uppercase tracking-wider">
                             {stat.label}
                           </p>
                           <p className="text-xl font-bold text-gray-900 group-hover:text-gray-800 transition-colors">
@@ -368,7 +367,7 @@ const Dashboard = () => {
                       </div>
 
                       {/* Trend Indicator */}
-                      <div className="flex items-center space-x-1 bg-green-50 text-green-700 px-2 py-1 rounded-full text-xs font-semibold">
+                      <div className="hidden md:block flex items-center space-x-1 bg-green-50 text-green-700 px-2 py-1 rounded-full text-xs font-semibold">
                         <div className="w-1 h-1 bg-green-500 rounded-full"></div>
                         <span>+12%</span>
                       </div>

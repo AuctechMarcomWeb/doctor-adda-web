@@ -61,15 +61,15 @@ const DashboardWallet = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-8 px-4">
-      <div className="max-w-7xl mx-auto px-2">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-8 md:px-4">
+      <div className="max-w-7xl mx-auto md:px-2">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
             <div className="p-2 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg">
               <Wallet className="h-6 w-6 text-white" />
             </div>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
+            <h1 className="md:text-2xl text-xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
               Wallet Overview
             </h1>
           </div>
@@ -103,7 +103,7 @@ const DashboardWallet = () => {
               </div>
 
               <div className="mb-4">
-                <div className="text-2xl font-bold mb-2">
+                <div className="md:text-2xl text-xl font-bold mb-2">
                   ₹{currentBalance.toLocaleString("en-IN")}
                 </div>
                 <div className="flex items-center space-x-2">
@@ -163,7 +163,7 @@ const DashboardWallet = () => {
                   <p className="text-sm text-gray-500 font-medium">
                     Average Transaction
                   </p>
-                  <p className="text-xl font-bold text-gray-900">
+                  <p className="md:text-xl text-base font-bold text-gray-900">
                     ₹
                     {Math.round(
                       transactions.reduce((sum, t) => sum + t.amount, 0) /
@@ -191,7 +191,7 @@ const DashboardWallet = () => {
           <div className="px-6 py-5 border-b border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-xl font-bold text-gray-900">
+                <h3 className="md:text-xl text-lg font-bold text-gray-900">
                   Recent Transactions
                 </h3>
                 <p className="text-sm text-gray-500 mt-1">
@@ -210,13 +210,13 @@ const DashboardWallet = () => {
               return (
                 <div
                   key={transaction.id}
-                  className="p-6 hover:bg-gray-50 transition-colors duration-150"
+                  className="md:px-6 md:py-6 px-2 py-6 hover:bg-gray-50 transition-colors duration-150"
                 >
                   <div className="flex items-start space-x-4">
                     {/* Avatar */}
                     <div className="flex-shrink-0">
-                      <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-md">
-                        <User className="w-6 h-6 text-white" />
+                      <div className="md:w-12 md:h-12 w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-md">
+                        <User className="md:w-6 md:h-6 w-4 h-4 text-white" />
                       </div>
                     </div>
 
@@ -224,10 +224,10 @@ const DashboardWallet = () => {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <p className="text-lg font-semibold text-gray-900">
+                          <p className="md:text-lg text-base font-semibold text-gray-900">
                             {transaction.name}
                           </p>
-                          <div className="flex items-center space-x-4 mt-1">
+                          <div className="flex items-center md:space-x-4 mt-1">
                             <div className="flex items-center space-x-1 text-sm text-gray-500">
                               <User className="w-3 h-3" />
                               <span>{transaction.gender}</span>
@@ -237,7 +237,7 @@ const DashboardWallet = () => {
                               <span>{transaction.phone}</span>
                             </div>
                           </div>
-                          <p className="text-sm text-gray-600 mt-2 font-medium">
+                          <p className="text-xs text-gray-600 mt-2 font-medium">
                             {transaction.description}
                           </p>
                           <div className="flex items-center space-x-1 text-xs text-gray-400 mt-2">
@@ -250,7 +250,7 @@ const DashboardWallet = () => {
 
                         {/* Amount */}
                         <div className="flex flex-col items-end ml-4">
-                          <div className="text-xl font-bold text-green-600">
+                          <div className="md:text-xl font-bold text-green-600">
                             +₹{transaction.amount.toLocaleString("en-IN")}
                           </div>
                           <div className="flex items-center space-x-1 mt-1">
