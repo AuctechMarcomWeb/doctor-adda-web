@@ -40,7 +40,7 @@ const DoctorsRegistration = () => {
   const [categoryName, setCategoryName] = useState("");
   const [selectedHospital, setSelectedHospital] = useState("");
   const [formData, setFormData] = useState({
-    phone: " ",
+    phone: "",
     fullName: "",
     email: "",
     gender: "",
@@ -50,8 +50,8 @@ const DoctorsRegistration = () => {
     about: "",
     education: "",
     category: "",
-    accountType: "Doctor",
     hospital: "",
+    profileImages: [],
     documentImage: [],
     veterinaryDoctorType: [],
     serviceType: [],
@@ -189,12 +189,6 @@ const DoctorsRegistration = () => {
       return;
     }
     console.log("✅ Step 2 passed (Validation done)");
-
-    if (!formData?.profilepic) {
-      setErrors({ profilepic: "Please upload a profile image" });
-      return;
-    }
-
     setErrors({});
     setLoading(true);
 
@@ -202,29 +196,32 @@ const DoctorsRegistration = () => {
       const payload = {
         ...formData,
       };
-
       console.log("📦 Final payload before submit:", payload);
 
       const response = await postRequest({
         url: `doctor/registers/${userId}`,
         cred: payload,
       });
-
-      console.log("🎉 Doctors Register Response:", response);
-      toast.success(response?.data?.message);
-      setShowSuccess(true);
+      console.log(" Doctors Register Response:", response);
+ // ✅ Sirf success hone par popup dikhao
+      if (
+        response?.status === 201 ||
+        response?.data?.statusCode === 201 ||
+        response?.data?.success === true
+      ) {
+        toast.success(
+          response?.data?.message || "Doctor registered successfully!"
+        );
+        setShowSuccess(true); // success popup trigger
+      } else {
+        toast.error(response?.data?.message || "Something went wrong!");
+      }
     } catch (err) {
-      // ✅ Error handling with statusCode
-      const statusCode = err?.response?.status;
-      const errorMessage = err?.response?.data?.message;
-
-      console.error("❌ Error Registering Doctor:", err);
-      console.log("📌 Status Code:", statusCode);
-
-      toast.error(`Error ${statusCode || ""}: ${errorMessage}`);
-      setErrors({ api: `Error ${statusCode || ""}: ${errorMessage}` });
+     console.error("Error Registering Doctors:", err);
+      toast.error(
+        err?.response?.data?.message || "Failed to register doctors"
+      );
     } finally {
-      console.log("🔄 Finally block executed");
       setLoading(false);
     }
   };
@@ -233,6 +230,9 @@ const DoctorsRegistration = () => {
     const newErrors = {};
 
     // Required Fields Validation
+     if (!profilePreview) {
+    newErrors.profilePic = "Profile picture is required";
+  }
     if (!formData.fullName) newErrors.fullName = "Full name is required";
     if (!formData.phone) newErrors.phone = "Phone number is required";
     if (!formData.email) newErrors.email = "Email is required";
@@ -252,7 +252,8 @@ const DoctorsRegistration = () => {
     if (!formData?.about) newErrors.about = "About is required";
     if (!formData?.experience) newErrors.experience = "Experience is required";
     if (!formData?.education) newErrors.education = "Education is required";
-
+    if (!formData?.documentNumber)
+      newErrors.documentNumber = "Document Number is required";
     if (!formData?.mci) newErrors.mci = "MCI is required";
 
     console.log("step3", newErrors);
@@ -323,19 +324,26 @@ const DoctorsRegistration = () => {
   // Gallery handlers
   const handleGalleryUpload = (e) => {
     const files = Array.from(e.target.files);
-    if (!files.length) return;
 
-    const newFiles = files.map((file) => ({
-      url: URL.createObjectURL(file),
-      name: file.name,
-    }));
-    setGalleryImages((prev) => [...prev, ...newFiles]);
-  };
-
-  const removeGalleryImage = (index) => {
-    const updated = galleryImages.filter((_, i) => i !== index);
-    setGalleryImages(updated);
-    if (galleryIndex >= updated.length) setGalleryIndex(0);
+    files.forEach((file) => {
+      fileUpload({
+        url: `upload/uploadImage`,
+        cred: { file },
+      })
+        .then((res) => {
+          const imageUrl = res.data?.data?.imageUrl;
+          if (imageUrl) {
+            setFormData((prev) => ({
+              ...prev,
+              documentImage: [...prev.documentImage, imageUrl],
+              // documentImage: [...prev.documentImage, { url: imageUrl }],
+            }));
+          }
+        })
+        .catch((error) => {
+          console.error("Image upload failed:", error);
+        });
+    });
   };
 
   // Document handlers
@@ -352,7 +360,7 @@ const DoctorsRegistration = () => {
           if (imageUrl) {
             setFormData((prev) => ({
               ...prev,
-              documentImage: [...prev.documentImage, imageUrl],
+              profileImages: [...prev.profileImages, imageUrl],
               // documentImage: [...prev.documentImage, { url: imageUrl }],
             }));
           }
@@ -460,6 +468,11 @@ const DoctorsRegistration = () => {
                 <div className="text-sm text-gray-600">
                   <p>Click to upload Diagnostic logo</p>
                   <p className="text-xs">Max size: 5MB</p>
+                  {errors.profilePic && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.profilePic}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -477,7 +490,7 @@ const DoctorsRegistration = () => {
                   value={formData?.fullName}
                   onChange={handleInputChange}
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter diagnostic center name"
+                  placeholder="Enter center name"
                 />
                 {errors.fullName && (
                   <p className="text-red-500 text-xs">{errors?.fullName}</p>
@@ -638,30 +651,77 @@ const DoctorsRegistration = () => {
                     onChange={selectData2}
                     options={serviceType}
                     size="large"
-                    value={formData?.serviceType} // Ensure selected categories are controlled by formData
+                    value={formData?.serviceType}
+                    className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               )}
             </div>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-2 group">
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                  {/* <FileText className="w-4 h-4 text-red-600" /> */}
+                  Experience
+                </label>
+                <input
+                  type="text"
+                  name="experience"
+                  value={formData?.experience}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
+                  placeholder="e.g.,5"
+                />
+                {errors?.experience && (
+                  <p className="text-red-500 text-xs">{errors?.experience}</p>
+                )}
+              </div>
+              <div className="space-y-2 group">
+                <label className="text-sm font-medium text-gray-700">
+                  Affiliated Hospital
+                </label>
+                <select
+                  name="hospital"
+                  value={selectedHospital}
+                  className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-purple-500"
+                  onChange={(e) => {
+                    if (e.target.value == "Other") {
+                      setSelectedHospital(e.target.value);
+                      setFormData((prev) => ({
+                        ...prev,
+                        hospital: "",
+                      }));
+                    } else {
+                      setSelectedHospital(e.target.value);
 
-            <div className="space-y-2 group">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                {/* <FileText className="w-4 h-4 text-red-600" /> */}
-                Experience
-              </label>
-              <input
-                type="text"
-                name="experience"
-                value={formData?.experience}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
-                placeholder="e.g.,5"
-              />
-              {errors?.experience && (
-                <p className="text-red-500 text-xs">{errors?.experience}</p>
-              )}
+                      setFormData((prev) => ({
+                        ...prev,
+                        hospital: e.target.value,
+                      }));
+                    }
+                  }}
+                >
+                  <option value="" disabled>
+                    Select Hospital
+                  </option>
+                  {hospitalOption}
+                  <option value="Other">Other</option>
+                </select>
+                {selectedHospital === "Other" && (
+                  <input
+                    type="text"
+                    name="hospital"
+                    value={formData?.hospital}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
+                    placeholder="Enter Hospital Name"
+                  />
+                )}
+
+                {errors?.hospital && (
+                  <p className="text-red-500 text-xs">{errors?.hospital}</p>
+                )}
+              </div>
             </div>
-
             {/* Clinics Section */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
@@ -707,25 +767,44 @@ const DoctorsRegistration = () => {
                     )}
 
                     {/* Row 1 → Clinic Name */}
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-gray-700">
-                        Clinic Name
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="Enter Clinic Name"
-                        value={clinic?.clinicName}
-                        onChange={(e) => {
-                          const newClinics = [...formData.clinics];
-                          newClinics[index].clinicName = e.target.value;
-                          setFormData({ ...formData, clinics: newClinics });
-                        }}
-                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                      />
+                    {/* Row 4 → Consultation Fee */}
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium text-gray-700">
+                          Clinic Name
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="Enter Clinic Name"
+                          value={clinic?.clinicName}
+                          onChange={(e) => {
+                            const newClinics = [...formData.clinics];
+                            newClinics[index].clinicName = e.target.value;
+                            setFormData({ ...formData, clinics: newClinics });
+                          }}
+                          className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium text-gray-700">
+                          Consultation Fee
+                        </label>
+                        <input
+                          type="number"
+                          placeholder="₹ Fee"
+                          value={clinic?.consultationFee}
+                          onChange={(e) => {
+                            const newClinics = [...formData.clinics];
+                            newClinics[index].consultationFee = e.target.value;
+                            setFormData({ ...formData, clinics: newClinics });
+                          }}
+                          className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                        />
+                      </div>
                     </div>
 
                     {/* Row 2 → Clinic Availability */}
-                    <p className="m-0 p-0">For In Clinc Availability</p>
+
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-gray-700">
                         Clinic Availability
@@ -821,26 +900,6 @@ const DoctorsRegistration = () => {
                       </div>
                     </div>
 
-                    {/* Row 4 → Consultation Fee */}
-                    <div className="grid md:grid-cols-1 gap-4">
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-700">
-                          Consultation Fee
-                        </label>
-                        <input
-                          type="number"
-                          placeholder="₹ Fee"
-                          value={clinic?.consultationFee}
-                          onChange={(e) => {
-                            const newClinics = [...formData.clinics];
-                            newClinics[index].consultationFee = e.target.value;
-                            setFormData({ ...formData, clinics: newClinics });
-                          }}
-                          className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"
-                        />
-                      </div>
-                    </div>
-
                     {/* Row 5  Location + Address */}
                     <div className="grid md:grid-cols-1 gap-4">
                       <div className="space-y-2 group">
@@ -873,53 +932,6 @@ const DoctorsRegistration = () => {
             </div>
 
             <div className="space-y-2 group">
-              <label className="text-sm font-medium text-gray-700">
-                Affiliated Hospital
-              </label>
-              <select
-                name="hospital"
-                value={selectedHospital}
-                className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-purple-500"
-                onChange={(e) => {
-                  if (e.target.value == "Other") {
-                    setSelectedHospital(e.target.value);
-                    setFormData((prev) => ({
-                      ...prev,
-                      hospital: "",
-                    }));
-                  } else {
-                    setSelectedHospital(e.target.value);
-
-                    setFormData((prev) => ({
-                      ...prev,
-                      hospital: e.target.value,
-                    }));
-                  }
-                }}
-              >
-                <option value="" disabled>
-                  Select Hospital
-                </option>
-                {hospitalOption}
-                <option value="Other">Other</option>
-              </select>
-              {selectedHospital === "Other" && (
-                <input
-                  type="text"
-                  name="hospital"
-                  value={formData?.hospital}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
-                  placeholder="Enter Hospital Name"
-                />
-              )}
-
-              {errors?.hospital && (
-                <p className="text-red-500 text-xs">{errors?.hospital}</p>
-              )}
-            </div>
-
-            <div className="space-y-2 group">
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
                 {/* <FileText className="w-4 h-4 text-red-600" /> */}
                 About
@@ -936,73 +948,99 @@ const DoctorsRegistration = () => {
                 <p className="text-red-500 text-xs">{errors?.about}</p>
               )}
             </div>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="space-y-2 group">
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                  {/* <FileText className="w-4 h-4 text-red-600" /> */}
+                  Education
+                </label>
+                <input
+                  type="text"
+                  name="education"
+                  value={formData?.education}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
+                  placeholder="Enter Education"
+                />
+                {errors?.education && (
+                  <p className="text-red-500 text-xs">{errors?.education}</p>
+                )}
+              </div>
 
-            <div className="space-y-2 group">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                {/* <FileText className="w-4 h-4 text-red-600" /> */}
-                Education
-              </label>
-              <input
-                type="text"
-                name="education"
-                value={formData?.education}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
-                placeholder="Tell us about yourself"
-              />
-              {errors?.education && (
-                <p className="text-red-500 text-xs">{errors?.education}</p>
-              )}
+              <div className="space-y-2 group">
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                  {/* <FileText className="w-4 h-4 text-red-600" /> */}
+                  MCI Registration Number
+                </label>
+                <input
+                  name="mci"
+                  type="number"
+                  value={formData?.mci}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
+                  placeholder="Enter MCI Number"
+                />
+                {errors?.mci && (
+                  <p className="text-red-500 text-xs">{errors?.mci}</p>
+                )}
+              </div>
             </div>
-
-            <div className="space-y-2 group">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                {/* <FileText className="w-4 h-4 text-red-600" /> */}
-                MCI Registration Number
-              </label>
-              <input
-                name="mci"
-                type="number"
-                value={formData?.mci}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
-                placeholder="Tell us about yourself"
-              />
-              {errors?.mci && (
-                <p className="text-red-500 text-xs">{errors?.mci}</p>
-              )}
-            </div>
-
+            
             <div className="space-y-2 group">
               <p className="text-gray-700 font-medium font-semibold">
-                Select Images to showcase your pharmacy
+                Clinics Images
               </p>
 
-              {galleryImages.length > 0 && (
-                <div className="relative w-full h-56 border rounded-lg flex items-center justify-center bg-gray-100 overflow-hidden">
-                  <img
-                    src={galleryImages[galleryIndex].url}
-                    alt="preview"
-                    className="h-full object-contain"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeGalleryImage(galleryIndex)}
-                    className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-1"
-                  >
-                    ✕
-                  </button>
-                  <div className="absolute bottom-2 flex gap-2">
-                    {galleryImages.map((_, i) => (
-                      <span
-                        key={i}
-                        onClick={() => setGalleryIndex(i)}
-                        className={`w-3 h-3 rounded-full cursor-pointer ${
-                          galleryIndex === i ? "bg-green-600" : "bg-gray-300"
-                        }`}
-                      ></span>
-                    ))}
-                  </div>
+              {/* Image container */}
+              {formData?.documentImage?.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {formData?.documentImage?.map((img, index) => (
+                    <div key={index} className="relative">
+                      {/* Image clickable banayi */}
+                      <a href={img} target="_blank" rel="noopener noreferrer">
+                        <img
+                          src={img}
+                          alt={`doc-${index}`}
+                          style={{
+                            width: "70px",
+                            height: "70px",
+                            objectFit: "cover",
+                            borderRadius: "6px",
+                            cursor: "pointer",
+                          }}
+                        />
+                      </a>
+
+                      {/* Remove button */}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            documentImage: prev.documentImage.filter(
+                              (_, i) => i !== index
+                            ),
+                          }))
+                        }
+                        style={{
+                          position: "absolute",
+                          top: "-6px",
+                          right: "-6px",
+                          background: "red",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "50%",
+                          width: "20px",
+                          height: "20px",
+                          cursor: "pointer",
+                          fontSize: "14px",
+                          lineHeight: "18px",
+                        }}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
                 </div>
               )}
 
@@ -1017,88 +1055,94 @@ const DoctorsRegistration = () => {
                 <span className="flex items-center gap-2">➕ Add Images</span>
               </label>
             </div>
+
+
             <div className="space-y-2 group">
-              <label className="form-label">Dcument Number</label>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                {/* <FileText className="w-4 h-4 text-red-600" /> */}
+                Documents Number
+              </label>
               <input
-                type="text"
                 name="documentNumber"
-                value={formData.documentNumber}
+                type="number"
+                value={formData?.documentNumber}
                 onChange={handleInputChange}
-                className="form-control"
-                placeholder="Document Number"
+                className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
+                placeholder="Enter Document Number"
               />
+              {errors?.documentNumber && (
+                <p className="text-red-500 text-xs">{errors?.documentNumber}</p>
+              )}
             </div>
 
-           <div className="space-y-2 group">
-  <p className="text-gray-700 font-semibold">Upload Documents</p>
+            <div className="space-y-2 group">
+              <p className="text-gray-700 font-semibold">Upload Documents</p>
 
-  {/* Image container */}
-  <div className="relative w-full h-56 border rounded-lg bg-gray-100 overflow-auto p-2">
-    {formData?.documentImage?.length > 0 && (
-      <div className="flex flex-wrap gap-2">
-        {formData?.documentImage?.map((img, index) => (
-          <div key={index} className="relative">
-            {/* Image clickable banayi */}
-            <a href={img} target="_blank" rel="noopener noreferrer">
-              <img
-                src={img}
-                alt={`doc-${index}`}
-                style={{
-                  width: "70px",
-                  height: "70px",
-                  objectFit: "cover",
-                  borderRadius: "6px",
-                  cursor: "pointer",
-                }}
-              />
-            </a>
+              {/* Image container */}
+              {formData?.profileImages?.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {formData?.profileImages?.map((img, index) => (
+                    <div key={index} className="relative">
+                      {/* Image clickable banayi */}
+                      <a href={img} target="_blank" rel="noopener noreferrer">
+                        <img
+                          src={img}
+                          alt={`doc-${index}`}
+                          style={{
+                            width: "70px",
+                            height: "70px",
+                            objectFit: "cover",
+                            borderRadius: "6px",
+                            cursor: "pointer",
+                          }}
+                        />
+                      </a>
 
-            {/* Remove button */}
-            <button
-              type="button"
-              onClick={() =>
-                setFormData((prev) => ({
-                  ...prev,
-                  documentImage: prev.documentImage.filter(
-                    (_, i) => i !== index
-                  ),
-                }))
-              }
-              style={{
-                position: "absolute",
-                top: "-6px",
-                right: "-6px",
-                background: "red",
-                color: "white",
-                border: "none",
-                borderRadius: "50%",
-                width: "20px",
-                height: "20px",
-                cursor: "pointer",
-                fontSize: "14px",
-                lineHeight: "18px",
-              }}
-            >
-              ×
-            </button>
-          </div>
-        ))}
-      </div>
-    )}
-  </div>
+                      {/* Remove button */}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            profileImages: prev.profileImages.filter(
+                              (_, i) => i !== index
+                            ),
+                          }))
+                        }
+                        style={{
+                          position: "absolute",
+                          top: "-6px",
+                          right: "-6px",
+                          background: "red",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "50%",
+                          width: "20px",
+                          height: "20px",
+                          cursor: "pointer",
+                          fontSize: "14px",
+                          lineHeight: "18px",
+                        }}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
 
-  {/* Upload Button */}
-  <label className="inline-flex items-center px-3 py-1.5 bg-green-600 text-white text-sm rounded-md cursor-pointer hover:bg-green-700">
-    <input
-      type="file"
-      multiple
-      accept="image/*"
-      onChange={uploadDocument}
-      className="hidden"
-    />
-    <span className="flex items-center gap-2">📄 Upload</span>
-  </label>
-</div>
+              {/* Upload Button */}
+              <label className="inline-flex items-center px-3 py-1.5 bg-green-600 text-white text-sm rounded-md cursor-pointer hover:bg-green-700">
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={uploadDocument}
+                  className="hidden"
+                />
+                <span className="flex items-center gap-2">📄 Upload</span>
+              </label>
+            </div>
 
             {/* Submit Button */}
             <div className="pt-6">

@@ -10,9 +10,10 @@ import {
   User,
   FileText,
 } from "lucide-react";
-import { getRequest, postRequest } from "../Helpers/index";
+import { fileUpload, getRequest, postRequest } from "../Helpers/index";
 import { useSelector } from "react-redux";
 import LocationSearchInput from "./LocationSearchInput";
+import toast from "react-hot-toast";
 
 const PharmacyRegistration = () => {
   const [errors, setErrors] = useState({});
@@ -32,7 +33,6 @@ const PharmacyRegistration = () => {
     address: "dfd",
     email: "",
     phone: "",
-    address: "",
     profileImage: "",
     storeTiming: "",
     services: [{ name: "", }],
@@ -40,6 +40,12 @@ const PharmacyRegistration = () => {
     accountType: "Pharmacy",
     latitude: "",
     longitude: "",
+    ownerDetails:"",
+    gstNumber:"",
+    phoneNumber:"",
+    onlinePayment:true,
+    cod: true,
+    profileImages:[]
   });
   console.log("formData", formData);
 
@@ -70,10 +76,7 @@ const PharmacyRegistration = () => {
     return;
   }
 
-  if (!formData?.profileImage) {
-    setErrors({ profileImage: "Please upload a profile image" });
-    return;
-  }
+
   setErrors({});
   setLoading(true);
 
@@ -86,9 +89,24 @@ const PharmacyRegistration = () => {
     });
 
     console.log("Pharmacy Register Response:", response?.data?.data);
-    setShowSuccess(true);
+   // ✅ Sirf success hone par popup dikhao
+      if (
+        response?.status === 201 ||
+        response?.data?.statusCode === 201 ||
+        response?.data?.success === true
+      ) {
+        toast.success(
+          response?.data?.message || "Ambulance registered successfully!"
+        );
+        setShowSuccess(true); // success popup trigger
+      } else {
+        toast.error(response?.data?.message || "Something went wrong!");
+      }
   } catch (err) {
     console.error(" Error Registering Pharmacy:", err);
+     toast.error(
+        err?.response?.data?.message || "Failed to register ambulance"
+      );
   } finally {
     console.log(" Finally block executed");
     setLoading(false);
@@ -126,18 +144,47 @@ const handleProfilePic = (e) => {
     }
   };
 
+    const uploadDocument = (e) => {
+      const files = Array.from(e.target.files);
+  
+      files.forEach((file) => {
+        fileUpload({
+          url: `upload/uploadImage`,
+          cred: { file },
+        })
+          .then((res) => {
+            const imageUrl = res.data?.data?.imageUrl;
+            if (imageUrl) {
+              setFormData((prev) => ({
+                ...prev,
+                profileImages: [...prev.profileImages, imageUrl],
+                // documentImage: [...prev.documentImage, { url: imageUrl }],
+              }));
+            }
+          })
+          .catch((error) => {
+            console.error("Image upload failed:", error);
+          });
+      });
+    };
+
+
   const validateForm = () => {
     const newErrors = {};
+     if (!profilePreview) {
+    newErrors.profilePic = "Profile picture is required";
+  }
     if (!formData.name) newErrors.name = "Pharmacy name is required";
     if (!formData.email) newErrors.email = "Email is required";
     if (!formData.phone) newErrors.phone = "Contact number is required";
     if (!formData.storeTiming) newErrors.storeTiming = "Please select a storeTiming";
-   // if (!formData.healthCard)
-     // newErrors.healthCard = "Please select health card type";
     if (!formData.address) newErrors.address = "Address is required";
     if (!formData.ownerName) newErrors.ownerName = "Owner name is required";
+     if (!formData.gstNumber) newErrors.gstNumber = "Gst Number name is required";
     if (!formData.phoneNumber)
       newErrors.phoneNumber = "Verification phone is required";
+        if (!formData.description) newErrors.description = "Description is required";
+
     return newErrors;
   };
 
@@ -222,6 +269,11 @@ const handleProfilePic = (e) => {
                 <div className="text-sm text-gray-600">
                   <p>Click to upload Pharmacy logo</p>
                   <p className="text-xs">Max size: 5MB</p>
+                   {errors.profilePic && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.profilePic}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -276,7 +328,7 @@ const handleProfilePic = (e) => {
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500"
                   placeholder="abc@example.com"
                 />
-                {errors.officialEmail && (
+                {errors.email && (
                   <p className="text-red-500 text-xs">{errors?.email}</p>
                 )}
               </div>
@@ -329,7 +381,7 @@ const handleProfilePic = (e) => {
               <input
                 type="text"
                 value={formData?.storeTiming}
-                onChange={(e) => handleInputChange("address", e.target.value)}
+                onChange={(e) => handleInputChange("storeTiming", e.target.value)}
                 className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
                 placeholder="Ex: 9:00 AM - 9:00 PM"
               />
@@ -433,6 +485,9 @@ const handleProfilePic = (e) => {
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-orange-500"
                   placeholder="GST registration number"
                 />
+                 {errors?.gstNumber && (
+                  <p className="text-red-500 text-xs">{errors?.gstNumber}</p>
+                )}
               </div>
 
               <div className="space-y-2 group">
@@ -461,9 +516,9 @@ const handleProfilePic = (e) => {
   <div className="flex gap-4">
     <button
       type="button"
-      onClick={() => handleInputChange("codPreference", "yes")}
+      onClick={() => handleInputChange("cod", "true")}
       className={`w-full px-4 py-3 border rounded-xl font-medium transition-all duration-200
-        ${formData?.codPreference === "yes" 
+        ${formData?.cod === "true" 
           ? "bg-green-500 text-white border-green-500" 
           : "bg-white text-gray-700 border-gray-300 hover:bg-green-50"}`}
     >
@@ -471,17 +526,17 @@ const handleProfilePic = (e) => {
     </button>
     <button
       type="button"
-      onClick={() => handleInputChange("codPreference", "no")}
+      onClick={() => handleInputChange("cod", "false")}
       className={`w-full px-4 py-3 border rounded-xl font-medium transition-all duration-200
-        ${formData?.codPreference === "no" 
+        ${formData?.cod === "false" 
           ? "bg-red-500 text-white border-red-500" 
           : "bg-white text-gray-700 border-gray-300 hover:bg-red-50"}`}
     >
       No
     </button>
   </div>
-  {errors?.codPreference && (
-    <p className="text-red-500 text-xs">{errors?.codPreference}</p>
+  {errors?.cod && (
+    <p className="text-red-500 text-xs">{errors?.cod}</p>
   )}
 </div>
 
@@ -516,7 +571,75 @@ const handleProfilePic = (e) => {
   )}
 </div>
 
+ <div className="space-y-2 group">
+              <p className="text-gray-700 font-medium font-semibold">
+                Select Hospital Display images
+              </p>
 
+              {/* Image container */}
+              {formData?.profileImages?.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {formData?.profileImages?.map((img, index) => (
+                    <div key={index} className="relative">
+                      {/* Image clickable banayi */}
+                      <a href={img} target="_blank" rel="noopener noreferrer">
+                        <img
+                          src={img}
+                          alt={`doc-${index}`}
+                          style={{
+                            width: "70px",
+                            height: "70px",
+                            objectFit: "cover",
+                            borderRadius: "6px",
+                            cursor: "pointer",
+                          }}
+                        />
+                      </a>
+
+                      {/* Remove button */}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            profileImages: prev.profileImages.filter(
+                              (_, i) => i !== index
+                            ),
+                          }))
+                        }
+                        style={{
+                          position: "absolute",
+                          top: "-6px",
+                          right: "-6px",
+                          background: "red",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "50%",
+                          width: "20px",
+                          height: "20px",
+                          cursor: "pointer",
+                          fontSize: "14px",
+                          lineHeight: "18px",
+                        }}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <label className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg cursor-pointer hover:bg-green-700">
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={uploadDocument}
+                  className="hidden"
+                />
+                <span className="flex items-center gap-2">➕ Add Images</span>
+              </label>
+            </div>
             {/* Submit Button */}
             <div className="pt-6">
               <button
