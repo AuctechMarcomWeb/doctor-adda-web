@@ -15,14 +15,17 @@ import { useSelector } from "react-redux";
 import LocationSearchInput from "./LocationSearchInput";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-
+import { useUpdate } from "../context/updateContext";
 const PharmacyRegistration = () => {
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const { setUpdate } = useUpdate();
   const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
   const userId = userProfileData?._id;
+  console.log("userProfileData user id ", userId);
+
   // Profile Image states
   const [profileFile, setProfileFile] = useState(null);
   const [uploadProfileImage, setUploadProfileImage] = useState("");
@@ -41,11 +44,11 @@ const PharmacyRegistration = () => {
     accountType: "Pharmacy",
     latitude: "",
     longitude: "",
-   ownerDetails: { 
-   name: "Rajesh Kumar", 
-    gstNumber: "43543534656", 
-    phoneNumber: "7845854785" 
-  }, 
+    ownerDetails: {
+      name: "Rajesh Kumar",
+      gstNumber: "43543534656",
+      phoneNumber: "7845854785",
+    },
     onlinePayment: true,
     cod: true,
     profileImages: [],
@@ -91,6 +94,7 @@ const PharmacyRegistration = () => {
 
       console.log("Pharmacy Register Response:", response?.data?.data);
       // ✅ Sirf success hone par popup dikhao
+      setUpdate((prev) => !prev);
       if (
         response?.status === 201 ||
         response?.data?.statusCode === 201 ||
@@ -99,6 +103,7 @@ const PharmacyRegistration = () => {
         toast.success(
           response?.data?.message || "Ambulance registered successfully!"
         );
+
         setShowSuccess(true); // success popup trigger
         setTimeout(() => {
           navigate("/verification"); // 👈 Verification page par redirect

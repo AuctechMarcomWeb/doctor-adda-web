@@ -18,6 +18,7 @@ const DashboardButton = ({ userDetails }) => {
       );
 
       const profileData = response?.data?.data;
+console.log("profileData",profileData);
 
       if (profileData?.isApprove === "NotApprove") {
         navigate("/verification");
@@ -26,7 +27,7 @@ const DashboardButton = ({ userDetails }) => {
         const routes = {
           Doctor: "/doctor-dashboard",
           Ambulance: "/ambulance-dashboard",
-          Hospital: "/dashboard",
+          Hospital: "/hospital-dashboard",
           Pharmacy: "/pharmacy-dashboard",
           Diagnostic: "/diagnostic-dashboard",
         };
