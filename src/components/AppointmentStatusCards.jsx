@@ -19,7 +19,7 @@ const AppointmentCard = ({
 }) => {
   return (
     <div
-      className={`${bgColor} rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 min-w-[100px] max-w-[240px]`}
+      className={`${bgColor} rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 `}
     >
       <div className="flex items-center justify-between mb-3">
         <div className={`p-2 rounded-lg ${iconColor}`}>
@@ -28,8 +28,8 @@ const AppointmentCard = ({
         <span className={`md:text-2xl text-lg font-bold ${textColor}`}>{count}</span>
       </div>
       <div className="space-y-1">
-        <h3 className={`font-semibold text-sm ${textColor}`}>{status}</h3>
-        <p className="text-xs text-gray-500">
+        <h3 className={`font-semibold text-base ${textColor}`}>{status}</h3>
+        <p className="text-sm text-gray-500">
           {status === "Requests" && "Pending approval"}
           {status === "Confirmed" && "Scheduled appointments"}
           {status === "Rescheduled" && "Modified appointments"}

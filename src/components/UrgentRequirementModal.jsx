@@ -91,7 +91,7 @@ const UrgentRequirementModal = ({ isOpen, onClose }) => {
                   <label className="block text-sm font-medium text-gray-700">Location</label>
                   <input
                     type="text"
-                    defaultValue="Butler Colony, Lucknow, Uttar Pradesh"
+                    
                     className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-700 
                                focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                   />
@@ -102,7 +102,7 @@ const UrgentRequirementModal = ({ isOpen, onClose }) => {
                     <label className="block text-sm font-medium text-gray-700">Email</label>
                     <input
                       type="email"
-                      defaultValue="abhi@gmail.com"
+                      
                       className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-700 
                                  focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                     />
@@ -111,7 +111,7 @@ const UrgentRequirementModal = ({ isOpen, onClose }) => {
                     <label className="block text-sm font-medium text-gray-700">Phone</label>
                     <input
                       type="text"
-                      defaultValue="8707767801"
+                      placeholder="+91"
                       className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-700 
                                  focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                     />

@@ -32,7 +32,7 @@ const DoctorAvailabilityPage = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-xl lg:text-2xl font-bold text-gray-800 mb-2">
+          <h1 className=" md:text-xl font-bold text-gray-800 mb-2">
             Available Doctors
           </h1>
           <div className="w-16 h-1 bg-blue-600 rounded-full"></div>
@@ -63,7 +63,7 @@ const DoctorAvailabilityPage = () => {
                   {/* Doctor Info */}
                   <div className="">
                     <div className="flex items-center gap-2 mb-2">
-                      <h3 className="text-lg lg:text-xl font-bold text-slate-800">
+                      <h3 className="text-lg lg:text-lg font-bold text-slate-800">
                         {doctor.name}
                       </h3>
                       {doctor.isOnline && (
@@ -105,7 +105,7 @@ const DoctorAvailabilityPage = () => {
         {/* Requirements Section */}
         <div className="bg-white rounded-2xl shadow-lg p-6 lg:p-8 border border-slate-100">
           <div className="mb-6">
-            <h2 className="text-xl lg:text-2xl font-bold text-slate-800 mb-2">
+            <h2 className=" md:text-xl font-bold text-slate-800 mb-2">
               Your Posted Requirements
             </h2>
             <div className="w-12 h-1 bg-blue-600 rounded-full"></div>
@@ -116,14 +116,14 @@ const DoctorAvailabilityPage = () => {
             <div className="w-16 h-16 lg:w-20 lg:h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <User className="text-slate-400" size={32} />
             </div>
-            <p className="text-slate-500 text-lg mb-8">
+            <p className="text-slate-500 text-base mb-8">
               No urgent requirements posted yet.
             </p>
 
             {/* Post Requirement Button */}
             <button
               onClick={() => setIsModalOpen(true)}
-              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-200 flex items-center justify-center gap-3 mx-auto shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-xl font-semibold text-base transition-all duration-200 flex items-center justify-center gap-3 mx-auto shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
               <Plus size={24} />
               Post Urgent Requirement
