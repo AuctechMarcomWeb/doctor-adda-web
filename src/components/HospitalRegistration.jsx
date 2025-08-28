@@ -15,8 +15,10 @@ import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import LocationSearchInput from "./LocationSearchInput";
 import { Select } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const HospitalRegistration = () => {
+  const navigate = useNavigate(); 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -136,7 +138,10 @@ const HospitalRegistration = () => {
         toast.success(
           response?.data?.message || "Hospital registered successfully!"
         );
-        setShowSuccess(true); // success popup trigger
+        setShowSuccess(true); 
+        setTimeout(() => {
+          navigate("/verification");   // 👈 Verification page par redirect
+        }, 2000); 
       } else {
         toast.error(response?.data?.message || "Something went wrong!");
       }

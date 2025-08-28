@@ -9,6 +9,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 // Pages
 import Home from "./pages/Home";
+import Verification from "./pages/Verification";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Contact from "./pages/Contact";
@@ -40,10 +41,9 @@ import PharmacyRegistration from "./components/PharmacyRegistration";
 import DiagonsticRegistration from "./components/DiagonsticRegistration";
 import DoctorsRegistration from "./components/DoctorsRegistration";
 import AmbulanceRegistration from "./components/AmbulanceRegistration";
-import Dashboard from "./components/Dashboard";
+import PharmacyDashboard from "./components/PharmacyDashboard";
 import PharmacyProfile from "./pages/PharmacyProfile";
 import HospitalDashboard from "./components/HospitalDashboard";
-
 
 // Components
 import Navbar from "./components/Navbar";
@@ -87,7 +87,6 @@ function App() {
         <Route path="/pharmacy-dashboard" element={<Dashboard />} />
         <Route path="/hospital-dashboard" element={<HospitalDashboard />} />
         <Route path="/pharmacy-profile" element={<PharmacyProfile />} />
-
         {/* All routes wrapped with Navbar + Footer */}
         <Route
           path="*"
@@ -96,23 +95,44 @@ function App() {
               <Navbar />
               <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path="/verification" element={<Verification />} />
                 <Route path="/manage-patients" element={<ManagePatients />} />
                 <Route path="/pets" element={<ManagePets />} />
                 <Route path="/login" element={<LoginSignupFlow />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/profile" element={<UserProfile />} />
-                <Route path="/appointments" element={<AppointmentSelection />} />
-                <Route path="/doctor-appointments" element={<DoctorAppointmentsPage />} />
-                
+                <Route
+                  path="/appointments"
+                  element={<AppointmentSelection />}
+                />
+                <Route
+                  path="/doctor-appointments"
+                  element={<DoctorAppointmentsPage />}
+                />
                 <Route path="/upgrade-profile" element={<UpgradeProfile />} />
                 <Route path="/all-registration" element={<AllRegistration />} />
-                <Route path="/hospital-registration" element={<HospitalRegistration />} />
-                <Route path="/pharmacy-registration" element={<PharmacyRegistration />} />
-                <Route path="/diagonstics-registration" element={<DiagonsticRegistration />} />
-                <Route path="/doctors-registration" element={<DoctorsRegistration />} />
-                <Route path="/ambulance-registration" element={<AmbulanceRegistration />} />
-
+                <Route
+                  path="/hospital-registration"
+                  element={<HospitalRegistration />}
+                />
+                <Route
+                  path="/pharmacy-registration"
+                  element={<PharmacyRegistration />}
+                />
+                <Route
+                  path="/diagonstics-registration"
+                  element={<DiagonsticRegistration />}
+                />
+                <Route
+                  path="/doctors-registration"
+                  element={<DoctorsRegistration />}
+                />
+                <Route
+                  path="/ambulance-registration"
+                  element={<AmbulanceRegistration />}
+                />
+               
                 <Route
                   path="/terms-and-conditions"
                   element={<TermsAndConditions />}
@@ -146,7 +166,6 @@ function App() {
                   path="/hospitaldetail/:id"
                   element={<HospitalDetailPage />}
                 />
-                 
               </Routes>
               <Footer />
             </>

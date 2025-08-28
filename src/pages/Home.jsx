@@ -20,13 +20,36 @@ import WhyChooseUs from "../components/WhyChooseUs";
 import Carousel from "../components/Carousel";
 import HomePageImagePopup from "../components/HomePageImagePopup";
 import { getRequest } from "../Helpers";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUserProfile } from "../redux/slices/userSlice";
 
 
 const Home = () => {
+  const dispatch = useDispatch();
+
+  const { userProfileData } = useSelector((state) => state.user);
+  const userId = userProfileData?._id;
+  useEffect(() => {
+
+    if (userId) {
+      const fetchUser = async () => {
+        try {
+          const res = await getRequest(`auth/getUserById/${userId}`);
+          console.log("User API response:", res.data.data);
+
+          //setUserData(res?.data);
+          dispatch(updateUserProfile(res.data.data));
+
+        } catch (error) {
+          console.error("Error fetching user:", error);
+        }
+      };
+      fetchUser();
+    }
+  }, [userId,dispatch]);
 
   const [data,setData] = useState([])
-
-  console.log("dfgfdg================>",data);
+  console.log("dfgfdg======>",data);
 
     useEffect(() => {
   
