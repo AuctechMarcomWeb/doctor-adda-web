@@ -16,6 +16,7 @@ import DashboardWallet from "../components/DashboardWallet";
 import dasboardlogo from "../assets/dashboard-logo.png";
 import AppointmentStatusCards from "./AppointmentStatusCards";
 import DoctorAvailabilityPage from "./DoctorAvailabilityPage";
+import AffiliatedDoctors from "./AffiliatedDoctors";
 
 const HospitalDashboard = () => {
   useEffect(() => {
@@ -135,7 +136,7 @@ const HospitalDashboard = () => {
           {[
             { id: "mydashboard", icon: Home, label: "My Dashboard" },
             { id: "jobs", icon: Briefcase, label: "Hospital Job Post" },
-            { id: "wallet", icon: Wallet, label: "Hospital Doctors  " },
+            { id: "doctors", icon: Wallet, label: "Hospital Doctors  " },
             { id: "home", icon: ArrowRightLeft, label: "Home" },
           ].map(({ id, icon: Icon, label }) => (
             <button
@@ -164,8 +165,8 @@ const HospitalDashboard = () => {
       <div className="p-6 lg:pl-80">
         {activeView === "jobs" ? (
           <DoctorAvailabilityPage />
-        ) : activeView === "wallet" ? (
-          <DashboardWallet />
+        ) : activeView === "doctors" ? (
+          <AffiliatedDoctors />
         ) : (
           <div className="space-y-8 md:p-6 bg-gradient-to-br from-slate-50 to-blue-50/30 min-h-screen">
             {/* Premium Hero Section */}
