@@ -41,7 +41,7 @@ import PharmacyRegistration from "./components/PharmacyRegistration";
 import DiagonsticRegistration from "./components/DiagonsticRegistration";
 import DoctorsRegistration from "./components/DoctorsRegistration";
 import AmbulanceRegistration from "./components/AmbulanceRegistration";
-import PharmacyDashboard from "./components/PharmacyDashboard";
+import Dashboard from "./components/Dashboard";
 import PharmacyProfile from "./pages/PharmacyProfile";
 import HospitalDashboard from "./components/HospitalDashboard";
 

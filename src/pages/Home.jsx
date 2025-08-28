@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useFocusEffect, useCallback } from "react";
 import DoctorAddaLanding from "../components/DoctorAddaLanding";
 import DoctorAddaHero from "../components/DoctorAddaHero";
 import DoctorCategoryCards from "../components/DoctorCategoryCards";
@@ -22,49 +22,41 @@ import HomePageImagePopup from "../components/HomePageImagePopup";
 import { getRequest } from "../Helpers";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUserProfile } from "../redux/slices/userSlice";
-
+import { useUpdate } from "../context/updateContext";
 
 const Home = () => {
   const dispatch = useDispatch();
-
+  const { update } = useUpdate();
   const { userProfileData } = useSelector((state) => state.user);
-  const userId = userProfileData?._id;
+  const userId = userProfileData;
   useEffect(() => {
-
     if (userId) {
       const fetchUser = async () => {
         try {
           const res = await getRequest(`auth/getUserById/${userId}`);
           console.log("User API response:", res.data.data);
 
-          //setUserData(res?.data);
-          dispatch(updateUserProfile(res.data.data));
-
+          dispatch(updateUserProfile(res?.data?.data));
         } catch (error) {
           console.error("Error fetching user:", error);
         }
       };
       fetchUser();
     }
-  }, [userId,dispatch]);
+  }, [userId, dispatch, update]);
 
-  const [data,setData] = useState([])
-  console.log("dfgfdg======>",data);
+  const [data, setData] = useState([]);
+  console.log("dfgfdg======>", data);
 
-    useEffect(() => {
-  
-      getRequest(`banner?isPagination=false`).then((res)=>{
-        setData(res?.data?.data)
-      }).catch((error)=>{
-        console.log("error",error);
-        
+  useEffect(() => {
+    getRequest(`banner?isPagination=false`)
+      .then((res) => {
+        setData(res?.data?.data);
       })
-  
-  
-  
-    }, []);
-
-
+      .catch((error) => {
+        console.log("error", error);
+      });
+  }, []);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -86,8 +78,6 @@ const Home = () => {
       <DoctorCategoryCards />
       {/* <DoctorAddaHero/> */}
 
-      
-
       {/* <FeaturedHospitals /> */}
       <FeaturedHospitals2 />
       {/* <HealthScansSection/> */}
@@ -96,7 +86,7 @@ const Home = () => {
       {/* <Carousel /> */}
       <AboutUsSection />
       {/* <TestimonialsSection/> */}
-      
+
       <HealthBlogSection />
       <DownloadAppSection />
     </>

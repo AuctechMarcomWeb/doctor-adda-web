@@ -16,7 +16,7 @@ import DashboardService from "./DashboardService";
 import DashboardWallet from "./DashboardWallet";
 import dasboardlogo from "../assets/dashboard-logo.png";
 
-const PharmacyDashboard = () => {
+const Dashboard = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
@@ -397,4 +397,4 @@ const PharmacyDashboard = () => {
   );
 };
 
-export default PharmacyDashboard;
+export default Dashboard;
