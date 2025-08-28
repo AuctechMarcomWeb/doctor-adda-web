@@ -43,6 +43,7 @@ import DoctorsRegistration from "./components/DoctorsRegistration";
 import AmbulanceRegistration from "./components/AmbulanceRegistration";
 import PharmacyDashboard from "./components/PharmacyDashboard";
 import PharmacyProfile from "./pages/PharmacyProfile";
+import HospitalDashboard from "./components/HospitalDashboard";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -83,7 +84,8 @@ function App() {
       <Routes>
         <Route path="/location" element={<Location />} />
         <Route path="/flow" element={<AppointmentFlow />} />
-        <Route path="/pharmacy-dashboard" element={<PharmacyDashboard />} />
+        <Route path="/pharmacy-dashboard" element={<Dashboard />} />
+        <Route path="/hospital-dashboard" element={<HospitalDashboard />} />
         <Route path="/pharmacy-profile" element={<PharmacyProfile />} />
         {/* All routes wrapped with Navbar + Footer */}
         <Route
