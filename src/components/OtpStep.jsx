@@ -192,7 +192,7 @@ const OtpStep = ({
           throw new Error("Token not found in response");
         }
         const userData = response?.data
-        //console.log("userData", userData)
+        console.log("userData", userData)
         dispatch(login(userData))
        // console.log("userData?.data?.isNew", userData?.data?.isNew)
 

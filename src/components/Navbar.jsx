@@ -21,6 +21,7 @@ import { deleteCookie, clearAuthCookies } from "../Hooks/cookie";
 import NavBar2 from "./NavBar2";
 import { toast } from "react-hot-toast";
 import NotificationBell from "./NotificationBell";
+import DashboardButton from "./DashboardButton";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -30,9 +31,9 @@ const Navbar = () => {
   const dispatch = useDispatch();
 
   // Get user profile data from Redux
-  const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
+  const { userProfileData, isLoggedIn, userData} = useSelector((state) => state.user);
 
-  console.log("user profile data from redux in navbar", userProfileData);
+  console.log("user profile data from redux in navbar", userData, userProfileData);
   console.log("isLoggedIn from redux", isLoggedIn);
   // Extract upgrade info
   const { upgradeAccountId, upgradeAccountType, upgradeAccountApproveStatus } =
@@ -221,12 +222,23 @@ const Navbar = () => {
                             Settings
                           </button>
                         </Link>
-                        <Link onClick={() => setDropdownOpen(false)} to={isUpgraded ? "/dashboard" : "/upgrade-profile"}>
+                        {/* <Link onClick={() => setDropdownOpen(false)} to={isUpgraded ? "/dashboard" : "/upgrade-profile"}>
                           <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
                             <User className="w-4 h-4" />
                             {isUpgraded ? "Dashboard" : "Upgrade Profile"}
                           </button>
-                        </Link>
+                        </Link> */}
+
+{isUpgraded ? (
+  <DashboardButton userDetails={userProfileData}  />
+) : (
+  <Link to="/upgrade-profile">
+    <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
+      <User className="w-4 h-4" />
+      Upgrade Profile
+    </button>
+  </Link>
+)}
 
                         <Link onClick={() => setDropdownOpen(false)} to={isUpgraded ? "/dashboard" : "/dashboard"}>
                           <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
