@@ -228,10 +228,16 @@ const Navbar = () => {
                           </button>
                         </Link>
 
-                        <Link onClick={() => setDropdownOpen(false)} to={isUpgraded ? "/dashboard" : "/dashboard"}>
+                        <Link onClick={() => setDropdownOpen(false)} to={isUpgraded ? "/dashboard" : "/pharmacy-dashboard"}>
                           <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
                             <User className="w-4 h-4" />
-                            {isUpgraded ? "Dashboard" : "Dashboard"}
+                            {isUpgraded ? "Dashboard" : " Dashboard"}
+                          </button>
+                        </Link>
+                        <Link onClick={() => setDropdownOpen(false)} to={isUpgraded ? "/dashboard" : "/hospital-dashboard"}>
+                          <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
+                            <User className="w-4 h-4" />
+                            {isUpgraded ? "Dashboard" : "Hospital Dashboard"}
                           </button>
                         </Link>
 
