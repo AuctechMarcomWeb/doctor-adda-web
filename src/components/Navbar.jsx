@@ -186,7 +186,7 @@ const Navbar = () => {
 
                     {/* Dropdown Menu */}
                     {dropdownOpen && (
-                      <div className="absolute z-100 right-0 mt-2 w-48  bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200  ">
+                      <div className="absolute z-100 right-0 mt-2 w-55  bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200  ">
                         <button
                           onClick={handleLogout}
                           className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
@@ -231,13 +231,31 @@ const Navbar = () => {
                         <Link onClick={() => setDropdownOpen(false)} to={isUpgraded ? "/dashboard" : "/pharmacy-dashboard"}>
                           <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
                             <User className="w-4 h-4" />
-                            {isUpgraded ? "Dashboard" : " Dashboard"}
+                            {isUpgraded ? "Dashboard" : " Pharmacy Dashboard"}
                           </button>
                         </Link>
                         <Link onClick={() => setDropdownOpen(false)} to={isUpgraded ? "/dashboard" : "/hospital-dashboard"}>
                           <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
                             <User className="w-4 h-4" />
                             {isUpgraded ? "Dashboard" : "Hospital Dashboard"}
+                          </button>
+                        </Link>
+                        <Link onClick={() => setDropdownOpen(false)} to={isUpgraded ? "/dashboard" : "/diagnostic-dashboard"}>
+                          <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
+                            <User className="w-4 h-4" />
+                            {isUpgraded ? "Dashboard" : "Diagnostic Dashboard"}
+                          </button>
+                        </Link>
+                        <Link onClick={() => setDropdownOpen(false)} to={isUpgraded ? "/dashboard" : "/ambulance-dashboard"}>
+                          <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
+                            <User className="w-4 h-4" />
+                            {isUpgraded ? "Dashboard" : "Ambulance Dashboard"}
+                          </button>
+                        </Link>
+                        <Link onClick={() => setDropdownOpen(false)} to={isUpgraded ? "/dashboard" : "/doctor-dashboard"}>
+                          <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
+                            <User className="w-4 h-4" />
+                            {isUpgraded ? "Dashboard" : "Doctor Dashboard"}
                           </button>
                         </Link>
 

@@ -20,7 +20,7 @@ import DiagnosticAvailability from "./DiagnosticAvailability";
 import PackageServices from "./PackageServices";
 import DiagnosticReferrals from "./DiagnosticReferrals";
 
-const DiagnosticDashboard = () => {
+const AmbulanceDashboard = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
@@ -29,47 +29,13 @@ const DiagnosticDashboard = () => {
 
   const statsData = [
     {
-      label: "Total  Patients",
-      value: "12",
+      label: "Available Ambulance",
+      value: "150",
       icon: "https://img.icons8.com/ios/50/human-resources.png",
-      color: "from-blue-500 to-blue-600",
+      color: "from-red-500 to-blue-600",
       bg: "from-blue-50 to-blue-100",
     },
-    {
-      label: "Total  Appointment",
-      value: "12",
-      icon: "https://img.icons8.com/ios/50/human-resources.png",
-      color: "from-emerald-500 to-emerald-600",
-      bg: "from-emerald-50 to-emerald-100",
-    },
-    {
-      label: " Samples Collected",
-      value: "2",
-      icon: "https://img.icons8.com/external-anggara-outline-color-anggara-putra/32/external-test-tube-medical-and-healthcare-anggara-outline-color-anggara-putra.png",
-      color: "from-purple-500 to-purple-600",
-      bg: "from-purple-50 to-purple-100",
-    },
-    {
-      label: " Pending Reports ",
-      value: "2",
-      icon: "https://img.icons8.com/ios-filled/50/hourglass-sand-top.png",
-      color: "from-amber-500 to-amber-600",
-      bg: "from-amber-50 to-amber-100",
-    },
-    {
-      label: "Completed Reports ",
-      value: "2",
-      icon: "https://img.icons8.com/color/48/verified-account--v1.png",
-      color: "from-amber-500 to-amber-600",
-      bg: "from-amber-50 to-amber-100",
-    },
-    {
-      label: "Average Rating",
-      value: "2",
-      icon: "https://img.icons8.com/color/48/filled-star--v1.png",
-      color: "from-amber-500 to-amber-600",
-      bg: "from-amber-50 to-amber-100",
-    },
+    
    
   ];
 
@@ -88,7 +54,7 @@ const DiagnosticDashboard = () => {
             onClick={() => setActiveView("mydashboard")}
             className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent hover:from-blue-700 hover:to-indigo-700 transition-all"
           >
-            Diagnostic Dashboard
+            Ambulance Dashboard
           </button>
         </div>
 
@@ -120,7 +86,7 @@ const DiagnosticDashboard = () => {
         } lg:translate-x-0 lg:shadow-xl lg:border-r lg:border-white/20`}
       >
         <div>
-          <img className="bg-gradient-to-br from-blue-500  to-green-400 px-6 py-4" src={dasboardlogo} alt=""  />
+          <img className="bg-gradient-to-br from-red-700  to-purple-400 px-6 py-4" src={dasboardlogo} alt=""  />
         </div>
         <div className="p-6 border-b border-gray-100">
           <div className="flex items-center">
@@ -129,12 +95,12 @@ const DiagnosticDashboard = () => {
               className="rounded-full"
               width="80"
               height="80"
-              src="https://i.pinimg.com/736x/22/aa/fc/22aafcd2853077801a6a7f00d0fb0d91.jpg"
+              src="https://i.pinimg.com/736x/64/82/46/6482466e42b00ae7147b7fdb7df3f82d.jpg"
               alt="doctor-male-skin-type-3"
             />
             {/* </div> */}
             <div className="flex-1 ml-4">
-              <p className="font-bold text-gray-800">Auctech Diagnostic Center</p>
+              <p className="font-bold text-gray-800">Auctech Ambulance Service</p>
               <button className="text-sm text-teal-600 hover:text-teal-700 font-medium transition-colors">
                 Edit Profile
               </button>
@@ -152,9 +118,7 @@ const DiagnosticDashboard = () => {
           {[
             { id: "mydashboard", icon: Home, label: "My Dashboard" },
             { id: "jobs", icon: Briefcase, label: "Appointments" },
-            { id: "report", icon: Wallet, label: " Reports" },
-            { id: "packages", icon: Wallet, label: " Packages & Services" },
-            { id: "refferals", icon: Wallet, label: " Refferals" },
+           
             { id: "home", icon: ArrowRightLeft, label: "Home" },
           ].map(({ id, icon: Icon, label }) => (
             <button
@@ -192,7 +156,7 @@ const DiagnosticDashboard = () => {
         ) : (
           <div className="space-y-8 md:p-6 bg-gradient-to-br from-slate-50 to-blue-50/30 min-h-screen">
             {/* Premium Hero Section */}
-            <div className="relative overflow-hidden bg-gradient-to-br from-blue-500  to-green-400 rounded-3xl p-6 text-white shadow-2xl border border-white/10">
+            <div className="relative overflow-hidden bg-gradient-to-br from-red-700  to-purple-400 rounded-3xl p-6 text-white shadow-2xl border border-white/10">
               {/* Animated Background Elements */}
               <div className="absolute inset-0">
                 <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-white/20 to-transparent rounded-full -translate-y-48 translate-x-48 animate-pulse"></div>
@@ -225,7 +189,7 @@ const DiagnosticDashboard = () => {
 
                   <div className="mb-2 md:mb-6">
                     <h1 className="text-xl md:text-2xl font-bold mb-2 md:mb-1 bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
-                      Auctech Diagnostic Center
+                      Auctech Ambulance Service
                     </h1>
                     <p className="text-blue-100/90 text-sm md:text-base leading-relaxed max-w-md">
                      Here's to another day of healing and hope
@@ -259,7 +223,7 @@ const DiagnosticDashboard = () => {
                     className="rounded-full"
                     width="120"
                     height="120"
-                    src="https://i.pinimg.com/736x/22/aa/fc/22aafcd2853077801a6a7f00d0fb0d91.jpg"
+                    src="https://i.pinimg.com/736x/64/82/46/6482466e42b00ae7147b7fdb7df3f82d.jpg"
                     alt="doctor-male-skin-type-3"
                   />
                   {/* </div> */}
@@ -348,7 +312,7 @@ const DiagnosticDashboard = () => {
               </div>
             </div>
 
-            <DashboardDistribution />
+            {/* <DashboardDistribution /> */}
           </div>
         )}
       </div>
@@ -356,4 +320,4 @@ const DiagnosticDashboard = () => {
   );
 };
 
-export default DiagnosticDashboard;
+export default AmbulanceDashboard;

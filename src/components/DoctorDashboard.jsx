@@ -20,7 +20,7 @@ import DiagnosticAvailability from "./DiagnosticAvailability";
 import PackageServices from "./PackageServices";
 import DiagnosticReferrals from "./DiagnosticReferrals";
 
-const DiagnosticDashboard = () => {
+const DoctorDashboard = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
@@ -31,42 +31,56 @@ const DiagnosticDashboard = () => {
     {
       label: "Total  Patients",
       value: "12",
-      icon: "https://img.icons8.com/ios/50/human-resources.png",
+      icon: "https://img.icons8.com/ios-filled/50/FFFFFF/human-resources.png",
       color: "from-blue-500 to-blue-600",
       bg: "from-blue-50 to-blue-100",
     },
     {
-      label: "Total  Appointment",
+      label: "Total  Appointments",
       value: "12",
-      icon: "https://img.icons8.com/ios/50/human-resources.png",
+      icon: "https://img.icons8.com/ios-filled/50/FFFFFF/today.png",
       color: "from-emerald-500 to-emerald-600",
       bg: "from-emerald-50 to-emerald-100",
     },
     {
-      label: " Samples Collected",
+      label: " In Clinic  Appointments",
       value: "2",
-      icon: "https://img.icons8.com/external-anggara-outline-color-anggara-putra/32/external-test-tube-medical-and-healthcare-anggara-outline-color-anggara-putra.png",
+      icon: "https://img.icons8.com/ios-filled/50/FFFFFF/home.png",
       color: "from-purple-500 to-purple-600",
       bg: "from-purple-50 to-purple-100",
     },
     {
-      label: " Pending Reports ",
+      label: "Video Consultations",
       value: "2",
-      icon: "https://img.icons8.com/ios-filled/50/hourglass-sand-top.png",
+      icon: "https://img.icons8.com/ios-filled/50/FFFFFF/video-call.png",
+      color: "from-purple-500 to-purple-600",
+      bg: "from-purple-50 to-purple-100",
+    },
+    {
+      label: " Pending  ",
+      value: "2",
+      icon: "https://img.icons8.com/ios-filled/50/FFFFFF/hourglass-sand-top.png",
+      color: "from-amber-500 to-amber-600",
+      bg: "from-amber-50 to-amber-100",
+    },
+     {
+      label: "Confirmed  ",
+      value: "2",
+      icon: "https://img.icons8.com/color/48/checked-2.png",
       color: "from-amber-500 to-amber-600",
       bg: "from-amber-50 to-amber-100",
     },
     {
-      label: "Completed Reports ",
+      label: "Completed  ",
       value: "2",
       icon: "https://img.icons8.com/color/48/verified-account--v1.png",
       color: "from-amber-500 to-amber-600",
       bg: "from-amber-50 to-amber-100",
     },
     {
-      label: "Average Rating",
+      label: " Rescheduled",
       value: "2",
-      icon: "https://img.icons8.com/color/48/filled-star--v1.png",
+      icon: "https://img.icons8.com/ios-filled/50/FFFFFF/tear-off-calendar.png",
       color: "from-amber-500 to-amber-600",
       bg: "from-amber-50 to-amber-100",
     },
@@ -88,7 +102,7 @@ const DiagnosticDashboard = () => {
             onClick={() => setActiveView("mydashboard")}
             className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent hover:from-blue-700 hover:to-indigo-700 transition-all"
           >
-            Diagnostic Dashboard
+            Doctor Dashboard
           </button>
         </div>
 
@@ -134,7 +148,7 @@ const DiagnosticDashboard = () => {
             />
             {/* </div> */}
             <div className="flex-1 ml-4">
-              <p className="font-bold text-gray-800">Auctech Diagnostic Center</p>
+              <p className="font-bold text-gray-800"> Dr. Abhishek Yadav   </p>
               <button className="text-sm text-teal-600 hover:text-teal-700 font-medium transition-colors">
                 Edit Profile
               </button>
@@ -151,10 +165,10 @@ const DiagnosticDashboard = () => {
         <nav className="p-6 space-y-2">
           {[
             { id: "mydashboard", icon: Home, label: "My Dashboard" },
-            { id: "jobs", icon: Briefcase, label: "Appointments" },
-            { id: "report", icon: Wallet, label: " Reports" },
-            { id: "packages", icon: Wallet, label: " Packages & Services" },
+            { id: "jobs", icon: Briefcase, label: "Hospital Requirements" },
             { id: "refferals", icon: Wallet, label: " Refferals" },
+        
+            { id: "wallet", icon: Wallet, label: " Your Wallet" },
             { id: "home", icon: ArrowRightLeft, label: "Home" },
           ].map(({ id, icon: Icon, label }) => (
             <button
@@ -225,7 +239,7 @@ const DiagnosticDashboard = () => {
 
                   <div className="mb-2 md:mb-6">
                     <h1 className="text-xl md:text-2xl font-bold mb-2 md:mb-1 bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
-                      Auctech Diagnostic Center
+                      Dr. Abhishek (Veterinary)
                     </h1>
                     <p className="text-blue-100/90 text-sm md:text-base leading-relaxed max-w-md">
                      Here's to another day of healing and hope
@@ -348,7 +362,7 @@ const DiagnosticDashboard = () => {
               </div>
             </div>
 
-            <DashboardDistribution />
+        
           </div>
         )}
       </div>
@@ -356,4 +370,4 @@ const DiagnosticDashboard = () => {
   );
 };
 
-export default DiagnosticDashboard;
+export default DoctorDashboard;
