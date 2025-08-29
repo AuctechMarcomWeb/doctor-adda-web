@@ -44,6 +44,9 @@ import AmbulanceRegistration from "./components/AmbulanceRegistration";
 import Dashboard from "./components/Dashboard";
 import PharmacyProfile from "./pages/PharmacyProfile";
 import HospitalDashboard from "./components/HospitalDashboard";
+import DiagnosticDashboard from "./components/DiagnosticDashboard";
+import AmbulanceDashboard from "./components/AmbulanceDashboard";
+import DoctorDashboard from "./components/DoctorDashboard";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -86,7 +89,11 @@ function App() {
         <Route path="/flow" element={<AppointmentFlow />} />
         <Route path="/pharmacy-dashboard" element={<Dashboard />} />
         <Route path="/hospital-dashboard" element={<HospitalDashboard />} />
+        <Route path="/diagnostic-dashboard" element={<DiagnosticDashboard />} />
+        <Route path="/ambulance-dashboard" element={<AmbulanceDashboard />} />
+        <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
         <Route path="/pharmacy-profile" element={<PharmacyProfile />} />
+
         {/* All routes wrapped with Navbar + Footer */}
         <Route
           path="*"
@@ -132,7 +139,7 @@ function App() {
                   path="/ambulance-registration"
                   element={<AmbulanceRegistration />}
                 />
-               
+
                 <Route
                   path="/terms-and-conditions"
                   element={<TermsAndConditions />}
