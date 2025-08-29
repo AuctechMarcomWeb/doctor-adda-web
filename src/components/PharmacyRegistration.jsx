@@ -14,16 +14,21 @@ import { fileUpload, getRequest, postRequest } from "../Helpers/index";
 import { useSelector } from "react-redux";
 import LocationSearchInput from "./LocationSearchInput";
 import toast from "react-hot-toast";
-
+import { useNavigate } from "react-router-dom";
+import { useUpdate } from "../context/updateContext";
 const PharmacyRegistration = () => {
+  const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const { setUpdate } = useUpdate();
   const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
   const userId = userProfileData?._id;
+  console.log("userProfileData user id ", userId);
+
   // Profile Image states
   const [profileFile, setProfileFile] = useState(null);
-  const [uploadProfileImage, setUploadProfileImage] = useState(""); 
+  const [uploadProfileImage, setUploadProfileImage] = useState("");
   const [profilePreview, setProfilePreview] = useState(null);
   const [services, setservices] = useState([
     { name: "fdgdf", discription: "" },
@@ -35,61 +40,61 @@ const PharmacyRegistration = () => {
     phone: "",
     profileImage: "",
     storeTiming: "",
-    services: [{ name: "", }],
     description: "",
     accountType: "Pharmacy",
     latitude: "",
     longitude: "",
-    ownerDetails:"",
-    gstNumber:"",
-    phoneNumber:"",
-    onlinePayment:true,
+    ownerDetails: {
+      name: "Rajesh Kumar",
+      gstNumber: "43543534656",
+      phoneNumber: "7845854785",
+    },
+    onlinePayment: true,
     cod: true,
-    profileImages:[]
+    profileImages: [],
   });
   console.log("formData", formData);
 
   const uploadImage = async (file) => {
-  try {
-    const formDataData = new FormData();
-    formDataData.append("file", file);
-    const response = await postRequest({
-      url: `upload/uploadImage`,
-      cred: formDataData,
-    });
-    console.log("Image uploaded successfully:", response);
-    const uploadedUrl = response?.data?.data?.imageUrl;
-    setUploadProfileImage(uploadedUrl);
-    console.log("uploadedUrl",uploadedUrl);
-    
-    setFormData((prev) => ({ ...prev, profileImage: uploadedUrl }));
-    
-  } catch (error) {
-    console.error("Error uploading image:", error);
-  }
-};
+    try {
+      const formDataData = new FormData();
+      formDataData.append("file", file);
+      const response = await postRequest({
+        url: `upload/uploadImage`,
+        cred: formDataData,
+      });
+      console.log("Image uploaded successfully:", response);
+      const uploadedUrl = response?.data?.data?.imageUrl;
+      setUploadProfileImage(uploadedUrl);
+      console.log("uploadedUrl", uploadedUrl);
+
+      setFormData((prev) => ({ ...prev, profileImage: uploadedUrl }));
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
+  };
 
   const handleSubmit = async () => {
-  const validationErrors = validateForm();
-  if (Object.keys(validationErrors).length > 0) {
-    setErrors(validationErrors);
-    return;
-  }
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
 
+    setErrors({});
+    setLoading(true);
 
-  setErrors({});
-  setLoading(true);
+    try {
+      const payload = { ...formData, services };
+      console.log("Final payload before submit:", payload);
+      const response = await postRequest({
+        url: `pharmacy/registerPharmacy/${userId}`,
+        cred: payload,
+      });
 
-  try {
-    const payload = { ...formData, services };
-    console.log("Final payload before submit:", payload);
-    const response = await postRequest({
-      url: `pharmacy/registerPharmacy/${userId}`,
-      cred: payload,
-    });
-
-    console.log("Pharmacy Register Response:", response?.data?.data);
-   // ✅ Sirf success hone par popup dikhao
+      console.log("Pharmacy Register Response:", response?.data?.data);
+      // ✅ Sirf success hone par popup dikhao
+      setUpdate((prev) => !prev);
       if (
         response?.status === 201 ||
         response?.data?.statusCode === 201 ||
@@ -98,27 +103,31 @@ const PharmacyRegistration = () => {
         toast.success(
           response?.data?.message || "Ambulance registered successfully!"
         );
+
         setShowSuccess(true); // success popup trigger
+        setTimeout(() => {
+          navigate("/verification"); // 👈 Verification page par redirect
+        }, 2000);
       } else {
         toast.error(response?.data?.message || "Something went wrong!");
       }
-  } catch (err) {
-    console.error(" Error Registering Pharmacy:", err);
-     toast.error(
+    } catch (err) {
+      console.error(" Error Registering Pharmacy:", err);
+      toast.error(
         err?.response?.data?.message || "Failed to register ambulance"
       );
-  } finally {
-    console.log(" Finally block executed");
-    setLoading(false);
-  }
-};
+    } finally {
+      console.log(" Finally block executed");
+      setLoading(false);
+    }
+  };
 
   // Profile Pic Handler
-const handleProfilePic = (e) => {
+  const handleProfilePic = (e) => {
     const file = e.target.files[0];
     if (file) {
       setProfileFile(file);
-      setProfilePreview(URL.createObjectURL(file)); 
+      setProfilePreview(URL.createObjectURL(file));
     }
     uploadImage(file);
   };
@@ -126,7 +135,6 @@ const handleProfilePic = (e) => {
   const handleInputChange = (name, value) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
 
   const handleServiceChange = (index, field, value) => {
     const updated = [...services];
@@ -144,46 +152,49 @@ const handleProfilePic = (e) => {
     }
   };
 
-    const uploadDocument = (e) => {
-      const files = Array.from(e.target.files);
-  
-      files.forEach((file) => {
-        fileUpload({
-          url: `upload/uploadImage`,
-          cred: { file },
-        })
-          .then((res) => {
-            const imageUrl = res.data?.data?.imageUrl;
-            if (imageUrl) {
-              setFormData((prev) => ({
-                ...prev,
-                profileImages: [...prev.profileImages, imageUrl],
-                // documentImage: [...prev.documentImage, { url: imageUrl }],
-              }));
-            }
-          })
-          .catch((error) => {
-            console.error("Image upload failed:", error);
-          });
-      });
-    };
+  const uploadDocument = (e) => {
+    const files = Array.from(e.target.files);
 
+    files.forEach((file) => {
+      fileUpload({
+        url: `upload/uploadImage`,
+        cred: { file },
+      })
+        .then((res) => {
+          const imageUrl = res.data?.data?.imageUrl;
+          if (imageUrl) {
+            setFormData((prev) => ({
+              ...prev,
+              profileImages: [...prev.profileImages, imageUrl],
+              // documentImage: [...prev.documentImage, { url: imageUrl }],
+            }));
+          }
+        })
+        .catch((error) => {
+          console.error("Image upload failed:", error);
+        });
+    });
+  };
 
   const validateForm = () => {
     const newErrors = {};
-     if (!profilePreview) {
-    newErrors.profilePic = "Profile picture is required";
-  }
+    if (!profilePreview) {
+      newErrors.profilePic = "Profile picture is required";
+    }
     if (!formData.name) newErrors.name = "Pharmacy name is required";
     if (!formData.email) newErrors.email = "Email is required";
     if (!formData.phone) newErrors.phone = "Contact number is required";
-    if (!formData.storeTiming) newErrors.storeTiming = "Please select a storeTiming";
+    if (!formData.storeTiming)
+      newErrors.storeTiming = "Please select a storeTiming";
     if (!formData.address) newErrors.address = "Address is required";
-    if (!formData.ownerName) newErrors.ownerName = "Owner name is required";
-     if (!formData.gstNumber) newErrors.gstNumber = "Gst Number name is required";
-    if (!formData.phoneNumber)
-      newErrors.phoneNumber = "Verification phone is required";
-        if (!formData.description) newErrors.description = "Description is required";
+    if (!formData.ownerDetails.name)
+      newErrors.ownerDetails.name = "Owner name is required";
+    if (!formData.ownerDetails.gstNumber)
+      newErrors.ownerDetails.gstNumber = "Gst Number name is required";
+    if (!formData.ownerDetails.phoneNumber)
+      newErrors.ownerDetails.phoneNumber = "Verification phone is required";
+    if (!formData.description)
+      newErrors.description = "Description is required";
 
     return newErrors;
   };
@@ -269,7 +280,7 @@ const handleProfilePic = (e) => {
                 <div className="text-sm text-gray-600">
                   <p>Click to upload Pharmacy logo</p>
                   <p className="text-xs">Max size: 5MB</p>
-                   {errors.profilePic && (
+                  {errors.profilePic && (
                     <p className="text-red-500 text-xs mt-1">
                       {errors.profilePic}
                     </p>
@@ -296,7 +307,7 @@ const handleProfilePic = (e) => {
                   <p className="text-red-500 text-xs">{errors?.name}</p>
                 )}
               </div>
-               <div className="space-y-2 group">
+              <div className="space-y-2 group">
                 <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
                   <Phone className="w-4 h-4 text-purple-600" />
                   Phone Number
@@ -316,7 +327,7 @@ const handleProfilePic = (e) => {
 
             {/* Email & Description */}
             <div className="grid md:grid-cols-2 gap-6">
-             <div className="space-y-2 group">
+              <div className="space-y-2 group">
                 <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
                   <Mail className="w-4 h-4 text-green-600" />
                   Official Email
@@ -333,45 +344,42 @@ const handleProfilePic = (e) => {
                 )}
               </div>
 
-               <div className="space-y-2 group">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                <FileText className="w-4 h-4 text-red-600" />
-                Decription
-              </label>
-              <input
-                type="text"
-                value={formData?.description}
-                onChange={(e) =>
-                  handleInputChange("description", e.target.value)
-                }
-                className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
-                placeholder="Complete Pharmacy address"
-              />
-              {errors?.description && (
-                <p className="text-red-500 text-xs">{errors?.description}</p>
-              )}
+              <div className="space-y-2 group">
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                  <FileText className="w-4 h-4 text-red-600" />
+                  Decription
+                </label>
+                <input
+                  type="text"
+                  value={formData?.description}
+                  onChange={(e) =>
+                    handleInputChange("description", e.target.value)
+                  }
+                  className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
+                  placeholder="Complete Pharmacy address"
+                />
+                {errors?.description && (
+                  <p className="text-red-500 text-xs">{errors?.description}</p>
+                )}
+              </div>
             </div>
 
-            </div>
-
-           
             {/* Address & timings*/}
             <div className="space-y-2 group">
-                          <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                            <MapPin className="w-4 h-4 text-red-600" />
-                            Search Address
-                          </label>
-                          <LocationSearchInput
-                            value={formData.address}
-                            onSelect={
-                              (place) => setFormData({ ...formData, ...place }) // address + lat/lng update
-                            }
-                          />
-                          {errors?.address && (
-                            <p className="text-red-500 text-xs">{errors?.address}</p>
-                          )}
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                <MapPin className="w-4 h-4 text-red-600" />
+                Search Address
+              </label>
+              <LocationSearchInput
+                value={formData.address}
+                onSelect={
+                  (place) => setFormData({ ...formData, ...place }) // address + lat/lng update
+                }
+              />
+              {errors?.address && (
+                <p className="text-red-500 text-xs">{errors?.address}</p>
+              )}
             </div>
-            
 
             <div className="space-y-2 group">
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
@@ -381,7 +389,9 @@ const handleProfilePic = (e) => {
               <input
                 type="text"
                 value={formData?.storeTiming}
-                onChange={(e) => handleInputChange("storeTiming", e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("storeTiming", e.target.value)
+                }
                 className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
                 placeholder="Ex: 9:00 AM - 9:00 PM"
               />
@@ -390,12 +400,11 @@ const handleProfilePic = (e) => {
               )}
             </div>
 
-
             {/* services Section */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-gray-800">
-                    Services Offered
+                  Services Offered
                 </h3>
                 <button
                   type="button"
@@ -451,7 +460,7 @@ const handleProfilePic = (e) => {
               </div>
             </div>
 
-         {/* Owner Details */}
+            {/* Owner Details */}
             <div className="grid md:grid-cols-3 gap-6">
               <div className="space-y-2 group">
                 <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
@@ -460,15 +469,17 @@ const handleProfilePic = (e) => {
                 </label>
                 <input
                   type="text"
-                  value={formData?.ownerName}
+                  value={formData?.ownerDetails?.name}
                   onChange={(e) =>
                     handleInputChange("ownerName", e.target.value)
                   }
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-gray-500"
                   placeholder="Full name"
                 />
-                {errors?.ownerName && (
-                  <p className="text-red-500 text-xs">{errors?.ownerName}</p>
+                {errors?.ownerDetails?.name && (
+                  <p className="text-red-500 text-xs">
+                    {errors?.ownerDetails?.name}
+                  </p>
                 )}
               </div>
 
@@ -478,15 +489,17 @@ const handleProfilePic = (e) => {
                 </label>
                 <input
                   type="number"
-                  value={formData?.gstNumber}
+                  value={formData?.ownerDetails?.gstNumber}
                   onChange={(e) =>
                     handleInputChange("gstNumber", e.target.value)
                   }
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-orange-500"
                   placeholder="GST registration number"
                 />
-                 {errors?.gstNumber && (
-                  <p className="text-red-500 text-xs">{errors?.gstNumber}</p>
+                {errors?.ownerDetails?.gstNumber && (
+                  <p className="text-red-500 text-xs">
+                    {errors?.ownerDetails?.gstNumber}
+                  </p>
                 )}
               </div>
 
@@ -496,82 +509,92 @@ const handleProfilePic = (e) => {
                 </label>
                 <input
                   type="number"
-                  value={formData?.phoneNumber}
+                  value={formData?.ownerDetails?.phoneNumber}
                   onChange={(e) =>
                     handleInputChange("phoneNumber", e.target.value)
                   }
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-teal-500"
                   placeholder="+91 98765 43210"
                 />
-                {errors?.phoneNumber && (
-                  <p className="text-red-500 text-xs">{errors?.phoneNumber}</p>
+                {errors?.ownerDetails?.phoneNumber && (
+                  <p className="text-red-500 text-xs">
+                    {errors?.ownerDetails?.phoneNumber}
+                  </p>
                 )}
               </div>
             </div>
 
-      <div className="space-y-2 group">
-  <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-    COD Preference
-  </label>
-  <div className="flex gap-4">
-    <button
-      type="button"
-      onClick={() => handleInputChange("cod", "true")}
-      className={`w-full px-4 py-3 border rounded-xl font-medium transition-all duration-200
-        ${formData?.cod === "true" 
-          ? "bg-green-500 text-white border-green-500" 
-          : "bg-white text-gray-700 border-gray-300 hover:bg-green-50"}`}
-    >
-      Yes
-    </button>
-    <button
-      type="button"
-      onClick={() => handleInputChange("cod", "false")}
-      className={`w-full px-4 py-3 border rounded-xl font-medium transition-all duration-200
-        ${formData?.cod === "false" 
-          ? "bg-red-500 text-white border-red-500" 
-          : "bg-white text-gray-700 border-gray-300 hover:bg-red-50"}`}
-    >
-      No
-    </button>
-  </div>
-  {errors?.cod && (
-    <p className="text-red-500 text-xs">{errors?.cod}</p>
-  )}
-</div>
+            <div className="space-y-2 group">
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                COD Preference
+              </label>
+              <div className="flex gap-4">
+                <button
+                  type="button"
+                  onClick={() => handleInputChange("cod", "true")}
+                  className={`w-full px-4 py-3 border rounded-xl font-medium transition-all duration-200
+        ${
+          formData?.cod === "true"
+            ? "bg-green-500 text-white border-green-500"
+            : "bg-white text-gray-700 border-gray-300 hover:bg-green-50"
+        }`}
+                >
+                  Yes
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleInputChange("cod", "false")}
+                  className={`w-full px-4 py-3 border rounded-xl font-medium transition-all duration-200
+        ${
+          formData?.cod === "false"
+            ? "bg-red-500 text-white border-red-500"
+            : "bg-white text-gray-700 border-gray-300 hover:bg-red-50"
+        }`}
+                >
+                  No
+                </button>
+              </div>
+              {errors?.cod && (
+                <p className="text-red-500 text-xs">{errors?.cod}</p>
+              )}
+            </div>
 
-<div className="space-y-2 group">
-  <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-    Online Payment
-  </label>
-  <div className="flex gap-4">
-    <button
-      type="button"
-      onClick={() => handleInputChange("onlinePayment", "true")}
-      className={`flex-1 px-4 py-3 border rounded-xl font-medium transition-all duration-200
-        ${formData?.onlinePayment === "true" 
-          ? "bg-green-500 text-white border-green-500" 
-          : "bg-white text-gray-700 border-gray-300 hover:bg-green-50"}`}
-    >
-      Yes
-    </button>
-    <button
-      type="button"
-      onClick={() => handleInputChange("onlinePayment", "false")}
-      className={`flex-1 px-4 py-3 border rounded-xl font-medium transition-all duration-200
-        ${formData?.onlinePayment === "false" 
-          ? "bg-red-500 text-white border-red-500" 
-          : "bg-white text-gray-700 border-gray-300 hover:bg-red-50"}`}
-    >
-      No
-    </button>
-  </div>
-  {errors?.onlinePayment && (
-    <p className="text-red-500 text-xs">{errors?.onlinePayment}</p>
-  )}
-</div>
+            <div className="space-y-2 group">
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                Online Payment
+              </label>
+              <div className="flex gap-4">
+                <button
+                  type="button"
+                  onClick={() => handleInputChange("onlinePayment", "true")}
+                  className={`flex-1 px-4 py-3 border rounded-xl font-medium transition-all duration-200
+        ${
+          formData?.onlinePayment === "true"
+            ? "bg-green-500 text-white border-green-500"
+            : "bg-white text-gray-700 border-gray-300 hover:bg-green-50"
+        }`}
+                >
+                  Yes
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleInputChange("onlinePayment", "false")}
+                  className={`flex-1 px-4 py-3 border rounded-xl font-medium transition-all duration-200
+        ${
+          formData?.onlinePayment === "false"
+            ? "bg-red-500 text-white border-red-500"
+            : "bg-white text-gray-700 border-gray-300 hover:bg-red-50"
+        }`}
+                >
+                  No
+                </button>
+              </div>
+              {errors?.onlinePayment && (
+                <p className="text-red-500 text-xs">{errors?.onlinePayment}</p>
+              )}
+            </div>
 
- <div className="space-y-2 group">
+            <div className="space-y-2 group">
               <p className="text-gray-700 font-medium font-semibold">
                 Select Hospital Display images
               </p>

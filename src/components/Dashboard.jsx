@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import { useState, useEffect } from "react";
 import {
@@ -11,8 +12,8 @@ import {
   TrendingUp,
   ArrowRightLeft,
 } from "lucide-react";
-import DashboardService from "../components/DashboardService";
-import DashboardWallet from "../components/DashboardWallet";
+import DashboardService from "./DashboardService";
+import DashboardWallet from "./DashboardWallet";
 import dasboardlogo from "../assets/dashboard-logo.png";
 
 const Dashboard = () => {
@@ -114,7 +115,11 @@ const Dashboard = () => {
         } lg:translate-x-0 lg:shadow-xl lg:border-r lg:border-white/20`}
       >
         <div>
-          <img className="bg-gradient-to-r from-blue-600 to-red-600 px-6 py-4" src={dasboardlogo} alt=""  />
+          <img
+            className="bg-gradient-to-r from-blue-600 to-red-600 px-6 py-4"
+            src={dasboardlogo}
+            alt=""
+          />
         </div>
         <div className="p-6 border-b border-gray-100">
           <div className="flex items-center">
@@ -224,7 +229,6 @@ const Dashboard = () => {
                   <div className="inline-flex items-center bg-white/15 backdrop-blur-md rounded-2xl px-3 py-2 border border-white/20 shadow-lg hover:bg-white/20 transition-all duration-300">
                     <div className="w-4 h-4 md:w-6 md:h-6 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-xl flex items-center justify-center text-xl shadow-lg mr-4">
                       <img
-                       
                         src="https://img.icons8.com/emoji/48/coin-emoji.png"
                         alt="coin-emoji"
                       />

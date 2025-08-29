@@ -9,6 +9,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 // Pages
 import Home from "./pages/Home";
+import Verification from "./pages/Verification";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Contact from "./pages/Contact";
@@ -46,7 +47,6 @@ import HospitalDashboard from "./components/HospitalDashboard";
 import DiagnosticDashboard from "./components/DiagnosticDashboard";
 import AmbulanceDashboard from "./components/AmbulanceDashboard";
 import DoctorDashboard from "./components/DoctorDashboard";
-
 
 // Components
 import Navbar from "./components/Navbar";
@@ -91,9 +91,8 @@ function App() {
         <Route path="/hospital-dashboard" element={<HospitalDashboard />} />
         <Route path="/diagnostic-dashboard" element={<DiagnosticDashboard />} />
         <Route path="/ambulance-dashboard" element={<AmbulanceDashboard />} />
-         <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
+        <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
         <Route path="/pharmacy-profile" element={<PharmacyProfile />} />
-
 
         {/* All routes wrapped with Navbar + Footer */}
         <Route
@@ -103,22 +102,43 @@ function App() {
               <Navbar />
               <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path="/verification" element={<Verification />} />
                 <Route path="/manage-patients" element={<ManagePatients />} />
                 <Route path="/pets" element={<ManagePets />} />
                 <Route path="/login" element={<LoginSignupFlow />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/profile" element={<UserProfile />} />
-                <Route path="/appointments" element={<AppointmentSelection />} />
-                <Route path="/doctor-appointments" element={<DoctorAppointmentsPage />} />
-                
+                <Route
+                  path="/appointments"
+                  element={<AppointmentSelection />}
+                />
+                <Route
+                  path="/doctor-appointments"
+                  element={<DoctorAppointmentsPage />}
+                />
                 <Route path="/upgrade-profile" element={<UpgradeProfile />} />
                 <Route path="/all-registration" element={<AllRegistration />} />
-                <Route path="/hospital-registration" element={<HospitalRegistration />} />
-                <Route path="/pharmacy-registration" element={<PharmacyRegistration />} />
-                <Route path="/diagonstics-registration" element={<DiagonsticRegistration />} />
-                <Route path="/doctors-registration" element={<DoctorsRegistration />} />
-                <Route path="/ambulance-registration" element={<AmbulanceRegistration />} />
+                <Route
+                  path="/hospital-registration"
+                  element={<HospitalRegistration />}
+                />
+                <Route
+                  path="/pharmacy-registration"
+                  element={<PharmacyRegistration />}
+                />
+                <Route
+                  path="/diagonstics-registration"
+                  element={<DiagonsticRegistration />}
+                />
+                <Route
+                  path="/doctors-registration"
+                  element={<DoctorsRegistration />}
+                />
+                <Route
+                  path="/ambulance-registration"
+                  element={<AmbulanceRegistration />}
+                />
 
                 <Route
                   path="/terms-and-conditions"
@@ -153,7 +173,6 @@ function App() {
                   path="/hospitaldetail/:id"
                   element={<HospitalDetailPage />}
                 />
-                 
               </Routes>
               <Footer />
             </>
