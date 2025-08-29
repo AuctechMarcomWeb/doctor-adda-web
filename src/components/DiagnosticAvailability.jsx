@@ -12,13 +12,13 @@ const DiagnosticAvailability = () => {
   };
 
   return (
-    <div className="p-4 w-[90%] mx-auto">
+    <div className="md:p-4 p-2 md:w-[90%] mx-auto">
       {/* Header */}
       <div className="flex items-center mb-2">
         <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-green-400 rounded-xl flex items-center justify-center shadow-lg">
           <Stethoscope className="w-5 h-5 text-white" />
         </div>
-        <h2 className="ml-4 md:text-xl text-base font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 bg-clip-text text-transparent">
+        <h2 className="ml-4 md:text-xl text-lg font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 bg-clip-text text-transparent">
           Diagnostic Availability
         </h2>
       </div>

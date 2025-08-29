@@ -35,14 +35,14 @@ const DashboardService = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-      <div className="w-[90%] mx-auto py-8  px-4 sm:px-6 lg:px-2">
+      <div className="md:w-[90%] mx-auto py-8  px-4 sm:px-6 lg:px-2">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
             <div className="p-2 bg-gradient-to-r from-teal-500 to-teal-600 rounded-lg">
               <Settings className="h-6 w-6 text-white" />
             </div>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
+            <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
               Services & Preferences
             </h1>
           </div>
@@ -55,7 +55,7 @@ const DashboardService = () => {
           {/* Services Section */}
           <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 border-b border-gray-100">
-              <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
+              <h2 className="text-base md:text-xl font-semibold text-gray-800 flex items-center gap-2">
                 <div className="p-1 bg-blue-100 rounded">
                   <Plus className="h-4 w-4 text-blue-600" />
                 </div>
@@ -66,7 +66,7 @@ const DashboardService = () => {
               </p>
             </div>
 
-            <div className="p-6">
+            <div className="md:p-6">
               <div className="space-y-4">
                 {services.map((service, index) => (
                   <div key={index} className="group relative">
@@ -82,7 +82,7 @@ const DashboardService = () => {
                               updateServiceName(index, e.target.value)
                             }
                             placeholder="Enter service name (e.g., Home Cleaning, Web Development)"
-                            className="w-full bg-white px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all duration-200 text-gray-800 placeholder-gray-400"
+                            className="w-full bg-white text-sm px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all duration-200 text-gray-800 placeholder-gray-400"
                           />
                         </div>
                         {services.length > 1 && (
@@ -101,7 +101,7 @@ const DashboardService = () => {
 
               <button
                 onClick={addService}
-                className="mt-6 flex items-center gap-2 px-4 py-2 text-blue-600 hover:text-blue-700 font-semibold rounded-lg hover:bg-blue-50 transition-all duration-200"
+                className="mt-6 flex items-center gap-2 px-4 py-2 text-blue-600 hover:text-blue-700 text-sm md:text-base font-semibold rounded-lg hover:bg-blue-50 transition-all duration-200"
               >
                 <Plus className="h-4 w-4" />
                 Add Another Service
@@ -114,7 +114,7 @@ const DashboardService = () => {
             {/* COD Preference */}
             <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
               <div className="bg-gradient-to-r from-orange-50 to-amber-50 px-6 py-4 border-b border-gray-100">
-                <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                <h3 className="md:text-lg text-base font-semibold text-gray-800 flex items-center gap-2">
                   <div className="p-1 bg-orange-100 rounded">
                     <Truck className="h-4 w-4 text-orange-600" />
                   </div>
@@ -128,7 +128,7 @@ const DashboardService = () => {
               <div className="p-6">
                 <div className="grid grid-cols-2 gap-3">
                   <button
-                    className={`py-3 px-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 ${
+                    className={`md:py-3 md:px-4 py-2 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 ${
                       codEnabled
                         ? "bg-gradient-to-r from-emerald-500 to-green-500 text-white shadow-lg shadow-green-200"
                         : "bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-200"
@@ -138,7 +138,7 @@ const DashboardService = () => {
                     Yes
                   </button>
                   <button
-                    className={`py-3 px-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 ${
+                    className={`md:py-3 md:px-4 py-2 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 ${
                       !codEnabled
                         ? "bg-gradient-to-r from-red-500 to-rose-500 text-white shadow-lg shadow-red-200"
                         : "bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-200"
@@ -154,7 +154,7 @@ const DashboardService = () => {
             {/* Online Payment */}
             <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
               <div className="bg-gradient-to-r from-purple-50 to-indigo-50 px-6 py-4 border-b border-gray-100">
-                <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                <h3 className="md:text-lg text-base font-semibold text-gray-800 flex items-center gap-2">
                   <div className="p-1 bg-purple-100 rounded">
                     <CreditCard className="h-4 w-4 text-purple-600" />
                   </div>
@@ -168,7 +168,7 @@ const DashboardService = () => {
               <div className="p-6">
                 <div className="grid grid-cols-2 gap-3">
                   <button
-                    className={`py-3 px-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 ${
+                    className={`md:py-3 md:px-4 py-2 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 ${
                       onlinePaymentEnabled
                         ? "bg-gradient-to-r from-emerald-500 to-green-500 text-white shadow-lg shadow-green-200"
                         : "bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-200"
@@ -178,7 +178,7 @@ const DashboardService = () => {
                     Yes
                   </button>
                   <button
-                    className={`py-3 px-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 ${
+                    className={`md:py-3 md:px-4 py-2 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 ${
                       !onlinePaymentEnabled
                         ? "bg-gradient-to-r from-red-500 to-rose-500 text-white shadow-lg shadow-red-200"
                         : "bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-200"
@@ -196,8 +196,8 @@ const DashboardService = () => {
           <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
             <button
               onClick={handleSave}
-              disabled={isLoading}
-              className="w-full py-4 rounded-xl text-white font-semibold bg-gradient-to-r from-teal-500  to-teal-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+              disabled={isLoading} 
+              className="w-full md:py-4 py-3 rounded-xl text-white font-semibold bg-gradient-to-r from-teal-500  to-teal-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
             >
               {isLoading ? (
                 <>

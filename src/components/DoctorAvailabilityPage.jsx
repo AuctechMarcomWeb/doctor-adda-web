@@ -28,11 +28,11 @@ const DoctorAvailabilityPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 lg:p-8">
-      <div className="w-[90%] mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 md:p-4 p-2 lg:p-8">
+      <div className="md:w-[90%] mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className=" md:text-xl font-bold text-gray-800 mb-2">
+          <h1 className=" text-lg md:text-xl  font-bold text-gray-800 mb-2">
             Available Doctors
           </h1>
           <div className="w-16 h-1 bg-blue-600 rounded-full"></div>
@@ -105,7 +105,7 @@ const DoctorAvailabilityPage = () => {
         {/* Requirements Section */}
         <div className="bg-white rounded-2xl shadow-lg p-6 lg:p-8 border border-slate-100">
           <div className="mb-6">
-            <h2 className=" md:text-xl font-bold text-slate-800 mb-2">
+            <h2 className=" md:text-xl text-lg font-bold text-slate-800 mb-2">
               Your Posted Requirements
             </h2>
             <div className="w-12 h-1 bg-blue-600 rounded-full"></div>

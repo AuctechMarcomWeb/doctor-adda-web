@@ -13,9 +13,9 @@ const AffiliatedDoctors = () => {
   };
 
   return (
-    <div className="w-[90%] mx-auto bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col">
+    <div className="md:w-[90%] mx-auto bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col">
       {/* Header */}
-      <header className=" bg-white/80 backdrop-blur-md shadow-sm px-6 py-4 flex items-center justify-between gap-3 mb-2">
+      <header className=" bg-white/80 backdrop-blur-md shadow-sm md:px-6 md:py-4 px-3 py-2 flex items-center justify-between gap-3 mb-2">
         <div className="flex items-center">
           <Stethoscope className="text-blue-600" size={26} />
           <h1 className="text-lg sm:text-xl font-bold text-gray-800">
@@ -40,7 +40,7 @@ const AffiliatedDoctors = () => {
       </header>
 
       {/* Doctors List */}
-      <main className="flex-1 px-4 sm:px-8 py-6 space-y-4">
+      <main className="flex-1 md:px-4  py-6 space-y-4">
         {doctors.length === 0 ? (
           <div className="text-center text-gray-500 mt-16">
             <p className="text-lg font-medium">No doctors added yet.</p>

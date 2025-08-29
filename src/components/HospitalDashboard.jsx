@@ -162,7 +162,7 @@ const HospitalDashboard = () => {
         </nav>
       </div>
 
-      <div className="p-6 lg:pl-80">
+      <div className="md:p-6 p-2 lg:pl-80">
         {activeView === "jobs" ? (
           <DoctorAvailabilityPage />
         ) : activeView === "doctors" ? (
