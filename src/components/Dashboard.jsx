@@ -28,35 +28,35 @@ const Dashboard = () => {
       label: "Total Orders",
       value: "12",
       icon: "https://img.icons8.com/ios-filled/50/FFFFFF/shopping-cart.png",
-      color: "from-blue-500 to-blue-600",
+      color: "from-teal-500 to-teal-600",
       bg: "from-blue-50 to-blue-100",
     },
     {
       label: "Total Customer",
       value: "12",
       icon: "https://img.icons8.com/ios-filled/50/FFFFFF/human-resources.png",
-      color: "from-emerald-500 to-emerald-600",
+      color: "from-teal-500 to-teal-600",
       bg: "from-emerald-50 to-emerald-100",
     },
     {
       label: "Accepted Orders",
       value: "2",
       icon: "https://img.icons8.com/color/48/verified-account--v1.png",
-      color: "from-purple-500 to-purple-600",
+      color: "from-teal-500 to-teal-600",
       bg: "from-purple-50 to-purple-100",
     },
     {
       label: "Pending Orders",
       value: "2",
       icon: "https://img.icons8.com/ios-filled/50/FFFFFF/hourglass.png",
-      color: "from-amber-500 to-amber-600",
+      color: "from-teal-500 to-teal-600",
       bg: "from-amber-50 to-amber-100",
     },
     {
       label: "In Transit",
       value: "1",
       icon: "https://img.icons8.com/ios-filled/50/FFFFFF/semi-truck-side-view.png",
-      color: "from-orange-500 to-orange-600",
+      color: "from-teal-500 to-teal-600",
       bg: "from-orange-50 to-orange-100",
     },
     {
@@ -267,7 +267,7 @@ const Dashboard = () => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <div className="relative">
-                    <div className="w-12 h-12 bg-gradient-to-br from-amber-400 via-orange-400 to-red-400 rounded-2xl flex items-center justify-center text-3xl shadow-xl group-hover:scale-110 transition-transform duration-300">
+                    <div className="w-12 h-12 bg-gradient-to-br from-teal-500 to-teal-600 rounded-2xl flex items-center justify-center text-3xl shadow-xl group-hover:scale-110 transition-transform duration-300">
                       <img
                         width="30"
                         height="30"

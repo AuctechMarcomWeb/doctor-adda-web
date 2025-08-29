@@ -20,7 +20,7 @@ import DiagnosticAvailability from "./DiagnosticAvailability";
 import PackageServices from "./PackageServices";
 import DiagnosticReferrals from "./DiagnosticReferrals";
 
-const DiagnosticDashboard = () => {
+const      DiagnosticDashboard = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
@@ -32,42 +32,42 @@ const DiagnosticDashboard = () => {
       label: "Total  Patients",
       value: "12",
       icon: "https://img.icons8.com/ios-filled/50/FFFFFF/human-resources.png",
-      color: "from-blue-500 to-blue-600",
+      color: "from-blue-500  to-green-400",
       bg: "from-blue-50 to-blue-100",
     },
     {
       label: "Total  Appointment",
       value: "12",
       icon: "https://img.icons8.com/ios-filled/50/FFFFFF/human-resources.png",
-      color: "from-emerald-500 to-emerald-600",
+      color: "from-blue-500  to-green-400",
       bg: "from-emerald-50 to-emerald-100",
     },
     {
       label: " Samples Collected",
       value: "2",
       icon: "https://img.icons8.com/external-anggara-outline-color-anggara-putra/32/external-test-tube-medical-and-healthcare-anggara-outline-color-anggara-putra.png",
-      color: "from-purple-500 to-purple-600",
+      color: "from-blue-500  to-green-400",
       bg: "from-purple-50 to-purple-100",
     },
     {
       label: " Pending Reports ",
       value: "2",
       icon: "https://img.icons8.com/ios-filled/50/FFFFFF/hourglass-sand-top.png",
-      color: "from-amber-500 to-amber-600",
+      color: "from-blue-500  to-green-400",
       bg: "from-amber-50 to-amber-100",
     },
     {
       label: "Completed Reports ",
       value: "2",
       icon: "https://img.icons8.com/color/48/verified-account--v1.png",
-      color: "from-amber-500 to-amber-600",
+      color: "from-blue-500  to-green-400",
       bg: "from-amber-50 to-amber-100",
     },
     {
       label: "Average Rating",
       value: "2",
       icon: "https://img.icons8.com/ios-filled/FFFFFF/50/filled-star--v1.png",
-      color: "from-amber-500 to-amber-600",
+      color: "from-blue-500  to-green-400",
       bg: "from-amber-50 to-amber-100",
     },
    

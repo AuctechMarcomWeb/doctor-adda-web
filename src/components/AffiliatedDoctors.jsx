@@ -26,7 +26,7 @@ const AffiliatedDoctors = () => {
         {/* Floating Add Doctor Button */}
         <button
           onClick={() => setIsModalOpen(true)}
-          className="  right-6 px-6 py-3 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold shadow-lg hover:shadow-2xl flex items-center gap-2 transition transform hover:scale-105"
+          className="  right-6 px-6 py-3 rounded-full bg-gradient-to-r from-[#007BBD] to-[#005A8C] text-white font-semibold shadow-lg hover:shadow-2xl flex items-center gap-2 transition transform hover:scale-105"
         >
           <UserPlus size={20} />
           Add Doctor
@@ -54,7 +54,7 @@ const AffiliatedDoctors = () => {
             >
               {/* Left side - Profile */}
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 flex items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-blue-700 text-white text-lg font-bold shadow">
+                <div className="w-14 h-14 flex items-center justify-center rounded-full bg-gradient-to-r from-[#007BBD] to-[#005A8C] text-white text-lg font-bold shadow">
                   {doctor.name.charAt(0).toUpperCase()}
                 </div>
                 <div>

@@ -30,28 +30,28 @@ const HospitalDashboard = () => {
       label: "Total Internal Doctors",
       value: "12",
       icon: "https://img.icons8.com/ios-filled/50/FFFFFF/medical-doctor.png",
-      color: "from-blue-500 to-blue-600",
+      color: "from-[#007BBD] to-[#005A8C]",
       bg: "from-blue-50 to-blue-100",
     },
     {
       label: "Total OPD Patients",
       value: "12",
       icon: "https://img.icons8.com/ios-filled/50/FFFFFF/human-resources.png",
-      color: "from-emerald-500 to-emerald-600",
+      color: "  from-[#007BBD] to-[#005A8C]",
       bg: "from-emerald-50 to-emerald-100",
     },
     {
       label: "Registered Doctor",
       value: "2",
       icon: "https://img.icons8.com/color/48/verified-account--v1.png",
-      color: "from-purple-500 to-purple-600",
+      color: "from-[#007BBD] to-[#005A8C]",
       bg: "from-purple-50 to-purple-100",
     },
     {
       label: "Total Doctors",
       value: "2",
       icon: "https://img.icons8.com/ios-filled/50/FFFFFF/conference-call.png",
-      color: "from-amber-500 to-amber-600",
+      color: "from-[#007BBD] to-[#005A8C]",
       bg: "from-amber-50 to-amber-100",
     },
    
@@ -70,7 +70,7 @@ const HospitalDashboard = () => {
           </button>
           <button
             onClick={() => setActiveView("mydashboard")}
-            className="text-xl font-bold bg-gradient-to-r from-blue-900  to-blue-500 bg-clip-text text-transparent hover:from-blue-700 hover:to-indigo-700 transition-all"
+            className="text-xl font-bold  bg-gradient-to-br from-[#007BBD] to-[#005A8C] bg-clip-text text-transparent hover:from-blue-700 hover:to-indigo-700 transition-all"
           >
             HospitalDashboard
           </button>
@@ -83,7 +83,7 @@ const HospitalDashboard = () => {
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-red-500 to-pink-500 rounded-full animate-pulse"></div>
             </button>
           </div>
-          <div className="w-10 h-10 bg-gradient-to-r from-blue-900  to-blue-500 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+          <div className="w-10 h-10  bg-gradient-to-br from-[#007BBD] to-[#005A8C] rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
             AH
           </div>
         </div>
@@ -104,7 +104,7 @@ const HospitalDashboard = () => {
         } lg:translate-x-0 lg:shadow-xl lg:border-r lg:border-white/20`}
       >
         <div>
-          <img className="bg-gradient-to-r from-blue-900  to-blue-500 px-6 py-4" src={dasboardlogo} alt=""  />
+          <img className=" bg-gradient-to-br from-[#007BBD] to-[#005A8C] px-6 py-4" src={dasboardlogo} alt=""  />
         </div>
         <div className="p-6 border-b border-gray-100">
           <div className="flex items-center">
@@ -119,7 +119,7 @@ const HospitalDashboard = () => {
             {/* </div> */}
             <div className="flex-1 ml-4">
               <p className="font-bold text-gray-800">Auctech Hospital</p>
-              <button className="text-sm text-teal-600 hover:text-teal-700 font-medium transition-colors">
+              <button className="text-sm text-blue-500 hover:text-teal-700 font-medium transition-colors">
                 Edit Profile
               </button>
             </div>
@@ -147,7 +147,7 @@ const HospitalDashboard = () => {
               }}
               className={`w-full flex items-center px-4 py-3 rounded-xl transition-all duration-200 group ${
                 activeView === id
-                  ? "bg-gradient-to-r from-blue-900  to-blue-500 text-white shadow-lg"
+                  ? " bg-gradient-to-br from-[#007BBD] to-[#005A8C] text-white shadow-lg"
                   : "text-gray-700 hover:bg-blue-50 hover:text-blue-600"
               }`}
             >
@@ -170,7 +170,7 @@ const HospitalDashboard = () => {
         ) : (
           <div className="space-y-8 md:p-6 bg-gradient-to-br from-slate-50 to-blue-50/30 min-h-screen">
             {/* Premium Hero Section */}
-            <div className="relative overflow-hidden bg-gradient-to-br from-blue-900  to-blue-500 rounded-3xl p-6 text-white shadow-2xl border border-white/10">
+            <div className="relative overflow-hidden bg-gradient-to-br from-[#007BBD] to-[#005A8C] rounded-3xl p-6 text-white shadow-2xl border border-white/10">
               {/* Animated Background Elements */}
               <div className="absolute inset-0">
                 <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-white/20 to-transparent rounded-full -translate-y-48 translate-x-48 animate-pulse"></div>
@@ -253,7 +253,7 @@ const HospitalDashboard = () => {
             <div className="px-1 md:px-0 space-y-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-900  to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
+                  <div className="w-10 h-10 bg-gradient-to-br from-[#007BBD] to-[#005A8C]  to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
                     <TrendingUp className="w-5 h-5 text-white" />
                   </div>
                   <h2 className="ml-4 md:text-xl text-base font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 bg-clip-text text-transparent">

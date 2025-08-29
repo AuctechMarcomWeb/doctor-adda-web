@@ -51,7 +51,7 @@ const DoctorAvailabilityPage = () => {
                   {/* Doctor Avatar and Status */}
                   <div className="flex items-start justify-between mb-4">
                     <div className="relative">
-                      <div className="w-16 h-16 lg:w-16 lg:h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-xl lg:text-2xl font-bold shadow-lg">
+                      <div className="w-16 h-16 lg:w-16 lg:h-16 rounded-full bg-gradient-to-br from-[#007BBD] to-[#005A8C] flex items-center justify-center text-white text-xl lg:text-2xl font-bold shadow-lg">
                         {doctor.avatar}
                       </div>
                       {doctor.isOnline && (
@@ -123,7 +123,7 @@ const DoctorAvailabilityPage = () => {
             {/* Post Requirement Button */}
             <button
               onClick={() => setIsModalOpen(true)}
-              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-xl font-semibold text-base transition-all duration-200 flex items-center justify-center gap-3 mx-auto shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              className="bg-gradient-to-r from-[#007BBD] to-[#005A8C] hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-xl font-semibold text-base transition-all duration-200 flex items-center justify-center gap-3 mx-auto shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
               <Plus size={24} />
               Post Urgent Requirement
