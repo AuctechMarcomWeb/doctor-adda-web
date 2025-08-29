@@ -15,7 +15,7 @@ const ManageAppointments = () => {
   };
 
   return (
-    <div className="p-4 max-w-4xl mx-auto">
+    <div className="p-4 w-[90%] mx-auto">
       {/* Header */}
       <div className="flex items-center mb-2">
         <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-green-400 rounded-xl flex items-center justify-center shadow-lg">
@@ -47,7 +47,7 @@ const ManageAppointments = () => {
             onClick={() => setActiveTab(tab)}
             className={`px-5 py-2 rounded-full border text-sm font-medium transition ${
               activeTab === tab
-                ? "bg-blue-600 text-white border-blue-600"
+                ? "bg-gradient-to-br from-blue-400 to-green-400 text-white border-blue-600"
                 : "bg-gray-100 text-gray-600 border-gray-200 hover:bg-gray-200"
             }`}
           >

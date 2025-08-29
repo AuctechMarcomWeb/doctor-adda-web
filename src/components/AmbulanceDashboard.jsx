@@ -31,8 +31,8 @@ const AmbulanceDashboard = () => {
     {
       label: "Available Ambulance",
       value: "150",
-      icon: "https://img.icons8.com/ios/50/human-resources.png",
-      color: "from-red-500 to-blue-600",
+      icon: "https://img.icons8.com/ios-filled/50/FFFFFF/human-resources.png",
+      color: "from-red-500 to-red-400",
       bg: "from-blue-50 to-blue-100",
     },
     
@@ -42,7 +42,7 @@ const AmbulanceDashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Enhanced Top Navigation */}
-      <div className="bg-white/80 backdrop-blur-xl border-b border-white/20 shadow-lg p-4 flex justify-between items-center lg:pl-80">
+      <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-white/20 shadow-lg p-4 flex justify-between items-center lg:pl-80">
         <div className="flex items-center">
           <button
             className="mr-4 p-2 hover:bg-gray-100 rounded-xl transition-colors lg:hidden"
@@ -52,7 +52,7 @@ const AmbulanceDashboard = () => {
           </button>
           <button
             onClick={() => setActiveView("mydashboard")}
-            className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent hover:from-blue-700 hover:to-indigo-700 transition-all"
+            className="text-xl font-bold bg-gradient-to-r from-red-700  to-red-400 bg-clip-text text-transparent hover:from-blue-700 hover:to-indigo-700 transition-all"
           >
             Ambulance Dashboard
           </button>
@@ -65,7 +65,7 @@ const AmbulanceDashboard = () => {
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-red-500 to-pink-500 rounded-full animate-pulse"></div>
             </button>
           </div>
-          <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+          <div className="w-10 h-10 bg-gradient-to-r from-red-700  to-red-400 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
             AH
           </div>
         </div>
@@ -86,7 +86,7 @@ const AmbulanceDashboard = () => {
         } lg:translate-x-0 lg:shadow-xl lg:border-r lg:border-white/20`}
       >
         <div>
-          <img className="bg-gradient-to-br from-red-700  to-purple-400 px-6 py-4" src={dasboardlogo} alt=""  />
+          <img className="bg-gradient-to-br from-red-700  to-red-400 px-6 py-4" src={dasboardlogo} alt=""  />
         </div>
         <div className="p-6 border-b border-gray-100">
           <div className="flex items-center">
@@ -129,13 +129,13 @@ const AmbulanceDashboard = () => {
               }}
               className={`w-full flex items-center px-4 py-3 rounded-xl transition-all duration-200 group ${
                 activeView === id
-                  ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg"
-                  : "text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                  ? "bg-gradient-to-r from-red-700  to-red-400 text-white shadow-lg"
+                  : "text-gray-700 hover:bg-blue-50 hover:text-red-600"
               }`}
             >
               <Icon
                 className={`h-5 w-5 mr-3 ${
-                  activeView === id ? "text-white" : "text-blue-500"
+                  activeView === id ? "text-white" : "text-red-500"
                 }`}
               />
               <span className="font-medium">{label}</span>
@@ -156,7 +156,7 @@ const AmbulanceDashboard = () => {
         ) : (
           <div className="space-y-8 md:p-6 bg-gradient-to-br from-slate-50 to-blue-50/30 min-h-screen">
             {/* Premium Hero Section */}
-            <div className="relative overflow-hidden bg-gradient-to-br from-red-700  to-purple-400 rounded-3xl p-6 text-white shadow-2xl border border-white/10">
+            <div className="relative overflow-hidden bg-gradient-to-br from-red-700  to-red-400 rounded-3xl p-6 text-white shadow-2xl border border-white/10">
               {/* Animated Background Elements */}
               <div className="absolute inset-0">
                 <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-white/20 to-transparent rounded-full -translate-y-48 translate-x-48 animate-pulse"></div>
@@ -239,7 +239,7 @@ const AmbulanceDashboard = () => {
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
+                  <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-red-400 rounded-xl flex items-center justify-center shadow-lg">
                     <TrendingUp className="w-5 h-5 text-white" />
                   </div>
                   <h2 className="ml-4 md:text-xl text-base font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 bg-clip-text text-transparent">

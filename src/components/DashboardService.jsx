@@ -35,11 +35,11 @@ const DashboardService = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-      <div className="max-w-7xl mx-auto py-8  px-4 sm:px-6 lg:px-2">
+      <div className="w-[90%] mx-auto py-8  px-4 sm:px-6 lg:px-2">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg">
+            <div className="p-2 bg-gradient-to-r from-teal-500 to-teal-600 rounded-lg">
               <Settings className="h-6 w-6 text-white" />
             </div>
             <h1 className="text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
@@ -197,7 +197,7 @@ const DashboardService = () => {
             <button
               onClick={handleSave}
               disabled={isLoading}
-              className="w-full py-4 rounded-xl text-white font-semibold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+              className="w-full py-4 rounded-xl text-white font-semibold bg-gradient-to-r from-teal-500  to-teal-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
             >
               {isLoading ? (
                 <>
