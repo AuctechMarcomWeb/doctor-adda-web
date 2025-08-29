@@ -90,7 +90,7 @@ const DoctorDashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Enhanced Top Navigation */}
-      <div className="bg-white/80 backdrop-blur-xl border-b border-white/20 shadow-lg p-4 flex justify-between items-center lg:pl-80">
+      <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-white/20 shadow-lg p-4 flex justify-between items-center lg:pl-80">
         <div className="flex items-center">
           <button
             className="mr-4 p-2 hover:bg-gray-100 rounded-xl transition-colors lg:hidden"
