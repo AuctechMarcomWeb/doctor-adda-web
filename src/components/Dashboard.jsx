@@ -27,14 +27,14 @@ const Dashboard = () => {
     {
       label: "Total Orders",
       value: "12",
-      icon: "https://img.icons8.com/ios/50/shopping-cart.png",
+      icon: "https://img.icons8.com/ios-filled/50/FFFFFF/shopping-cart.png",
       color: "from-blue-500 to-blue-600",
       bg: "from-blue-50 to-blue-100",
     },
     {
       label: "Total Customer",
       value: "12",
-      icon: "https://img.icons8.com/ios/50/human-resources.png",
+      icon: "https://img.icons8.com/ios-filled/50/FFFFFF/human-resources.png",
       color: "from-emerald-500 to-emerald-600",
       bg: "from-emerald-50 to-emerald-100",
     },
@@ -48,14 +48,14 @@ const Dashboard = () => {
     {
       label: "Pending Orders",
       value: "2",
-      icon: "https://img.icons8.com/ios-glyphs/50/hourglass.png",
+      icon: "https://img.icons8.com/ios-filled/50/FFFFFF/hourglass.png",
       color: "from-amber-500 to-amber-600",
       bg: "from-amber-50 to-amber-100",
     },
     {
       label: "In Transit",
       value: "1",
-      icon: "https://img.icons8.com/ios/50/semi-truck-side-view.png",
+      icon: "https://img.icons8.com/ios-filled/50/FFFFFF/semi-truck-side-view.png",
       color: "from-orange-500 to-orange-600",
       bg: "from-orange-50 to-orange-100",
     },
@@ -71,7 +71,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Enhanced Top Navigation */}
-      <div className="bg-white/80 backdrop-blur-xl border-b border-white/20 shadow-lg p-4 flex justify-between items-center lg:pl-80">
+      <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-white/20 shadow-lg p-4 flex justify-between items-center lg:pl-80">
         <div className="flex items-center">
           <button
             className="mr-4 p-2 hover:bg-gray-100 rounded-xl transition-colors lg:hidden"
@@ -81,7 +81,7 @@ const Dashboard = () => {
           </button>
           <button
             onClick={() => setActiveView("mydashboard")}
-            className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent hover:from-blue-700 hover:to-indigo-700 transition-all"
+            className="text-xl font-bold bg-gradient-to-r from-teal-500 to-teal-600 bg-clip-text text-transparent hover:from-blue-700 hover:to-indigo-700 transition-all"
           >
             Dashboard
           </button>
@@ -94,7 +94,7 @@ const Dashboard = () => {
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-red-500 to-pink-500 rounded-full animate-pulse"></div>
             </button>
           </div>
-          <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+          <div className="w-10 h-10 bg-gradient-to-r from-teal-500 to-teal-600 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
             N
           </div>
         </div>
@@ -116,7 +116,7 @@ const Dashboard = () => {
       >
         <div>
           <img
-            className="bg-gradient-to-r from-blue-600 to-red-600 px-6 py-4"
+            className="bg-gradient-to-r from-teal-500 to-teal-600 px-6 py-4"
             src={dasboardlogo}
             alt=""
           />
@@ -162,13 +162,13 @@ const Dashboard = () => {
               }}
               className={`w-full flex items-center px-4 py-3 rounded-xl transition-all duration-200 group ${
                 activeView === id
-                  ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg"
-                  : "text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                  ? "bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg"
+                  : "text-gray-700 hover:bg-blue-50 hover:text-teal-600"
               }`}
             >
               <Icon
                 className={`h-5 w-5 mr-3 ${
-                  activeView === id ? "text-white" : "text-blue-500"
+                  activeView === id ? "text-white" : "text-teal-500"
                 }`}
               />
               <span className="font-medium">{label}</span>
@@ -185,7 +185,7 @@ const Dashboard = () => {
         ) : (
           <div className="space-y-8 md:p-6 bg-gradient-to-br from-slate-50 to-blue-50/30 min-h-screen">
             {/* Premium Hero Section */}
-            <div className="relative overflow-hidden bg-gradient-to-br from-blue-700 via-indigo-700 to-purple-800 rounded-3xl p-6 text-white shadow-2xl border border-white/10">
+            <div className="relative overflow-hidden bg-gradient-to-br from-teal-500 to-teal-600 rounded-3xl p-6 text-white shadow-2xl border border-white/10">
               {/* Animated Background Elements */}
               <div className="absolute inset-0">
                 <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-white/20 to-transparent rounded-full -translate-y-48 translate-x-48 animate-pulse"></div>
@@ -275,7 +275,7 @@ const Dashboard = () => {
                         alt="star-emoji"
                       />
                     </div>
-                    <div className="absolute -top-1 -right-1 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-xs text-white font-bold shadow-lg">
+                    <div className="absolute -top-1 -right-1 w-6 h-6 bg-teal-500 rounded-full flex items-center justify-center text-xs text-white font-bold shadow-lg">
                       ✓
                     </div>
                   </div>
@@ -318,7 +318,7 @@ const Dashboard = () => {
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
+                  <div className="w-10 h-10 bg-gradient-to-br from-teal-600 to-teal-400 rounded-xl flex items-center justify-center shadow-lg">
                     <TrendingUp className="w-5 h-5 text-white" />
                   </div>
                   <h2 className="ml-4 md:text-xl text-base font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 bg-clip-text text-transparent">

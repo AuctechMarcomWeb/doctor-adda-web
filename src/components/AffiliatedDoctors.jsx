@@ -13,12 +13,12 @@ const AffiliatedDoctors = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col">
+    <div className="w-[90%] mx-auto bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col">
       {/* Header */}
-      <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-md shadow-sm px-6 py-4 flex items-center justify-between gap-3 mb-2">
+      <header className=" bg-white/80 backdrop-blur-md shadow-sm px-6 py-4 flex items-center justify-between gap-3 mb-2">
         <div className="flex items-center">
           <Stethoscope className="text-blue-600" size={26} />
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
+          <h1 className="text-lg sm:text-xl font-bold text-gray-800">
             Affiliated Doctors
           </h1>
         </div>

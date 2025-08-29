@@ -12,7 +12,7 @@ const DiagnosticAvailability = () => {
   };
 
   return (
-    <div className="p-4 max-w-4xl mx-auto">
+    <div className="p-4 w-[90%] mx-auto">
       {/* Header */}
       <div className="flex items-center mb-2">
         <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-green-400 rounded-xl flex items-center justify-center shadow-lg">

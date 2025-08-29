@@ -31,14 +31,14 @@ const DiagnosticDashboard = () => {
     {
       label: "Total  Patients",
       value: "12",
-      icon: "https://img.icons8.com/ios/50/human-resources.png",
+      icon: "https://img.icons8.com/ios-filled/50/FFFFFF/human-resources.png",
       color: "from-blue-500 to-blue-600",
       bg: "from-blue-50 to-blue-100",
     },
     {
       label: "Total  Appointment",
       value: "12",
-      icon: "https://img.icons8.com/ios/50/human-resources.png",
+      icon: "https://img.icons8.com/ios-filled/50/FFFFFF/human-resources.png",
       color: "from-emerald-500 to-emerald-600",
       bg: "from-emerald-50 to-emerald-100",
     },
@@ -52,7 +52,7 @@ const DiagnosticDashboard = () => {
     {
       label: " Pending Reports ",
       value: "2",
-      icon: "https://img.icons8.com/ios-filled/50/hourglass-sand-top.png",
+      icon: "https://img.icons8.com/ios-filled/50/FFFFFF/hourglass-sand-top.png",
       color: "from-amber-500 to-amber-600",
       bg: "from-amber-50 to-amber-100",
     },
@@ -66,7 +66,7 @@ const DiagnosticDashboard = () => {
     {
       label: "Average Rating",
       value: "2",
-      icon: "https://img.icons8.com/color/48/filled-star--v1.png",
+      icon: "https://img.icons8.com/ios-filled/FFFFFF/50/filled-star--v1.png",
       color: "from-amber-500 to-amber-600",
       bg: "from-amber-50 to-amber-100",
     },
@@ -76,7 +76,7 @@ const DiagnosticDashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Enhanced Top Navigation */}
-      <div className="bg-white/80 backdrop-blur-xl border-b border-white/20 shadow-lg p-4 flex justify-between items-center lg:pl-80">
+      <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-white/20 shadow-lg p-4 flex justify-between items-center lg:pl-80">
         <div className="flex items-center">
           <button
             className="mr-4 p-2 hover:bg-gray-100 rounded-xl transition-colors lg:hidden"
@@ -86,7 +86,7 @@ const DiagnosticDashboard = () => {
           </button>
           <button
             onClick={() => setActiveView("mydashboard")}
-            className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent hover:from-blue-700 hover:to-indigo-700 transition-all"
+            className="text-xl font-bold bg-gradient-to-r from-blue-500  to-green-400 bg-clip-text text-transparent hover:from-blue-700 hover:to-indigo-700 transition-all"
           >
             Diagnostic Dashboard
           </button>
@@ -99,7 +99,7 @@ const DiagnosticDashboard = () => {
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-red-500 to-pink-500 rounded-full animate-pulse"></div>
             </button>
           </div>
-          <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+          <div className="w-10 h-10 bg-gradient-to-r from-blue-500  to-green-400 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
             AH
           </div>
         </div>
@@ -165,13 +165,13 @@ const DiagnosticDashboard = () => {
               }}
               className={`w-full flex items-center px-4 py-3 rounded-xl transition-all duration-200 group ${
                 activeView === id
-                  ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg"
-                  : "text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                  ? "bg-gradient-to-r from-blue-500  to-green-400 text-white shadow-lg"
+                  : "text-gray-700 hover:bg-blue-50 hover:text-teal-600"
               }`}
             >
               <Icon
                 className={`h-5 w-5 mr-3 ${
-                  activeView === id ? "text-white" : "text-blue-500"
+                  activeView === id ? "text-white" : "text-blue-400"
                 }`}
               />
               <span className="font-medium">{label}</span>
@@ -275,7 +275,7 @@ const DiagnosticDashboard = () => {
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500  to-green-400 rounded-xl flex items-center justify-center shadow-lg">
                     <TrendingUp className="w-5 h-5 text-white" />
                   </div>
                   <h2 className="ml-4 md:text-xl text-base font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 bg-clip-text text-transparent">
