@@ -101,11 +101,11 @@ const AppointmentStatusCards = () => {
   ];
 
   return (
-    <div className="p-8 bg-blue-100  rounded-3xl">
+    <div className="md:p-8 p-2 bg-blue-100  rounded-3xl">
       <div className="max-w-7xl">
         <div className="mb-8">
           <div className="flex items-center">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
+            <div className="w-10 h-10  bg-gradient-to-br from-[#007BBD] to-[#005A8C] rounded-xl flex items-center justify-center shadow-lg">
               <File className="w-5 h-5 text-white" />
             </div>
             <h2 className="ml-4 md:text-xl text-base font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 bg-clip-text text-transparent">

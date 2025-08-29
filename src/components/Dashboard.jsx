@@ -27,36 +27,36 @@ const Dashboard = () => {
     {
       label: "Total Orders",
       value: "12",
-      icon: "https://img.icons8.com/ios/50/shopping-cart.png",
-      color: "from-blue-500 to-blue-600",
+      icon: "https://img.icons8.com/ios-filled/50/FFFFFF/shopping-cart.png",
+      color: "from-teal-500 to-teal-600",
       bg: "from-blue-50 to-blue-100",
     },
     {
       label: "Total Customer",
       value: "12",
-      icon: "https://img.icons8.com/ios/50/human-resources.png",
-      color: "from-emerald-500 to-emerald-600",
+      icon: "https://img.icons8.com/ios-filled/50/FFFFFF/human-resources.png",
+      color: "from-teal-500 to-teal-600",
       bg: "from-emerald-50 to-emerald-100",
     },
     {
       label: "Accepted Orders",
       value: "2",
       icon: "https://img.icons8.com/color/48/verified-account--v1.png",
-      color: "from-purple-500 to-purple-600",
+      color: "from-teal-500 to-teal-600",
       bg: "from-purple-50 to-purple-100",
     },
     {
       label: "Pending Orders",
       value: "2",
-      icon: "https://img.icons8.com/ios-glyphs/50/hourglass.png",
-      color: "from-amber-500 to-amber-600",
+      icon: "https://img.icons8.com/ios-filled/50/FFFFFF/hourglass.png",
+      color: "from-teal-500 to-teal-600",
       bg: "from-amber-50 to-amber-100",
     },
     {
       label: "In Transit",
       value: "1",
-      icon: "https://img.icons8.com/ios/50/semi-truck-side-view.png",
-      color: "from-orange-500 to-orange-600",
+      icon: "https://img.icons8.com/ios-filled/50/FFFFFF/semi-truck-side-view.png",
+      color: "from-teal-500 to-teal-600",
       bg: "from-orange-50 to-orange-100",
     },
     {
@@ -71,7 +71,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Enhanced Top Navigation */}
-      <div className="bg-white/80 backdrop-blur-xl border-b border-white/20 shadow-lg p-4 flex justify-between items-center lg:pl-80">
+      <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-white/20 shadow-lg md:p-4 p-2 flex justify-between items-center lg:pl-80">
         <div className="flex items-center">
           <button
             className="mr-4 p-2 hover:bg-gray-100 rounded-xl transition-colors lg:hidden"
@@ -81,7 +81,7 @@ const Dashboard = () => {
           </button>
           <button
             onClick={() => setActiveView("mydashboard")}
-            className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent hover:from-blue-700 hover:to-indigo-700 transition-all"
+            className="text-xl font-bold bg-gradient-to-r from-teal-500 to-teal-600 bg-clip-text text-transparent hover:from-blue-700 hover:to-indigo-700 transition-all"
           >
             Dashboard
           </button>
@@ -94,7 +94,7 @@ const Dashboard = () => {
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-red-500 to-pink-500 rounded-full animate-pulse"></div>
             </button>
           </div>
-          <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+          <div className="w-10 h-10 bg-gradient-to-r from-teal-500 to-teal-600 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
             N
           </div>
         </div>
@@ -116,7 +116,7 @@ const Dashboard = () => {
       >
         <div>
           <img
-            className="bg-gradient-to-r from-blue-600 to-red-600 px-6 py-4"
+            className="bg-gradient-to-r from-teal-500 to-teal-600 px-6 py-4"
             src={dasboardlogo}
             alt=""
           />
@@ -162,13 +162,13 @@ const Dashboard = () => {
               }}
               className={`w-full flex items-center px-4 py-3 rounded-xl transition-all duration-200 group ${
                 activeView === id
-                  ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg"
-                  : "text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                  ? "bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-lg"
+                  : "text-gray-700 hover:bg-blue-50 hover:text-teal-600"
               }`}
             >
               <Icon
                 className={`h-5 w-5 mr-3 ${
-                  activeView === id ? "text-white" : "text-blue-500"
+                  activeView === id ? "text-white" : "text-teal-500"
                 }`}
               />
               <span className="font-medium">{label}</span>
@@ -177,15 +177,15 @@ const Dashboard = () => {
         </nav>
       </div>
 
-      <div className="p-6 lg:pl-80">
+      <div className="md:p-6  lg:pl-80">
         {activeView === "services" ? (
           <DashboardService />
         ) : activeView === "wallet" ? (
           <DashboardWallet />
         ) : (
-          <div className="space-y-8 md:p-6 bg-gradient-to-br from-slate-50 to-blue-50/30 min-h-screen">
+          <div className="space-y-8 md:p-6 p-2  bg-gradient-to-br from-slate-50 to-blue-50/30 min-h-screen">
             {/* Premium Hero Section */}
-            <div className="relative overflow-hidden bg-gradient-to-br from-blue-700 via-indigo-700 to-purple-800 rounded-3xl p-6 text-white shadow-2xl border border-white/10">
+            <div className="relative overflow-hidden bg-gradient-to-br from-teal-500 to-teal-600 rounded-3xl p-2 md:p-6 text-white shadow-2xl border border-white/10">
               {/* Animated Background Elements */}
               <div className="absolute inset-0">
                 <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-white/20 to-transparent rounded-full -translate-y-48 translate-x-48 animate-pulse"></div>
@@ -263,11 +263,11 @@ const Dashboard = () => {
             </div>
 
             {/* Sophisticated Rating Card */}
-            <div className="bg-white/90 backdrop-blur-lg border border-white/30 rounded-2xl p-4 shadow-xl hover:shadow-2xl transition-all duration-300 group">
+            <div className="bg-white/90 backdrop-blur-lg border border-white/30 rounded-2xl mr-2 ml-2 md:mr-0 md:ml-0 p-4 shadow-xl hover:shadow-2xl transition-all duration-300 group">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <div className="relative">
-                    <div className="w-12 h-12 bg-gradient-to-br from-amber-400 via-orange-400 to-red-400 rounded-2xl flex items-center justify-center text-3xl shadow-xl group-hover:scale-110 transition-transform duration-300">
+                    <div className="w-12 h-12 bg-gradient-to-br from-teal-500 to-teal-600 rounded-2xl flex items-center justify-center text-3xl shadow-xl group-hover:scale-110 transition-transform duration-300">
                       <img
                         width="30"
                         height="30"
@@ -275,7 +275,7 @@ const Dashboard = () => {
                         alt="star-emoji"
                       />
                     </div>
-                    <div className="absolute -top-1 -right-1 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-xs text-white font-bold shadow-lg">
+                    <div className="absolute -top-1 -right-1 w-6 h-6 bg-teal-500 rounded-full flex items-center justify-center text-xs text-white font-bold shadow-lg">
                       ✓
                     </div>
                   </div>
@@ -315,15 +315,15 @@ const Dashboard = () => {
             </div>
 
             {/* Premium Statistics Grid */}
-            <div className="space-y-6">
+            <div className="px-1 md:px-0 space-y-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
+                  <div className="w-10 h-10 bg-gradient-to-br from-teal-600 to-teal-400 rounded-xl flex items-center justify-center shadow-lg">
                     <TrendingUp className="w-5 h-5 text-white" />
                   </div>
-                  <h2 className="ml-4 md:text-xl text-base font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 bg-clip-text text-transparent">
+                  <h1 className="ml-4 md:text-xl text-lg font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 bg-clip-text text-transparent">
                     Business Analytics
-                  </h2>
+                  </h1>
                 </div>
                 <div className="text-sm text-gray-500 bg-gray-100 px-4 py-2 rounded-full font-medium">
                   Last 30 days

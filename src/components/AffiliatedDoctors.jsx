@@ -13,12 +13,12 @@ const AffiliatedDoctors = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col">
+    <div className="md:w-[90%] mx-auto bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col">
       {/* Header */}
-      <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-md shadow-sm px-6 py-4 flex items-center justify-between gap-3 mb-2">
+      <header className=" bg-white/80 backdrop-blur-md shadow-sm md:px-6 md:py-4 px-3 py-2 flex items-center justify-between gap-3 mb-2">
         <div className="flex items-center">
           <Stethoscope className="text-blue-600" size={26} />
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
+          <h1 className="text-lg sm:text-xl font-bold text-gray-800">
             Affiliated Doctors
           </h1>
         </div>
@@ -26,7 +26,7 @@ const AffiliatedDoctors = () => {
         {/* Floating Add Doctor Button */}
         <button
           onClick={() => setIsModalOpen(true)}
-          className="  right-6 px-6 py-3 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold shadow-lg hover:shadow-2xl flex items-center gap-2 transition transform hover:scale-105"
+          className="  right-6 px-6 py-3 rounded-full bg-gradient-to-r from-[#007BBD] to-[#005A8C] text-white font-semibold shadow-lg hover:shadow-2xl flex items-center gap-2 transition transform hover:scale-105"
         >
           <UserPlus size={20} />
           Add Doctor
@@ -40,7 +40,7 @@ const AffiliatedDoctors = () => {
       </header>
 
       {/* Doctors List */}
-      <main className="flex-1 px-4 sm:px-8 py-6 space-y-4">
+      <main className="flex-1 md:px-4  py-6 space-y-4">
         {doctors.length === 0 ? (
           <div className="text-center text-gray-500 mt-16">
             <p className="text-lg font-medium">No doctors added yet.</p>
@@ -54,7 +54,7 @@ const AffiliatedDoctors = () => {
             >
               {/* Left side - Profile */}
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 flex items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-blue-700 text-white text-lg font-bold shadow">
+                <div className="w-14 h-14 flex items-center justify-center rounded-full bg-gradient-to-r from-[#007BBD] to-[#005A8C] text-white text-lg font-bold shadow">
                   {doctor.name.charAt(0).toUpperCase()}
                 </div>
                 <div>

@@ -28,11 +28,11 @@ const DoctorAvailabilityPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 lg:p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 md:p-4 p-2 lg:p-8">
+      <div className="md:w-[90%] mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className=" md:text-xl font-bold text-gray-800 mb-2">
+          <h1 className=" text-lg md:text-xl  font-bold text-gray-800 mb-2">
             Available Doctors
           </h1>
           <div className="w-16 h-1 bg-blue-600 rounded-full"></div>
@@ -51,7 +51,7 @@ const DoctorAvailabilityPage = () => {
                   {/* Doctor Avatar and Status */}
                   <div className="flex items-start justify-between mb-4">
                     <div className="relative">
-                      <div className="w-16 h-16 lg:w-16 lg:h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-xl lg:text-2xl font-bold shadow-lg">
+                      <div className="w-16 h-16 lg:w-16 lg:h-16 rounded-full bg-gradient-to-br from-[#007BBD] to-[#005A8C] flex items-center justify-center text-white text-xl lg:text-2xl font-bold shadow-lg">
                         {doctor.avatar}
                       </div>
                       {doctor.isOnline && (
@@ -105,7 +105,7 @@ const DoctorAvailabilityPage = () => {
         {/* Requirements Section */}
         <div className="bg-white rounded-2xl shadow-lg p-6 lg:p-8 border border-slate-100">
           <div className="mb-6">
-            <h2 className=" md:text-xl font-bold text-slate-800 mb-2">
+            <h2 className=" md:text-xl text-lg font-bold text-slate-800 mb-2">
               Your Posted Requirements
             </h2>
             <div className="w-12 h-1 bg-blue-600 rounded-full"></div>
@@ -123,7 +123,7 @@ const DoctorAvailabilityPage = () => {
             {/* Post Requirement Button */}
             <button
               onClick={() => setIsModalOpen(true)}
-              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-xl font-semibold text-base transition-all duration-200 flex items-center justify-center gap-3 mx-auto shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              className="bg-gradient-to-r from-[#007BBD] to-[#005A8C] hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-xl font-semibold text-base transition-all duration-200 flex items-center justify-center gap-3 mx-auto shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
               <Plus size={24} />
               Post Urgent Requirement

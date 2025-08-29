@@ -61,12 +61,12 @@ const DashboardWallet = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-8 md:px-4">
-      <div className="max-w-7xl mx-auto md:px-2">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      <div className="md:w-[90%] mx-auto py-8  px-4 sm:px-6 lg:px-2 ">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg">
+            <div className="p-2 bg-gradient-to-r from-teal-500 to-teal-600 rounded-lg">
               <Wallet className="h-6 w-6 text-white" />
             </div>
             <h1 className="md:text-2xl text-xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
@@ -81,14 +81,14 @@ const DashboardWallet = () => {
         {/* Balance Cards */}
         <div className="grid md:grid-cols-2 gap-6 mb-8">
           {/* Main Balance Card */}
-          <div className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 rounded-2xl shadow-xl p-6 text-white">
+          <div className="relative overflow-hidden bg-gradient-to-br from-teal-500 to-teal-600 rounded-2xl shadow-xl p-6 text-white">
             <div className="absolute top-0 right-0 -mr-10 -mt-10 w-32 h-32 bg-white opacity-5 rounded-full"></div>
             <div className="absolute bottom-0 left-0 -ml-6 -mb-6 w-24 h-24 bg-white opacity-5 rounded-full"></div>
 
             <div className="relative z-10">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-500 bg-opacity-20 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-gradient-to-br from-teal-300 to-teal-400 bg-opacity-20 rounded-xl flex items-center justify-center">
                     <Wallet className="w-6 h-6 text-white" />
                   </div>
                   <div>
@@ -117,7 +117,7 @@ const DashboardWallet = () => {
                 </div>
               </div>
 
-              <button className="w-full bg-gradient-to-br from-blue-800 to-blue-600 bg-opacity-20 hover:bg-opacity-30 transition-all duration-200 rounded-xl py-3 px-4 font-semibold text-sm backdrop-blur-sm border border-white border-opacity-20">
+              <button className="w-full bg-gradient-to-br from-teal-500 to-teal-600 bg-opacity-20 hover:bg-opacity-30 transition-all duration-200 rounded-xl py-3 px-4 font-semibold text-sm backdrop-blur-sm border border-white border-opacity-20">
                 Withdraw Funds
               </button>
             </div>
@@ -215,7 +215,7 @@ const DashboardWallet = () => {
                   <div className="flex items-start space-x-4">
                     {/* Avatar */}
                     <div className="flex-shrink-0">
-                      <div className="md:w-12 md:h-12 w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-md">
+                      <div className="md:w-12 md:h-12 w-8 h-8 bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl flex items-center justify-center shadow-md">
                         <User className="md:w-6 md:h-6 w-4 h-4 text-white" />
                       </div>
                     </div>
