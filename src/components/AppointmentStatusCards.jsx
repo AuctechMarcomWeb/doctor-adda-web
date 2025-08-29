@@ -101,7 +101,7 @@ const AppointmentStatusCards = () => {
   ];
 
   return (
-    <div className="p-8 bg-blue-100  rounded-3xl">
+    <div className="md:p-8 p-2 bg-blue-100  rounded-3xl">
       <div className="max-w-7xl">
         <div className="mb-8">
           <div className="flex items-center">

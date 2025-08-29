@@ -177,7 +177,7 @@ const Dashboard = () => {
         </nav>
       </div>
 
-      <div className="md:p-6 lg:pl-80">
+      <div className="md:p-6  lg:pl-80">
         {activeView === "services" ? (
           <DashboardService />
         ) : activeView === "wallet" ? (
@@ -321,9 +321,9 @@ const Dashboard = () => {
                   <div className="w-10 h-10 bg-gradient-to-br from-teal-600 to-teal-400 rounded-xl flex items-center justify-center shadow-lg">
                     <TrendingUp className="w-5 h-5 text-white" />
                   </div>
-                  <h2 className="ml-4 md:text-xl text-base font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 bg-clip-text text-transparent">
+                  <h1 className="ml-4 md:text-xl text-lg font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 bg-clip-text text-transparent">
                     Business Analytics
-                  </h2>
+                  </h1>
                 </div>
                 <div className="text-sm text-gray-500 bg-gray-100 px-4 py-2 rounded-full font-medium">
                   Last 30 days

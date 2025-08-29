@@ -5,7 +5,7 @@ const DiagnosticReferrals = () => {
   const referrals = []; // Replace with API data later
 
   return (
-    <div className="p-4 w-[90%] mx-auto">
+    <div className="md:p-4 p-2 md:w-[90%] mx-auto">
       {/* Header */}
       <div className="flex items-center mb-2">
         <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-green-400 rounded-xl flex items-center justify-center shadow-lg">

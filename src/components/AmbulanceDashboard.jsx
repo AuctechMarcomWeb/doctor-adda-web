@@ -144,7 +144,7 @@ const AmbulanceDashboard = () => {
         </nav>
       </div>
 
-      <div className="p-6 lg:pl-80">
+      <div className="md:p-6 p-2 lg:pl-80">
         {activeView === "jobs" ? (
           <ManageAppointments />
         ) : activeView === "report" ? (
@@ -242,7 +242,7 @@ const AmbulanceDashboard = () => {
                   <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-red-400 rounded-xl flex items-center justify-center shadow-lg">
                     <TrendingUp className="w-5 h-5 text-white" />
                   </div>
-                  <h2 className="ml-4 md:text-xl text-base font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 bg-clip-text text-transparent">
+                  <h2 className="ml-4 md:text-xl text-lg font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 bg-clip-text text-transparent">
                     Business Analytics
                   </h2>
                 </div>
