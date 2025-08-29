@@ -71,7 +71,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Enhanced Top Navigation */}
-      <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-white/20 shadow-lg p-4 flex justify-between items-center lg:pl-80">
+      <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-white/20 shadow-lg md:p-4 p-2 flex justify-between items-center lg:pl-80">
         <div className="flex items-center">
           <button
             className="mr-4 p-2 hover:bg-gray-100 rounded-xl transition-colors lg:hidden"
@@ -177,15 +177,15 @@ const Dashboard = () => {
         </nav>
       </div>
 
-      <div className="p-6 lg:pl-80">
+      <div className="md:p-6 lg:pl-80">
         {activeView === "services" ? (
           <DashboardService />
         ) : activeView === "wallet" ? (
           <DashboardWallet />
         ) : (
-          <div className="space-y-8 md:p-6 bg-gradient-to-br from-slate-50 to-blue-50/30 min-h-screen">
+          <div className="space-y-8 md:p-6 p-2  bg-gradient-to-br from-slate-50 to-blue-50/30 min-h-screen">
             {/* Premium Hero Section */}
-            <div className="relative overflow-hidden bg-gradient-to-br from-teal-500 to-teal-600 rounded-3xl p-6 text-white shadow-2xl border border-white/10">
+            <div className="relative overflow-hidden bg-gradient-to-br from-teal-500 to-teal-600 rounded-3xl p-2 md:p-6 text-white shadow-2xl border border-white/10">
               {/* Animated Background Elements */}
               <div className="absolute inset-0">
                 <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-white/20 to-transparent rounded-full -translate-y-48 translate-x-48 animate-pulse"></div>
