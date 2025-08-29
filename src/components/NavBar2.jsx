@@ -7,7 +7,7 @@ const NavBar2 = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const [activeSubCategory, setActiveSubCategory] = useState(null);
 
-  const navigation = useNavigate()
+  const navigation = useNavigate();
 
   const megaMenuData = {
     blood: {
@@ -98,29 +98,44 @@ const NavBar2 = () => {
     },
     diagnostic: {
       left: [
-        "Lab Tests",
-        "Body Checkups",
-        "Home Collection",
-        "Special Tests",
-        "Download Reports",
+        "Pathology",
+        "Radiology & Imaging",
+        "Cardiac & Pulmonary",
+        "Neurology",
+        "Ophthalmology & ENT",
+        "Genetic & Molecular",
+        "Preventive Health Packages",
+        "Govt & Corporate Panels",
       ],
       right: {
-        "Lab Tests": [
-          "CBC",
-          "Blood Glucose",
-          "Lipid Profile",
-          "Thyroid",
-          "Vitamin D",
+        "Pathology": [
+          "Hematology",
+          "Biochemistry",
+          "Hormones",
+          "Infection & Immunology",
+          "Tumor Markers",
+          "Advanced Hematology",
+          "Microbiology",
+          "Urine & Stool",
+          "Pregnancy & Fertility",
+          "Condition-Based Packages"
         ],
-        "Body Checkups": [
-          "Full Body Basic",
-          "Advanced",
-          "Executive",
-          "Master",
+        "Radiology & Imaging": [
+          "X-Ray",
+          "Ultrasound",
+          "CT Scan",
+          "MRI",
+          "PET-CT",
+          "Mammography",
+          "Bone Densitometry",
+
         ],
-        "Home Collection": ["Schedule Pickup", "Slot Availability"],
-        "Special Tests": ["COVID Test", "Cancer Marker", "Allergy Test"],
-        "Download Reports": ["Login", "Past Records"],
+        "Cardiac & Pulmonary": ["ECG / Echo", "Stress Tests", "Pulmonary Function"],
+        "Neurology": ["Brain Function", "Nerve & Muscle", "Sensory Pathways"],
+        "Ophthalmology & ENT": ["Eye Diagnostics", "ENT Diagnostics"],
+        "Genetic & Molecular": ["DNA Tests", "Prenatal Testing", "Oncology Genetics", "Allergy Panels"],
+        "Preventive Health Packages": ["Basic Health Package", "Executive Health Package", "Master Health Package", "Women’s Health Package", "Senior Citizen Package", "Child Health Package", ""],
+        "Govt & Corporate Panels": ["Govt Schemes", "Corporate Medicals", "Insurance Packages"],
       },
     },
     hospital: {
@@ -202,7 +217,7 @@ const NavBar2 = () => {
         {/* Top nav area + dropdown hover wrapper */}
         <div className="flex items-center sm:px-1 md:px-4 xl:px-4 justify-between font-medium text-gray-800 sm:text-[12px] md:text-[12px] xl:text-[15px]  overflow-x-auto ">
           <a href="/">
-            <FaHome  className="text-lg font-semibold text-gray-800 cursor-pointer hover:text-[#0074b2]" />
+            <FaHome className="text-lg font-semibold text-gray-800 cursor-pointer hover:text-[#0074b2]" />
           </a>
 
           {menuItems.map((menu) => (
@@ -213,33 +228,22 @@ const NavBar2 = () => {
                 setOpenDropdown(menu.key);
                 setActiveSubCategory(null);
               }}
-
-              onClick={()=>{
-                console.log("menu",menu?.label);
-                if (menu?.label=="Blood Bank") {
-                  navigation('/bloodbank')
-                  
-                } else if (menu?.label=="Pharmacies") {
-                  navigation('/pharmacy')
-                  
-                }else if (menu?.label=="Doctor & Specialists") {
-                  navigation('/doctor')
-                  
-                }else if (menu?.label=="Diagnostic") {
-                  navigation('/diagnostic')
-                  
-                }else if (menu?.label=="Hospitals & Clinics") {
-                  navigation('/hospital')
-                  
-                }else if (menu?.label=="Ambulance") {
-                  navigation('/ambulance')
-                  
+              onClick={() => {
+                console.log("menu", menu?.label);
+                if (menu?.label == "Blood Bank") {
+                  navigation("/bloodbank");
+                } else if (menu?.label == "Pharmacies") {
+                  navigation("/pharmacy");
+                } else if (menu?.label == "Doctor & Specialists") {
+                  navigation("/doctor");
+                } else if (menu?.label == "Diagnostic") {
+                  navigation("/diagnostic");
+                } else if (menu?.label == "Hospitals & Clinics") {
+                  navigation("/hospital");
+                } else if (menu?.label == "Ambulance") {
+                  navigation("/ambulance");
                 }
-                
               }}
-              
-
-
             >
               <div
                 className={`flex items-center gap-1  md:px-1 md:py-1 lg:px-0 lg:py-1 xl:px-3 xl:py-2 rounded hover:bg-[#0074b2] hover:text-white transition cursor-pointer ${
