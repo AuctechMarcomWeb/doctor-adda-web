@@ -263,7 +263,7 @@ const Dashboard = () => {
             </div>
 
             {/* Sophisticated Rating Card */}
-            <div className="bg-white/90 backdrop-blur-lg border border-white/30 rounded-2xl p-4 shadow-xl hover:shadow-2xl transition-all duration-300 group">
+            <div className="bg-white/90 backdrop-blur-lg border border-white/30 rounded-2xl mr-2 ml-2 md:mr-0 md:ml-0 p-4 shadow-xl hover:shadow-2xl transition-all duration-300 group">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <div className="relative">
@@ -315,7 +315,7 @@ const Dashboard = () => {
             </div>
 
             {/* Premium Statistics Grid */}
-            <div className="space-y-6">
+            <div className="px-1 md:px-0 space-y-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <div className="w-10 h-10 bg-gradient-to-br from-teal-600 to-teal-400 rounded-xl flex items-center justify-center shadow-lg">

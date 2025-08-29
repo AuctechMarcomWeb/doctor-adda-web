@@ -236,7 +236,7 @@ const AmbulanceDashboard = () => {
 
 
             {/* Premium Statistics Grid */}
-            <div className="space-y-6">
+            <div className="px-1 md:px-0 space-y-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-red-400 rounded-xl flex items-center justify-center shadow-lg">
