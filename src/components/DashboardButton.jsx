@@ -14,11 +14,15 @@ const DashboardButton = ({ userDetails }) => {
 
       // ✅ Single generic API call with await
       const response = await getRequest(
-        `${userDetails?.upgradeAccountType}/${userDetails?.upgradeAccountId}`
+        `${
+          userDetails?.upgradeAccountType == "Diagnostic"
+            ? "Diagnostics"
+            : userDetails?.upgradeAccountType
+        }/${userDetails?.upgradeAccountId}`
       );
 
       const profileData = response?.data?.data;
-console.log("profileData",profileData);
+      console.log("profileData", profileData);
 
       if (profileData?.isApprove === "NotApprove") {
         navigate("/verification");

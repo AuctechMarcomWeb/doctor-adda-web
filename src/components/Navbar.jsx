@@ -37,17 +37,22 @@ const Navbar = () => {
 
   console.log(
     "user profile data from redux in navbar",
-    userData,
+   
     userProfileData
   );
-  console.log("isLoggedIn from redux", isLoggedIn);
-  // Extract upgrade info
+
+
+  const hasUpgradeRequest =
+  !!(userProfileData?.upgradeAccountId && userProfileData?.upgradeAccountType);
+
+console.log("Has Upgrade Request:", hasUpgradeRequest);
+
   const { upgradeAccountId, upgradeAccountType, upgradeAccountApproveStatus } =
     userProfileData ?? {};
 
   // Determine if user is upgraded
   const isUpgraded =
-    upgradeAccountId && upgradeAccountType && upgradeAccountApproveStatus;
+    upgradeAccountId && upgradeAccountType ;
 
   console.log("isUpgraded", isUpgraded);
 
@@ -231,7 +236,7 @@ const Navbar = () => {
                           </button>
                         </Link> */}
 
-                      {isUpgraded ? (
+                      {hasUpgradeRequest ? (
                         <DashboardButton userDetails={userProfileData} />
                       ) : (
                         <Link to="/upgrade-profile">
