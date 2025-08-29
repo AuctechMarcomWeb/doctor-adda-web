@@ -242,38 +242,51 @@ const Navbar = () => {
                         </Link>
                       )}
 
-                      
-                        <Link onClick={() => setDropdownOpen(false)} to={isUpgraded ? "/dashboard" : "/pharmacy-dashboard"}>
-                          <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
-                            <User className="w-4 h-4" />
-                            {isUpgraded ? "Dashboard" : " Pharmacy Dashboard"}
-                          </button>
-                        </Link>
-                      <Link onClick={() => setDropdownOpen(false)} to={isUpgraded ? "/dashboard" : "/hospital-dashboard"}>
-                          <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
-                            <User className="w-4 h-4" />
-                            {isUpgraded ? "Dashboard" : "Hospital Dashboard"}
-                          </button>
-                        </Link>
-                        <Link onClick={() => setDropdownOpen(false)} to={isUpgraded ? "/dashboard" : "/diagnostic-dashboard"}>
-                          <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
-                            <User className="w-4 h-4" />
-                            {isUpgraded ? "Dashboard" : "Diagnostic Dashboard"}
-                          </button>
-                        </Link>
-                        <Link onClick={() => setDropdownOpen(false)} to={isUpgraded ? "/dashboard" : "/ambulance-dashboard"}>
-                          <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
-                            <User className="w-4 h-4" />
-                            {isUpgraded ? "Dashboard" : "Ambulance Dashboard"}
-                          </button>
-                        </Link>
-                        <Link onClick={() => setDropdownOpen(false)} to={isUpgraded ? "/dashboard" : "/doctor-dashboard"}>
-                          <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
-                            <User className="w-4 h-4" />
-                            {isUpgraded ? "Dashboard" : "Doctor Dashboard"}
-                          </button>
-                        </Link>
-                        
+                      <Link
+                        onClick={() => setDropdownOpen(false)}
+                        to={isUpgraded ? "/dashboard" : "/pharmacy-dashboard"}
+                      >
+                        <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
+                          <User className="w-4 h-4" />
+                          {isUpgraded ? "Dashboard" : " Pharmacy Dashboard"}
+                        </button>
+                      </Link>
+                      <Link
+                        onClick={() => setDropdownOpen(false)}
+                        to={isUpgraded ? "/dashboard" : "/hospital-dashboard"}
+                      >
+                        <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
+                          <User className="w-4 h-4" />
+                          {isUpgraded ? "Dashboard" : "Hospital Dashboard"}
+                        </button>
+                      </Link>
+                      <Link
+                        onClick={() => setDropdownOpen(false)}
+                        to={isUpgraded ? "/dashboard" : "/diagnostic-dashboard"}
+                      >
+                        <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
+                          <User className="w-4 h-4" />
+                          {isUpgraded ? "Dashboard" : "Diagnostic Dashboard"}
+                        </button>
+                      </Link>
+                      <Link
+                        onClick={() => setDropdownOpen(false)}
+                        to={isUpgraded ? "/dashboard" : "/ambulance-dashboard"}
+                      >
+                        <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
+                          <User className="w-4 h-4" />
+                          {isUpgraded ? "Dashboard" : "Ambulance Dashboard"}
+                        </button>
+                      </Link>
+                      <Link
+                        onClick={() => setDropdownOpen(false)}
+                        to={isUpgraded ? "/dashboard" : "/doctor-dashboard"}
+                      >
+                        <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
+                          <User className="w-4 h-4" />
+                          {isUpgraded ? "Dashboard" : "Doctor Dashboard"}
+                        </button>
+                      </Link>
                     </div>
                   )}
                 </div>
@@ -383,6 +396,51 @@ const Navbar = () => {
                             {isUpgraded ? "Dashboard" : "Upgrade Profile"}
                           </button>
                         </Link>
+                        <Link
+                        onClick={() => setDropdownOpen(false)}
+                        to={isUpgraded ? "/dashboard" : "/pharmacy-dashboard"}
+                      >
+                        <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
+                          <User className="w-4 h-4" />
+                          {isUpgraded ? "Dashboard" : " Pharmacy Dashboard"}
+                        </button>
+                      </Link>
+                      <Link
+                        onClick={() => setDropdownOpen(false)}
+                        to={isUpgraded ? "/dashboard" : "/hospital-dashboard"}
+                      >
+                        <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
+                          <User className="w-4 h-4" />
+                          {isUpgraded ? "Dashboard" : "Hospital Dashboard"}
+                        </button>
+                      </Link>
+                      <Link
+                        onClick={() => setDropdownOpen(false)}
+                        to={isUpgraded ? "/dashboard" : "/diagnostic-dashboard"}
+                      >
+                        <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
+                          <User className="w-4 h-4" />
+                          {isUpgraded ? "Dashboard" : "Diagnostic Dashboard"}
+                        </button>
+                      </Link>
+                      <Link
+                        onClick={() => setDropdownOpen(false)}
+                        to={isUpgraded ? "/dashboard" : "/ambulance-dashboard"}
+                      >
+                        <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
+                          <User className="w-4 h-4" />
+                          {isUpgraded ? "Dashboard" : "Ambulance Dashboard"}
+                        </button>
+                      </Link>
+                      <Link
+                        onClick={() => setDropdownOpen(false)}
+                        to={isUpgraded ? "/dashboard" : "/doctor-dashboard"}
+                      >
+                        <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
+                          <User className="w-4 h-4" />
+                          {isUpgraded ? "Dashboard" : "Doctor Dashboard"}
+                        </button>
+                      </Link>
                       </div>
                     )}
                   </div>
