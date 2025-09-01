@@ -18,7 +18,7 @@ import { Select } from "antd";
 import { useNavigate } from "react-router-dom";
 
 const HospitalRegistration = () => {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -45,7 +45,7 @@ const HospitalRegistration = () => {
     latitude: "",
     longitude: "",
     facilities: [{ name: "", discription: "" }],
-    profileImages:[],
+    profileImages: [],
   });
   console.log("formData", formData);
 
@@ -116,7 +116,6 @@ const HospitalRegistration = () => {
       return;
     }
 
-
     setErrors({});
     setLoading(true);
 
@@ -138,14 +137,13 @@ const HospitalRegistration = () => {
         toast.success(
           response?.data?.message || "Hospital registered successfully!"
         );
-        setShowSuccess(true); 
+        setShowSuccess(true);
         setTimeout(() => {
-          navigate("/verification");   // 👈 Verification page par redirect
-        }, 2000); 
+          navigate("/verification"); // 👈 Verification page par redirect
+        }, 2000);
       } else {
         toast.error(response?.data?.message || "Something went wrong!");
       }
-
     } catch (err) {
       console.error("Error Registering Hospital:", err);
       const message =
@@ -235,6 +233,7 @@ const HospitalRegistration = () => {
         console.error("Error fetching data:", error);
       });
   }, []);
+
   const validateForm = () => {
     const newErrors = {};
 

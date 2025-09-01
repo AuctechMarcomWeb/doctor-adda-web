@@ -1,12 +1,20 @@
 import React, { useState } from "react";
-import { Truck, Building, User, Activity } from "lucide-react";
+import { Truck, Building, User, Activity, Plus, MapPin } from "lucide-react";
 import logo from "../assets/dr-adda-logo.png";
+import { postRequest } from "../Helpers";
+import LocationSearchInput from "./LocationSearchInput";
+import DoctorsRegistration from "./DoctorsRegistration";
 
 const HealthcareRegistrationModal = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [selectedCard, setSelectedCard] = useState("");
   const [formData, setFormData] = useState({});
   const [isFormComplete, setIsFormComplete] = useState(false);
+  const [profilePreview, setProfilePreview] = useState(null);
+  const [profileFile, setProfileFile] = useState(null);
+
+  const [imagesPreview, setImagesPreview] = useState([]);
+  const [imagesFiles, setImagesFiles] = useState([]);
 
   const cardTypes = [
     {
@@ -46,6 +54,59 @@ const HealthcareRegistrationModal = () => {
     },
   ];
 
+  const handleProfileSelect = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setProfileFile(file);
+    setProfilePreview(URL.createObjectURL(file));
+  };
+
+  const handleUploadProfile = async () => {
+    if (!profileFile) return;
+    try {
+      const formDataData = new FormData();
+      formDataData.append("file", profileFile);
+      const response = await postRequest({
+        url: `upload/uploadImage`,
+        cred: formDataData,
+      });
+      const uploadedUrl = response?.data?.data?.imageUrl;
+      setFormData((prev) => ({ ...prev, profileImage: uploadedUrl }));
+      console.log("Profile uploaded:", uploadedUrl);
+    } catch (err) {
+      console.error("Error uploading profile image:", err);
+    }
+  };
+
+  const handleImagesSelect = (e) => {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+    setImagesFiles(files);
+    const previews = files.map((file) => URL.createObjectURL(file));
+    setImagesPreview(previews);
+  };
+
+  const handleUploadImages = async () => {
+    try {
+      const uploadedUrls = [];
+      for (const file of imagesFiles) {
+        const formDataData = new FormData();
+        formDataData.append("file", file);
+        const response = await postRequest({
+          url: `upload/uploadImage`,
+          cred: formDataData,
+        });
+        console.log("Image upload response pre launch", response);
+
+        uploadedUrls.push(response?.data?.data?.imageUrl);
+      }
+      setFormData((prev) => ({ ...prev, images: uploadedUrls }));
+      console.log("Images uploaded:", uploadedUrls);
+    } catch (err) {
+      console.error("Error uploading images:", err);
+    }
+  };
+
   const handleInputChange = (field, value) => {
     const newFormData = { ...formData, [field]: value };
     setFormData(newFormData);
@@ -63,35 +124,67 @@ const HealthcareRegistrationModal = () => {
       case "ambulance":
         return [...commonFields, "licenseNumber", "vehicleCount"];
       case "hospital":
-        return [...commonFields, "hospitalName", "bedCapacity", "specializations"];
+        return [
+          ...commonFields,
+          "hospitalName",
+          "bedCapacity",
+          "specializations",
+        ];
       case "doctor":
-        return [...commonFields, "qualification", "specialization", "experience"];
+        return [
+          ...commonFields,
+          "qualification",
+          "specialization",
+          "experience",
+        ];
       case "diagnostic":
         return [...commonFields, "centerName", "services", "equipments"];
-        case "pharmacy":
+      case "pharmacy":
         return [...commonFields, "centerName", "services", "equipments"];
       default:
         return commonFields;
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (isFormComplete) {
-      alert("Registration submitted successfully!");
-      setIsModalOpen(false);
-    }
-  };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (isFormComplete) {
+  //     alert("Registration submitted successfully!");
+  //     setIsModalOpen(false);
+  //   }
+  // };
 
   const renderInput = (label, type, field, placeholder, rows) => (
-    <div className="space-y-1">
+    <div className="space-y-1 relative">
       <label className="block text-sm font-medium text-gray-700">{label}</label>
-      {type === "textarea" ? (
+
+      {type === "textarea" && field !== "address" ? (
         <textarea
           placeholder={placeholder}
           rows={rows || 3}
           className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
           onChange={(e) => handleInputChange(field, e.target.value)}
+        />
+      ) : field === "address" ? (
+        <LocationSearchInput
+          value={formData[field] || ""}
+          onSelect={(locData) => {
+            // locData contains address, latitude, longitude, location
+            setFormData((prev) => ({
+              ...prev,
+              address: locData.address,
+              latitude: locData.latitude,
+              longitude: locData.longitude,
+              location: locData.location,
+            }));
+
+            // Check if form is complete
+            const requiredFields = getRequiredFields(selectedCard);
+            const isComplete = requiredFields.every(
+              (f) => formData[f] && formData[f].trim() !== ""
+            );
+            setIsFormComplete(isComplete);
+          }}
         />
       ) : (
         <input
@@ -117,8 +210,18 @@ const HealthcareRegistrationModal = () => {
           {renderInput("Email", "email", "email", "Enter email address")}
           {renderInput("Phone", "tel", "phone", "Enter phone number")}
           {renderInput("Address", "textarea", "address", "Enter full address")}
-          {renderInput("License Number", "text", "licenseNumber", "Enter license no.")}
-          {renderInput("Number of Vehicles", "number", "vehicleCount", "Enter count")}
+          {renderInput(
+            "License Number",
+            "text",
+            "licenseNumber",
+            "Enter license no."
+          )}
+          {renderInput(
+            "Number of Vehicles",
+            "number",
+            "vehicleCount",
+            "Enter count"
+          )}
         </>
       ),
       hospital: (
@@ -126,13 +229,43 @@ const HealthcareRegistrationModal = () => {
           <h3 className="text-xl font-semibold text-[#005b8e] mb-4">
             Hospital Registration
           </h3>
-          {renderInput("Hospital Name", "text", "hospitalName", "Enter hospital name")}
-          {renderInput("Official Email", "email", "email", "Enter email address")}
-          {renderInput("Contact Number", "tel", "phone", "Enter contact number")}
-          {renderInput("Hospital Address", "textarea", "address", "Enter address")}
+          {renderInput(
+            "Hospital Name",
+            "text",
+            "hospitalName",
+            "Enter hospital name"
+          )}
+          {renderInput(
+            "Official Email",
+            "email",
+            "email",
+            "Enter email address"
+          )}
+          {renderInput(
+            "Contact Number",
+            "tel",
+            "phone",
+            "Enter contact number"
+          )}
+          {renderInput(
+            "Hospital Address",
+            "textarea",
+            "address",
+            "Enter address"
+          )}
           {renderInput("Administrator Name", "text", "name", "Enter name")}
-          {renderInput("Bed Capacity", "number", "bedCapacity", "Enter capacity")}
-          {renderInput("Specializations", "textarea", "specializations", "Comma separated")}
+          {renderInput(
+            "Bed Capacity",
+            "number",
+            "bedCapacity",
+            "Enter capacity"
+          )}
+          {renderInput(
+            "Specializations",
+            "textarea",
+            "specializations",
+            "Comma separated"
+          )}
         </>
       ),
       doctor: (
@@ -143,11 +276,242 @@ const HealthcareRegistrationModal = () => {
           {renderInput("Full Name", "text", "name", "Enter full name")}
           {renderInput("Email", "email", "email", "Enter email address")}
           {renderInput("Phone", "tel", "phone", "Enter phone number")}
-          {renderInput("Clinic/Practice Address", "textarea", "address", "Enter address")}
-          {renderInput("Medical Qualification", "text", "qualification", "Enter qualification")}
-          {renderInput("Specialization", "text", "specialization", "Enter specialization")}
-          {renderInput("Years of Experience", "number", "experience", "Enter experience")}
+          {renderInput(
+            "Clinic/Practice Address",
+            "textarea",
+            "address",
+            "Enter address"
+          )}
+          {renderInput(
+            "About",
+            "textarea",
+            "about",
+            "Enter description for yourself"
+          )}
+          {renderInput(
+            "Medical Qualification",
+            "text",
+            "education",
+            "Enter qualification"
+          )}
+          {renderInput(
+            "Specialization",
+            "text",
+            "specialization",
+            "Enter specialization"
+          )}
+          {renderInput(
+            "Years of Experience",
+            "number",
+            "experience",
+            "Enter experience"
+          )}
+
+          {/* Clinics Section */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-gray-800">Clinics</h3>
+              <button
+                type="button"
+                onClick={() =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    clinics: [
+                      ...(prev.clinics || []),
+                      {
+                        clinicName: "",
+                        clinicAddress: "",
+                        consultationFee: "",
+                        startTime: "",
+                        endTime: "",
+                        duration: "",
+                        videoStartTime: "",
+                        videoEndTime: "",
+                        videoDuration: "",
+                        location: { type: "Point", coordinates: [0, 0] },
+                      },
+                    ],
+                  }))
+                }
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-green-600 text-white rounded-lg hover:from-blue-700 hover:to-green-700"
+              >
+                <Plus className="w-4 h-4" />
+                Add Clinics
+              </button>
+            </div>
+
+            <div className="space-y-6">
+              {formData?.clinics?.map((clinic, index) => (
+                <div
+                  key={index}
+                  className="relative p-6 bg-white shadow-sm border border-gray-200 rounded-xl space-y-6 transition-all hover:shadow-md"
+                >
+                  {/* Remove Clinic Button */}
+                  {formData.clinics.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newClinics = [...formData.clinics];
+                        newClinics.splice(index, 1);
+                        setFormData({ ...formData, clinics: newClinics });
+                      }}
+                      className="absolute top-3 right-3 text-red-600 hover:bg-red-100 rounded-full w-6 h-6 flex items-center justify-center text-xl font-bold"
+                    >
+                      ×
+                    </button>
+                  )}
+
+                  {/* Clinic Name & Consultation Fee */}
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-700">
+                        Clinic Name
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Enter Clinic Name"
+                        value={clinic.clinicName}
+                        onChange={(e) => {
+                          const newClinics = [...formData.clinics];
+                          newClinics[index].clinicName = e.target.value;
+                          setFormData({ ...formData, clinics: newClinics });
+                        }}
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-700">
+                        Consultation Fee
+                      </label>
+                      <input
+                        type="number"
+                        placeholder="₹ Fee"
+                        value={clinic.consultationFee}
+                        onChange={(e) => {
+                          const newClinics = [...formData.clinics];
+                          newClinics[index].consultationFee = e.target.value;
+                          setFormData({ ...formData, clinics: newClinics });
+                        }}
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Clinic Availability */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">
+                      Clinic Availability
+                    </label>
+                    <div className="grid md:grid-cols-3 gap-4">
+                      <input
+                        type="time"
+                        value={clinic.startTime}
+                        onChange={(e) => {
+                          const newClinics = [...formData.clinics];
+                          newClinics[index].startTime = e.target.value;
+                          setFormData({ ...formData, clinics: newClinics });
+                        }}
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:outline-none"
+                      />
+                      <input
+                        type="time"
+                        value={clinic.endTime}
+                        onChange={(e) => {
+                          const newClinics = [...formData.clinics];
+                          newClinics[index].endTime = e.target.value;
+                          setFormData({ ...formData, clinics: newClinics });
+                        }}
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:outline-none"
+                      />
+                      <select
+                        value={clinic.duration}
+                        onChange={(e) => {
+                          const newClinics = [...formData.clinics];
+                          newClinics[index].duration = e.target.value;
+                          setFormData({ ...formData, clinics: newClinics });
+                        }}
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
+                      >
+                        <option value="">Duration Per Patient</option>
+                        <option value="15">15 min</option>
+                        <option value="30">30 min</option>
+                        <option value="45">45 min</option>
+                        <option value="60">60 min</option>
+                        <option value="90">90 min</option>
+                        <option value="120">120 min</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Video Consulting Availability */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">
+                      Video Consulting Availability
+                    </label>
+                    <div className="grid md:grid-cols-3 gap-4">
+                      <input
+                        type="time"
+                        value={clinic.videoStartTime}
+                        onChange={(e) => {
+                          const newClinics = [...formData.clinics];
+                          newClinics[index].videoStartTime = e.target.value;
+                          setFormData({ ...formData, clinics: newClinics });
+                        }}
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
+                      />
+                      <input
+                        type="time"
+                        value={clinic.videoEndTime}
+                        onChange={(e) => {
+                          const newClinics = [...formData.clinics];
+                          newClinics[index].videoEndTime = e.target.value;
+                          setFormData({ ...formData, clinics: newClinics });
+                        }}
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
+                      />
+                      <select
+                        value={clinic.videoDuration}
+                        onChange={(e) => {
+                          const newClinics = [...formData.clinics];
+                          newClinics[index].videoDuration = e.target.value;
+                          setFormData({ ...formData, clinics: newClinics });
+                        }}
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
+                      >
+                        <option value="">Duration Per Patient</option>
+                        <option value="15">15 min</option>
+                        <option value="30">30 min</option>
+                        <option value="45">45 min</option>
+                        <option value="60">60 min</option>
+                        <option value="90">90 min</option>
+                        <option value="120">120 min</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Address */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                      <MapPin className="w-4 h-4 text-red-600" />
+                      Clinic Address
+                    </label>
+                    <LocationSearchInput
+                      value={clinic.clinicAddress}
+                      onSelect={(place) => {
+                        const newClinics = [...formData.clinics];
+                        newClinics[index].clinicAddress = place.address;
+                        setFormData({ ...formData, clinics: newClinics });
+                      }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </>
+        // <>
+        //   <DoctorsRegistration />
+        // </>
       ),
       diagnostic: (
         <>
@@ -157,13 +521,28 @@ const HealthcareRegistrationModal = () => {
           {renderInput("Center Name", "text", "centerName", "Enter name")}
           {renderInput("Official Email", "email", "email", "Enter email")}
           {renderInput("Contact Number", "tel", "phone", "Enter number")}
-          {renderInput("Center Address", "textarea", "address", "Enter address")}
+          {renderInput(
+            "Center Address",
+            "textarea",
+            "address",
+            "Enter address"
+          )}
           {renderInput("Director/Manager Name", "text", "name", "Enter name")}
-          {renderInput("Available Services", "textarea", "services", "Comma separated")}
-          {renderInput("Equipment Details", "textarea", "equipments", "List equipment")}
+          {renderInput(
+            "Available Services",
+            "textarea",
+            "services",
+            "Comma separated"
+          )}
+          {renderInput(
+            "Equipment Details",
+            "textarea",
+            "equipments",
+            "List equipment"
+          )}
         </>
       ),
-       pharmacy: (
+      pharmacy: (
         <>
           <h3 className="text-xl font-semibold text-[#005b8e] mb-4">
             Pharmacy Registration
@@ -171,10 +550,25 @@ const HealthcareRegistrationModal = () => {
           {renderInput("Pharmacy Name", "text", "pharmacyName", "Enter name")}
           {renderInput("Official Email", "email", "email", "Enter email")}
           {renderInput("Contact Number", "tel", "phone", "Enter number")}
-          {renderInput("Center Address", "textarea", "address", "Enter address")}
+          {renderInput(
+            "Center Address",
+            "textarea",
+            "address",
+            "Enter address"
+          )}
           {renderInput("Director/Manager Name", "text", "name", "Enter name")}
-          {renderInput("Available Services", "textarea", "services", "Comma separated")}
-          {renderInput("Equipment Details", "textarea", "equipments", "List equipment")}
+          {renderInput(
+            "Available Services",
+            "textarea",
+            "services",
+            "Comma separated"
+          )}
+          {renderInput(
+            "Equipment Details",
+            "textarea",
+            "equipments",
+            "List equipment"
+          )}
         </>
       ),
     };
@@ -183,6 +577,142 @@ const HealthcareRegistrationModal = () => {
   };
 
   if (!isModalOpen) return null;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!isFormComplete) {
+      alert("Please fill all required fields");
+      return;
+    }
+
+    try {
+      let payload = {};
+
+      switch (selectedCard) {
+        case "doctor":
+          payload = {
+            schemaType: "Doctor",
+            userId: formData.userId, // get this from logged in user
+            phone: formData.phone,
+            latitude: formData.latitude,
+            longitude: formData.longitude,
+            fullName: formData.name,
+            gender: formData.gender,
+            dob: formData.dob,
+            email: formData.email,
+            profilepic: formData.profileImage,
+            experience: formData.experience,
+            serviceType: formData.serviceType,
+            about: formData.about,
+            education: formData.education,
+            category: formData.category,
+            hospital: formData.hospital,
+            profileImages: formData.profileImages,
+            clinics: [
+              {
+                clinicName: "",
+                clinicAddress: "",
+                consultationFee: "",
+                startTime: "",
+                endTime: "",
+                duration: "",
+                videoStartTime: "",
+                videoEndTime: "",
+                videoDuration: "",
+                location: { type: "Point", coordinates: [0, 0] },
+              },
+            ],
+          };
+          break;
+
+        case "hospital":
+          payload = {
+            schemaType: "Hospital",
+            name: formData.hospitalName,
+            phone: formData.phone,
+            email: formData.email,
+            latitude: formData.latitude,
+            longitude: formData.longitude,
+            address: formData.address,
+            profileImage: formData.profileImage,
+            description: formData.description,
+            doctors: formData.doctors || [],
+            categories: formData.categories || [],
+            healthCard: formData.healthCard || [],
+            facilities: formData.facilities || [],
+            ownerDetails: formData.ownerDetails || {},
+            accountType: "Hospital",
+            isApprove: "Approved",
+            profileImages: formData.images || [],
+          };
+          break;
+
+        case "ambulance":
+          payload = {
+            schemaType: "Ambulance",
+            name: formData.name,
+            licenseNumber: formData.licenseNumber,
+            phone: formData.phone,
+            latitude: formData.latitude,
+            longitude: formData.longitude,
+            address: formData.address,
+            vehicleCount: formData.vehicleCount,
+            profilepic: formData.profileImage,
+            profileImages: formData.images || [],
+          };
+          break;
+
+        case "diagnostic":
+          payload = {
+            schemaType: "Diagnostic",
+            centerName: formData.centerName,
+            phone: formData.phone,
+            latitude: formData.latitude,
+            longitude: formData.longitude,
+            address: formData.address,
+            services: formData.services,
+            equipments: formData.equipments,
+            profileImage: formData.profileImage,
+            profileImages: formData.images || [],
+          };
+          break;
+
+        case "pharmacy":
+          payload = {
+            schemaType: "Pharmacy",
+            centerName: formData.pharmacyName,
+            phone: formData.phone,
+            latitude: formData.latitude,
+            longitude: formData.longitude,
+            address: formData.address,
+            services: formData.services,
+            equipments: formData.equipments,
+            profileImage: formData.profileImage,
+            profileImages: formData.images || [],
+          };
+          break;
+
+        default:
+          break;
+      }
+      console.log("Payload prelaunch", payload);
+
+      // Send API request
+      const response = await postRequest({
+        url: "preLaunch",
+        cred: payload,
+      });
+
+      const result = response;
+      console.log("Registration success:", result);
+      alert("Registration submitted successfully!");
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("Error submitting registration:", error);
+      alert("Failed to submit registration. Please try again.");
+    }
+  }; //8707767805
 
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
@@ -240,6 +770,66 @@ const HealthcareRegistrationModal = () => {
 
               <form onSubmit={handleSubmit} className="space-y-5">
                 {renderForm()}
+                {/* Profile Image Upload */}
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Profile Image
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleProfileSelect}
+                  />
+                  {profilePreview && (
+                    <div className="mt-2">
+                      <img
+                        src={profilePreview}
+                        alt="Profile Preview"
+                        className="w-24 h-24 rounded-full object-cover border"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleUploadProfile}
+                        className="ml-2 px-3 py-1 bg-indigo-600 text-white rounded"
+                      >
+                        Upload
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* Multiple Images Upload */}
+                <div className="space-y-2 mt-4">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Gallery Images
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handleImagesSelect}
+                  />
+                  {imagesPreview.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {imagesPreview.map((src, idx) => (
+                        <img
+                          key={idx}
+                          src={src}
+                          alt={`preview-${idx}`}
+                          className="w-20 h-20 object-cover rounded border"
+                        />
+                      ))}
+                      <button
+                        type="button"
+                        onClick={handleUploadImages}
+                        className="px-3 py-1 bg-indigo-600 text-white rounded"
+                      >
+                        Upload All
+                      </button>
+                    </div>
+                  )}
+                </div>
+
                 <div className="mt-6 flex justify-center">
                   <button
                     type="submit"
@@ -262,7 +852,8 @@ const HealthcareRegistrationModal = () => {
 
         {/* Footer */}
         <div className="bg-gray-100 p-4 rounded-b-2xl text-center text-sm text-gray-600">
-          Registration is required to access our platform. All information is secure and confidential.
+          Registration is required to access our platform. All information is
+          secure and confidential.
         </div>
       </div>
     </div>
