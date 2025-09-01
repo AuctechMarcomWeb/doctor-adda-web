@@ -38,7 +38,7 @@ const AmbulanceRegistration = () => {
 
   const [formData, setFormData] = useState({
     name: "",
-    email:"",
+    email: "",
     phone: "",
     address: "",
     latitude: "28.6139",
@@ -51,7 +51,7 @@ const AmbulanceRegistration = () => {
     availabilityStatus: "Available",
     operatingHours: "24/7",
     emergencyContact: "911",
-    profileImages:[]
+    profileImages: [],
   });
   console.log("form data", formData);
 
@@ -102,7 +102,8 @@ const AmbulanceRegistration = () => {
         toast.success(
           response?.data?.message || "Ambulance registered successfully!"
         );
-        setShowSuccess(true); // success popup trigger
+        // setShowSuccess(true); // success popup
+        navigate("/verification");
       } else {
         toast.error(response?.data?.message || "Something went wrong!");
       }
@@ -166,9 +167,9 @@ const AmbulanceRegistration = () => {
   };
   const validateForm = () => {
     const newErrors = {};
-     if (!profilePreview) {
-    newErrors.profilePic = "Profile picture is required";
-  }
+    if (!profilePreview) {
+      newErrors.profilePic = "Profile picture is required";
+    }
 
     if (!formData.name) newErrors.name = "Ambulance name is required";
     if (!formData.phone) newErrors.phone = "Phone number is required";
@@ -183,19 +184,19 @@ const AmbulanceRegistration = () => {
     if (!formData.description)
       newErrors.description = "Description is required";
 
-   // ✅ driver validation
-  const driverErrors = drivers.map((driver) => {
-    const dErrors = {};
-    if (!driver.name) dErrors.name = "Driver name is required";
-    if (!driver.phone) dErrors.phone = "Driver phone is required";
-    if (!driver.licenseNumber)
-      dErrors.licenseNumber = "License number is required";
-    return dErrors;
-  });
+    // ✅ driver validation
+    const driverErrors = drivers.map((driver) => {
+      const dErrors = {};
+      if (!driver.name) dErrors.name = "Driver name is required";
+      if (!driver.phone) dErrors.phone = "Driver phone is required";
+      if (!driver.licenseNumber)
+        dErrors.licenseNumber = "License number is required";
+      return dErrors;
+    });
 
-  if (driverErrors.some((d) => Object.keys(d).length > 0)) {
-    newErrors.drivers = driverErrors;
-  }
+    if (driverErrors.some((d) => Object.keys(d).length > 0)) {
+      newErrors.drivers = driverErrors;
+    }
     return newErrors;
   };
 

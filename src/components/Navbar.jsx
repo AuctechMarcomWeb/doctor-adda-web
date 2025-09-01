@@ -401,7 +401,7 @@ console.log("Has Upgrade Request:", hasUpgradeRequest);
                             {isUpgraded ? "Dashboard" : "Upgrade Profile"}
                           </button>
                         </Link>
-                        <Link
+                        {/* <Link
                         onClick={() => setDropdownOpen(false)}
                         to={isUpgraded ? "/dashboard" : "/pharmacy-dashboard"}
                       >
@@ -445,7 +445,7 @@ console.log("Has Upgrade Request:", hasUpgradeRequest);
                           <User className="w-4 h-4" />
                           {isUpgraded ? "Dashboard" : "Doctor Dashboard"}
                         </button>
-                      </Link>
+                      </Link> */}
                       </div>
                     )}
                   </div>
