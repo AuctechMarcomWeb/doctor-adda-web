@@ -16,8 +16,10 @@ import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import LocationSearchInput from "./LocationSearchInput";
 import { Select } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const DoctorsRegistration = () => {
+  const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -203,7 +205,7 @@ const DoctorsRegistration = () => {
         cred: payload,
       });
       console.log(" Doctors Register Response:", response);
- // ✅ Sirf success hone par popup dikhao
+      // ✅ Sirf success hone par popup dikhao
       if (
         response?.status === 201 ||
         response?.data?.statusCode === 201 ||
@@ -212,15 +214,14 @@ const DoctorsRegistration = () => {
         toast.success(
           response?.data?.message || "Doctor registered successfully!"
         );
-        setShowSuccess(true); // success popup trigger
+        // setShowSuccess(true); // success popup trigger
+        navigate("/verification");
       } else {
         toast.error(response?.data?.message || "Something went wrong!");
       }
     } catch (err) {
-     console.error("Error Registering Doctors:", err);
-      toast.error(
-        err?.response?.data?.message || "Failed to register doctors"
-      );
+      console.error("Error Registering Doctors:", err);
+      toast.error(err?.response?.data?.message || "Failed to register doctors");
     } finally {
       setLoading(false);
     }
@@ -230,9 +231,9 @@ const DoctorsRegistration = () => {
     const newErrors = {};
 
     // Required Fields Validation
-     if (!profilePreview) {
-    newErrors.profilePic = "Profile picture is required";
-  }
+    if (!profilePreview) {
+      newErrors.profilePic = "Profile picture is required";
+    }
     if (!formData.fullName) newErrors.fullName = "Full name is required";
     if (!formData.phone) newErrors.phone = "Phone number is required";
     if (!formData.email) newErrors.email = "Email is required";
@@ -985,7 +986,7 @@ const DoctorsRegistration = () => {
                 )}
               </div>
             </div>
-            
+
             <div className="space-y-2 group">
               <p className="text-gray-700 font-medium font-semibold">
                 Clinics Images
@@ -1055,7 +1056,6 @@ const DoctorsRegistration = () => {
                 <span className="flex items-center gap-2">➕ Add Images</span>
               </label>
             </div>
-
 
             <div className="space-y-2 group">
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700">

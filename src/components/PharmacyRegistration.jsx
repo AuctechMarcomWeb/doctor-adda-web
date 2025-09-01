@@ -104,7 +104,9 @@ const PharmacyRegistration = () => {
           response?.data?.message || "Ambulance registered successfully!"
         );
 
-        setShowSuccess(true); // success popup trigger
+        // setShowSuccess(true); // success popup trigger
+        navigate("/verification");
+
         setTimeout(() => {
           navigate("/verification"); // 👈 Verification page par redirect
         }, 2000);

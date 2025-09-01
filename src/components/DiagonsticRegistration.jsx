@@ -45,53 +45,52 @@ const DiagonsticRegistration = () => {
     storeTiming: "8:00 am to 5:00 pm",
     description: "",
     accountType: "Diagnostic",
-    startTime:"",
-    endTime:"",
-    profileImages:[],
-    isBloodBank:true
+    startTime: "",
+    endTime: "",
+    profileImages: [],
+    isBloodBank: true,
   });
-console.log("form data",formData);
+  console.log("form data", formData);
 
   const uploadImage = async (file) => {
-  try {
-    const formDataData = new FormData();
-    formDataData.append("file", file);
-    const response = await postRequest({
-      url: `upload/uploadImage`,
-      cred: formDataData,
-    });
-    console.log("Image uploaded successfully:", response);
-    const uploadedUrl = response?.data?.data?.imageUrl;
-    setUploadProfileImage(uploadedUrl);
-    console.log("uploadedUrl",uploadedUrl);
-    setFormData((prev) => ({ ...prev, profileImage: uploadedUrl }));
-    
-  } catch (error) {
-    console.error("Error uploading image:", error);
-  }
-};
+    try {
+      const formDataData = new FormData();
+      formDataData.append("file", file);
+      const response = await postRequest({
+        url: `upload/uploadImage`,
+        cred: formDataData,
+      });
+      console.log("Image uploaded successfully:", response);
+      const uploadedUrl = response?.data?.data?.imageUrl;
+      setUploadProfileImage(uploadedUrl);
+      console.log("uploadedUrl", uploadedUrl);
+      setFormData((prev) => ({ ...prev, profileImage: uploadedUrl }));
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
+  };
 
   const handleSubmit = async () => {
-  const validationErrors = validateForm();
-  if (Object.keys(validationErrors).length > 0) {
-    setErrors(validationErrors);
-    return;
-  }
-  if (!formData?.profileImage) {
-    setErrors({ profileImage: "Please upload a profile image" });
-    return;
-  }
-  setErrors({});
-  setLoading(true);
-  try {
-    const payload = { ...formData, services , packages};
-    console.log("Final payload before submit:", payload);
-    const response = await postRequest({
-      url: `diagnostics/registerDiagnostic/${userId}`,
-      cred: payload,
-    });
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+    if (!formData?.profileImage) {
+      setErrors({ profileImage: "Please upload a profile image" });
+      return;
+    }
+    setErrors({});
+    setLoading(true);
+    try {
+      const payload = { ...formData, services, packages };
+      console.log("Final payload before submit:", payload);
+      const response = await postRequest({
+        url: `diagnostics/registerDiagnostic/${userId}`,
+        cred: payload,
+      });
 
-    console.log("Diagonstic Register Response:", response?.data?.data);
+      console.log("Diagonstic Register Response:", response?.data?.data);
       if (
         response?.status === 201 ||
         response?.data?.statusCode === 201 ||
@@ -100,18 +99,19 @@ console.log("form data",formData);
         toast.success(
           response?.data?.message || "Diagonstics registered successfully!"
         );
-        setShowSuccess(true); // success popup trigger
+        // setShowSuccess(true); // success popup trigger
+        navigate("/verification");
       } else {
         toast.error(response?.data?.message || "Something went wrong!");
       }
-  } catch (err) {
-    console.error(" Error Registering :", err);
-    toast.error(err?.respone?.data?.message)
-  } finally {
-    console.log(" Finally block executed");
-    setLoading(false);
-  }
-};
+    } catch (err) {
+      console.error(" Error Registering :", err);
+      toast.error(err?.respone?.data?.message);
+    } finally {
+      console.log(" Finally block executed");
+      setLoading(false);
+    }
+  };
   // Profile Pic Handler
   const handleProfilePic = (e) => {
     const file = e.target.files[0];
@@ -159,27 +159,27 @@ console.log("form data",formData);
   };
 
   const handleImageUpload = (e) => {
-        const files = Array.from(e.target.files);
-    
-        files.forEach((file) => {
-          fileUpload({
-            url: `upload/uploadImage`,
-            cred: { file },
-          })
-            .then((res) => {
-              const imageUrl = res.data?.data?.imageUrl;
-              if (imageUrl) {
-                setFormData((prev) => ({
-                  ...prev,
-                  profileImages: [...prev.profileImages, imageUrl],
-                  // documentImage: [...prev.documentImage, { url: imageUrl }],
-                }));
-              }
-            })
-            .catch((error) => {
-              console.error("Image upload failed:", error);
-            });
+    const files = Array.from(e.target.files);
+
+    files.forEach((file) => {
+      fileUpload({
+        url: `upload/uploadImage`,
+        cred: { file },
+      })
+        .then((res) => {
+          const imageUrl = res.data?.data?.imageUrl;
+          if (imageUrl) {
+            setFormData((prev) => ({
+              ...prev,
+              profileImages: [...prev.profileImages, imageUrl],
+              // documentImage: [...prev.documentImage, { url: imageUrl }],
+            }));
+          }
+        })
+        .catch((error) => {
+          console.error("Image upload failed:", error);
         });
+    });
   };
 
   const removeImage = (index) => {
@@ -190,23 +190,25 @@ console.log("form data",formData);
     }
   };
 
-const validateForm = () => {
-  const newErrors = {};
+  const validateForm = () => {
+    const newErrors = {};
 
-  // Basic Info
-  if (!formData.name) newErrors.name = "Diagnostic center name is required";
-  if (!formData.phone) newErrors.phone = "Phone number is required";
-  if (!formData.email) newErrors.email = "Email is required";
-  if (!formData.description) newErrors.description = "Description is required";
-  if (!formData.address) newErrors.address = "Address is required";
+    // Basic Info
+    if (!formData.name) newErrors.name = "Diagnostic center name is required";
+    if (!formData.phone) newErrors.phone = "Phone number is required";
+    if (!formData.email) newErrors.email = "Email is required";
+    if (!formData.description)
+      newErrors.description = "Description is required";
+    if (!formData.address) newErrors.address = "Address is required";
 
-  // Clinic timings
-  if (!formData.startTime) newErrors.startTime = "Start time is required";
-  if (!formData.endTime) newErrors.endTime = "End time is required";
-  if (!formData.isBloodBank) newErrors.isBloodBank = "Please select blood bank availability";
+    // Clinic timings
+    if (!formData.startTime) newErrors.startTime = "Start time is required";
+    if (!formData.endTime) newErrors.endTime = "End time is required";
+    if (!formData.isBloodBank)
+      newErrors.isBloodBank = "Please select blood bank availability";
 
-  return newErrors;
-};
+    return newErrors;
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 py-34 px-4">
@@ -369,11 +371,10 @@ const validateForm = () => {
                   <p className="text-red-500 text-xs">{errors?.description}</p>
                 )}
               </div>
-
             </div>
 
             {/* Address */}
-             <div className="space-y-2 group">
+            <div className="space-y-2 group">
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
                 <MapPin className="w-4 h-4 text-red-600" />
                 Search Address
@@ -405,10 +406,10 @@ const validateForm = () => {
                   }
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-gray-500"
                   placeholder="Select Time"
-                /> {errors?.startTime && (
-                <p className="text-red-500 text-xs">{errors?.startTime}</p>
-              )}
-
+                />{" "}
+                {errors?.startTime && (
+                  <p className="text-red-500 text-xs">{errors?.startTime}</p>
+                )}
                 {/* End Time */}
                 <input
                   type="time"
@@ -416,13 +417,14 @@ const validateForm = () => {
                   onChange={(e) => handleInputChange("endTime", e.target.value)}
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-gray-500"
                   placeholder="Select Time"
-                /> {errors?.endTime && (
-                <p className="text-red-500 text-xs">{errors?.endTime}</p>
-              )}
-              </div>             
+                />{" "}
+                {errors?.endTime && (
+                  <p className="text-red-500 text-xs">{errors?.endTime}</p>
+                )}
+              </div>
             </div>
 
-             {/* Service Duration per patient field */}
+            {/* Service Duration per patient field */}
             <div className="space-y-2 group">
               <label className="text-sm font-medium text-gray-700">
                 Service Duration Per Patient
@@ -449,7 +451,6 @@ const validateForm = () => {
               )}
             </div>
 
-           
             {/* Services Section */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
@@ -600,10 +601,9 @@ const validateForm = () => {
 
             <div className="space-y-2 group">
               <p className="text-gray-700 font-medium font-semibold">
-                Select Images to showcase your 
+                Select Images to showcase your
               </p>
 
-             
               {/* Image container */}
               {formData?.profileImages?.length > 0 && (
                 <div className="flex flex-wrap gap-2">
@@ -685,7 +685,6 @@ const validateForm = () => {
               </button>
             </div>
           </div>
-          
         </div>
       </div>
     </div>
