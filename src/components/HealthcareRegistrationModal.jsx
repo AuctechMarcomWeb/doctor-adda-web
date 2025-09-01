@@ -13,35 +13,35 @@ const HealthcareRegistrationModal = () => {
       id: "ambulance",
       title: "Ambulance Service",
       icon: <Truck className="w-10 h-10" />,
-      gradient: "from-[#00B09B] to-[#96C93D]",
+      gradient: "from-[#005b8e] to-[#005A8C]",
       description: "Register your ambulance service",
     },
     {
       id: "hospital",
       title: "Hospital",
       icon: <Building className="w-10 h-10" />,
-      gradient: "from-[#00B09B] to-[#96C93D]",
+      gradient: "from-[#005b8e] to-[#005A8C]",
       description: "Register your hospital facility",
     },
     {
       id: "doctor",
       title: "Doctor",
       icon: <User className="w-10 h-10" />,
-      gradient: "from-[#00B09B] to-[#96C93D]",
+      gradient: "from-[#005b8e] to-[#005A8C]",
       description: "Register as a medical practitioner",
     },
     {
       id: "diagnostic",
       title: "Diagnostic Center",
       icon: <Activity className="w-10 h-10" />,
-      gradient: "from-[#00B09B] to-[#96C93D]",
+      gradient: "from-[#005b8e] to-[#005A8C]",
       description: "Register your diagnostic services",
     },
     {
       id: "pharmacy",
       title: "Pharmacy  ",
       icon: <Activity className="w-10 h-10" />,
-      gradient: "from-[#00B09B] to-[#96C93D]",
+      gradient: "from-[#005b8e] to-[#005A8C]",
       description: "Register your pharmacy services",
     },
   ];
@@ -110,7 +110,7 @@ const HealthcareRegistrationModal = () => {
     const forms = {
       ambulance: (
         <>
-          <h3 className="text-xl font-semibold text-indigo-700 mb-4">
+          <h3 className="text-xl font-semibold text-[#005b8e] mb-4">
             Ambulance Service Registration
           </h3>
           {renderInput("Service Name", "text", "name", "Enter service name")}
@@ -123,7 +123,7 @@ const HealthcareRegistrationModal = () => {
       ),
       hospital: (
         <>
-          <h3 className="text-xl font-semibold text-indigo-700 mb-4">
+          <h3 className="text-xl font-semibold text-[#005b8e] mb-4">
             Hospital Registration
           </h3>
           {renderInput("Hospital Name", "text", "hospitalName", "Enter hospital name")}
@@ -137,7 +137,7 @@ const HealthcareRegistrationModal = () => {
       ),
       doctor: (
         <>
-          <h3 className="text-xl font-semibold text-green-700 mb-4">
+          <h3 className="text-xl font-semibold text-[#005b8e] mb-4">
             Doctor Registration
           </h3>
           {renderInput("Full Name", "text", "name", "Enter full name")}
@@ -151,7 +151,7 @@ const HealthcareRegistrationModal = () => {
       ),
       diagnostic: (
         <>
-          <h3 className="text-xl font-semibold text-purple-700 mb-4">
+          <h3 className="text-xl font-semibold text-[#005b8e] mb-4">
             Diagnostic Center Registration
           </h3>
           {renderInput("Center Name", "text", "centerName", "Enter name")}
@@ -165,7 +165,7 @@ const HealthcareRegistrationModal = () => {
       ),
        pharmacy: (
         <>
-          <h3 className="text-xl font-semibold text-purple-700 mb-4">
+          <h3 className="text-xl font-semibold text-[#005b8e] mb-4">
             Pharmacy Registration
           </h3>
           {renderInput("Pharmacy Name", "text", "pharmacyName", "Enter name")}
@@ -213,7 +213,7 @@ const HealthcareRegistrationModal = () => {
                     className={`bg-gradient-to-br ${card.gradient} p-6 rounded-xl cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-white`}
                   >
                     <div className="flex flex-col items-center text-center space-y-3">
-                      <div className="bg-blue-300 bg-opacity-20 p-4 rounded-full shadow-md">
+                      <div className="bg-[#007abb] bg-opacity-20 p-4 rounded-full shadow-md">
                         {card.icon}
                       </div>
                       <h4 className="text-lg font-semibold">{card.title}</h4>
@@ -227,7 +227,7 @@ const HealthcareRegistrationModal = () => {
             <div>
               <button
                 onClick={() => setSelectedCard("")}
-                className="text-indigo-600 hover:text-indigo-800 font-medium mb-6 flex items-center gap-2"
+                className="text-[#005b8e] hover:text-indigo-800 font-medium mb-6 flex items-center gap-2"
               >
                 <img
                   width="28"
