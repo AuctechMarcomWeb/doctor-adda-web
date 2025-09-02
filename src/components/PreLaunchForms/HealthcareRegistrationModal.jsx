@@ -217,7 +217,10 @@ const HealthcareRegistrationModal = () => {
         />
       );
     case "diagnostic":
-      return <DiagnosticsRegistrationForms renderInput={renderInput} />;
+      return <DiagnosticsRegistrationForms renderInput={renderInput} 
+        formData={formData}
+          setFormData={setFormData}
+      />;
     case "pharmacy":
       return <PharmacyRegistrationForms
        renderInput={renderInput} />;
@@ -316,15 +319,20 @@ const HealthcareRegistrationModal = () => {
         case "diagnostic":
           payload = {
             schemaType: "Diagnostic",
-            centerName: formData.centerName,
-            phone: formData.phone,
-            latitude: formData.latitude,
-            longitude: formData.longitude,
-            address: formData.address,
-            services: formData.services,
-            equipments: formData.equipments,
-            profileImage: formData.profileImage,
-            profileImages: formData.images || [],
+            centerName: formData?.centerName,
+            phone: formData?.phone,
+            latitude: formData?.latitude,
+            longitude: formData?.longitude,
+            address: formData?.address,
+            description: formData?.description,
+            services: formData?.services || [],
+            packages: formData?.packages || [],
+            storeTiming:formData?.storeTiming,
+            startTime:formData?.startTime,
+            endTime:formData?.endTime,
+            profileImage: formData?.profileImage,
+            profileImages: formData?.images || [],
+
           };
           break;
 
@@ -337,7 +345,7 @@ const HealthcareRegistrationModal = () => {
             longitude: formData.longitude,
             address: formData.address,
             services: formData.services,
-            equipments: formData.equipments,
+            packages: formData.packages,
             profileImage: formData.profileImage,
             profileImages: formData.images || [],
           };
