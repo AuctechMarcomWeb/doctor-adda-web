@@ -59,13 +59,19 @@ const Home = () => {
       });
   }, []);
 
+  const [open,setOpen] = useState(true)
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
   return (
     <>
+
+    {
+      open ? 
+      <HealthcareRegistrationModal setOpen={setOpen} /> :""
+    }
       {/* <MedicalHeroSection/> */}
-      <HealthcareRegistrationModal />
 
       {/* <HomePageImagePopup data={data} /> */}
 

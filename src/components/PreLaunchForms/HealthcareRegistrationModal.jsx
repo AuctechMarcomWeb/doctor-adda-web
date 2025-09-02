@@ -12,7 +12,7 @@ import AmbulanceRegistrationForm from "./AmbulanceForms/AmbulanceRegistrationFor
 import DiagnosticsRegistrationForms from "./DiagnosticsForms/DiagnosticsRegistrationForms";
 import PharmacyRegistrationForms from "./PharmacyForms/PharmacyRegistrationForms";
 
-const HealthcareRegistrationModal = () => {
+const HealthcareRegistrationModal = ({setOpen}) => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [selectedCard, setSelectedCard] = useState("");
   const [formData, setFormData] = useState({});
@@ -517,6 +517,7 @@ const HealthcareRegistrationModal = () => {
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
         {/* Header */}
+        <button className="btn btn-primary" onClick={()=>setOpen(false)} >close</button>
         <div className="bg-gradient-to-r from-[#007BBD] to-[#005A8C] p-6 rounded-t-2xl text-center">
           <img src={logo} alt="Logo" className="h-14 mx-auto mb-3" />
           <h2 className="text-3xl font-bold text-white">
