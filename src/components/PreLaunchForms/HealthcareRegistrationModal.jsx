@@ -350,7 +350,7 @@ const HealthcareRegistrationModal = () => {
           payload = {
             schemaType: "Diagnostic",
             name: formData?.name, // ✅ not centerName
-            email:formData?.email,
+            email: formData?.email,
             phone: formData?.phone,
             latitude: formData?.latitude,
             longitude: formData?.longitude,
@@ -369,18 +369,23 @@ const HealthcareRegistrationModal = () => {
         case "pharmacy":
           payload = {
             schemaType: "Pharmacy",
-            centerName: formData?.pharmacyName,
+            name: formData?.name, // ✅ not pharmacyName
+            email: formData?.email,
             phone: formData?.phone,
             latitude: formData?.latitude,
             longitude: formData?.longitude,
             address: formData?.address,
             storeTiming: formData?.storeTiming,
-            services: formData?.services || [],
-            ownerDetails: formData?.ownerDetails || {},
+            services: formData?.services || [], // ✅ synced from form state
+            ownerDetails: {
+              ownerName: formData?.ownerName,
+              gstNumber: formData?.gstNumber,
+              phoneNumber: formData?.phoneNumber,
+            },
             profileImage: formData?.profileImage,
-            profileImages: formData?.images || [],
-            onlinePayment: true,
-            cod: true,
+            profileImages: formData?.profileImages || [], // ✅ consistent
+            onlinePayment: formData?.onlinePayment === "true", // ✅ from form
+            cod: formData?.cod === "true", // ✅ from form
           };
           break;
 
@@ -558,14 +563,14 @@ const HealthcareRegistrationModal = () => {
                     className={`px-8 py-3 rounded-xl font-semibold text-white transition-all duration-300 ${
                       // isFormComplete
                       //   ? "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl"
-                        // : 
-                        "bg-gray-400 cursor-not-allowed"
+                      // :
+                      "bg-gray-400 cursor-not-allowed"
                     }`}
                   >
                     {/* {isFormComplete
                       ?  */}
-                      "Complete Registration"
-                      {/* : "Please fill all fields"} */}
+                    "Complete Registration"
+                    {/* : "Please fill all fields"} */}
                   </button>
                 </div>
               </form>
