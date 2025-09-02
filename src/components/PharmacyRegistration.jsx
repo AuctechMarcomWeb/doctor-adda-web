@@ -22,8 +22,8 @@ const PharmacyRegistration = () => {
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const { setUpdate } = useUpdate();
-  const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
-  const userId = userProfileData?._id;
+  const { userProfileData, isLoggedIn ,userData} = useSelector((state) => state.user);
+  const userId = userData?.data?._id;
   console.log("userProfileData user id ", userId);
 
   // Profile Image states

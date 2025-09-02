@@ -37,7 +37,7 @@ const Home = () => {
           const res = await getRequest(`auth/getUserById/${userId}`);
           console.log("User API response:", res.data.data);
 
-          dispatch(updateUserProfile(res?.data?.data));
+          dispatch(updateUserProfile(res?.data));
         } catch (error) {
           console.error("Error fetching user:", error);
         }
