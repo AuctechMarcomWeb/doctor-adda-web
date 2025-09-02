@@ -339,15 +339,18 @@ const HealthcareRegistrationModal = () => {
         case "pharmacy":
           payload = {
             schemaType: "Pharmacy",
-            centerName: formData.pharmacyName,
-            phone: formData.phone,
-            latitude: formData.latitude,
-            longitude: formData.longitude,
-            address: formData.address,
-            services: formData.services,
-            packages: formData.packages,
-            profileImage: formData.profileImage,
-            profileImages: formData.images || [],
+            centerName: formData?.pharmacyName,
+            phone: formData?.phone,
+            latitude: formData?.latitude,
+            longitude: formData?.longitude,
+            address: formData?.address,
+            storeTiming: formData?.storeTiming,
+            services: formData?.services || [],
+            ownerDetails: formData?.ownerDetails || {},
+            profileImage: formData?.profileImage,
+            profileImages: formData?.images || [],
+            onlinePayment: true,
+            cod: true,
           };
           break;
 
