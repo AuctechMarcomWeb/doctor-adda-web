@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-dupe-keys */
 import React, { useState } from "react";
 import { Truck, Building, User, Activity, Plus, MapPin } from "lucide-react";
 import logo from "../../assets/dr-adda-logo.png";
@@ -317,12 +319,17 @@ const HealthcareRegistrationModal = () => {
           payload = {
             schemaType: "Ambulance",
             name: formData.name,
-            licenseNumber: formData.licenseNumber,
+            email:formData.email,
+            ambulanceNumber: formData.ambulanceNumber,
+            ambulanceType: formData?.ambulanceType,
+            availabilityStatus:formData?.availabilityStatus,
             phone: formData.phone,
+            description:formData?.description,
             latitude: formData.latitude,
             longitude: formData.longitude,
             address: formData.address,
-            vehicleCount: formData.vehicleCount,
+            operatingHours: formData.operatingHours,
+            emergencyContact:formData?.emergencyContact,
             profilepic: formData.profileImage,
             profileImages: formData.images || [],
           };
