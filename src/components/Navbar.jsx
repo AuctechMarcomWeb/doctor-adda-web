@@ -35,11 +35,9 @@ const Navbar = () => {
     (state) => state.user
   );
 
-  console.log(
-    "user profile data from redux in navbar",
-   
-    userProfileData
-  );
+console.log("userProfileData in Navbar:", userProfileData);
+console.log("User Id:", userProfileData?._id);
+console.log("Upgrade Id:", userProfileData?.upgradeAccountId);
 
 
   const hasUpgradeRequest =
@@ -247,7 +245,7 @@ console.log("Has Upgrade Request:", hasUpgradeRequest);
                         </Link>
                       )}
 
-                      <Link
+                      {/* <Link
                         onClick={() => setDropdownOpen(false)}
                         to={isUpgraded ? "/dashboard" : "/pharmacy-dashboard"}
                       >
@@ -291,7 +289,7 @@ console.log("Has Upgrade Request:", hasUpgradeRequest);
                           <User className="w-4 h-4" />
                           {isUpgraded ? "Dashboard" : "Doctor Dashboard"}
                         </button>
-                      </Link>
+                      </Link> */}
                     </div>
                   )}
                 </div>

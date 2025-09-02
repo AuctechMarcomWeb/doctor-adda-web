@@ -37,7 +37,7 @@ const userSlice = createSlice({
     builder.addCase(REHYDRATE, (state, action) => {
       if (action.payload && action.payload.user) {
         state.isLoggedIn = action.payload.user.isLoggedIn;
-        state.userData = action.payload.user.userData;
+        state.userData = action.payload.user.userData.data;
         state.userProfileData = action.payload.user.userProfileData;
         state.locationData = action.payload.user.locationData;
         console.log("State rehydrated from cookies", state);

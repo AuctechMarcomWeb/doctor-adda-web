@@ -17,8 +17,17 @@ import dasboardlogo from "../assets/dashboard-logo.png";
 import AppointmentStatusCards from "./AppointmentStatusCards";
 import DoctorAvailabilityPage from "./DoctorAvailabilityPage";
 import AffiliatedDoctors from "./AffiliatedDoctors";
+import { useSelector } from "react-redux";
 
 const HospitalDashboard = () => {
+    const {userProfileData} = useSelector((state) => state.user)
+  console.log("userData",userProfileData);
+  
+  const upgradeAccountId = userProfileData?.upgradeAccountId;
+  console.log("User Id:", upgradeAccountId);
+  
+  const [hospital,setHospital] = useState([])
+  
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
