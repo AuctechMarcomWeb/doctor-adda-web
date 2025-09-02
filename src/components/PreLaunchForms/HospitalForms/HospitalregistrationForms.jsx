@@ -78,6 +78,9 @@ const HospitalRegistrationForm = ({ renderInput, formData, setFormData }) => {
     }));
   };
 
+  console.log("Hospital Formdata ===",formData);
+  
+
   return (
     <>
       <h3 className="text-xl font-semibold text-[#005b8e] mb-4">

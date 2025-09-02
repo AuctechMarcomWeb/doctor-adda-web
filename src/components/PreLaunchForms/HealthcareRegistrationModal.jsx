@@ -25,6 +25,7 @@ const HealthcareRegistrationModal = () => {
 
   const [uploadingProfile, setUploadingProfile] = useState(false);
   const [uploadingImages, setUploadingImages] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const cardTypes = [
     {
@@ -147,43 +148,119 @@ const HealthcareRegistrationModal = () => {
     const newFormData = { ...formData, [field]: value };
     setFormData(newFormData);
 
+    // Run validation for this field (only for scalars)
+    const errorMsg = validateField(field, value);
+    setErrors((prev) => ({ ...prev, [field]: errorMsg }));
+
+    // Re-check completeness
     const requiredFields = getRequiredFields(selectedCard);
-    const isComplete = requiredFields.every(
-      (field) => newFormData[field] && newFormData[field].trim() !== ""
-    );
+    const isComplete = requiredFields.every((f) => {
+      const val = newFormData[f];
+
+      if (Array.isArray(val)) {
+        // ✅ array must have at least 1 item with no empty required subfields
+        return (
+          val.length > 0 &&
+          val.every((obj) =>
+            Object.values(obj).every((v) => v && v.toString().trim() !== "")
+          )
+        );
+      }
+
+      if (typeof val === "object" && val !== null) {
+        // ✅ object must not be empty
+        return Object.values(val).every((v) => v && v.toString().trim() !== "");
+      }
+
+      // ✅ scalar (string/number) check
+      return val && val.toString().trim() !== "" && !validateField(f, val);
+    });
+
     setIsFormComplete(isComplete);
   };
 
+  // utils/getRequiredFields.js
+
   const getRequiredFields = (type) => {
-    const commonFields = ["name", "email", "phone", "address"];
     switch (type) {
-      case "ambulance":
-        return [...commonFields, "licenseNumber", "vehicleCount"];
+      case "doctor":
+        return [
+          "name",
+          "email",
+          "phone",
+          "gender",
+          "dob",
+          "specialization",
+          "category",
+          "services", // must have at least 1
+          "location", // Google API location
+          "clinics", // must have at least 1
+        ];
+
       case "hospital":
         return [
-          ...commonFields,
-          "hospitalName",
-          "bedCapacity",
-          "specializations",
+          "name",
+          "email",
+          "phone",
+          "address",
+          "description",
+          "services", // must have at least 1
+          "departments", // must have at least 1
+          "operatingHours",
+          "location",
         ];
-      case "doctor":
-        return [...commonFields, "education", "specialization", "experience"];
-      case "diagnostic":
-        return [...commonFields, "", "services", ""];
+
       case "pharmacy":
-        return [...commonFields, "centerName", "services", "equipments"];
+        return [
+          "name",
+          "email",
+          "phone",
+          "address",
+          "description",
+          "operatingHours",
+          "location",
+        ];
+
+      case "ambulance":
+        return [
+          "name",
+          "email",
+          "phone",
+          "address",
+          "description",
+          "operatingHours",
+          "ambulanceType",
+          "ambulanceNumber",
+          "drivers", // must have at least 1
+        ];
+
       default:
-        return commonFields;
+        return [];
     }
   };
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   if (isFormComplete) {
-  //     alert("Registration submitted successfully!");
-  //     setIsModalOpen(false);
-  //   }
-  // };
+  const validateField = (field, value) => {
+    let error = "";
+
+    if (!value || value.trim() === "") {
+      error = "This field is required";
+    } else {
+      if (field === "email") {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) {
+          error = "Invalid email format";
+        }
+      }
+      if (field === "phone") {
+        const phoneRegex = /^[0-9]{10}$/; // 10 digits only
+        if (!phoneRegex.test(value)) {
+          error = "Invalid phone number";
+        }
+      }
+    }
+
+    return error;
+  };
 
   const renderInput = (label, type, field, placeholder, rows) => (
     <div className="space-y-1 relative">
@@ -225,39 +302,72 @@ const HealthcareRegistrationModal = () => {
           onChange={(e) => handleInputChange(field, e.target.value)}
         />
       )}
+      {errors[field] && (
+        <p className="text-red-500 text-xs mt-1">{errors[field]}</p>
+      )}
     </div>
   );
 
- const renderForm = () => {
-  switch (selectedCard) {
-    case "ambulance":
-      return <AmbulanceRegistrationForm renderInput={renderInput} />;
-    case "hospital":
-      return <HospitalRegistrationForm renderInput={renderInput}
-       formData={formData}
-          setFormData={setFormData} />;
-    case "doctor":
-      return (
-        <DoctorRegistrationForm
-          renderInput={renderInput}
-          formData={formData}
-          setFormData={setFormData}
-        />
-      );
-    case "diagnostic":
-      return <DiagnosticsRegistrationForms renderInput={renderInput} 
-        formData={formData}
-          setFormData={setFormData}
-      />;
-    case "pharmacy":
-      return <PharmacyRegistrationForms
-       renderInput={renderInput} />;
-    default:
-      return null;
-  }
-};
+  const renderForm = () => {
+    switch (selectedCard) {
+      case "ambulance":
+        return (
+          <AmbulanceRegistrationForm
+            renderInput={renderInput}
+            formData={formData}
+            setFormData={setFormData}
+          />
+        );
+      case "hospital":
+        return (
+          <HospitalRegistrationForm
+            renderInput={renderInput}
+            formData={formData}
+            setFormData={setFormData}
+          />
+        );
+      case "doctor":
+        return (
+          <DoctorRegistrationForm
+            renderInput={renderInput}
+            formData={formData}
+            setFormData={setFormData}
+          />
+        );
+      case "diagnostic":
+        return (
+          <DiagnosticsRegistrationForms
+            renderInput={renderInput}
+            formData={formData}
+            setFormData={setFormData}
+          />
+        );
+      case "pharmacy":
+        return <PharmacyRegistrationForms renderInput={renderInput} />;
+      default:
+        return null;
+    }
+  };
 
   if (!isModalOpen) return null;
+
+  const validateForm = () => {
+    const requiredFields = getRequiredFields(selectedCard);
+    let newErrors = {};
+    let isValid = true;
+
+    requiredFields.forEach((field) => {
+      const errorMsg = validateField(field, formData[field]);
+      if (errorMsg) {
+        newErrors[field] = errorMsg;
+        isValid = false;
+      }
+    });
+
+    setErrors(newErrors);
+    setIsFormComplete(isValid);
+    return isValid;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -296,22 +406,20 @@ const HealthcareRegistrationModal = () => {
         case "hospital":
           payload = {
             schemaType: "Hospital",
-            name: formData?.hospitalName,
-            phone: formData?.phone,
-            email: formData?.email,
-            latitude: formData?.latitude,
-            longitude: formData?.longitude,
-            address: formData?.address,
-            profileImage: formData?.profileImage,
-            description: formData?.description,
-            doctors: formData?.doctors || [],
-            categories: formData?.categories || [],
-            healthCard: formData?.healthCard || [],
-            facilities: [{name: "", discription:""}],
+            name: formData.name,
+            phone: formData.phone,
+            email: formData.email,
+            latitude: formData.latitude,
+            longitude: formData.longitude,
+            address: formData.address,
+            profileImage: formData.profileImage,
+            description: formData.description,
+            doctors: formData.doctors || [],
+            categories: formData.categories || [],
+            healthCard: formData.healthCard || [],
+            facilities: [{ name: "", discription: "" }],
             ownerDetails: formData.ownerDetails || {},
-            accountType: "Hospital",
-            isApprove: "Approved",
-            profileImages: formData?.images || [],
+            profileImages: formData.profileImages || [],
           };
           break;
 
@@ -319,19 +427,23 @@ const HealthcareRegistrationModal = () => {
           payload = {
             schemaType: "Ambulance",
             name: formData?.name,
-            email:formData?.email,
-            ambulanceNumber: formData?.ambulanceNumber,
-            ambulanceType: formData?.ambulanceType,
-            availabilityStatus:formData?.availabilityStatus,
-            phone: formData.phone,
-            description:formData?.description,
-            latitude: formData?.latitude,
-            longitude: formData?.longitude,
-            address: formData?.address,
+            email: formData?.email,
+            phone: formData?.phone,
+            address: formData?.address || "1090 chauraha",
+            latitude: formData?.latitude || "26.8469242",
+            longitude: formData?.longitude || "80.9659187",
+            description: formData?.description,
             operatingHours: formData?.operatingHours,
-            emergencyContact:formData?.emergencyContact,
+            ambulanceType: formData?.ambulanceType,
+            ambulanceNumber: formData?.ambulanceNumber,
+            capacity: formData?.capacity,
+            price: formData?.price,
+            emergencyContact: formData?.emergencyContact,
+            availabilityStatus: formData?.availabilityStatus,
             profilepic: formData?.profileImage,
-            profileImages: formData?.images || [],
+            profileImages: formData?.profileImages || [],
+            drivers: formData?.drivers || [],
+            ownerDetails: formData?.ownerDetails || [],
           };
           break;
 
@@ -553,15 +665,14 @@ const HealthcareRegistrationModal = () => {
                     // disabled={!isFormComplete}
                     className={`px-8 py-3 rounded-xl font-semibold text-white transition-all duration-300 ${
                       // isFormComplete
-                      //   ? "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl"
-                      // :
-                      "bg-gray-400 cursor-not-allowed"
+                      //   ? 
+                        "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl"
+                        // : "bg-gray-400 cursor-not-allowed"
                     }`}
                   >
-                    {/* {isFormComplete
-                      ?  */}
-                    "Complete Registration"
-                    {/* : "Please fill all fields"} */}
+                    {/* {isFormComplete ?*/}
+                       "Complete Registration"
+                      {/* : "Please fill all fields"} */}
                   </button>
                 </div>
               </form>
