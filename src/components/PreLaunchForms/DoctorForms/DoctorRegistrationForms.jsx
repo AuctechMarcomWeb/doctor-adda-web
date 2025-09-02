@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Plus, MapPin } from "lucide-react";
+import { Plus, MapPin, User } from "lucide-react";
 import LocationSearchInput from "../../LocationSearchInput";
 import { getRequest } from "../../../Helpers";
 import { useSelector } from "react-redux";
@@ -42,6 +42,8 @@ const DoctorRegistrationForm = ({ renderInput, formData, setFormData }) => {
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
+
+    console.log("Doctor formdata", formData);
   };
 
   useEffect(() => {
@@ -146,40 +148,6 @@ const DoctorRegistrationForm = ({ renderInput, formData, setFormData }) => {
     );
   });
 
-  const validateForm = () => {
-    const newErrors = {};
-
-    // Required Fields Validation
-    if (!profilePreview) {
-      newErrors.profilePic = "Profile picture is required";
-    }
-    if (!formData.fullName) newErrors.fullName = "Full name is required";
-    if (!formData.phone) newErrors.phone = "Phone number is required";
-    if (!formData.email) newErrors.email = "Email is required";
-    if (!formData.gender) newErrors.gender = "Gender is required";
-    if (!formData.dob) newErrors.dob = "Date of birth is required";
-
-    if (!formData.category) newErrors.category = "Category is required";
-    if (!formData.hospital) newErrors.hospital = "Hospital is required";
-    if (!formData.profilepic)
-      newErrors.profilepic = "Profile image is required";
-    if (!formData.serviceType)
-      newErrors.serviceType = "Service type is required";
-    if (!formData.veterinaryserviceType)
-      newErrors.veterinaryserviceType = "Veterinary service type is required";
-    if (!formData.veterinaryDoctorType)
-      newErrors.veterinaryDoctorType = "Veterinary Doctor type is required";
-    if (!formData?.about) newErrors.about = "About is required";
-    if (!formData?.experience) newErrors.experience = "Experience is required";
-    if (!formData?.education) newErrors.education = "Education is required";
-    if (!formData?.documentNumber)
-      newErrors.documentNumber = "Document Number is required";
-    if (!formData?.mci) newErrors.mci = "MCI is required";
-
-    console.log("step3", newErrors);
-
-    return newErrors;
-  };
   const uploadImage = async (file) => {
     try {
       const formDataData = new FormData();
@@ -278,6 +246,41 @@ const DoctorRegistrationForm = ({ renderInput, formData, setFormData }) => {
         "address",
         "Enter address"
       )} */}
+
+      <div className="space-y-2 group">
+        <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+          {/* <Calendar className="w-4 h-4 text-red-600" /> */}
+          Birth Date
+        </label>
+        <input
+          type="date"
+          name="dob"
+          value={formData?.dob}
+          onChange={handleInputChange}
+          className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
+        />
+        {errors?.dob && <p className="text-red-500 text-xs">{errors?.dob}</p>}
+      </div>
+      <div className="space-y-2 group">
+        <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+          <User className="w-4 h-4 text-red-600" />
+          Gender
+        </label>
+        <select
+          value={formData?.gender}
+          name="gender"
+          onChange={handleInputChange}
+          className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
+        >
+          <option value="">Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+        {errors?.gender && (
+          <p className="text-red-500 text-xs">{errors?.gender}</p>
+        )}
+      </div>
       {renderInput(
         "About",
         "textarea",
@@ -409,7 +412,7 @@ const DoctorRegistrationForm = ({ renderInput, formData, setFormData }) => {
         </div>
 
         <div className="space-y-3">
-          {formData?.clinics.map((clinic, index) => (
+          {formData?.clinics?.map((clinic, index) => (
             <div
               key={index}
               className="p-4 bg-gray-50 rounded-xl space-y-6 relative"
@@ -571,12 +574,12 @@ const DoctorRegistrationForm = ({ renderInput, formData, setFormData }) => {
                   <LocationSearchInput
                     value={clinic.clinicAddress}
                     onSelect={(place) => {
+                      console.log("Selected clinic address", place);
+
                       const updatedClinics = [...formData.clinics];
-                      updatedClinics[index].clinicAddress = place.address; // sirf clinicAddress update karega
-                      setFormData({
-                        ...formData,
-                        clinics: updatedClinics,
-                      });
+                      updatedClinics[index].clinicAddress = place.address;
+                      updatedClinics[index].location = place.location;
+                      setFormData({ ...formData, clinics: updatedClinics });
                     }}
                   />
 
@@ -589,6 +592,21 @@ const DoctorRegistrationForm = ({ renderInput, formData, setFormData }) => {
               </div>
             </div>
           ))}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">
+              Select Hospital
+            </label>
+            <select
+              name="hospital"
+              value={formData.hospital || ""}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Select Hospital</option>
+              {hospitalOption}
+              <option value="Other">Other</option>
+            </select>
+          </div>
         </div>
       </div>
     </>

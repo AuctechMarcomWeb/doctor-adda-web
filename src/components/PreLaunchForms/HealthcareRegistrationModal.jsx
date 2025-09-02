@@ -21,6 +21,9 @@ const HealthcareRegistrationModal = () => {
   const [imagesPreview, setImagesPreview] = useState([]);
   const [imagesFiles, setImagesFiles] = useState([]);
 
+  const [uploadingProfile, setUploadingProfile] = useState(false);
+  const [uploadingImages, setUploadingImages] = useState(false);
+
   const cardTypes = [
     {
       id: "ambulance",
@@ -59,18 +62,26 @@ const HealthcareRegistrationModal = () => {
     },
   ];
 
-  const handleProfileSelect = (e) => {
+  // const handleProfileSelect = (e) => {
+  //   const file = e.target.files[0];
+  //   if (!file) return;
+  //   setProfileFile(file);
+  //   setProfilePreview(URL.createObjectURL(file));
+  // };
+  const handleProfileSelect = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
     setProfileFile(file);
     setProfilePreview(URL.createObjectURL(file));
+    await handleUploadProfile(file); // auto upload after select
   };
 
-  const handleUploadProfile = async () => {
-    if (!profileFile) return;
+  const handleUploadProfile = async (file) => {
+    if (!file) return;
+    setUploadingProfile(true);
     try {
       const formDataData = new FormData();
-      formDataData.append("file", profileFile);
+      formDataData.append("file", file);
       const response = await postRequest({
         url: `upload/uploadImage`,
         cred: formDataData,
@@ -80,36 +91,54 @@ const HealthcareRegistrationModal = () => {
       console.log("Profile uploaded:", uploadedUrl);
     } catch (err) {
       console.error("Error uploading profile image:", err);
+    } finally {
+      setUploadingProfile(false);
     }
   };
 
-  const handleImagesSelect = (e) => {
+  const handleImagesSelect = async (e) => {
     const files = Array.from(e.target.files);
     if (!files.length) return;
     setImagesFiles(files);
     const previews = files.map((file) => URL.createObjectURL(file));
     setImagesPreview(previews);
+    await handleUploadImages(files); // auto upload after select
   };
 
-  const handleUploadImages = async () => {
+  const handleUploadImages = async (files) => {
+    setUploadingImages(true);
     try {
       const uploadedUrls = [];
-      for (const file of imagesFiles) {
+      for (const file of files) {
         const formDataData = new FormData();
         formDataData.append("file", file);
         const response = await postRequest({
           url: `upload/uploadImage`,
           cred: formDataData,
         });
-        console.log("Image upload response pre launch", response);
-
         uploadedUrls.push(response?.data?.data?.imageUrl);
       }
-      setFormData((prev) => ({ ...prev, images: uploadedUrls }));
+
+      setFormData((prev) => ({
+        ...prev,
+        profileImages: [...(prev.profileImages || []), ...uploadedUrls],
+      }));
+
       console.log("Images uploaded:", uploadedUrls);
     } catch (err) {
       console.error("Error uploading images:", err);
+    } finally {
+      setUploadingImages(false);
     }
+  };
+
+  // Remove a gallery image
+  const handleRemoveImage = (index) => {
+    setImagesPreview((prev) => prev.filter((_, i) => i !== index));
+    setFormData((prev) => ({
+      ...prev,
+      profileImages: prev.profileImages?.filter((_, i) => i !== index) || [],
+    }));
   };
 
   const handleInputChange = (field, value) => {
@@ -136,14 +165,9 @@ const HealthcareRegistrationModal = () => {
           "specializations",
         ];
       case "doctor":
-        return [
-          ...commonFields,
-          "qualification",
-          "specialization",
-          "experience",
-        ];
+        return [...commonFields, "education", "specialization", "experience"];
       case "diagnostic":
-        return [...commonFields, "centerName", "services", "equipments"];
+        return [...commonFields, "", "services", ""];
       case "pharmacy":
         return [...commonFields, "centerName", "services", "equipments"];
       default:
@@ -236,10 +260,10 @@ const HealthcareRegistrationModal = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!isFormComplete) {
-      alert("Please fill all required fields");
-      return;
-    }
+    // if (!isFormComplete) {
+    //   alert("Please fill all required fields");
+    //   return;
+    // }
 
     try {
       let payload = {};
@@ -248,36 +272,22 @@ const HealthcareRegistrationModal = () => {
         case "doctor":
           payload = {
             schemaType: "Doctor",
-            userId: formData.userId, // get this from logged in user
-            phone: formData.phone,
-            latitude: formData.latitude,
-            longitude: formData.longitude,
-            fullName: formData.name,
-            gender: formData.gender,
-            dob: formData.dob,
-            email: formData.email,
-            profilepic: formData.profileImage,
-            experience: formData.experience,
-            serviceType: formData.serviceType,
-            about: formData.about,
-            education: formData.education,
-            category: formData.category,
-            hospital: formData.hospital,
-            profileImages: formData.profileImages,
-            clinics: [
-              {
-                clinicName: "",
-                clinicAddress: "",
-                consultationFee: "",
-                startTime: "",
-                endTime: "",
-                duration: "",
-                videoStartTime: "",
-                videoEndTime: "",
-                videoDuration: "",
-                location: { type: "Point", coordinates: [0, 0] },
-              },
-            ],
+            phone: formData.phone || null,
+            fullName: formData?.name || null,
+            gender: formData?.gender || null,
+            dob: formData?.dob || null,
+            email: formData?.email || null,
+            profilepic: formData?.profileImage || null,
+            experience: formData?.experience || null,
+            serviceType: formData?.serviceType || null,
+            about: formData?.about || null,
+            education: formData?.education || null,
+            category: formData?.category || null,
+            hospital: formData?.hospital || null,
+            profileImages: formData?.profileImages || [], // ✅ unified gallery
+            clinics: formData.clinics || [],
+            latitude: formData?.clinics[0]?.location?.coordinates[0],
+            longitude: formData?.clinics[0]?.location?.coordinates[1],
           };
           break;
 
@@ -321,7 +331,8 @@ const HealthcareRegistrationModal = () => {
         case "diagnostic":
           payload = {
             schemaType: "Diagnostic",
-            centerName: formData?.centerName,
+            name: formData?.name, // ✅ not centerName
+            email: formData?.email,
             phone: formData?.phone,
             email: formData.email,
             latitude: formData?.latitude,
@@ -330,31 +341,35 @@ const HealthcareRegistrationModal = () => {
             description: formData?.description,
             services: formData?.services || [],
             packages: formData?.packages || [],
-            storeTiming:formData?.storeTiming,
-            startTime:formData?.startTime,
-            endTime:formData?.endTime,
+            storeTiming: formData?.storeTiming,
+            startTime: formData?.startTime,
+            endTime: formData?.endTime,
             profileImage: formData?.profileImage,
-            profileImages: formData?.images || [],
-
+            profileImages: formData?.profileImages || [], // ✅ not images
           };
           break;
 
         case "pharmacy":
           payload = {
             schemaType: "Pharmacy",
-            centerName: formData?.pharmacyName,
+            name: formData?.name, // ✅ not pharmacyName
+            email: formData?.email,
             phone: formData?.phone,
             email: formData.email,
             latitude: formData?.latitude,
             longitude: formData?.longitude,
             address: formData?.address,
             storeTiming: formData?.storeTiming,
-            services: formData?.services || [],
-            ownerDetails: formData?.ownerDetails || {},
+            services: formData?.services || [], // ✅ synced from form state
+            ownerDetails: {
+              ownerName: formData?.ownerName,
+              gstNumber: formData?.gstNumber,
+              phoneNumber: formData?.phoneNumber,
+            },
             profileImage: formData?.profileImage,
-            profileImages: formData?.images || [],
-            onlinePayment: true,
-            cod: true,
+            profileImages: formData?.profileImages || [], // ✅ consistent
+            onlinePayment: formData?.onlinePayment === "true", // ✅ from form
+            cod: formData?.cod === "true", // ✅ from form
           };
           break;
 
@@ -404,7 +419,19 @@ const HealthcareRegistrationModal = () => {
                 {cardTypes.map((card) => (
                   <div
                     key={card.id}
-                    onClick={() => setSelectedCard(card.id)}
+                    onClick={() => {
+                      setSelectedCard(card.id);
+                      // reset profile + gallery images
+                      setProfilePreview(null);
+                      setProfileFile(null);
+                      setImagesPreview([]);
+                      setImagesFiles([]);
+                      setFormData((prev) => ({
+                        ...prev,
+                        profileImage: null,
+                        profileImages: [],
+                      }));
+                    }}
                     className={`bg-gradient-to-br ${card.gradient} p-6 rounded-xl cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-white`}
                   >
                     <div className="flex flex-col items-center text-center space-y-3">
@@ -446,18 +473,30 @@ const HealthcareRegistrationModal = () => {
                     onChange={handleProfileSelect}
                   />
                   {profilePreview && (
-                    <div className="mt-2">
+                    <div className="mt-2 relative inline-block">
                       <img
                         src={profilePreview}
                         alt="Profile Preview"
                         className="w-24 h-24 rounded-full object-cover border"
                       />
+                      {uploadingProfile && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-white/70 rounded-full">
+                          <span className="loader border-t-2 border-indigo-600 w-6 h-6 rounded-full animate-spin"></span>
+                        </div>
+                      )}
                       <button
                         type="button"
-                        onClick={handleUploadProfile}
-                        className="ml-2 px-3 py-1 bg-indigo-600 text-white rounded"
+                        onClick={() => {
+                          setProfilePreview(null);
+                          setProfileFile(null);
+                          setFormData((prev) => ({
+                            ...prev,
+                            profileImage: null,
+                          }));
+                        }}
+                        className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
                       >
-                        Upload
+                        ✕
                       </button>
                     </div>
                   )}
@@ -477,20 +516,26 @@ const HealthcareRegistrationModal = () => {
                   {imagesPreview.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-2">
                       {imagesPreview.map((src, idx) => (
-                        <img
-                          key={idx}
-                          src={src}
-                          alt={`preview-${idx}`}
-                          className="w-20 h-20 object-cover rounded border"
-                        />
+                        <div key={idx} className="relative w-20 h-20">
+                          <img
+                            src={src}
+                            alt={`preview-${idx}`}
+                            className="w-20 h-20 object-cover rounded border"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveImage(idx)}
+                            className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                          >
+                            ✕
+                          </button>
+                        </div>
                       ))}
-                      <button
-                        type="button"
-                        onClick={handleUploadImages}
-                        className="px-3 py-1 bg-indigo-600 text-white rounded"
-                      >
-                        Upload All
-                      </button>
+                      {uploadingImages && (
+                        <div className="flex items-center justify-center w-20 h-20 border rounded">
+                          <span className="loader border-t-2 border-indigo-600 w-6 h-6 rounded-full animate-spin"></span>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
@@ -498,16 +543,18 @@ const HealthcareRegistrationModal = () => {
                 <div className="mt-6 flex justify-center">
                   <button
                     type="submit"
-                    disabled={!isFormComplete}
+                    // disabled={!isFormComplete}
                     className={`px-8 py-3 rounded-xl font-semibold text-white transition-all duration-300 ${
-                      isFormComplete
-                        ? "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl"
-                        : "bg-gray-400 cursor-not-allowed"
+                      // isFormComplete
+                      //   ? "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl"
+                      // :
+                      "bg-gray-400 cursor-not-allowed"
                     }`}
                   >
-                    {isFormComplete
-                      ? "Complete Registration"
-                      : "Please fill all fields"}
+                    {/* {isFormComplete
+                      ?  */}
+                    "Complete Registration"
+                    {/* : "Please fill all fields"} */}
                   </button>
                 </div>
               </form>

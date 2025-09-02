@@ -16,19 +16,26 @@ const PharmacyRegistrationForms = ({ renderInput, formData, setFormData }) => {
     const updated = [...services];
     updated[index][field] = value;
     setservices(updated);
+    setFormData((prev) => ({ ...prev, services: updated })); // ✅ sync
   };
 
   const addService = () => {
-    setservices([...services, { name: "", description: "" }]);
+    const updated = [...services, { name: "", description: "" }];
+    setservices(updated);
+    setFormData((prev) => ({ ...prev, services: updated })); // ✅ sync
   };
 
   const removeService = (index) => {
     if (services.length > 1) {
-      setservices(services.filter((_, i) => i !== index));
+      const updated = services.filter((_, i) => i !== index);
+      setservices(updated);
+      setFormData((prev) => ({ ...prev, services: updated })); // ✅ sync
     }
   };
+
   const handleInputChange = (name, value) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
+    console.log("Pharmacy formdata", formData);
   };
   return (
     <>
@@ -112,7 +119,7 @@ const PharmacyRegistrationForms = ({ renderInput, formData, setFormData }) => {
         </div>
       </div>
 
-       <div className="space-y-2 group">
+      <div className="space-y-2 group">
         <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
           {/* <MapPin className="w-4 h-4 text-red-600" /> */}
           Store Timings
@@ -141,71 +148,68 @@ const PharmacyRegistrationForms = ({ renderInput, formData, setFormData }) => {
       )}
 
       <div className="space-y-2 group">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                COD Preference
-              </label>
-              <div className="flex gap-4">
-                <button
-                  type="button"
-                  onClick={() => handleInputChange("cod", "true")}
-                  className={`w-full px-4 py-3 border rounded-xl font-medium transition-all duration-200
+        <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+          COD Preference
+        </label>
+        <div className="flex gap-4">
+          <button
+            type="button"
+            onClick={() => handleInputChange("cod", "true")}
+            className={`w-full px-4 py-3 border rounded-xl font-medium transition-all duration-200
         ${
           formData?.cod === "true"
             ? "bg-green-500 text-white border-green-500"
             : "bg-white text-gray-700 border-gray-300 hover:bg-green-50"
         }`}
-                >
-                  Yes
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleInputChange("cod", "false")}
-                  className={`w-full px-4 py-3 border rounded-xl font-medium transition-all duration-200
+          >
+            Yes
+          </button>
+          <button
+            type="button"
+            onClick={() => handleInputChange("cod", "false")}
+            className={`w-full px-4 py-3 border rounded-xl font-medium transition-all duration-200
         ${
           formData?.cod === "false"
             ? "bg-red-500 text-white border-red-500"
             : "bg-white text-gray-700 border-gray-300 hover:bg-red-50"
         }`}
-                >
-                  No
-                </button>
-              </div>
-              
-            </div>
+          >
+            No
+          </button>
+        </div>
+      </div>
 
-            <div className="space-y-2 group">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                Online Payment
-              </label>
-              <div className="flex gap-4">
-                <button
-                  type="button"
-                  onClick={() => handleInputChange("onlinePayment", "true")}
-                  className={`flex-1 px-4 py-3 border rounded-xl font-medium transition-all duration-200
+      <div className="space-y-2 group">
+        <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+          Online Payment
+        </label>
+        <div className="flex gap-4">
+          <button
+            type="button"
+            onClick={() => handleInputChange("onlinePayment", "true")}
+            className={`flex-1 px-4 py-3 border rounded-xl font-medium transition-all duration-200
         ${
           formData?.onlinePayment === "true"
             ? "bg-green-500 text-white border-green-500"
             : "bg-white text-gray-700 border-gray-300 hover:bg-green-50"
         }`}
-                >
-                  Yes
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleInputChange("onlinePayment", "false")}
-                  className={`flex-1 px-4 py-3 border rounded-xl font-medium transition-all duration-200
+          >
+            Yes
+          </button>
+          <button
+            type="button"
+            onClick={() => handleInputChange("onlinePayment", "false")}
+            className={`flex-1 px-4 py-3 border rounded-xl font-medium transition-all duration-200
         ${
           formData?.onlinePayment === "false"
             ? "bg-red-500 text-white border-red-500"
             : "bg-white text-gray-700 border-gray-300 hover:bg-red-50"
         }`}
-                >
-                  No
-                </button>
-              </div>
-             
-            </div>
- 
+          >
+            No
+          </button>
+        </div>
+      </div>
     </>
   );
 };
