@@ -23,7 +23,7 @@ import { getRequest } from "../Helpers";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUserProfile } from "../redux/slices/userSlice";
 import { useUpdate } from "../context/updateContext";
-import HealthcareRegistrationModal from "../components/HealthcareRegistrationModal";
+import HealthcareRegistrationModal from "../components/PreLaunchForms/HealthcareRegistrationModal";
 
 const Home = () => {
   const dispatch = useDispatch();
