@@ -207,7 +207,9 @@ const HealthcareRegistrationModal = () => {
     case "ambulance":
       return <AmbulanceRegistrationForm renderInput={renderInput} />;
     case "hospital":
-      return <HospitalRegistrationForm renderInput={renderInput} />;
+      return <HospitalRegistrationForm renderInput={renderInput}
+       formData={formData}
+          setFormData={setFormData} />;
     case "doctor":
       return (
         <DoctorRegistrationForm
@@ -293,7 +295,7 @@ const HealthcareRegistrationModal = () => {
             doctors: formData.doctors || [],
             categories: formData.categories || [],
             healthCard: formData.healthCard || [],
-            facilities: formData.facilities || [],
+            facilities: [{name: "", discription:""}],
             ownerDetails: formData.ownerDetails || {},
             accountType: "Hospital",
             isApprove: "Approved",
@@ -321,6 +323,7 @@ const HealthcareRegistrationModal = () => {
             schemaType: "Diagnostic",
             centerName: formData?.centerName,
             phone: formData?.phone,
+            email: formData.email,
             latitude: formData?.latitude,
             longitude: formData?.longitude,
             address: formData?.address,
@@ -341,6 +344,7 @@ const HealthcareRegistrationModal = () => {
             schemaType: "Pharmacy",
             centerName: formData?.pharmacyName,
             phone: formData?.phone,
+            email: formData.email,
             latitude: formData?.latitude,
             longitude: formData?.longitude,
             address: formData?.address,

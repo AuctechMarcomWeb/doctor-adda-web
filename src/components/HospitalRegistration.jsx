@@ -175,6 +175,7 @@ const HospitalRegistration = () => {
     }));
   };
 
+
   const removeFacility = (index) => {
     const updatedFacilities = formData.facilities.filter((_, i) => i !== index);
     setFormData((prev) => ({
