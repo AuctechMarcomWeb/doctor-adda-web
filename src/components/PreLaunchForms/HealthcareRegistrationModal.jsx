@@ -226,52 +226,34 @@ const HealthcareRegistrationModal = () => {
     </div>
   );
 
-  const renderForm = () => {
-    switch (selectedCard) {
-      case "ambulance":
-        return (
-          <AmbulanceRegistrationForm
-            renderInput={renderInput}
-            formData={formData}
-            setFormData={setFormData}
-          />
-        );
-      case "hospital":
-        return (
-          <HospitalRegistrationForm
-            renderInput={renderInput}
-            formData={formData}
-            setFormData={setFormData}
-          />
-        );
-      case "doctor":
-        return (
-          <DoctorRegistrationForm
-            renderInput={renderInput}
-            formData={formData}
-            setFormData={setFormData}
-          />
-        );
-      case "diagnostic":
-        return (
-          <DiagnosticsRegistrationForms
-            renderInput={renderInput}
-            formData={formData}
-            setFormData={setFormData}
-          />
-        );
-      case "pharmacy":
-        return (
-          <PharmacyRegistrationForms
-            renderInput={renderInput}
-            formData={formData}
-            setFormData={setFormData}
-          />
-        );
-      default:
-        return null;
-    }
-  };
+ const renderForm = () => {
+  switch (selectedCard) {
+    case "ambulance":
+      return <AmbulanceRegistrationForm renderInput={renderInput} />;
+    case "hospital":
+      return <HospitalRegistrationForm renderInput={renderInput}
+       formData={formData}
+          setFormData={setFormData} />;
+    case "doctor":
+      return (
+        <DoctorRegistrationForm
+          renderInput={renderInput}
+          formData={formData}
+          setFormData={setFormData}
+        />
+      );
+    case "diagnostic":
+      return <DiagnosticsRegistrationForms renderInput={renderInput} 
+        formData={formData}
+          setFormData={setFormData}
+      />;
+    case "pharmacy":
+      return <PharmacyRegistrationForms
+       renderInput={renderInput} />;
+    default:
+      return null;
+  }
+};
 
   if (!isModalOpen) return null;
 
@@ -323,7 +305,7 @@ const HealthcareRegistrationModal = () => {
             doctors: formData.doctors || [],
             categories: formData.categories || [],
             healthCard: formData.healthCard || [],
-            facilities: formData.facilities || [],
+            facilities: [{name: "", discription:""}],
             ownerDetails: formData.ownerDetails || {},
             accountType: "Hospital",
             isApprove: "Approved",
@@ -352,6 +334,7 @@ const HealthcareRegistrationModal = () => {
             name: formData?.name, // ✅ not centerName
             email: formData?.email,
             phone: formData?.phone,
+            email: formData.email,
             latitude: formData?.latitude,
             longitude: formData?.longitude,
             address: formData?.address,
@@ -372,6 +355,7 @@ const HealthcareRegistrationModal = () => {
             name: formData?.name, // ✅ not pharmacyName
             email: formData?.email,
             phone: formData?.phone,
+            email: formData.email,
             latitude: formData?.latitude,
             longitude: formData?.longitude,
             address: formData?.address,
