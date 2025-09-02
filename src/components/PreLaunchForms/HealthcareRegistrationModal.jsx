@@ -274,7 +274,7 @@ const HealthcareRegistrationModal = () => {
         case "doctor":
           payload = {
             schemaType: "Doctor",
-            phone: formData.phone || null,
+            phone: formData?.phone || null,
             fullName: formData?.name || null,
             gender: formData?.gender || null,
             dob: formData?.dob || null,
@@ -287,7 +287,7 @@ const HealthcareRegistrationModal = () => {
             category: formData?.category || null,
             hospital: formData?.hospital || null,
             profileImages: formData?.profileImages || [], // ✅ unified gallery
-            clinics: formData.clinics || [],
+            clinics: formData?.clinics || [],
             latitude: formData?.clinics[0]?.location?.coordinates[0],
             longitude: formData?.clinics[0]?.location?.coordinates[1],
           };
@@ -296,42 +296,42 @@ const HealthcareRegistrationModal = () => {
         case "hospital":
           payload = {
             schemaType: "Hospital",
-            name: formData.hospitalName,
-            phone: formData.phone,
-            email: formData.email,
-            latitude: formData.latitude,
-            longitude: formData.longitude,
-            address: formData.address,
-            profileImage: formData.profileImage,
-            description: formData.description,
-            doctors: formData.doctors || [],
-            categories: formData.categories || [],
-            healthCard: formData.healthCard || [],
+            name: formData?.hospitalName,
+            phone: formData?.phone,
+            email: formData?.email,
+            latitude: formData?.latitude,
+            longitude: formData?.longitude,
+            address: formData?.address,
+            profileImage: formData?.profileImage,
+            description: formData?.description,
+            doctors: formData?.doctors || [],
+            categories: formData?.categories || [],
+            healthCard: formData?.healthCard || [],
             facilities: [{name: "", discription:""}],
             ownerDetails: formData.ownerDetails || {},
             accountType: "Hospital",
             isApprove: "Approved",
-            profileImages: formData.images || [],
+            profileImages: formData?.images || [],
           };
           break;
 
         case "ambulance":
           payload = {
             schemaType: "Ambulance",
-            name: formData.name,
-            email:formData.email,
-            ambulanceNumber: formData.ambulanceNumber,
+            name: formData?.name,
+            email:formData?.email,
+            ambulanceNumber: formData?.ambulanceNumber,
             ambulanceType: formData?.ambulanceType,
             availabilityStatus:formData?.availabilityStatus,
             phone: formData.phone,
             description:formData?.description,
-            latitude: formData.latitude,
-            longitude: formData.longitude,
-            address: formData.address,
-            operatingHours: formData.operatingHours,
+            latitude: formData?.latitude,
+            longitude: formData?.longitude,
+            address: formData?.address,
+            operatingHours: formData?.operatingHours,
             emergencyContact:formData?.emergencyContact,
-            profilepic: formData.profileImage,
-            profileImages: formData.images || [],
+            profilepic: formData?.profileImage,
+            profileImages: formData?.images || [],
           };
           break;
 
@@ -341,7 +341,7 @@ const HealthcareRegistrationModal = () => {
             name: formData?.name, // ✅ not centerName
             email: formData?.email,
             phone: formData?.phone,
-            email: formData.email,
+            email: formData?.email,
             latitude: formData?.latitude,
             longitude: formData?.longitude,
             address: formData?.address,
@@ -362,7 +362,7 @@ const HealthcareRegistrationModal = () => {
             name: formData?.name, // ✅ not pharmacyName
             email: formData?.email,
             phone: formData?.phone,
-            email: formData.email,
+            email: formData?.email,
             latitude: formData?.latitude,
             longitude: formData?.longitude,
             address: formData?.address,
