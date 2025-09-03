@@ -621,7 +621,7 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
             profileImages: formData.profileImages || [],
             documents: formData?.documents || [],
             yearOfEstablish: formData?.yearOfEstablish || "",
-            registrationNo:formData?.registrationNo || ''
+            registrationNo: formData?.registrationNo || "",
           };
           break;
 
@@ -647,7 +647,7 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
             drivers: formData?.drivers || [],
             ownerDetails: formData?.ownerDetails || [],
             documents: formData?.documents || [],
-            gpsTraking:formData?.gpsTraking || false,
+            gpsTraking: formData?.gpsTraking || false,
           };
           break;
 
@@ -735,14 +735,25 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <button className="btn btn-primary" onClick={() => setOpen(false)}>
-          close
-        </button>
-        <div className="bg-gradient-to-r from-[#007BBD] to-[#005A8C] p-6 rounded-t-2xl text-center">
+        <div className="relative bg-gradient-to-r from-[#007BBD] to-[#005A8C] p-6 rounded-t-2xl text-center">
+          {/* Close Button */}
+          <button
+            type="button"
+            onClick={() => setOpen(false)} // <-- pass your close handler function
+            className="absolute top-3 right-3 bg-white/30 hover:bg-white/50 text-white rounded p-1 transition"
+          >
+            ✕
+          </button>
+
+          {/* Logo */}
           <img src={logo} alt="Logo" className="h-14 mx-auto mb-3" />
+
+          {/* Title */}
           <h2 className="text-3xl font-bold text-white">
             Registration for Pre-Launch
           </h2>
+
+          {/* Subtitle */}
           <p className="text-indigo-100 mt-2">
             Join our healthcare network early and get exclusive benefits
           </p>
