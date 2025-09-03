@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import LocationSearchInput from "../../LocationSearchInput";
 
-const AmbulanceRegistrationForm = ({ renderInput, formData, setFormData }) => {
+const AmbulanceRegistrationForm = ({
+  renderInput,
+  formData,
+  setFormData,
+  errors = {},
+}) => {
   const [drivers, setDrivers] = useState([
     { name: "", phone: "", licenseNumber: "" },
   ]);
@@ -53,6 +58,9 @@ const AmbulanceRegistrationForm = ({ renderInput, formData, setFormData }) => {
           value={formData?.address}
           onSelect={(place) => setFormData((prev) => ({ ...prev, ...place }))}
         />
+        {errors.address && (
+          <p className="text-red-500 text-sm">{errors.address}</p>
+        )}
       </div>
 
       {/* Description */}
@@ -75,6 +83,9 @@ const AmbulanceRegistrationForm = ({ renderInput, formData, setFormData }) => {
           className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-gray-500"
           placeholder="Operating Hours of ambulance service"
         />
+        {errors.operatingHours && (
+          <p className="text-red-500 text-sm">{errors.operatingHours}</p>
+        )}
       </div>
 
       {/* Ambulance Type */}
@@ -94,6 +105,9 @@ const AmbulanceRegistrationForm = ({ renderInput, formData, setFormData }) => {
           </option>
           <option value="ICU Ambulance">ICU Ambulance</option>
         </select>
+        {errors.ambulanceType && (
+          <p className="text-red-500 text-sm">{errors.ambulanceType}</p>
+        )}
       </div>
 
       {/* Number of Ambulance */}
@@ -112,6 +126,9 @@ const AmbulanceRegistrationForm = ({ renderInput, formData, setFormData }) => {
           <option value="3">3</option>
           <option value="4+">4+</option>
         </select>
+        {errors.ambulanceNumber && (
+          <p className="text-red-500 text-sm">{errors.ambulanceNumber}</p>
+        )}
       </div>
 
       {/* Availability Status */}
@@ -121,6 +138,9 @@ const AmbulanceRegistrationForm = ({ renderInput, formData, setFormData }) => {
         "availabilityStatus",
         "Available/Unavailable"
       )}
+      {/* {errors.availabilityStatus && (
+        <p className="text-red-500 text-sm">{errors.availabilityStatus}</p>
+      )} */}
 
       {/* Capacity */}
       {renderInput(
@@ -129,7 +149,9 @@ const AmbulanceRegistrationForm = ({ renderInput, formData, setFormData }) => {
         "capacity",
         "Number of patients ambulance can carry"
       )}
-
+      {/* {errors.capacity && (
+        <p className="text-red-500 text-sm">{errors.capacity}</p>
+      )} */}
       {/* Emergency Contact */}
       {renderInput(
         "Emergency Contact",
@@ -137,9 +159,13 @@ const AmbulanceRegistrationForm = ({ renderInput, formData, setFormData }) => {
         "emergencyContact",
         "Enter emergency contact"
       )}
+      {/* {errors.emergencyContact && (
+        <p className="text-red-500 text-sm">{errors.emergencyContact}</p>
+      )} */}
 
       {/* Price */}
       {renderInput("Price", "number", "price", "Enter service charge")}
+      {/* {errors.price && <p className="text-red-500 text-sm">{errors.price}</p>} */}
 
       {/* Driver Information */}
       <div className="space-y-4">
@@ -175,6 +201,11 @@ const AmbulanceRegistrationForm = ({ renderInput, formData, setFormData }) => {
                   }
                   className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
+                {errors[`drivers.${index}.name`] && (
+                  <p className="text-red-500 text-sm">
+                    {errors[`drivers.${index}.name`]}
+                  </p>
+                )}
               </div>
 
               {/* Phone */}
@@ -191,6 +222,11 @@ const AmbulanceRegistrationForm = ({ renderInput, formData, setFormData }) => {
                   }
                   className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
+                {errors[`drivers.${index}.phone`] && (
+                  <p className="text-red-500 text-sm">
+                    {errors[`drivers.${index}.phone`]}
+                  </p>
+                )}
               </div>
 
               {/* License Number */}
@@ -218,9 +254,17 @@ const AmbulanceRegistrationForm = ({ renderInput, formData, setFormData }) => {
                     </button>
                   )}
                 </div>
+                {errors[`drivers.${index}.licenseNumber`] && (
+                  <p className="text-red-500 text-sm">
+                    {errors[`drivers.${index}.licenseNumber`]}
+                  </p>
+                )}
               </div>
             </div>
           ))}
+          {errors.drivers && (
+            <p className="text-red-500 text-sm">{errors.drivers}</p>
+          )}
         </div>
       </div>
     </>

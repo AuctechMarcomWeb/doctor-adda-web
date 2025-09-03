@@ -9,7 +9,12 @@ import {
   User,
   FileText,
 } from "lucide-react";
-const PharmacyRegistrationForms = ({ renderInput, formData, setFormData }) => {
+const PharmacyRegistrationForms = ({
+  renderInput,
+  formData,
+  setFormData,
+  errors = {},
+}) => {
   const [services, setservices] = useState([{ name: "", discription: "" }]);
 
   const handleServiceChange = (index, field, value) => {
@@ -80,30 +85,46 @@ const PharmacyRegistrationForms = ({ renderInput, formData, setFormData }) => {
         </div>
 
         <div className="space-y-3">
-          {services.map((Service, index) => (
+          {services.map((service, index) => (
             <div
               key={index}
               className="grid md:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-xl"
             >
-              <input
-                type="text"
-                placeholder="Services Offered Name"
-                value={Service?.name}
-                onChange={(e) =>
-                  handleServiceChange(index, "name", e.target.value)
-                }
-                className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-              />
-              <div className="flex gap-2">
+              <div className="space-y-1">
                 <input
                   type="text"
-                  placeholder="Services Offered Description"
-                  value={Service?.discription}
+                  placeholder="Service Name"
+                  value={service?.name}
                   onChange={(e) =>
-                    handleServiceChange(index, "discription", e.target.value)
+                    handleServiceChange(index, "name", e.target.value)
                   }
-                  className="flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 w-full"
                 />
+                {errors[`serviceName_${index}`] && (
+                  <p className="text-red-500 text-sm">
+                    {errors[`serviceName_${index}`]}
+                  </p>
+                )}
+              </div>
+
+              <div className="flex gap-2 w-full">
+                <div className="flex-1 space-y-1">
+                  <input
+                    type="text"
+                    placeholder="Service Description"
+                    value={service?.discription}
+                    onChange={(e) =>
+                      handleServiceChange(index, "discription", e.target.value)
+                    }
+                    className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 w-full"
+                  />
+                  {errors[`serviceDescription_${index}`] && (
+                    <p className="text-red-500 text-sm">
+                      {errors[`serviceDescription_${index}`]}
+                    </p>
+                  )}
+                </div>
+
                 {services.length > 1 && (
                   <button
                     type="button"
@@ -117,11 +138,14 @@ const PharmacyRegistrationForms = ({ renderInput, formData, setFormData }) => {
             </div>
           ))}
         </div>
+        {errors.services && (
+          <p className="text-red-500 text-sm">{errors.services}</p>
+        )}
       </div>
 
+      {/* Store Timings */}
       <div className="space-y-2 group">
-        <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-          {/* <MapPin className="w-4 h-4 text-red-600" /> */}
+        <label className="text-sm font-medium text-gray-700">
           Store Timings
         </label>
         <input
@@ -131,6 +155,9 @@ const PharmacyRegistrationForms = ({ renderInput, formData, setFormData }) => {
           className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
           placeholder="Ex: 9:00 AM - 9:00 PM"
         />
+        {errors.storeTiming && (
+          <p className="text-red-500 text-sm">{errors.storeTiming}</p>
+        )}
       </div>
 
       {/* Owner Name */}
@@ -147,8 +174,9 @@ const PharmacyRegistrationForms = ({ renderInput, formData, setFormData }) => {
         "Enter verification phone"
       )}
 
+      {/* COD Preference */}
       <div className="space-y-2 group">
-        <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+        <label className="text-sm font-medium text-gray-700">
           COD Preference
         </label>
         <div className="flex gap-4">
@@ -156,11 +184,11 @@ const PharmacyRegistrationForms = ({ renderInput, formData, setFormData }) => {
             type="button"
             onClick={() => handleInputChange("cod", "true")}
             className={`w-full px-4 py-3 border rounded-xl font-medium transition-all duration-200
-        ${
-          formData?.cod === "true"
-            ? "bg-green-500 text-white border-green-500"
-            : "bg-white text-gray-700 border-gray-300 hover:bg-green-50"
-        }`}
+              ${
+                formData?.cod === "true"
+                  ? "bg-green-500 text-white border-green-500"
+                  : "bg-white text-gray-700 border-gray-300 hover:bg-green-50"
+              }`}
           >
             Yes
           </button>
@@ -168,19 +196,21 @@ const PharmacyRegistrationForms = ({ renderInput, formData, setFormData }) => {
             type="button"
             onClick={() => handleInputChange("cod", "false")}
             className={`w-full px-4 py-3 border rounded-xl font-medium transition-all duration-200
-        ${
-          formData?.cod === "false"
-            ? "bg-red-500 text-white border-red-500"
-            : "bg-white text-gray-700 border-gray-300 hover:bg-red-50"
-        }`}
+              ${
+                formData?.cod === "false"
+                  ? "bg-red-500 text-white border-red-500"
+                  : "bg-white text-gray-700 border-gray-300 hover:bg-red-50"
+              }`}
           >
             No
           </button>
         </div>
+        {errors.cod && <p className="text-red-500 text-sm">{errors.cod}</p>}
       </div>
 
+      {/* Online Payment */}
       <div className="space-y-2 group">
-        <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+        <label className="text-sm font-medium text-gray-700">
           Online Payment
         </label>
         <div className="flex gap-4">
@@ -188,11 +218,11 @@ const PharmacyRegistrationForms = ({ renderInput, formData, setFormData }) => {
             type="button"
             onClick={() => handleInputChange("onlinePayment", "true")}
             className={`flex-1 px-4 py-3 border rounded-xl font-medium transition-all duration-200
-        ${
-          formData?.onlinePayment === "true"
-            ? "bg-green-500 text-white border-green-500"
-            : "bg-white text-gray-700 border-gray-300 hover:bg-green-50"
-        }`}
+              ${
+                formData?.onlinePayment === "true"
+                  ? "bg-green-500 text-white border-green-500"
+                  : "bg-white text-gray-700 border-gray-300 hover:bg-green-50"
+              }`}
           >
             Yes
           </button>
@@ -200,15 +230,18 @@ const PharmacyRegistrationForms = ({ renderInput, formData, setFormData }) => {
             type="button"
             onClick={() => handleInputChange("onlinePayment", "false")}
             className={`flex-1 px-4 py-3 border rounded-xl font-medium transition-all duration-200
-        ${
-          formData?.onlinePayment === "false"
-            ? "bg-red-500 text-white border-red-500"
-            : "bg-white text-gray-700 border-gray-300 hover:bg-red-50"
-        }`}
+              ${
+                formData?.onlinePayment === "false"
+                  ? "bg-red-500 text-white border-red-500"
+                  : "bg-white text-gray-700 border-gray-300 hover:bg-red-50"
+              }`}
           >
             No
           </button>
         </div>
+        {errors.onlinePayment && (
+          <p className="text-red-500 text-sm">{errors.onlinePayment}</p>
+        )}
       </div>
     </>
   );

@@ -25,6 +25,7 @@ const HealthcareRegistrationModal = ({setOpen}) => {
 
   const [uploadingProfile, setUploadingProfile] = useState(false);
   const [uploadingImages, setUploadingImages] = useState(false);
+  const [submitting, setSubmitting] = useState(false); // ✅ Loader state for button
   const [errors, setErrors] = useState({});
 
   const cardTypes = [
@@ -190,11 +191,14 @@ const HealthcareRegistrationModal = ({setOpen}) => {
           "phone",
           "gender",
           "dob",
-          "specialization",
           "category",
-          "services", // must have at least 1
-          "location", // Google API location
           "clinics", // must have at least 1
+          "about",
+          "experience",
+          "serviceType",
+          "education",
+          "profileImage", // ✅ added
+          "profileImages", // ✅ added
         ];
 
       case "hospital":
@@ -204,10 +208,12 @@ const HealthcareRegistrationModal = ({setOpen}) => {
           "phone",
           "address",
           "description",
-          "services", // must have at least 1
-          "departments", // must have at least 1
-          "operatingHours",
           "location",
+          "categories",
+          "healthCard",
+          "facilities",
+          "profileImage", // ✅ added
+          "profileImages", // ✅ added
         ];
 
       case "pharmacy":
@@ -217,8 +223,15 @@ const HealthcareRegistrationModal = ({setOpen}) => {
           "phone",
           "address",
           "description",
-          "operatingHours",
-          "location",
+          "cod",
+          "onlinePayment",
+          "services",
+          "storeTiming",
+          "ownerName", // ✅ add
+          "gstNumber", // ✅ add
+          "phoneNumber", // ✅ add
+          "profileImage", // ✅ added
+          "profileImages", // ✅ added
         ];
 
       case "ambulance":
@@ -231,7 +244,27 @@ const HealthcareRegistrationModal = ({setOpen}) => {
           "operatingHours",
           "ambulanceType",
           "ambulanceNumber",
+          "availabilityStatus",
+          "emergencyContact",
+          "price",
+          "capacity",
           "drivers", // must have at least 1
+          "profileImage", // ✅ added
+          "profileImages", // ✅ added
+        ];
+      case "diagnostic":
+        return [
+          "name",
+          "email",
+          "phone",
+          "address",
+          "description",
+          "startTime",
+          "endTime",
+          "packages",
+          "services",
+          "profileImage", // ✅ added
+          "profileImages", // ✅ added
         ];
 
       default:
@@ -242,8 +275,8 @@ const HealthcareRegistrationModal = ({setOpen}) => {
   const validateField = (field, value) => {
     let error = "";
 
-    if (!value || value.trim() === "") {
-      error = "This field is required";
+    if (!value || (typeof value === "string" && !value.trim())) {
+      return `${field} is required`;
     } else {
       if (field === "email") {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -316,6 +349,7 @@ const HealthcareRegistrationModal = ({setOpen}) => {
             renderInput={renderInput}
             formData={formData}
             setFormData={setFormData}
+            errors={errors}
           />
         );
       case "hospital":
@@ -324,6 +358,7 @@ const HealthcareRegistrationModal = ({setOpen}) => {
             renderInput={renderInput}
             formData={formData}
             setFormData={setFormData}
+            errors={errors}
           />
         );
       case "doctor":
@@ -332,6 +367,7 @@ const HealthcareRegistrationModal = ({setOpen}) => {
             renderInput={renderInput}
             formData={formData}
             setFormData={setFormData}
+            errors={errors}
           />
         );
       case "diagnostic":
@@ -340,10 +376,18 @@ const HealthcareRegistrationModal = ({setOpen}) => {
             renderInput={renderInput}
             formData={formData}
             setFormData={setFormData}
+            errors={errors}
           />
         );
       case "pharmacy":
-        return <PharmacyRegistrationForms renderInput={renderInput} />;
+        return (
+          <PharmacyRegistrationForms
+            renderInput={renderInput}
+            formData={formData}
+            setFormData={setFormData}
+            errors={errors}
+          />
+        );
       default:
         return null;
     }
@@ -356,6 +400,7 @@ const HealthcareRegistrationModal = ({setOpen}) => {
     let newErrors = {};
     let isValid = true;
 
+    // 1. Check required fields with validateField
     requiredFields.forEach((field) => {
       const errorMsg = validateField(field, formData[field]);
       if (errorMsg) {
@@ -363,6 +408,99 @@ const HealthcareRegistrationModal = ({setOpen}) => {
         isValid = false;
       }
     });
+
+    // 2. Schema-specific deep validation
+    switch (selectedCard) {
+      case "doctor":
+        if (!formData.clinics || formData.clinics.length === 0) {
+          newErrors.clinics = "At least one clinic is required";
+          isValid = false;
+        }
+        break;
+
+      case "hospital":
+        if (!formData.categories || formData.categories.length === 0) {
+          newErrors.categories = "At least one department/category is required";
+          isValid = false;
+        }
+
+        if (!formData.ownerName?.trim()) {
+          newErrors.ownerName = "Owner name is required";
+          isValid = false;
+        }
+
+        if (!formData.gstNumber?.trim()) {
+          newErrors.gstNumber = "GST number is required";
+          isValid = false;
+        }
+
+        if (!formData.phoneNumber?.trim()) {
+          newErrors.phoneNumber = "Verification phone is required";
+          isValid = false;
+        } else if (!/^\d{10}$/.test(formData.phoneNumber)) {
+          newErrors.phoneNumber = "Verification phone must be 10 digits";
+          isValid = false;
+        }
+
+        if (!formData.facilities || formData.facilities.length === 0) {
+          newErrors.facilities = "At least one facility is required";
+          isValid = false;
+        } else {
+          formData.facilities.forEach((facility, index) => {
+            if (!facility.name?.trim()) {
+              newErrors[`facilityName_${index}`] = "Facility name is required";
+              isValid = false;
+            }
+            if (!facility.discription?.trim()) {
+              newErrors[`facilityDescription_${index}`] =
+                "Facility description is required";
+              isValid = false;
+            }
+          });
+        }
+
+        break;
+
+      case "ambulance":
+        if (!formData.drivers || formData.drivers.length === 0) {
+          newErrors.drivers = "At least one driver is required";
+          isValid = false;
+        }
+        break;
+
+      case "diagnostic":
+        if (!formData.services || formData.services.length === 0) {
+          newErrors.services = "At least one service is required";
+          isValid = false;
+        }
+        break;
+
+      case "pharmacy":
+        // Owner name
+        if (!formData.ownerName?.trim()) {
+          newErrors.ownerName = "Owner name is required";
+          isValid = false;
+        }
+
+        // GST number
+        if (!formData.gstNumber?.trim()) {
+          newErrors.gstNumber = "GST number is required";
+          isValid = false;
+        }
+
+        // Verification phone
+        if (!formData.phoneNumber?.trim()) {
+          newErrors.phoneNumber = "Verification phone is required";
+          isValid = false;
+        } else if (!/^\d{10}$/.test(formData.phoneNumber)) {
+          newErrors.phoneNumber = "Verification phone must be 10 digits";
+          isValid = false;
+        }
+        break;
+
+      default:
+        break;
+    }
 
     setErrors(newErrors);
     setIsFormComplete(isValid);
@@ -372,11 +510,13 @@ const HealthcareRegistrationModal = ({setOpen}) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // if (!isFormComplete) {
-    //   alert("Please fill all required fields");
-    //   return;
-    // }
-
+    // 1. Validate before building payload
+    const isValid = validateForm();
+    if (!isValid) {
+      alert("Please correct the highlighted errors before submitting.");
+      return;
+    }
+    setSubmitting(true);
     try {
       let payload = {};
 
@@ -453,7 +593,6 @@ const HealthcareRegistrationModal = ({setOpen}) => {
             name: formData?.name, // ✅ not centerName
             email: formData?.email,
             phone: formData?.phone,
-            email: formData?.email,
             latitude: formData?.latitude,
             longitude: formData?.longitude,
             address: formData?.address,
@@ -474,7 +613,6 @@ const HealthcareRegistrationModal = ({setOpen}) => {
             name: formData?.name, // ✅ not pharmacyName
             email: formData?.email,
             phone: formData?.phone,
-            email: formData?.email,
             latitude: formData?.latitude,
             longitude: formData?.longitude,
             address: formData?.address,
@@ -503,13 +641,21 @@ const HealthcareRegistrationModal = ({setOpen}) => {
         cred: payload,
       });
 
-      const result = response;
-      console.log("Registration success:", result);
-      alert("Registration submitted successfully!");
-      setIsModalOpen(false);
+      if (response?.data?.success) {
+        alert("Registration submitted successfully!");
+        setIsModalOpen(false);
+      } else {
+        alert(response?.data?.message || "Failed to submit registration.");
+      }
     } catch (error) {
       console.error("Error submitting registration:", error);
-      alert("Failed to submit registration. Please try again.");
+      const apiMessage =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong!";
+      alert(apiMessage);
+    } finally {
+      setSubmitting(false);
     }
   }; //8707767805
 
@@ -587,17 +733,42 @@ const HealthcareRegistrationModal = ({setOpen}) => {
                   <label className="block text-sm font-medium text-gray-700">
                     Profile Image
                   </label>
+
+                  {/* Styled Upload Button */}
+                  <label
+                    htmlFor="profile-upload"
+                    className="cursor-pointer inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 mr-2"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path d="M16.88 9.94A1.5 1.5 0 0015.5 9h-2.793l1.147-1.146a.5.5 0 10-.708-.708L12 8.293V5.5a.5.5 0 00-1 0v2.793L9.854 7.146a.5.5 0 00-.708.708L10.293 9H7.5a1.5 1.5 0 000 3h8a1.5 1.5 0 001.38-2.06z" />
+                    </svg>
+                    Upload Profile Image
+                  </label>
                   <input
+                    id="profile-upload"
                     type="file"
                     accept="image/*"
                     onChange={handleProfileSelect}
+                    className="hidden"
                   />
+
+                  {errors.profileImage && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.profileImage}
+                    </p>
+                  )}
+
                   {profilePreview && (
                     <div className="mt-2 relative inline-block">
                       <img
                         src={profilePreview}
                         alt="Profile Preview"
-                        className="w-24 h-24 rounded-full object-cover border"
+                        className="w-24 h-24 rounded-full object-cover border shadow"
                       />
                       {uploadingProfile && (
                         <div className="absolute inset-0 flex items-center justify-center bg-white/70 rounded-full">
@@ -614,7 +785,7 @@ const HealthcareRegistrationModal = ({setOpen}) => {
                             profileImage: null,
                           }));
                         }}
-                        className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                        className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs shadow"
                       >
                         ✕
                       </button>
@@ -622,17 +793,48 @@ const HealthcareRegistrationModal = ({setOpen}) => {
                   )}
                 </div>
 
-                {/* Multiple Images Upload */}
+                {/* Gallery Images Upload */}
                 <div className="space-y-2 mt-4">
                   <label className="block text-sm font-medium text-gray-700">
                     Gallery Images
                   </label>
+
+                  {/* Styled Upload Button */}
+                  <label
+                    htmlFor="gallery-upload"
+                    className="cursor-pointer inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 mr-2"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 4v16m8-8H4"
+                      />
+                    </svg>
+                    Upload Gallery Images
+                  </label>
                   <input
+                    id="gallery-upload"
                     type="file"
                     accept="image/*"
                     multiple
                     onChange={handleImagesSelect}
+                    className="hidden"
                   />
+
+                  {errors.profileImages && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.profileImages}
+                    </p>
+                  )}
+
                   {imagesPreview.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-2">
                       {imagesPreview.map((src, idx) => (
@@ -640,19 +842,19 @@ const HealthcareRegistrationModal = ({setOpen}) => {
                           <img
                             src={src}
                             alt={`preview-${idx}`}
-                            className="w-20 h-20 object-cover rounded border"
+                            className="w-20 h-20 object-cover rounded border shadow"
                           />
                           <button
                             type="button"
                             onClick={() => handleRemoveImage(idx)}
-                            className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                            className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs shadow"
                           >
                             ✕
                           </button>
                         </div>
                       ))}
                       {uploadingImages && (
-                        <div className="flex items-center justify-center w-20 h-20 border rounded">
+                        <div className="flex items-center justify-center w-20 h-20 border rounded shadow">
                           <span className="loader border-t-2 border-indigo-600 w-6 h-6 rounded-full animate-spin"></span>
                         </div>
                       )}
@@ -663,17 +865,21 @@ const HealthcareRegistrationModal = ({setOpen}) => {
                 <div className="mt-6 flex justify-center">
                   <button
                     type="submit"
-                    // disabled={!isFormComplete}
+                    disabled={submitting}
                     className={`px-8 py-3 rounded-xl font-semibold text-white transition-all duration-300 ${
-                      // isFormComplete
-                      //   ? 
-                        "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl"
-                        // : "bg-gray-400 cursor-not-allowed"
+                      submitting
+                        ? "bg-gray-400 cursor-not-allowed"
+                        : "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl"
                     }`}
                   >
-                    {/* {isFormComplete ?*/}
-                       "Complete Registration"
-                      {/* : "Please fill all fields"} */}
+                    {submitting ? (
+                      <span className="flex items-center gap-2">
+                        <span className="loader border-t-2 border-white w-5 h-5 rounded-full animate-spin"></span>
+                        Submitting...
+                      </span>
+                    ) : (
+                      "Complete Registration"
+                    )}
                   </button>
                 </div>
               </form>

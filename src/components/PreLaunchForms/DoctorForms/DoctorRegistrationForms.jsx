@@ -5,11 +5,16 @@ import { getRequest } from "../../../Helpers";
 import { useSelector } from "react-redux";
 import { Select } from "antd";
 
-const DoctorRegistrationForm = ({ renderInput, formData, setFormData }) => {
+const DoctorRegistrationForm = ({
+  renderInput,
+  formData,
+  setFormData,
+  errors = {},
+}) => {
   const [categoryName, setCategoryName] = useState("");
   const [category, setCategory] = useState([]);
   const [hospital, setHospital] = useState([]);
-  const [errors, setErrors] = useState({});
+  // const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [documents, setDocuments] = useState([]);
   const [docIndex, setDocIndex] = useState(0);
@@ -300,6 +305,7 @@ const DoctorRegistrationForm = ({ renderInput, formData, setFormData }) => {
         "Enter experience"
       )}
 
+      {/* Category */}
       <div className="space-y-2 group">
         <label className="text-sm font-medium text-gray-700">
           Select Your Specialization
@@ -315,12 +321,10 @@ const DoctorRegistrationForm = ({ renderInput, formData, setFormData }) => {
           </option>
           {categoryOption}
         </select>
-
-        {errors?.categories && (
+        {errors?.category && (
           <p className="text-red-500 text-xs">{errors?.category}</p>
         )}
       </div>
-
       {categoryName == "Veterinary" ? (
         <div className="space-y-2 group">
           <label className="text-sm font-medium text-gray-700">
@@ -345,40 +349,63 @@ const DoctorRegistrationForm = ({ renderInput, formData, setFormData }) => {
         ""
       )}
 
-      {categoryName == "Veterinary" ? (
-        <div className="col-md-6">
-          <label className="form-label">Service Type</label>
+      {/* Veterinary options */}
+      {categoryName === "Veterinary" && (
+        <div className="space-y-2 group">
+          <label className="text-sm font-medium text-gray-700">
+            Provide Services
+          </label>
           <Select
             mode="multiple"
             allowClear
             style={{ width: "100%" }}
-            placeholder="Please select"
+            placeholder="Select Services"
             defaultValue={[]}
-            onChange={selectData1}
-            options={veterinaryserviceType}
+            onChange={selectData}
             size="large"
-            value={formData?.veterinaryserviceType} // Ensure selected categories are controlled by formData
+            options={serviceProvideOption}
+            value={formData?.veterinaryDoctorType}
           />
-        </div>
-      ) : (
-        <div className="col-md-6">
-          <label className="form-label">Service Type</label>
-          <Select
-            mode="multiple"
-            allowClear
-            style={{ width: "100%" }}
-            placeholder="Please select"
-            defaultValue={[]}
-            onChange={selectData2}
-            options={serviceType}
-            size="large"
-            value={formData?.serviceType}
-            className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500"
-          />
+          {errors?.veterinaryDoctorType && (
+            <p className="text-red-500 text-xs">
+              {errors?.veterinaryDoctorType}
+            </p>
+          )}
         </div>
       )}
 
-      {/* Clinics Section */}
+      {/* Service type */}
+      <div className="col-md-6 space-y-2">
+        <label className="form-label">Service Type</label>
+        <Select
+          mode="multiple"
+          allowClear
+          style={{ width: "100%" }}
+          placeholder="Please select"
+          defaultValue={[]}
+          onChange={categoryName === "Veterinary" ? selectData1 : selectData2}
+          options={
+            categoryName === "Veterinary" ? veterinaryserviceType : serviceType
+          }
+          size="large"
+          value={
+            categoryName === "Veterinary"
+              ? formData?.veterinaryserviceType
+              : formData?.serviceType
+          }
+        />
+        {categoryName === "Veterinary"
+          ? errors?.veterinaryserviceType && (
+              <p className="text-red-500 text-xs">
+                {errors?.veterinaryserviceType}
+              </p>
+            )
+          : errors?.serviceType && (
+              <p className="text-red-500 text-xs">{errors?.serviceType}</p>
+            )}
+      </div>
+
+      {/* Clinics */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-semibold text-gray-800">Clinics</h3>
@@ -411,6 +438,10 @@ const DoctorRegistrationForm = ({ renderInput, formData, setFormData }) => {
           </button>
         </div>
 
+        {errors?.clinics && (
+          <p className="text-red-500 text-xs">{errors?.clinics}</p>
+        )}
+
         <div className="space-y-3">
           {formData?.clinics?.map((clinic, index) => (
             <div
@@ -426,9 +457,8 @@ const DoctorRegistrationForm = ({ renderInput, formData, setFormData }) => {
                   ×
                 </button>
               )}
-
               {/* Row 1 → Clinic Name */}
-              {/* Row 4 → Consultation Fee */}
+              {/* Clinic Name + Fee */}
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">
@@ -445,6 +475,11 @@ const DoctorRegistrationForm = ({ renderInput, formData, setFormData }) => {
                     }}
                     className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                   />
+                  {errors?.[`clinics.${index}.clinicName`] && (
+                    <p className="text-red-500 text-xs">
+                      {errors[`clinics.${index}.clinicName`]}
+                    </p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">
@@ -461,11 +496,15 @@ const DoctorRegistrationForm = ({ renderInput, formData, setFormData }) => {
                     }}
                     className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"
                   />
+                  {errors?.[`clinics.${index}.consultationFee`] && (
+                    <p className="text-red-500 text-xs">
+                      {errors[`clinics.${index}.consultationFee`]}
+                    </p>
+                  )}
                 </div>
               </div>
 
-              {/* Row 2 → Clinic Availability */}
-
+              {/* Clinic Availability */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">
                   Clinic Availability
@@ -480,7 +519,6 @@ const DoctorRegistrationForm = ({ renderInput, formData, setFormData }) => {
                       setFormData({ ...formData, clinics: newClinics });
                     }}
                     className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500"
-                    placeholder="Select Time"
                   />
                   <input
                     type="time"
@@ -491,7 +529,6 @@ const DoctorRegistrationForm = ({ renderInput, formData, setFormData }) => {
                       setFormData({ ...formData, clinics: newClinics });
                     }}
                     className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500"
-                    placeholder="Select Time"
                   />
                   <select
                     value={clinic?.duration}
@@ -511,10 +548,14 @@ const DoctorRegistrationForm = ({ renderInput, formData, setFormData }) => {
                     <option value="120">120 min</option>
                   </select>
                 </div>
+                {errors?.[`clinics.${index}.duration`] && (
+                  <p className="text-red-500 text-xs">
+                    {errors[`clinics.${index}.duration`]}
+                  </p>
+                )}
               </div>
 
-              {/* Row 3 → Video Consulting Availability */}
-              {/* Row 3 → Video Consulting Availability */}
+              {/* Video Consulting */}
               {formData?.serviceType?.includes("Video Consultation") && (
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">
@@ -530,7 +571,6 @@ const DoctorRegistrationForm = ({ renderInput, formData, setFormData }) => {
                         setFormData({ ...formData, clinics: newClinics });
                       }}
                       className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
-                      placeholder="Select Time"
                     />
                     <input
                       type="time"
@@ -541,7 +581,6 @@ const DoctorRegistrationForm = ({ renderInput, formData, setFormData }) => {
                         setFormData({ ...formData, clinics: newClinics });
                       }}
                       className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
-                      placeholder="Select Time"
                     />
                     <select
                       value={clinic?.videoDuration}
@@ -561,10 +600,15 @@ const DoctorRegistrationForm = ({ renderInput, formData, setFormData }) => {
                       <option value="120">120 min</option>
                     </select>
                   </div>
+                  {errors?.[`clinics.${index}.videoDuration`] && (
+                    <p className="text-red-500 text-xs">
+                      {errors[`clinics.${index}.videoDuration`]}
+                    </p>
+                  )}
                 </div>
               )}
 
-              {/* Row 5  Location + Address */}
+              {/* Address */}
               <div className="grid md:grid-cols-1 gap-4">
                 <div className="space-y-2 group">
                   <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
@@ -574,39 +618,36 @@ const DoctorRegistrationForm = ({ renderInput, formData, setFormData }) => {
                   <LocationSearchInput
                     value={clinic.clinicAddress}
                     onSelect={(place) => {
-                      console.log("Selected clinic address", place);
-
                       const updatedClinics = [...formData.clinics];
                       updatedClinics[index].clinicAddress = place.address;
                       updatedClinics[index].location = place.location;
                       setFormData({ ...formData, clinics: updatedClinics });
                     }}
                   />
-
-                  {/* {errors?.address && (
-                          <p className="text-red-500 text-xs">
-                            {errors?.address}
-                          </p>
-                        )} */}
+                  {errors?.[`clinics.${index}.clinicAddress`] && (
+                    <p className="text-red-500 text-xs">
+                      {errors[`clinics.${index}.clinicAddress`]}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
           ))}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">
-              Select Hospital
-            </label>
-            <select
-              name="hospital"
-              value={formData.hospital || ""}
-              onChange={handleInputChange}
-              className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">Select Hospital</option>
-              {hospitalOption}
-              <option value="Other">Other</option>
-            </select>
-          </div>
+        </div>
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-gray-700">
+            Select Hospital
+          </label>
+          <select
+            name="hospital"
+            value={formData.hospital || ""}
+            onChange={handleInputChange}
+            className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">Select Hospital</option>
+            {hospitalOption}
+            <option value="Other">Other</option>
+          </select>
         </div>
       </div>
     </>
