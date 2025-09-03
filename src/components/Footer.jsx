@@ -141,6 +141,20 @@ const Footer = () => {
               >
                 Terms & Conditions
               </Link>
+              <span className="text-gray-600">|</span>
+              <Link
+                to="/refund"
+                className="text-gray-400 hover:text-white transition-colors cursor-pointer"
+              >
+                Refund And Cancellation 
+              </Link>
+              <span className="text-gray-600">|</span>
+              <Link
+                to="/price-policy"
+                className="text-gray-400 hover:text-white transition-colors cursor-pointer"
+              >
+                Pricing AndShipping Policy
+              </Link>
             </div>
           </div>
         </div>

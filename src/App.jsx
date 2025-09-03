@@ -47,6 +47,8 @@ import HospitalDashboard from "./components/HospitalDashboard";
 import DiagnosticDashboard from "./components/DiagnosticDashboard";
 import AmbulanceDashboard from "./components/AmbulanceDashboard";
 import DoctorDashboard from "./components/DoctorDashboard";
+import RefundAndCancellation from "./pages/RefundAndCancellation";
+import PricingAndShippingPolicy from "./pages/PricingAndShippingPolicy";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -145,6 +147,8 @@ function App() {
                   element={<TermsAndConditions />}
                 />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/refund" element={<RefundAndCancellation />} />
+                <Route path="/price-policy" element={<PricingAndShippingPolicy />} />
                 <Route path="/user-details" element={<UserDetails />} />
                 <Route path="/bloodbank" element={<AmbulancePage />} />
                 <Route path="/ambulance" element={<AmbulancePage />} />
