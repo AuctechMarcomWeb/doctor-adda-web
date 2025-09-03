@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-dupe-keys */
 import React, { useState } from "react";
-import { Truck, Building, User, Activity, Plus, MapPin } from "lucide-react";
+import { Truck, Building, User, Activity, Plus, MapPin, X } from "lucide-react";
 import logo from "../../assets/dr-adda-logo.png";
 import { postRequest } from "../../Helpers";
 import LocationSearchInput from "../LocationSearchInput";
@@ -467,6 +467,11 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
       isValid = false;
     }
 
+    if(formData?.profileImages?.length === 0){
+      newErrors.profileImages="Uploade at least one gallery Images";
+      isValid =false 
+    }
+
     // 2. Schema-specific deep validation
     switch (selectedCard) {
       case "doctor":
@@ -739,10 +744,11 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
           {/* Close Button */}
           <button
             type="button"
-            onClick={() => setOpen(false)} // <-- pass your close handler function
-            className="absolute top-3 right-3 bg-white/30 hover:bg-white/50 text-white rounded p-1 transition"
+            onClick={() => setOpen(false)}
+            aria-label="Close"
+            className="absolute top-3 right-3 bg-white/30 hover:bg-white/50 text-white rounded-full p-2 shadow-md transition"
           >
-            ✕
+            <X className="w-5 h-5" />
           </button>
 
           {/* Logo */}
