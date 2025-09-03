@@ -405,6 +405,90 @@ const DoctorRegistrationForm = ({
             )}
       </div>
 
+      {/* Animals Treated - Only for Veterinary */}
+      {/* {categoryName === "Veterinary" && ( */}
+      {/* Animals Treated - Only for Veterinary */}
+      {categoryName === "Veterinary" && (
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Animals Treated
+          </label>
+          <Select
+            mode="multiple"
+            allowClear
+            style={{ width: "100%" }}
+            placeholder="Select animals"
+            value={formData.animalTreated || []}
+            onChange={(values) =>
+              setFormData((prev) => ({
+                ...prev,
+                animalTreated: values,
+              }))
+            }
+            size="large"
+          >
+            <Option value="Dog">Dog</Option>
+            <Option value="Cat">Cat</Option>
+            <Option value="Bird">Bird</Option>
+            <Option value="Rabbit">Rabbit</Option>
+            <Option value="Horse">Horse</Option>
+            <Option value="Cow">Cow</Option>
+            <Option value="Goat">Goat</Option>
+            <Option value="Sheep">Sheep</Option>
+            <Option value="Other">Other</Option>
+          </Select>
+
+          {/* Show second dropdown if "Other" is selected */}
+          {formData.animalTreated?.includes("Other") && (
+            <div className="mt-3">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Select Other Animal
+              </label>
+              <Select
+                style={{ width: "100%" }}
+                placeholder="Select other animal"
+                value={formData.otherAnimal || undefined}
+                onChange={(value) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    otherAnimal: value,
+                  }))
+                }
+                size="large"
+              >
+                <Option value="Elephant">Elephant</Option>
+                <Option value="Camel">Camel</Option>
+                <Option value="Donkey">Donkey</Option>
+                <Option value="Pig">Pig</Option>
+                <Option value="OtherCustom">Other (Custom)</Option>
+              </Select>
+
+              {/* Show textbox if "OtherCustom" is picked */}
+              {formData.otherAnimal === "OtherCustom" && (
+                <div className="mt-3">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Please specify
+                  </label>
+                  <input
+                    type="text"
+                    name="customAnimal"
+                    value={formData.customAnimal || ""}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        customAnimal: e.target.value,
+                      }))
+                    }
+                    placeholder="Enter animal type"
+                    className="w-full border border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-200 focus:outline-none"
+                  />
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Clinics */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
@@ -634,6 +718,72 @@ const DoctorRegistrationForm = ({
             </div>
           ))}
         </div>
+        {/* Is Surgeon */}
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Is Surgeon
+          </label>
+          <div className="flex gap-6">
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                name="isSurgeon"
+                value="true"
+                checked={formData.isSurgeon === true}
+                onChange={() =>
+                  setFormData((prev) => ({ ...prev, isSurgeon: true }))
+                }
+              />
+              Yes
+            </label>
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                name="isSurgeon"
+                value="false"
+                checked={formData.isSurgeon === false}
+                onChange={() =>
+                  setFormData((prev) => ({ ...prev, isSurgeon: false }))
+                }
+              />
+              No
+            </label>
+          </div>
+        </div>
+
+        {/* Online Booking */}
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Online Booking
+          </label>
+          <div className="flex gap-6">
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                name="onlineBooking"
+                value="true"
+                checked={formData.onlineBooking === true}
+                onChange={() =>
+                  setFormData((prev) => ({ ...prev, onlineBooking: true }))
+                }
+              />
+              Yes
+            </label>
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                name="onlineBooking"
+                value="false"
+                checked={formData.onlineBooking === false}
+                onChange={() =>
+                  setFormData((prev) => ({ ...prev, onlineBooking: false }))
+                }
+              />
+              No
+            </label>
+          </div>
+        </div>
+
         <div className="space-y-2">
           <label className="text-sm font-medium text-gray-700">
             Select Hospital

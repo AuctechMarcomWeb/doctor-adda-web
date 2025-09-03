@@ -100,6 +100,12 @@ const HospitalRegistrationForm = ({
 
       {/* Email */}
       {renderInput("Official Email", "email", "email", "Enter email address")}
+      {renderInput(
+        "Year of Establishment",
+        "text",
+        "yearOfEstablish",
+        "Enter Year of Eshtablishment"
+      )}
 
       {/* Phone */}
       {renderInput("Contact Number", "tel", "phone", "Enter contact number")}
@@ -123,6 +129,55 @@ const HospitalRegistrationForm = ({
         "description",
         "Enter description"
       )}
+      {/* Description */}
+      {renderInput(
+        "Registration Number",
+        "text",
+        "registrationNo",
+        "Enter Hospital Registration Number"
+      )}
+
+      {/* Hospital Type */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Hospital Type
+        </label>
+        <select
+          name="hospitalType"
+          value={formData.hospitalType || "Private"} // 👈 default to Private
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              hospitalType: e.target.value,
+            }))
+          }
+          className="w-full border border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-200 focus:outline-none"
+          required
+        >
+          <option value="Private">Private</option>
+          <option value="Government">Government</option>
+          <option value="Charitable">Charitable</option>
+          <option value="Other">Other</option>
+        </select>
+        {/* Show input if "Other" is selected */}
+        {formData.hospitalType === "Other" && (
+          <input
+            type="text"
+            name="hospitalType"
+            value={formData.hospitalTypeCustom || ""}
+            onChange={(e) =>
+              setFormData((prev) => ({
+                ...prev,
+                hospitalTypeCustom: e.target.value, // store separately while typing
+                hospitalType: e.target.value, // overwrite hospitalType for submission
+              }))
+            }
+            placeholder="Please specify hospital type"
+            className="mt-2 w-full border border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-200 focus:outline-none"
+            required
+          />
+        )}
+      </div>
 
       {/* Categories */}
       <div className="space-y-2">

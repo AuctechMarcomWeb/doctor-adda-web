@@ -21,30 +21,35 @@ import Carousel from "../components/Carousel";
 import HomePageImagePopup from "../components/HomePageImagePopup";
 import { getRequest } from "../Helpers";
 import { useDispatch, useSelector } from "react-redux";
-import { updateUserProfile } from "../redux/slices/userSlice";
+import { login, updateUserProfile } from "../redux/slices/userSlice";
 import { useUpdate } from "../context/updateContext";
 import HealthcareRegistrationModal from "../components/PreLaunchForms/HealthcareRegistrationModal";
+import { getCookieItem } from "../Hooks/cookie";
+import { useLocation } from "react-router-dom";
 
 const Home = () => {
+  const location = useLocation();
   const dispatch = useDispatch();
   const { update } = useUpdate();
   const { userProfileData } = useSelector((state) => state.user);
   const userId = userProfileData;
+  const token = getCookieItem("Token");
+  const UserId = getCookieItem("UserId");
   useEffect(() => {
-    if (userId) {
+    if (UserId) {
       const fetchUser = async () => {
         try {
-          const res = await getRequest(`auth/getUserById/${userId}`);
+          const res = await getRequest(`auth/getUserById/${UserId}`);
           console.log("User API response:", res.data.data);
-
-          dispatch(updateUserProfile(res?.data));
+          dispatch(updateUserProfile(res?.data?.data));
+          dispatch(login({ userData: res?.data?.data }));
         } catch (error) {
           console.error("Error fetching user:", error);
         }
       };
       fetchUser();
     }
-  }, [userId, dispatch, update]);
+  }, [location.pathname, UserId, dispatch, update]);
 
   const [data, setData] = useState([]);
   console.log("dfgfdg======>", data);
@@ -59,18 +64,14 @@ const Home = () => {
       });
   }, []);
 
-  const [open,setOpen] = useState(true)
+  const [open, setOpen] = useState(true);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
   return (
     <>
-
-    {
-      open ? 
-      <HealthcareRegistrationModal setOpen={setOpen} /> :""
-    }
+      {!token && open ? <HealthcareRegistrationModal setOpen={setOpen} /> : ""}
       {/* <MedicalHeroSection/> */}
 
       {/* <HomePageImagePopup data={data} /> */}
