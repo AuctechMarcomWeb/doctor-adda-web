@@ -35,6 +35,7 @@ const AmbulanceRegistrationForm = ({
       setFormData((prev) => ({ ...prev, drivers: updated }));
     }
   };
+  console.log("Ambulance Formdata ===", formData);
 
   return (
     <>
@@ -99,11 +100,13 @@ const AmbulanceRegistrationForm = ({
           className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500"
         >
           <option value="">Select Options</option>
-          <option value="Emergency Ambulance">Emergency Ambulance</option>
-          <option value="Non-Emergency Ambulance">
-            Non-Emergency Ambulance
+          <option value="BLS - Basic Life Support">
+            BLS - Basic Life Support
           </option>
-          <option value="ICU Ambulance">ICU Ambulance</option>
+          <option value="ICU - Intensive Care Unit">
+            ICU - Intensive Care Unit
+          </option>
+          <option value="Dead Body Carrier">Dead Body Carrier</option>
         </select>
         {errors.ambulanceType && (
           <p className="text-red-500 text-sm">{errors.ambulanceType}</p>
@@ -132,12 +135,25 @@ const AmbulanceRegistrationForm = ({
       </div>
 
       {/* Availability Status */}
-      {renderInput(
-        "Availability Status",
-        "text",
-        "availabilityStatus",
-        "Available/Unavailable"
-      )}
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Availability Status
+        </label>
+        <select
+          name="availabilityStatus"
+          value={formData.availabilityStatus || ""}
+          onChange={(e) =>
+            handleInputChange("availabilityStatus", e.target.value)
+          }
+          className="w-full border border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-200 focus:outline-none"
+        >
+          <option value="">Select Status</option>
+          <option value="Available">Available</option>
+          <option value="Unavailable">Unavailable</option>
+          <option value="In Transit">In Transit</option>
+        </select>
+      </div>
+
       {/* {errors.availabilityStatus && (
         <p className="text-red-500 text-sm">{errors.availabilityStatus}</p>
       )} */}
@@ -166,6 +182,49 @@ const AmbulanceRegistrationForm = ({
       {/* Price */}
       {renderInput("Price", "number", "price", "Enter service charge")}
       {/* {errors.price && <p className="text-red-500 text-sm">{errors.price}</p>} */}
+
+      {/* GPS Tracking */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          GPS Tracking
+        </label>
+        <div className="flex gap-6">
+          <label className="flex items-center gap-2">
+            <input
+              type="radio"
+              name="gpsTracking"
+              value="true"
+              checked={formData.gpsTracking === true}
+              onChange={() =>
+                handleInputChange({
+                  target: { name: "gpsTracking", value: true },
+                })
+              }
+              disabled // 👈 keeps it disabled
+            />
+            Yes
+          </label>
+
+          <label className="flex items-center gap-2">
+            <input
+              type="radio"
+              name="gpsTracking"
+              value="false"
+              checked={
+                formData.gpsTracking === false ||
+                formData.gpsTracking === undefined
+              }
+              onChange={() =>
+                handleInputChange({
+                  target: { name: "gpsTracking", value: false },
+                })
+              }
+              disabled // 👈 keeps it disabled
+            />
+            No
+          </label>
+        </div>
+      </div>
 
       {/* Driver Information */}
       <div className="space-y-4">

@@ -11,8 +11,10 @@ import HospitalRegistrationForm from "./HospitalForms/HospitalregistrationForms"
 import AmbulanceRegistrationForm from "./AmbulanceForms/AmbulanceRegistrationForms";
 import DiagnosticsRegistrationForms from "./DiagnosticsForms/DiagnosticsRegistrationForms";
 import PharmacyRegistrationForms from "./PharmacyForms/PharmacyRegistrationForms";
+import { setCookieItem } from "../../Hooks/cookie";
+import DocumentsUpload from "./documentsUpload/documentsUpload";
 
-const HealthcareRegistrationModal = ({setOpen}) => {
+const HealthcareRegistrationModal = ({ setOpen }) => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [selectedCard, setSelectedCard] = useState("");
   const [formData, setFormData] = useState({});
@@ -66,12 +68,43 @@ const HealthcareRegistrationModal = ({setOpen}) => {
     },
   ];
 
-  // const handleProfileSelect = (e) => {
-  //   const file = e.target.files[0];
-  //   if (!file) return;
-  //   setProfileFile(file);
-  //   setProfilePreview(URL.createObjectURL(file));
-  // };
+  const documentsOptionsMap = {
+    doctor: [
+      "Aadhar Card",
+      "PAN Card",
+      "Medical License",
+      "Registration Number & Counsil Name",
+      "Degree Certificate",
+      "Specialization Certificate",
+    ],
+    hospital: [
+      "Hospital Registration Certificate",
+      "PAN Card",
+      "GST Certificate",
+      "Fire Safety Certificate",
+      "Aadhar Card (Owner)",
+    ],
+    pharmacy: [
+      "Pharmacist Certificate",
+      "Drug License (PDF)",
+      "GST Certificate",
+      "Shop Front Photo",
+      "Aadhar/PAN Card of the Owner",
+    ],
+    diagnostic: [
+      "Pathalogy License",
+      "NABL Accreditation",
+      "Aadhar/PAN Card of the Owner",
+      "Lab Photo(Exterior + Lab tables)",
+    ],
+    ambulance: [
+      "Vehile RC",
+      "Driver License",
+      "Ambulance Photo",
+      "Aadhar of Owner",
+    ],
+  };
+
   const handleProfileSelect = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -199,6 +232,7 @@ const HealthcareRegistrationModal = ({setOpen}) => {
           "education",
           "profileImage", // ✅ added
           "profileImages", // ✅ added
+          "documents",
         ];
 
       case "hospital":
@@ -214,6 +248,7 @@ const HealthcareRegistrationModal = ({setOpen}) => {
           "facilities",
           "profileImage", // ✅ added
           "profileImages", // ✅ added
+          "documents",
         ];
 
       case "pharmacy":
@@ -232,6 +267,7 @@ const HealthcareRegistrationModal = ({setOpen}) => {
           "phoneNumber", // ✅ add
           "profileImage", // ✅ added
           "profileImages", // ✅ added
+          "documents",
         ];
 
       case "ambulance":
@@ -251,6 +287,7 @@ const HealthcareRegistrationModal = ({setOpen}) => {
           "drivers", // must have at least 1
           "profileImage", // ✅ added
           "profileImages", // ✅ added
+          "documents",
         ];
       case "diagnostic":
         return [
@@ -265,6 +302,7 @@ const HealthcareRegistrationModal = ({setOpen}) => {
           "services",
           "profileImage", // ✅ added
           "profileImages", // ✅ added
+          "documents",
         ];
 
       default:
@@ -409,6 +447,26 @@ const HealthcareRegistrationModal = ({setOpen}) => {
       }
     });
 
+    if (formData.documents?.length > 0) {
+      formData.documents.forEach((doc, index) => {
+        if (!doc.name?.trim()) {
+          newErrors[`documentName_${index}`] = "Document name is required";
+          isValid = false;
+        }
+        if (!doc.number?.trim()) {
+          newErrors[`documentNumber_${index}`] = "Document number is required";
+          isValid = false;
+        }
+        if (!doc.image?.trim()) {
+          newErrors[`documentImage_${index}`] = "Document file is required";
+          isValid = false;
+        }
+      });
+    } else {
+      newErrors.documents = "Minimum one document is required"; // ✅ fixed
+      isValid = false;
+    }
+
     // 2. Schema-specific deep validation
     switch (selectedCard) {
       case "doctor":
@@ -537,6 +595,7 @@ const HealthcareRegistrationModal = ({setOpen}) => {
             category: formData?.category || null,
             hospital: formData?.hospital || null,
             profileImages: formData?.profileImages || [], // ✅ unified gallery
+            documents: formData?.documents || [],
             clinics: formData?.clinics || [],
             latitude: formData?.clinics[0]?.location?.coordinates[0],
             longitude: formData?.clinics[0]?.location?.coordinates[1],
@@ -560,6 +619,9 @@ const HealthcareRegistrationModal = ({setOpen}) => {
             facilities: [{ name: "", discription: "" }],
             ownerDetails: formData.ownerDetails || {},
             profileImages: formData.profileImages || [],
+            documents: formData?.documents || [],
+            yearOfEstablish: formData?.yearOfEstablish || "",
+            registrationNo:formData?.registrationNo || ''
           };
           break;
 
@@ -584,6 +646,8 @@ const HealthcareRegistrationModal = ({setOpen}) => {
             profileImages: formData?.profileImages || [],
             drivers: formData?.drivers || [],
             ownerDetails: formData?.ownerDetails || [],
+            documents: formData?.documents || [],
+            gpsTraking:formData?.gpsTraking || false,
           };
           break;
 
@@ -604,6 +668,7 @@ const HealthcareRegistrationModal = ({setOpen}) => {
             endTime: formData?.endTime,
             profileImage: formData?.profileImage,
             profileImages: formData?.profileImages || [], // ✅ not images
+            documents: formData?.documents || [],
           };
           break;
 
@@ -627,6 +692,7 @@ const HealthcareRegistrationModal = ({setOpen}) => {
             profileImages: formData?.profileImages || [], // ✅ consistent
             onlinePayment: formData?.onlinePayment === "true", // ✅ from form
             cod: formData?.cod === "true", // ✅ from form
+            documents: formData?.documents || [],
           };
           break;
 
@@ -640,9 +706,15 @@ const HealthcareRegistrationModal = ({setOpen}) => {
         url: "preLaunch",
         cred: payload,
       });
+      console.log(response);
 
       if (response?.data?.success) {
+        console.log("response", response?.data?.data?.token);
+
         alert("Registration submitted successfully!");
+        setCookieItem("Token", response?.data?.data?.token, 30);
+        setCookieItem("UserId", response?.data?.data?.savedEntity?.userId, 30);
+
         setIsModalOpen(false);
       } else {
         alert(response?.data?.message || "Failed to submit registration.");
@@ -663,7 +735,9 @@ const HealthcareRegistrationModal = ({setOpen}) => {
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <button className="btn btn-primary" onClick={()=>setOpen(false)} >close</button>
+        <button className="btn btn-primary" onClick={() => setOpen(false)}>
+          close
+        </button>
         <div className="bg-gradient-to-r from-[#007BBD] to-[#005A8C] p-6 rounded-t-2xl text-center">
           <img src={logo} alt="Logo" className="h-14 mx-auto mb-3" />
           <h2 className="text-3xl font-bold text-white">
@@ -861,6 +935,17 @@ const HealthcareRegistrationModal = ({setOpen}) => {
                     </div>
                   )}
                 </div>
+
+                <DocumentsUpload
+                  formData={formData}
+                  setFormData={setFormData}
+                  documentOptions={documentsOptionsMap[selectedCard] || []}
+                />
+                {errors?.documents && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.documents}
+                  </p>
+                )}
 
                 <div className="mt-6 flex justify-center">
                   <button

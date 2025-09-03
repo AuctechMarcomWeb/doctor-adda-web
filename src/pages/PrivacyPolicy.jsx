@@ -108,10 +108,9 @@ const PrivacyPolicy = () => {
                   <ul className="list-disc pl-6 mb-4 text-gray-700">
                     <li>Email: support@doctoradda.com</li>
                     <li>
-                      Address: Sai Heights, C-3/76, Vibhuti Khand, Gomti Nagar,
-                      Lucknow, Uttar Pradesh 226010{" "}
+                      Address:H NO 39-B Block B Vani Elite Homes Laulai Chinhat LUCKNOW UP 226028 IND{" "}
                     </li>
-                    <li>Phone: +919838075493</li>
+                    <li>Phone: +919450180033</li>
                   </ul>
                 </section>
               </div>

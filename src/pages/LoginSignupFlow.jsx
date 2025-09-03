@@ -21,7 +21,7 @@ const LoginSignupFlow = () => {
           <LoginStep setStep={setStep} setMobile={setMobile} setMode={setMode} />
         )
       ) : step === 2 ? (
-        <OtpStep 
+        <OtpStep
           mobile={mobile} 
           setStep={setStep} 
           isFromSignup={mode === 'signup'}
