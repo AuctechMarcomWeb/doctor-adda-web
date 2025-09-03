@@ -14,6 +14,7 @@ const DiagnosticsRegistrationForms = ({
   renderInput,
   formData,
   setFormData,
+  errors = {},
 }) => {
   const [packages, setPackages] = useState([
     { name: "", price: "", details: "" },
@@ -96,6 +97,7 @@ const DiagnosticsRegistrationForms = ({
         "description",
         "Enter description"
       )}
+
       {/* Services Section */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
@@ -114,7 +116,7 @@ const DiagnosticsRegistrationForms = ({
           {services.map((service, index) => (
             <div
               key={index}
-              className="flex items-center gap-2 p-4 bg-gray-50 rounded-xl"
+              className="flex flex-col gap-2 p-4 bg-gray-50 rounded-xl"
             >
               <input
                 type="text"
@@ -125,23 +127,30 @@ const DiagnosticsRegistrationForms = ({
                 }
                 className="flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
               />
-
+              {errors.services?.[index]?.name && (
+                <p className="text-red-500 text-xs">
+                  {errors.services[index].name}
+                </p>
+              )}
               {services.length > 1 && (
                 <button
                   type="button"
                   onClick={() => removeServices(index)}
-                  className="px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg"
+                  className="px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg self-start"
                 >
                   ×
                 </button>
               )}
             </div>
           ))}
+          {typeof errors.services === "string" && (
+            <p className="text-red-500 text-xs">{errors.services}</p>
+          )}
         </div>
       </div>
 
       {/* Packages Section */}
-      <div className="space-y-4">
+      <div className="space-y-4 mt-6">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-semibold text-gray-800">Packages</h3>
           <button
@@ -161,7 +170,7 @@ const DiagnosticsRegistrationForms = ({
               className="grid md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-xl"
             >
               {/* Name */}
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <label className="text-sm font-medium text-gray-700">
                   Name
                 </label>
@@ -174,10 +183,15 @@ const DiagnosticsRegistrationForms = ({
                   }
                   className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
+                {errors.packages?.[index]?.name && (
+                  <p className="text-red-500 text-xs">
+                    {errors.packages[index].name}
+                  </p>
+                )}
               </div>
 
               {/* Price */}
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <label className="text-sm font-medium text-gray-700">
                   Price
                 </label>
@@ -190,10 +204,15 @@ const DiagnosticsRegistrationForms = ({
                   }
                   className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
+                {errors.packages?.[index]?.price && (
+                  <p className="text-red-500 text-xs">
+                    {errors.packages[index].price}
+                  </p>
+                )}
               </div>
 
               {/* Details + Remove */}
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <label className="text-sm font-medium text-gray-700">
                   Details
                 </label>
@@ -217,35 +236,52 @@ const DiagnosticsRegistrationForms = ({
                     </button>
                   )}
                 </div>
+                {errors.packages?.[index]?.details && (
+                  <p className="text-red-500 text-xs">
+                    {errors.packages[index].details}
+                  </p>
+                )}
               </div>
             </div>
           ))}
+          {typeof errors.packages === "string" && (
+            <p className="text-red-500 text-xs">{errors.packages}</p>
+          )}
         </div>
       </div>
 
-      {/* Store Timings*/}
-      <div className="space-y-2 group">
+      {/* Store Timings */}
+      <div className="space-y-2 group mt-6">
         <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
           Clinic Availability
         </label>
 
         <div className="grid grid-cols-2 gap-6">
           {/* Start Time */}
-          <input
-            type="time"
-            value={formData?.startTime}
-            onChange={(e) => handleInputChange("startTime", e.target.value)}
-            className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-gray-500"
-            placeholder="Select Time"
-          />
+          <div>
+            <input
+              type="time"
+              value={formData?.startTime}
+              onChange={(e) => handleInputChange("startTime", e.target.value)}
+              className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-gray-500"
+            />
+            {errors.startTime && (
+              <p className="text-red-500 text-xs">{errors.startTime}</p>
+            )}
+          </div>
+
           {/* End Time */}
-          <input
-            type="time"
-            value={formData?.endTime}
-            onChange={(e) => handleInputChange("endTime", e.target.value)}
-            className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-gray-500"
-            placeholder="Select Time"
-          />
+          <div>
+            <input
+              type="time"
+              value={formData?.endTime}
+              onChange={(e) => handleInputChange("endTime", e.target.value)}
+              className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-gray-500"
+            />
+            {errors.endTime && (
+              <p className="text-red-500 text-xs">{errors.endTime}</p>
+            )}
+          </div>
         </div>
       </div>
     </>

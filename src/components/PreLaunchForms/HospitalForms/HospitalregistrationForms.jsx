@@ -1,10 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Building2, Mail, Phone, MapPin, User, FileText ,Plus} from "lucide-react";
+import {
+  Building2,
+  Mail,
+  Phone,
+  MapPin,
+  User,
+  FileText,
+  Plus,
+} from "lucide-react";
 import { Select } from "antd";
 import LocationSearchInput from "../../LocationSearchInput";
 import { getRequest } from "../../../Helpers"; // ✅ same helper as in HospitalRegistration.jsx
 
-const HospitalRegistrationForm = ({ renderInput, formData, setFormData }) => {
+const HospitalRegistrationForm = ({
+  renderInput,
+  formData,
+  setFormData,
+  errors = {},
+}) => {
   const [categories, setCategories] = useState([]);
   const [healthCards, setHealthCards] = useState([]);
 
@@ -43,7 +56,7 @@ const HospitalRegistrationForm = ({ renderInput, formData, setFormData }) => {
     }));
   };
 
-    const handleFacilityChange = (e, index) => {
+  const handleFacilityChange = (e, index) => {
     const { name, value } = e.target;
     const updatedFacilities = [...formData.facilities];
 
@@ -60,15 +73,11 @@ const HospitalRegistrationForm = ({ renderInput, formData, setFormData }) => {
   };
 
   const addFacility = () => {
-  setFormData((prev) => ({
-    ...prev,
-    facilities: [
-      ...(prev.facilities || []), 
-      { name: "", discription: "" },
-    ],
-  }));
-};
-
+    setFormData((prev) => ({
+      ...prev,
+      facilities: [...(prev.facilities || []), { name: "", discription: "" }],
+    }));
+  };
 
   const removeFacility = (index) => {
     const updatedFacilities = formData.facilities.filter((_, i) => i !== index);
@@ -78,8 +87,7 @@ const HospitalRegistrationForm = ({ renderInput, formData, setFormData }) => {
     }));
   };
 
-  console.log("Hospital Formdata ===",formData);
-  
+  console.log("Hospital Formdata ===", formData);
 
   return (
     <>
@@ -129,6 +137,9 @@ const HospitalRegistrationForm = ({ renderInput, formData, setFormData }) => {
           size="large"
           value={formData?.categories}
         />
+        {errors?.categories && (
+          <p className="text-red-500 text-sm">{errors.categories}</p>
+        )}
       </div>
 
       {/* Health Card */}
@@ -144,6 +155,9 @@ const HospitalRegistrationForm = ({ renderInput, formData, setFormData }) => {
           size="large"
           value={formData?.healthCard}
         />
+        {errors?.healthCard && (
+          <p className="text-red-500 text-sm">{errors.healthCard}</p>
+        )}
       </div>
 
       {/* Owner Name */}
@@ -160,76 +174,87 @@ const HospitalRegistrationForm = ({ renderInput, formData, setFormData }) => {
         "Enter verification phone"
       )}
 
-       {/* Facilities Section */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-800">
-                  Facilities & Services
-                </h3>
-                <button
-                  type="button"
-                  onClick={addFacility}
-                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-green-600 text-white rounded-lg hover:from-blue-700 hover:to-green-700"
-                >
-                  <Plus className="w-4 h-4" />
-                  Add Facility
-                </button>
+      {/* Facilities Section */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-gray-800">
+            Facilities & Services
+          </h3>
+          <button
+            type="button"
+            onClick={addFacility}
+            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-green-600 text-white rounded-lg hover:from-blue-700 hover:to-green-700"
+          >
+            <Plus className="w-4 h-4" />
+            Add Facility
+          </button>
+        </div>
+
+        <div className="space-y-3">
+          {formData?.facilities?.map((facility, index) => (
+            <div
+              key={index}
+              className="grid md:grid-cols-2 gap-4 p-4 mb-3 bg-gray-50 rounded-xl border"
+            >
+              {/* Facility Name */}
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-gray-700 mb-1">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  name={`facilityName_${index}`}
+                  value={facility?.name}
+                  onChange={(e) => handleFacilityChange(e, index)}
+                  placeholder="Facility name (e.g., ICU, X-Ray)"
+                  className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                />
+                {errors?.[`facilityName_${index}`] && (
+                  <p className="text-red-500 text-sm">
+                    {errors[`facilityName_${index}`]}
+                  </p>
+                )}
               </div>
 
-              <div className="space-y-3">
-                {formData?.facilities?.map((facility, index) => (
-                  <div
-                    key={index}
-                    className="grid md:grid-cols-2 gap-4 p-4 mb-3 bg-gray-50 rounded-xl border"
+              {/* Facility Description + Remove Button */}
+              <div className="flex gap-2">
+                <div className="flex flex-col flex-1">
+                  <label className="text-sm font-medium text-gray-700 mb-1">
+                    Description
+                  </label>
+                  <input
+                    type="text"
+                    name={`facilityDescription_${index}`}
+                    value={facility?.discription}
+                    onChange={(e) => handleFacilityChange(e, index)}
+                    placeholder="Enter description"
+                    className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  />
+                  {errors?.[`facilityDescription_${index}`] && (
+                    <p className="text-red-500 text-sm">
+                      {errors[`facilityDescription_${index}`]}
+                    </p>
+                  )}
+                </div>
+
+                {/* Remove Button */}
+                {formData?.facilities?.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeFacility(index)}
+                    className="h-10 w-10 self-end flex items-center justify-center text-red-600 hover:bg-red-50 rounded-lg transition"
                   >
-                    {/* Facility Name */}
-                    <div className="flex flex-col">
-                      <label className="text-sm font-medium text-gray-700 mb-1">
-                        Name
-                      </label>
-                      <input
-                        type="text"
-                        name={`facilityName_${index}`}
-                        value={facility?.name}
-                        onChange={(e) => handleFacilityChange(e, index)}
-                        placeholder="Facility name (e.g., ICU, X-Ray)"
-                        className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                      />
-                    </div>
-
-                    {/* Facility Description + Remove Button */}
-                    <div className="flex gap-2">
-                      <div className="flex flex-col flex-1">
-                        <label className="text-sm font-medium text-gray-700 mb-1">
-                          Description
-                        </label>
-                        <input
-                          type="text"
-                          name={`facilityDescription_${index}`}
-                          value={facility?.discription}
-                          onChange={(e) => handleFacilityChange(e, index)}
-                          placeholder="Enter description"
-                          className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                        />
-                      </div>
-
-                      {/* Remove Button */}
-                      {formData?.facilities?.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => removeFacility(index)}
-                          className="h-10 w-10 self-end flex items-center justify-center text-red-600 hover:bg-red-50 rounded-lg transition"
-                        >
-                          ×
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                ))}
+                    ×
+                  </button>
+                )}
               </div>
             </div>
-
-
+          ))}
+        </div>
+        {errors?.facilities && (
+          <p className="text-red-500 text-sm">{errors.facilities}</p>
+        )}
+      </div>
     </>
   );
 };
