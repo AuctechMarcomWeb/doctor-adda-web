@@ -10,6 +10,7 @@ const DoctorRegistrationForm = ({
   formData,
   setFormData,
   errors = {},
+  clearError,
 }) => {
   const [categoryName, setCategoryName] = useState("");
   const [category, setCategory] = useState([]);
@@ -49,6 +50,7 @@ const DoctorRegistrationForm = ({
     }
 
     console.log("Doctor formdata", formData);
+    if (value) clearError(name);
   };
 
   useEffect(() => {
@@ -242,252 +244,274 @@ const DoctorRegistrationForm = ({
       <h3 className="text-xl font-semibold text-[#005b8e] mb-4">
         Doctor Registration
       </h3>
-      {renderInput("Full Name", "text", "name", "Enter full name")}
-      {renderInput("Email", "email", "email", "Enter email address")}
-      {renderInput("Phone", "tel", "phone", "Enter phone number")}
-      {/* {renderInput(
-        "Clinic/Practice Address",
-        "textarea",
-        "address",
-        "Enter address"
-      )} */}
+      <div className="grid md:grid-cols-2 gap-6">
+        {renderInput("Full Name", "text", "name", "Enter full name")}
+        {renderInput("Email", "email", "email", "Enter email address")}
+        {renderInput("Phone", "tel", "phone", "Enter phone number")}
 
-      <div className="space-y-2 group">
-        <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-          {/* <Calendar className="w-4 h-4 text-red-600" /> */}
-          Birth Date
-        </label>
-        <input
-          type="date"
-          name="dob"
-          value={formData?.dob}
-          onChange={handleInputChange}
-          className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
-        />
-        {errors?.dob && <p className="text-red-500 text-xs">{errors?.dob}</p>}
-      </div>
-      <div className="space-y-2 group">
-        <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-          <User className="w-4 h-4 text-red-600" />
-          Gender
-        </label>
-        <select
-          value={formData?.gender}
-          name="gender"
-          onChange={handleInputChange}
-          className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
-        >
-          <option value="">Select Gender</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-          <option value="Other">Other</option>
-        </select>
-        {errors?.gender && (
-          <p className="text-red-500 text-xs">{errors?.gender}</p>
+        {/* DOB */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-gray-700">
+            Birth Date
+          </label>
+          <input
+            type="date"
+            name="dob"
+            value={formData?.dob}
+            onChange={handleInputChange}
+            className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
+          />
+          {errors?.dob && <p className="text-red-500 text-xs">{errors?.dob}</p>}
+        </div>
+        {/* Gender */}
+        <div className="space-y-2">
+          <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+            <User className="w-4 h-4 text-red-600" /> Gender
+          </label>
+          <select
+            value={formData?.gender}
+            name="gender"
+            onChange={handleInputChange}
+            className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
+          >
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+          {errors?.gender && (
+            <p className="text-red-500 text-xs">{errors?.gender}</p>
+          )}
+        </div>
+        {renderInput(
+          "About",
+          "textarea",
+          "about",
+          "Enter description for yourself"
         )}
-      </div>
-      {renderInput(
-        "About",
-        "textarea",
-        "about",
-        "Enter description for yourself"
-      )}
-      {renderInput(
-        "Medical Qualification",
-        "text",
-        "education",
-        "Enter qualification"
-      )}
-      {renderInput(
-        "Years of Experience",
-        "number",
-        "experience",
-        "Enter experience"
-      )}
+        {renderInput(
+          "Medical Qualification",
+          "text",
+          "education",
+          "Enter qualification"
+        )}
+        {renderInput(
+          "Years of Experience",
+          "number",
+          "experience",
+          "Enter experience"
+        )}
 
-      {/* Category */}
-      <div className="space-y-2 group">
-        <label className="text-sm font-medium text-gray-700">
-          Select Your Specialization
-        </label>
-        <select
-          name="category"
-          value={formData?.category}
-          onChange={handleInputChange}
-          className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500"
-        >
-          <option disabled value="">
+        {/* Category */}
+        {/* Category */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-gray-700">
             Select Your Specialization
-          </option>
-          {categoryOption}
-        </select>
-        {errors?.category && (
-          <p className="text-red-500 text-xs">{errors?.category}</p>
-        )}
-      </div>
-      {categoryName == "Veterinary" ? (
-        <div className="space-y-2 group">
-          <label className="text-sm font-medium text-gray-700">
-            Provide Services
           </label>
-          <Select
-            mode="multiple"
-            allowClear
-            style={{ width: "100%" }}
-            placeholder="Select Services"
-            defaultValue={[]}
-            onChange={selectData}
-            size="large"
-            options={serviceProvideOption}
-            value={formData?.veterinaryDoctorType}
-          />
-          {errors?.serviceType && (
-            <p className="text-red-500 text-xs">{errors?.serviceType}</p>
+          <select
+            name="category"
+            value={formData?.category || ""} // 👈 ensures default empty
+            onChange={handleInputChange}
+            className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="" disabled>
+              Select Your Specialization
+            </option>
+            {category.map((item, idx) => (
+              <option key={idx} value={item._id}>
+                {item.name}
+              </option>
+            ))}
+          </select>
+          {errors?.category && (
+            <p className="text-red-500 text-xs">{errors?.category}</p>
           )}
         </div>
-      ) : (
-        ""
-      )}
 
-      {/* Veterinary options */}
-      {categoryName === "Veterinary" && (
-        <div className="space-y-2 group">
-          <label className="text-sm font-medium text-gray-700">
-            Provide Services
-          </label>
+        {/* Service type */}
+        <div className="col-md-6 space-y-2">
+          <label className="form-label">Service Type</label>
           <Select
             mode="multiple"
             allowClear
             style={{ width: "100%" }}
-            placeholder="Select Services"
+            placeholder="Please select"
             defaultValue={[]}
-            onChange={selectData}
-            size="large"
-            options={serviceProvideOption}
-            value={formData?.veterinaryDoctorType}
-          />
-          {errors?.veterinaryDoctorType && (
-            <p className="text-red-500 text-xs">
-              {errors?.veterinaryDoctorType}
-            </p>
-          )}
-        </div>
-      )}
-
-      {/* Service type */}
-      <div className="col-md-6 space-y-2">
-        <label className="form-label">Service Type</label>
-        <Select
-          mode="multiple"
-          allowClear
-          style={{ width: "100%" }}
-          placeholder="Please select"
-          defaultValue={[]}
-          onChange={categoryName === "Veterinary" ? selectData1 : selectData2}
-          options={
-            categoryName === "Veterinary" ? veterinaryserviceType : serviceType
-          }
-          size="large"
-          value={
-            categoryName === "Veterinary"
-              ? formData?.veterinaryserviceType
-              : formData?.serviceType
-          }
-        />
-        {categoryName === "Veterinary"
-          ? errors?.veterinaryserviceType && (
-              <p className="text-red-500 text-xs">
-                {errors?.veterinaryserviceType}
-              </p>
-            )
-          : errors?.serviceType && (
-              <p className="text-red-500 text-xs">{errors?.serviceType}</p>
-            )}
-      </div>
-
-      {/* Animals Treated - Only for Veterinary */}
-      {/* {categoryName === "Veterinary" && ( */}
-      {/* Animals Treated - Only for Veterinary */}
-      {categoryName === "Veterinary" && (
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Animals Treated
-          </label>
-          <Select
-            mode="multiple"
-            allowClear
-            style={{ width: "100%" }}
-            placeholder="Select animals"
-            value={formData.animalTreated || []}
-            onChange={(values) =>
-              setFormData((prev) => ({
-                ...prev,
-                animalTreated: values,
-              }))
+            onChange={categoryName === "Veterinary" ? selectData1 : selectData2}
+            options={
+              categoryName === "Veterinary"
+                ? veterinaryserviceType
+                : serviceType
             }
             size="large"
-          >
-            <Option value="Dog">Dog</Option>
-            <Option value="Cat">Cat</Option>
-            <Option value="Bird">Bird</Option>
-            <Option value="Rabbit">Rabbit</Option>
-            <Option value="Horse">Horse</Option>
-            <Option value="Cow">Cow</Option>
-            <Option value="Goat">Goat</Option>
-            <Option value="Sheep">Sheep</Option>
-            <Option value="Other">Other</Option>
-          </Select>
-
-          {/* Show second dropdown if "Other" is selected */}
-          {formData.animalTreated?.includes("Other") && (
-            <div className="mt-3">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Select Other Animal
-              </label>
-              <Select
-                style={{ width: "100%" }}
-                placeholder="Select other animal"
-                value={formData.otherAnimal || undefined}
-                onChange={(value) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    otherAnimal: value,
-                  }))
-                }
-                size="large"
-              >
-                <Option value="Elephant">Elephant</Option>
-                <Option value="Camel">Camel</Option>
-                <Option value="Donkey">Donkey</Option>
-                <Option value="Pig">Pig</Option>
-                <Option value="OtherCustom">Other (Custom)</Option>
-              </Select>
-
-              {/* Show textbox if "OtherCustom" is picked */}
-              {formData.otherAnimal === "OtherCustom" && (
-                <div className="mt-3">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Please specify
-                  </label>
-                  <input
-                    type="text"
-                    name="customAnimal"
-                    value={formData.customAnimal || ""}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        customAnimal: e.target.value,
-                      }))
-                    }
-                    placeholder="Enter animal type"
-                    className="w-full border border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-200 focus:outline-none"
-                  />
-                </div>
+            value={
+              categoryName === "Veterinary"
+                ? formData?.veterinaryserviceType
+                : formData?.serviceType
+            }
+          />
+          {categoryName === "Veterinary"
+            ? errors?.veterinaryserviceType && (
+                <p className="text-red-500 text-xs">
+                  {errors?.veterinaryserviceType}
+                </p>
+              )
+            : errors?.serviceType && (
+                <p className="text-red-500 text-xs">{errors?.serviceType}</p>
               )}
-            </div>
-          )}
         </div>
-      )}
+
+        {categoryName == "Veterinary" ? (
+          <div className="space-y-2 group">
+            <label className="text-sm font-medium text-gray-700">
+              Provide Services
+            </label>
+            <Select
+              mode="multiple"
+              allowClear
+              style={{ width: "100%" }}
+              placeholder="Select Services"
+              defaultValue={[]}
+              onChange={selectData}
+              size="large"
+              options={serviceProvideOption}
+              value={formData?.veterinaryDoctorType}
+            />
+            {errors?.serviceType && (
+              <p className="text-red-500 text-xs">{errors?.serviceType}</p>
+            )}
+          </div>
+        ) : (
+          ""
+        )}
+
+        {/* Animals Treated - Only for Veterinary */}
+        {/* {categoryName === "Veterinary" && ( */}
+        {/* Animals Treated - Only for Veterinary */}
+        {categoryName === "Veterinary" && (
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Animals Treated
+            </label>
+            <Select
+              mode="multiple"
+              allowClear
+              style={{ width: "100%" }}
+              placeholder="Select animals"
+              value={formData.animalTreated || []}
+              onChange={(values) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  animalTreated: values,
+                }))
+              }
+              size="large"
+            >
+              <Option value="Dog">Dog</Option>
+              <Option value="Cat">Cat</Option>
+              <Option value="Bird">Bird</Option>
+              <Option value="Rabbit">Rabbit</Option>
+              <Option value="Horse">Horse</Option>
+              <Option value="Cow">Cow</Option>
+              <Option value="Goat">Goat</Option>
+              <Option value="Sheep">Sheep</Option>
+              <Option value="Other">Other</Option>
+            </Select>
+
+            {/* Show second dropdown if "Other" is selected */}
+            {formData.animalTreated?.includes("Other") && (
+              <div className="mt-3">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Select Other Animal
+                </label>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  {/* Left Column - Dropdown */}
+                  <div>
+                    <Select
+                      style={{ width: "100%" }}
+                      placeholder="Select other animal"
+                      value={formData.otherAnimal || undefined}
+                      onChange={(value) => {
+                        setFormData((prev) => {
+                          let updatedAnimals = [...(prev.animalTreated || [])];
+
+                          // remove any previously selected otherAnimal/customAnimal before adding new one
+                          updatedAnimals = updatedAnimals.filter(
+                            (a) =>
+                              ![
+                                "Elephant",
+                                "Camel",
+                                "Donkey",
+                                "Pig",
+                                prev.customAnimal,
+                              ].includes(a)
+                          );
+
+                          if (value && value !== "OtherCustom") {
+                            updatedAnimals.push(value);
+                          }
+
+                          return {
+                            ...prev,
+                            otherAnimal: value,
+                            animalTreated: updatedAnimals,
+                          };
+                        });
+                      }}
+                      size="large"
+                    >
+                      <Option value="Elephant">Elephant</Option>
+                      <Option value="Camel">Camel</Option>
+                      <Option value="Donkey">Donkey</Option>
+                      <Option value="Pig">Pig</Option>
+                      <Option value="OtherCustom">Other (Custom)</Option>
+                    </Select>
+                  </div>
+
+                  {/* Right Column - Textbox */}
+                  <div>
+                    {formData.otherAnimal === "OtherCustom" ? (
+                      <input
+                        type="text"
+                        name="customAnimal"
+                        value={formData.customAnimal || ""}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setFormData((prev) => {
+                            let updatedAnimals = [
+                              ...(prev.animalTreated || []),
+                            ];
+
+                            // remove old custom animal before adding new one
+                            updatedAnimals = updatedAnimals.filter(
+                              (a) => a !== prev.customAnimal
+                            );
+
+                            if (val.trim()) {
+                              updatedAnimals.push(val.trim());
+                            }
+
+                            return {
+                              ...prev,
+                              customAnimal: val,
+                              animalTreated: updatedAnimals,
+                            };
+                          });
+                        }}
+                        placeholder="Please specify"
+                        className="w-full border border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-200 focus:outline-none"
+                      />
+                    ) : (
+                      <div className="h-10" /> // keeps space
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
 
       {/* Clinics */}
       <div className="space-y-4">
@@ -719,68 +743,70 @@ const DoctorRegistrationForm = ({
           ))}
         </div>
         {/* Is Surgeon */}
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Is Surgeon
-          </label>
-          <div className="flex gap-6">
-            <label className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="isSurgeon"
-                value="true"
-                checked={formData.isSurgeon === true}
-                onChange={() =>
-                  setFormData((prev) => ({ ...prev, isSurgeon: true }))
-                }
-              />
-              Yes
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Is Surgeon
             </label>
-            <label className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="isSurgeon"
-                value="false"
-                checked={formData.isSurgeon === false}
-                onChange={() =>
-                  setFormData((prev) => ({ ...prev, isSurgeon: false }))
-                }
-              />
-              No
-            </label>
+            <div className="flex gap-6">
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="isSurgeon"
+                  value="true"
+                  checked={formData.isSurgeon === true}
+                  onChange={() =>
+                    setFormData((prev) => ({ ...prev, isSurgeon: true }))
+                  }
+                />
+                Yes
+              </label>
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="isSurgeon"
+                  value="false"
+                  checked={formData.isSurgeon === false}
+                  onChange={() =>
+                    setFormData((prev) => ({ ...prev, isSurgeon: false }))
+                  }
+                />
+                No
+              </label>
+            </div>
           </div>
-        </div>
 
-        {/* Online Booking */}
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Online Booking
-          </label>
-          <div className="flex gap-6">
-            <label className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="onlineBooking"
-                value="true"
-                checked={formData.onlineBooking === true}
-                onChange={() =>
-                  setFormData((prev) => ({ ...prev, onlineBooking: true }))
-                }
-              />
-              Yes
+          {/* Online Booking */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Online Booking
             </label>
-            <label className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="onlineBooking"
-                value="false"
-                checked={formData.onlineBooking === false}
-                onChange={() =>
-                  setFormData((prev) => ({ ...prev, onlineBooking: false }))
-                }
-              />
-              No
-            </label>
+            <div className="flex gap-6">
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="onlineBooking"
+                  value="true"
+                  checked={formData.onlineBooking === true}
+                  onChange={() =>
+                    setFormData((prev) => ({ ...prev, onlineBooking: true }))
+                  }
+                />
+                Yes
+              </label>
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="onlineBooking"
+                  value="false"
+                  checked={formData.onlineBooking === false}
+                  onChange={() =>
+                    setFormData((prev) => ({ ...prev, onlineBooking: false }))
+                  }
+                />
+                No
+              </label>
+            </div>
           </div>
         </div>
 

@@ -47,26 +47,45 @@ const PharmacyRegistrationForms = ({
       <h3 className="text-xl font-semibold text-[#005b8e] mb-4">
         Pharmacy Registration
       </h3>
+      <div className="grid md:grid-cols-2 gap-6">
+        {/* Hospital Name */}
+        {renderInput("Pharmacy Name", "text", "name", "Enter Pharmacy name")}
 
-      {/* Hospital Name */}
-      {renderInput("Pharmacy Name", "text", "name", "Enter Pharmacy name")}
+        {/* Email */}
+        {renderInput("Official Email", "email", "email", "Enter email address")}
 
-      {/* Email */}
-      {renderInput("Official Email", "email", "email", "Enter email address")}
+        {/* Phone */}
+        {renderInput("Contact Number", "tel", "phone", "Enter contact number")}
 
-      {/* Phone */}
-      {renderInput("Contact Number", "tel", "phone", "Enter contact number")}
+        {/* Address*/}
 
-      {/* Address*/}
+        {/* Description */}
+        {renderInput(
+          "Description",
+          "textarea",
+          "description",
+          "Enter description",
+          1
+        )}
+
+        {/* Store Timings */}
+        <div className="space-y-2 group">
+          <label className="text-sm font-medium text-gray-700">
+            Store Timings
+          </label>
+          <input
+            type="text"
+            value={formData?.storeTiming}
+            onChange={(e) => handleInputChange("storeTiming", e.target.value)}
+            className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
+            placeholder="Ex: 9:00 AM - 9:00 PM"
+          />
+          {errors.storeTiming && (
+            <p className="text-red-500 text-sm">{errors.storeTiming}</p>
+          )}
+        </div>
+      </div>
       {renderInput("Address", "textarea", "address", "Enter full address")}
-
-      {/* Description */}
-      {renderInput(
-        "Description",
-        "textarea",
-        "description",
-        "Enter description"
-      )}
 
       {/* services Section */}
       <div className="space-y-4">
@@ -143,28 +162,11 @@ const PharmacyRegistrationForms = ({
         )}
       </div>
 
-      {/* Store Timings */}
-      <div className="space-y-2 group">
-        <label className="text-sm font-medium text-gray-700">
-          Store Timings
-        </label>
-        <input
-          type="text"
-          value={formData?.storeTiming}
-          onChange={(e) => handleInputChange("storeTiming", e.target.value)}
-          className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
-          placeholder="Ex: 9:00 AM - 9:00 PM"
-        />
-        {errors.storeTiming && (
-          <p className="text-red-500 text-sm">{errors.storeTiming}</p>
-        )}
-      </div>
-
       {/* Owner Name */}
       {renderInput("Owner Name", "text", "ownerName", "Enter owner name")}
 
       {/* GST Number */}
-      {renderInput("GST Number", "number", "gstNumber", "Enter GST number")}
+      {renderInput("GST Number", "text", "gstNumber", "Enter GST number")}
 
       {/* Verification Phone */}
       {renderInput(
