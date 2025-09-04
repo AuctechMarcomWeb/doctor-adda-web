@@ -13,6 +13,7 @@ import DiagnosticsRegistrationForms from "./DiagnosticsForms/DiagnosticsRegistra
 import PharmacyRegistrationForms from "./PharmacyForms/PharmacyRegistrationForms";
 import { setCookieItem } from "../../Hooks/cookie";
 import DocumentsUpload from "./documentsUpload/documentsUpload";
+import toast from "react-hot-toast";
 
 const HealthcareRegistrationModal = ({ setOpen }) => {
   const [isModalOpen, setIsModalOpen] = useState(true);
@@ -789,7 +790,9 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
       if (response?.data?.success) {
         console.log("response", response?.data?.data?.token);
 
-        alert("Registration submitted successfully!");
+        toast.success(
+          response?.data?.message || "Ambulance registered successfully!"
+        );
         setCookieItem("Token", response?.data?.data?.token, 30);
         setCookieItem("UserId", response?.data?.data?.savedEntity?.userId, 30);
 
@@ -800,22 +803,18 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
     } catch (error) {
       console.error("Error submitting registration:", error);
       const apiMessage =
-        error?.response?.data?.message ||
+        error?.response?.data?.data?.message ||
         error?.message ||
         "Something went wrong!";
-      alert(apiMessage);
+      toast.error(
+        error?.response?.data?.message ||
+          error?.message ||
+          "Something went wrong!"
+      );
     } finally {
       setSubmitting(false);
     }
   }; //8707767805
-
-    // 👇 Clear form + errors whenever user leaves tab
-  useEffect(() => {
-    return () => {
-      setFormData({});
-      setErrors({});
-    };
-  }, [selectedCard]);
 
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
@@ -886,7 +885,15 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
           ) : (
             <div>
               <button
-                onClick={() => setSelectedCard("")}
+                onClick={() => {
+                  setSelectedCard("");
+                  setFormData({});
+                  setErrors({});
+                  setProfilePreview(null);
+                  setProfileFile(null);
+                  setImagesPreview([]);
+                  setImagesFiles([]);
+                }}
                 className="text-[#005b8e] hover:text-indigo-800 font-medium mb-6 flex items-center gap-2"
               >
                 <img

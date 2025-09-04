@@ -35,6 +35,9 @@ const Home = () => {
   const userId = userProfileData;
   const token = getCookieItem("Token");
   const UserId = getCookieItem("UserId");
+  const [data, setData] = useState([]);
+  const [open, setOpen] = useState(true);
+  console.log("dfgfdg======>", data);
   useEffect(() => {
     if (UserId) {
       const fetchUser = async () => {
@@ -49,10 +52,7 @@ const Home = () => {
       };
       fetchUser();
     }
-  }, [location.pathname, UserId, dispatch, update]);
-
-  const [data, setData] = useState([]);
-  console.log("dfgfdg======>", data);
+  }, [location.pathname, UserId, dispatch, update, open]);
 
   useEffect(() => {
     getRequest(`banner?isPagination=false`)
@@ -63,8 +63,6 @@ const Home = () => {
         console.log("error", error);
       });
   }, []);
-
-  const [open, setOpen] = useState(true);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
