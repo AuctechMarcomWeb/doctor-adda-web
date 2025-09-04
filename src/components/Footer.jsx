@@ -86,21 +86,32 @@ const Footer = () => {
             <div>
               <h3 className="text-lg font-semibold mb-4">Services</h3>
               <div className="flex flex-col space-y-2">
-                <Link to="/doctor" className="text-gray-400 hover:text-white transition-colors">
+                <Link
+                  to="/doctor"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
                   Doctor & Specialists
                 </Link>
-                <Link to="/ambulance" className="text-gray-400 hover:text-white transition-colors">
+                <Link
+                  to="/ambulance"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
                   Ambulance
                 </Link>
-                <Link to="/diagnostic" className="text-gray-400 hover:text-white transition-colors">
+                <Link
+                  to="/diagnostic"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
                   Diagnostics
                 </Link>
-                <Link to="/hospital" className="text-gray-400 hover:text-white transition-colors">
+                <Link
+                  to="/hospital"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
                   Hospitals
                 </Link>
               </div>
             </div>
-
 
             <div>
               <h3 className="text-lg font-semibold mb-4">Contact Info</h3>
@@ -116,7 +127,8 @@ const Footer = () => {
                 <div className="flex items-center space-x-3">
                   <MapPin className="w-5 h-5 fs-6 text-blue-400" />
                   <span className="text-gray-400">
-                    Sai Heights, C-3/76, Vibhuti <br /> Khand, Gomti Nagar, Lucknow, Uttar Pradesh 226010
+                    H NO 39-B Block B Vani Elite <br /> Homes Laulai Chinhat
+                    LUCKNOW UP 226028 IND
                   </span>
                 </div>
               </div>
@@ -125,7 +137,8 @@ const Footer = () => {
 
           <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
             <p>
-              &copy; 2025 Doctor Adda. All rights reserved. Designed by Auctech MarCom
+              &copy; 2025 Doctor Adda. All rights reserved. Designed by Auctech
+              MarCom
             </p>
             <div className="mt-4 flex justify-center items-center gap-4 text-sm">
               <Link
@@ -146,7 +159,7 @@ const Footer = () => {
                 to="/refund"
                 className="text-gray-400 hover:text-white transition-colors cursor-pointer"
               >
-                Refund And Cancellation 
+                Refund And Cancellation
               </Link>
               <span className="text-gray-600">|</span>
               <Link

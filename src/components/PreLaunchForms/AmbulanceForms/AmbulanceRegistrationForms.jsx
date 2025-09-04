@@ -276,9 +276,13 @@ const AmbulanceRegistrationForm = ({
                   type="text"
                   placeholder="Phone number"
                   value={driver.phone}
-                  onChange={(e) =>
-                    handleDriverChange(index, "phone", e.target.value)
-                  }
+                  maxLength={10}
+                  onChange={(e) => {
+                    e.target.value = e.target.value.replace(/\D/g, ""); // keep only numbers
+                    if (e.target.value.length > 10)
+                      e.target.value = e.target.value.slice(0, 10);
+                    handleDriverChange(index, "phone", e.target.value);
+                  }}
                   className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
                 {errors[`drivers.${index}.phone`] && (
