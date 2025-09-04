@@ -136,10 +136,18 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
   const handleImagesSelect = async (e) => {
     const files = Array.from(e.target.files);
     if (!files.length) return;
-    setImagesFiles(files);
+
+    // Append instead of replace
+    setImagesFiles((prev) => [...prev, ...files]);
+
     const previews = files.map((file) => URL.createObjectURL(file));
-    setImagesPreview(previews);
-    await handleUploadImages(files); // auto upload after select
+    setImagesPreview((prev) => [...prev, ...previews]);
+
+    // Upload newly selected files only
+    await handleUploadImages(files);
+
+    // Reset file input so the same file can be uploaded again if needed
+    e.target.value = "";
   };
 
   const handleUploadImages = async (files) => {
@@ -328,7 +336,27 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
           error = "Invalid phone number";
         }
       }
+      if (field === "dob") {
+        const dobDate = new Date(value);
+        const today = new Date();
+        if (dobDate > today) {
+          errors.dob = "Date of Birth cannot be in the future.";
+        } else {
+          const ageDiff = today.getFullYear() - dobDate.getFullYear();
+          const monthDiff = today.getMonth() - dobDate.getMonth();
+          const dayDiff = today.getDate() - dobDate.getDate();
+          const isUnder18 =
+            ageDiff < 18 ||
+            (ageDiff === 18 &&
+              (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)));
+  
+          if (isUnder18) {
+            errors.dob = "You must be at least 18 years old.";
+          }
+        }
+      }
     }
+
 
     return error;
   };
@@ -370,7 +398,35 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
           type={type}
           placeholder={placeholder}
           className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-          onChange={(e) => handleInputChange(field, e.target.value)}
+          onChange={(e) => {
+            // If phone, allow only digits and max 10 characters
+            if (type === "tel") {
+              e.target.value = e.target.value.replace(/\D/g, ""); // keep only numbers
+              if (e.target.value.length > 10)
+                e.target.value = e.target.value.slice(0, 10);
+            }
+            if (field === "yearOfEstablish") {
+              e.target.value = e.target.value.replace(/\D/g, "");
+            }
+            if (field === "experience") {
+              e.target.value = e.target.value.replace(/\D/g, ""); // numbers only
+              if (e.target.value.length > 2)
+                e.target.value = e.target.value.slice(0, 2);
+            }
+            handleInputChange(field, e.target.value);
+          }}
+          maxLength={
+            type === "tel" || type === "tel"
+              ? 10
+              : field === "yearOfEstablish"
+              ? 4
+              : field === "experience"
+              ? 4
+              : undefined
+          }
+          max={
+            field === "dob" ? new Date().toISOString().split("T")[0] : undefined
+          }
         />
       )}
       {errors[field] && (
@@ -467,9 +523,9 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
       isValid = false;
     }
 
-    if(formData?.profileImages?.length === 0){
-      newErrors.profileImages="Uploade at least one gallery Images";
-      isValid =false 
+    if (formData?.profileImages?.length === 0) {
+      newErrors.profileImages = "Uploade at least one gallery Images";
+      isValid = false;
     }
 
     // 2. Schema-specific deep validation
@@ -479,6 +535,7 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
           newErrors.clinics = "At least one clinic is required";
           isValid = false;
         }
+
         break;
 
       case "hospital":

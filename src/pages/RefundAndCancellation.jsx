@@ -30,14 +30,16 @@ const RefundAndCancellation = () => {
                   </div> */}
 
                 <section className="mb-8">
-                 
                   <p className="text-gray-700 mb-4">
-                   At Doctorsadda, we maintain a strict no-refund policy under any circumstances. We strongly encourage all participants to thoroughly review and understand our terms and conditions before completing their registration. By registering, you acknowledge and agree to abide by these policies. Please make an informed decision, as once the payment is made, no refunds will be processed.
+                    At Doctor’s Adda , we maintain a strict no-refund policy
+                    under any circumstances. We strongly encourage all
+                    participants to thoroughly review and understand our terms
+                    and conditions before completing their registration. By
+                    registering, you acknowledge and agree to abide by these
+                    policies. Please make an informed decision, as once the
+                    payment is made, no refunds will be processed.
                   </p>
-                  
                 </section>
-
-               
               </div>
             </div>
           </div>
