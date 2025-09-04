@@ -77,7 +77,7 @@ export const removeCookieItem = function (cname) {
 // Clear all authentication cookies
 export const clearAuthCookies = function () {
   try {
-    const authCookies = ['DoctorAddaPanel', 'userMobile', 'loginTime', 'isAuthenticated']
+    const authCookies = ['DoctorAddaPanel', 'userMobile', 'loginTime', 'isAuthenticated', 'Token', 'UserId']
     authCookies.forEach(cookieName => {
       Cookies.remove(cookieName, { path: '/' })
     })

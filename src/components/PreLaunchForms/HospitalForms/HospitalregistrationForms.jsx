@@ -1,15 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {
-  Building2,
-  Mail,
-  Phone,
-  MapPin,
-  User,
-  FileText,
-  Plus,
-} from "lucide-react";
+import { Plus } from "lucide-react";
 import { Select } from "antd";
-import LocationSearchInput from "../../LocationSearchInput";
 import { getRequest } from "../../../Helpers"; // ✅ same helper as in HospitalRegistration.jsx
 
 const HospitalRegistrationForm = ({
@@ -17,6 +8,7 @@ const HospitalRegistrationForm = ({
   formData,
   setFormData,
   errors = {},
+  clearError, // ✅ passed from parent modal
 }) => {
   const [categories, setCategories] = useState([]);
   const [healthCards, setHealthCards] = useState([]);
@@ -47,6 +39,7 @@ const HospitalRegistrationForm = ({
       ...prev,
       categories: selectedValues,
     }));
+    clearError("categories");
   };
 
   const selectHealthCard = (selectedValues) => {
@@ -54,6 +47,7 @@ const HospitalRegistrationForm = ({
       ...prev,
       healthCard: selectedValues,
     }));
+    clearError("healthCard");
   };
 
   const handleFacilityChange = (e, index) => {
@@ -62,8 +56,10 @@ const HospitalRegistrationForm = ({
 
     if (name.includes("Name")) {
       updatedFacilities[index].name = value;
+      clearError(`facilityName_${index}`);
     } else if (name.includes("Description")) {
       updatedFacilities[index].discription = value;
+      clearError(`facilityDescription_${index}`);
     }
 
     setFormData((prev) => ({
@@ -87,150 +83,143 @@ const HospitalRegistrationForm = ({
     }));
   };
 
-  console.log("Hospital Formdata ===", formData);
-
   return (
     <>
       <h3 className="text-xl font-semibold text-[#005b8e] mb-4">
         Hospital Registration
       </h3>
 
-      {/* Hospital Name */}
-      {renderInput("Hospital Name", "text", "name", "Enter hospital name")}
-
-      {/* Email */}
-      {renderInput("Official Email", "email", "email", "Enter email address")}
-      {renderInput(
-        "Year of Establishment",
-        "text",
-        "yearOfEstablish",
-        "Enter Year of Eshtablishment"
-      )}
-
-      {/* Phone */}
-      {renderInput("Contact Number", "tel", "phone", "Enter contact number")}
-      {renderInput("Address", "textarea", "address", "Enter full address")}
-      {/* Address
-      <div className="space-y-2">
-        <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-          <MapPin className="w-4 h-4 text-red-600" />
-          Hospital Address
-        </label>
-        <LocationSearchInput
-          value={formData.address}
-          onSelect={(place) => setFormData({ ...formData, ...place })}
-        />
-      </div> */}
-
-      {/* Description */}
-      {renderInput(
-        "Description",
-        "textarea",
-        "description",
-        "Enter description"
-      )}
-      {/* Description */}
-      {renderInput(
-        "Registration Number",
-        "text",
-        "registrationNo",
-        "Enter Hospital Registration Number"
-      )}
-
-      {/* Hospital Type */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Hospital Type
-        </label>
-        <select
-          name="hospitalType"
-          value={formData.hospitalType || "Private"} // 👈 default to Private
-          onChange={(e) =>
-            setFormData((prev) => ({
-              ...prev,
-              hospitalType: e.target.value,
-            }))
-          }
-          className="w-full border border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-200 focus:outline-none"
-          required
-        >
-          <option value="Private">Private</option>
-          <option value="Government">Government</option>
-          <option value="Charitable">Charitable</option>
-          <option value="Other">Other</option>
-        </select>
-        {/* Show input if "Other" is selected */}
-        {formData.hospitalType === "Other" && (
-          <input
-            type="text"
+      {/* ✅ 2-Column Grid Layout */}
+      <div className="grid md:grid-cols-2 gap-6">
+        {renderInput("Hospital Name", "text", "name", "Enter hospital name")}
+        {renderInput("Official Email", "email", "email", "Enter email address")}
+        {renderInput(
+          "Year of Establishment",
+          "text",
+          "yearOfEstablish",
+          "Enter year of establishment"
+        )}
+        {renderInput("Contact Number", "tel", "phone", "Enter contact number")}
+        {renderInput(
+          "Registration Number",
+          "text",
+          "registrationNo",
+          "Enter Hospital Registration Number"
+        )}
+        {/* Hospital Type */}
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Hospital Type
+          </label>
+          <select
             name="hospitalType"
-            value={formData.hospitalTypeCustom || ""}
-            onChange={(e) =>
+            value={formData.hospitalType || "Private"}
+            onChange={(e) => {
               setFormData((prev) => ({
                 ...prev,
-                hospitalTypeCustom: e.target.value, // store separately while typing
-                hospitalType: e.target.value, // overwrite hospitalType for submission
-              }))
-            }
-            placeholder="Please specify hospital type"
-            className="mt-2 w-full border border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-200 focus:outline-none"
+                hospitalType: e.target.value,
+              }));
+              clearError("hospitalType");
+            }}
+            className="w-full border border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-200 focus:outline-none"
             required
+          >
+            <option value="Private">Private</option>
+            <option value="Government">Government</option>
+            <option value="Charitable">Charitable</option>
+            <option value="Other">Other</option>
+          </select>
+          {formData.hospitalType === "Other" && (
+            <input
+              type="text"
+              name="hospitalTypeCustom"
+              value={formData.hospitalTypeCustom || ""}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  hospitalTypeCustom: e.target.value,
+                  hospitalType: e.target.value,
+                }))
+              }
+              placeholder="Please specify hospital type"
+              className="mt-2 w-full border border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-200 focus:outline-none"
+              required
+            />
+          )}
+          {errors?.hospitalType && (
+            <p className="text-red-500 text-sm">{errors.hospitalType}</p>
+          )}
+        </div>
+      </div>
+
+      {/* ✅ Address (full width) */}
+      <div className="my-4">
+        {renderInput("Address", "textarea", "address", "Enter full address")}
+      </div>
+
+      {/* ✅ Description (full width) */}
+      <div className="my-4">
+        {renderInput(
+          "Description",
+          "textarea",
+          "description",
+          "Enter description"
+        )}
+      </div>
+
+      {/* ✅ Categories & Health Cards (2-column grid) */}
+      <div className="grid md:grid-cols-2 gap-6 my-4">
+        <div>
+          <label className="text-sm font-medium text-gray-700">Category</label>
+          <Select
+            mode="multiple"
+            allowClear
+            style={{ width: "100%" }}
+            placeholder="Select categories"
+            onChange={selectCategory}
+            options={categoryOptions}
+            size="large"
+            value={formData?.categories}
           />
+          {errors?.categories && (
+            <p className="text-red-500 text-sm">{errors.categories}</p>
+          )}
+        </div>
+
+        <div>
+          <label className="text-sm font-medium text-gray-700">
+            Health Card
+          </label>
+          <Select
+            mode="multiple"
+            allowClear
+            style={{ width: "100%" }}
+            placeholder="Select health cards"
+            onChange={selectHealthCard}
+            options={healthCardOptions}
+            size="large"
+            value={formData?.healthCard}
+          />
+          {errors?.healthCard && (
+            <p className="text-red-500 text-sm">{errors.healthCard}</p>
+          )}
+        </div>
+      </div>
+
+      {/* ✅ Remaining fields (2-column grid) */}
+      <div className="grid md:grid-cols-2 gap-6 my-4">
+        {renderInput("Owner Name", "text", "ownerName", "Enter owner name")}
+        {renderInput("GST Number", "text", "gstNumber", "Enter GST number")}
+        {renderInput(
+          "Verification Phone",
+          "tel",
+          "phoneNumber",
+          "Enter verification phone"
         )}
       </div>
 
-      {/* Categories */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-gray-700">Category</label>
-        <Select
-          mode="multiple"
-          allowClear
-          style={{ width: "100%" }}
-          placeholder="Select categories"
-          onChange={selectCategory}
-          options={categoryOptions}
-          size="large"
-          value={formData?.categories}
-        />
-        {errors?.categories && (
-          <p className="text-red-500 text-sm">{errors.categories}</p>
-        )}
-      </div>
-
-      {/* Health Card */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-gray-700">Health Card</label>
-        <Select
-          mode="multiple"
-          allowClear
-          style={{ width: "100%" }}
-          placeholder="Select health cards"
-          onChange={selectHealthCard}
-          options={healthCardOptions}
-          size="large"
-          value={formData?.healthCard}
-        />
-        {errors?.healthCard && (
-          <p className="text-red-500 text-sm">{errors.healthCard}</p>
-        )}
-      </div>
-
-      {/* Owner Name */}
-      {renderInput("Owner Name", "text", "ownerName", "Enter owner name")}
-
-      {/* GST Number */}
-      {renderInput("GST Number", "number", "gstNumber", "Enter GST number")}
-
-      {/* Verification Phone */}
-      {renderInput(
-        "Verification Phone",
-        "tel",
-        "phoneNumber",
-        "Enter verification phone"
-      )}
-
-      {/* Facilities Section */}
-      <div className="space-y-4">
+      {/* ✅ Facilities Section */}
+      <div className="space-y-4 mt-6">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-semibold text-gray-800">
             Facilities & Services

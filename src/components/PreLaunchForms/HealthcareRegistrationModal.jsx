@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-dupe-keys */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Truck, Building, User, Activity, Plus, MapPin, X } from "lucide-react";
 import logo from "../../assets/dr-adda-logo.png";
 import { postRequest } from "../../Helpers";
@@ -190,17 +190,24 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
     const newFormData = { ...formData, [field]: value };
     setFormData(newFormData);
 
-    // Run validation for this field (only for scalars)
+    // validate this field
     const errorMsg = validateField(field, value);
-    setErrors((prev) => ({ ...prev, [field]: errorMsg }));
 
-    // Re-check completeness
+    setErrors((prev) => {
+      const newErrors = { ...prev };
+      if (errorMsg) {
+        newErrors[field] = errorMsg; // keep error if invalid
+      } else {
+        delete newErrors[field]; // clear error if valid
+      }
+      return newErrors;
+    });
+
+    // re-check completeness
     const requiredFields = getRequiredFields(selectedCard);
     const isComplete = requiredFields.every((f) => {
       const val = newFormData[f];
-
       if (Array.isArray(val)) {
-        // ✅ array must have at least 1 item with no empty required subfields
         return (
           val.length > 0 &&
           val.every((obj) =>
@@ -208,16 +215,11 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
           )
         );
       }
-
       if (typeof val === "object" && val !== null) {
-        // ✅ object must not be empty
         return Object.values(val).every((v) => v && v.toString().trim() !== "");
       }
-
-      // ✅ scalar (string/number) check
       return val && val.toString().trim() !== "" && !validateField(f, val);
     });
-
     setIsFormComplete(isComplete);
   };
 
@@ -349,7 +351,7 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
             ageDiff < 18 ||
             (ageDiff === 18 &&
               (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)));
-  
+
           if (isUnder18) {
             errors.dob = "You must be at least 18 years old.";
           }
@@ -357,8 +359,15 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
       }
     }
 
-
     return error;
+  };
+
+  const clearError = (field) => {
+    setErrors((prev) => {
+      const newErrors = { ...prev };
+      delete newErrors[field];
+      return newErrors;
+    });
   };
 
   const renderInput = (label, type, field, placeholder, rows) => (
@@ -444,6 +453,7 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
             formData={formData}
             setFormData={setFormData}
             errors={errors}
+            clearError={clearError}
           />
         );
       case "hospital":
@@ -453,6 +463,7 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
             formData={formData}
             setFormData={setFormData}
             errors={errors}
+            clearError={clearError}
           />
         );
       case "doctor":
@@ -659,6 +670,9 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
             profileImages: formData?.profileImages || [], // ✅ unified gallery
             documents: formData?.documents || [],
             clinics: formData?.clinics || [],
+            animalTreated: formData?.animalTreated || [],
+            onlineBooking: formData?.onlineBooking,
+            isSurgeon: formData?.isSurgeon,
             latitude: formData?.clinics[0]?.location?.coordinates[0],
             longitude: formData?.clinics[0]?.location?.coordinates[1],
           };
@@ -731,6 +745,8 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
             profileImage: formData?.profileImage,
             profileImages: formData?.profileImages || [], // ✅ not images
             documents: formData?.documents || [],
+            isBloodBank: formData?.isBloodBank,
+            homeCollection: formData?.homeCollection,
           };
           break;
 
@@ -792,6 +808,14 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
       setSubmitting(false);
     }
   }; //8707767805
+
+    // 👇 Clear form + errors whenever user leaves tab
+  useEffect(() => {
+    return () => {
+      setFormData({});
+      setErrors({});
+    };
+  }, [selectedCard]);
 
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
