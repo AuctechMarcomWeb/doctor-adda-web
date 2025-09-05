@@ -117,23 +117,6 @@ const OtpStep = ({
     otpRefs.current[nextIndex].focus();
   };
 
-  // Navigation function
-  const navigateToNextScreen = () => {
-    // Check if we're in a React Router environment
-    if (typeof window !== "undefined") {
-      // For React Router (if using useNavigate hook)
-      if (window.history && window.history.pushState) {
-        window.history.pushState(null, "", redirectTo);
-
-        // Dispatch a custom event to trigger route change
-        window.dispatchEvent(new PopStateEvent("popstate"));
-      } else {
-        // Fallback to window.location
-        window.location.href = redirectTo;
-      }
-    }
-  };
-
   // Store authentication data
   const handleAuthSuccess = (token, id) => {
     try {
@@ -198,14 +181,15 @@ const OtpStep = ({
 
         // Only navigate to UserDetails if user came from signup
         if (isFromSignup) {
-          navigateToNextScreen();
+          // navigateToNextScreen();
+          navigate("/user-details", { state: { userId: userData?.data?._id } });
         } else {
           // For login users, just show success and call the callback
           toast.success("Login successful!");
 
           if (onLoginSuccess) {
             onLoginSuccess();
-            navigate("/location", { state: {userId: userData?.data?._id} });
+            navigate("/location", { state: { userId: userData?.data?._id } });
           }
         }
       }
