@@ -56,8 +56,9 @@ const Contact = () => {
     {
       icon: <MapPin className="w-6 h-6" />,
       title: "Office",
-      content: "Vibhuti Khand, Gomti Nagar, Lucknow",
-      description: "Sai Heights, C-3/76, Vibhuti Khand, Gomti Nagar, Lucknow, Uttar Pradesh 226010",
+      content: "Vani Elite Homes Laulai Chinhat, LUCKNOW",
+      description:
+        "H NO 39-B Block B Vani Elite Homes Laulai Chinhat LUCKNOW UP 226028 IND",
     },
   ];
 

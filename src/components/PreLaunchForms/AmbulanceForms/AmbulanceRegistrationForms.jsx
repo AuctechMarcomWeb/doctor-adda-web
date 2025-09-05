@@ -1,13 +1,21 @@
 import React, { useState } from "react";
 import LocationSearchInput from "../../LocationSearchInput";
 
-const AmbulanceRegistrationForm = ({ renderInput, formData, setFormData }) => {
+const AmbulanceRegistrationForm = ({
+  renderInput,
+  formData,
+  setFormData,
+  errors = {},
+  clearError,
+}) => {
   const [drivers, setDrivers] = useState([
     { name: "", phone: "", licenseNumber: "" },
   ]);
 
   const handleInputChange = (name, value) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    if (value) clearError(name);
   };
 
   const handleDriverChange = (index, field, value) => {
@@ -15,6 +23,8 @@ const AmbulanceRegistrationForm = ({ renderInput, formData, setFormData }) => {
     updated[index][field] = value;
     setDrivers(updated);
     setFormData((prev) => ({ ...prev, drivers: updated })); // sync to formData
+
+    if (value) clearError(`drivers.${index}.${field}`);
   };
 
   const addDriver = () => {
@@ -33,116 +43,160 @@ const AmbulanceRegistrationForm = ({ renderInput, formData, setFormData }) => {
 
   return (
     <>
-      <h3 className="text-xl font-semibold text-[#005b8e] mb-4">
+      <h3 className="text-xl font-semibold text-[#005b8e] mb-6">
         Ambulance Service Registration
       </h3>
 
-      {/* Service Name */}
-      {renderInput("Service Name", "text", "name", "Enter service name")}
+      {/* Grid wrapper for two-column layout */}
+      <div className="grid md:grid-cols-2 gap-6">
+        {/* Row 1: Name + Email */}
+        {renderInput("Service Name", "text", "name", "Enter service name")}
+        {renderInput("Email", "email", "email", "Enter email address")}
 
-      {/* Email */}
-      {renderInput("Email", "email", "email", "Enter email address")}
+        {/* Row 2: Phone + Address */}
+        {renderInput("Phone", "tel", "phone", "Enter phone number")}
+        {/* GPS Tracking (full row) */}
+        <div className="mt-6">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            GPS Tracking
+          </label>
+          <div className="flex gap-6">
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                name="gpsTracking"
+                value="true"
+                checked={formData.gpsTracking === true}
+                disabled
+              />
+              Yes
+            </label>
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                name="gpsTracking"
+                value="false"
+                checked={
+                  formData.gpsTracking === false ||
+                  formData.gpsTracking === undefined
+                }
+                disabled
+              />
+              No
+            </label>
+          </div>
+        </div>
+        {/* Row 3: Description + Operating Hours */}
 
-      {/* Phone */}
-      {renderInput("Phone", "tel", "phone", "Enter phone number")}
+        <div className="space-y-2 group">
+          <label className="text-sm font-medium text-gray-700">
+            Operating Hours
+          </label>
+          <input
+            type="text"
+            value={formData?.operatingHours}
+            onChange={(e) =>
+              handleInputChange("operatingHours", e.target.value)
+            }
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gray-500"
+            placeholder="Operating Hours of ambulance service"
+          />
+          {errors.operatingHours && (
+            <p className="text-red-500 text-sm">{errors.operatingHours}</p>
+          )}
+        </div>
 
-      {/* Address with lat/lng */}
-      <div className="space-y-2 group">
-        <label className="text-sm font-medium text-gray-700">Address</label>
-        <LocationSearchInput
-          value={formData?.address}
-          onSelect={(place) => setFormData((prev) => ({ ...prev, ...place }))}
-        />
+        {/* Row 4: Ambulance Type + Number of Ambulance */}
+        <div className="space-y-2 group">
+          <label className="text-sm font-medium text-gray-700">
+            Ambulance Type
+          </label>
+          <select
+            value={formData?.ambulanceType}
+            onChange={(e) => handleInputChange("ambulanceType", e.target.value)}
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500"
+          >
+            <option value="">Select Options</option>
+            <option value="BLS - Basic Life Support">
+              BLS - Basic Life Support
+            </option>
+            <option value="ICU - Intensive Care Unit">
+              ICU - Intensive Care Unit
+            </option>
+            <option value="Dead Body Carrier">Dead Body Carrier</option>
+          </select>
+          {errors.ambulanceType && (
+            <p className="text-red-500 text-sm">{errors.ambulanceType}</p>
+          )}
+        </div>
+
+        <div className="space-y-2 group">
+          <label className="text-sm font-medium text-gray-700">
+            Number of Ambulance
+          </label>
+          <select
+            value={formData?.ambulanceNumber}
+            onChange={(e) =>
+              handleInputChange("ambulanceNumber", e.target.value)
+            }
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500"
+          >
+            <option value="">Select Options</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4+">4+</option>
+          </select>
+          {errors.ambulanceNumber && (
+            <p className="text-red-500 text-sm">{errors.ambulanceNumber}</p>
+          )}
+        </div>
+
+        {/* Row 5: Availability Status + Capacity */}
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">
+            Availability Status
+          </label>
+          <select
+            name="availabilityStatus"
+            value={formData.availabilityStatus || ""}
+            onChange={(e) =>
+              handleInputChange("availabilityStatus", e.target.value)
+            }
+            className="w-full border border-gray-300 rounded-md p-3 focus:ring focus:ring-blue-200 focus:outline-none"
+          >
+            <option value="">Select Status</option>
+            <option value="Available">Available</option>
+            <option value="Unavailable">Unavailable</option>
+            <option value="In Transit">In Transit</option>
+          </select>
+        </div>
+        {renderInput(
+          "Capacity",
+          "number",
+          "capacity",
+          "Number of patients ambulance can carry"
+        )}
+
+        {/* Row 6: Emergency Contact + Price */}
+        {renderInput(
+          "Emergency Contact",
+          "tel",
+          "emergencyContact",
+          "Enter emergency contact"
+        )}
+        {renderInput("Price", "number", "price", "Enter service charge")}
       </div>
-
-      {/* Description */}
       {renderInput(
         "Description",
         "textarea",
         "description",
         "Enter description"
       )}
+      {renderInput("Address", "textarea", "address", "Enter full address")}
 
-      {/* Operating Hours */}
-      <div className="space-y-2 group">
-        <label className="text-sm font-medium text-gray-700">
-          Operating Hours
-        </label>
-        <input
-          type="text"
-          value={formData?.operatingHours}
-          onChange={(e) => handleInputChange("operatingHours", e.target.value)}
-          className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-gray-500"
-          placeholder="Operating Hours of ambulance service"
-        />
-      </div>
-
-      {/* Ambulance Type */}
-      <div className="space-y-2 group">
-        <label className="text-sm font-medium text-gray-700">
-          Ambulance Type
-        </label>
-        <select
-          value={formData?.ambulanceType}
-          onChange={(e) => handleInputChange("ambulanceType", e.target.value)}
-          className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500"
-        >
-          <option value="">Select Options</option>
-          <option value="Emergency Ambulance">Emergency Ambulance</option>
-          <option value="Non-Emergency Ambulance">
-            Non-Emergency Ambulance
-          </option>
-          <option value="ICU Ambulance">ICU Ambulance</option>
-        </select>
-      </div>
-
-      {/* Number of Ambulance */}
-      <div className="space-y-2 group">
-        <label className="text-sm font-medium text-gray-700">
-          Number of Ambulance
-        </label>
-        <select
-          value={formData?.ambulanceNumber}
-          onChange={(e) => handleInputChange("ambulanceNumber", e.target.value)}
-          className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500"
-        >
-          <option value="">Select Options</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4+">4+</option>
-        </select>
-      </div>
-
-      {/* Availability Status */}
-      {renderInput(
-        "Availability Status",
-        "text",
-        "availabilityStatus",
-        "Available/Unavailable"
-      )}
-
-      {/* Capacity */}
-      {renderInput(
-        "Capacity",
-        "number",
-        "capacity",
-        "Number of patients ambulance can carry"
-      )}
-
-      {/* Emergency Contact */}
-      {renderInput(
-        "Emergency Contact",
-        "tel",
-        "emergencyContact",
-        "Enter emergency contact"
-      )}
-
-      {/* Price */}
-      {renderInput("Price", "number", "price", "Enter service charge")}
-
-      {/* Driver Information */}
-      <div className="space-y-4">
+      {/* Driver Info (full row) */}
+      <div className="space-y-4 mt-6">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-semibold text-gray-700">
             Driver Information
@@ -173,7 +227,7 @@ const AmbulanceRegistrationForm = ({ renderInput, formData, setFormData }) => {
                   onChange={(e) =>
                     handleDriverChange(index, "name", e.target.value)
                   }
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
@@ -186,10 +240,14 @@ const AmbulanceRegistrationForm = ({ renderInput, formData, setFormData }) => {
                   type="text"
                   placeholder="Phone number"
                   value={driver.phone}
-                  onChange={(e) =>
-                    handleDriverChange(index, "phone", e.target.value)
-                  }
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  maxLength={10}
+                  onChange={(e) => {
+                    e.target.value = e.target.value
+                      .replace(/\D/g, "")
+                      .slice(0, 10);
+                    handleDriverChange(index, "phone", e.target.value);
+                  }}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
@@ -206,7 +264,7 @@ const AmbulanceRegistrationForm = ({ renderInput, formData, setFormData }) => {
                     onChange={(e) =>
                       handleDriverChange(index, "licenseNumber", e.target.value)
                     }
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   />
                   {drivers.length > 1 && (
                     <button
