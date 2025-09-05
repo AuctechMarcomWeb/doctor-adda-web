@@ -1,14 +1,15 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import { Upload, Zap, Check, Plus, ShoppingCart } from "lucide-react";
+import CartModal from "../../components/CartModal";
 
 const PharmacyOrder = ({ onUploadSubmit, onCartSubmit }) => {
   const [mode, setMode] = useState("upload"); // "upload" or "select"
   const [prescription, setPrescription] = useState(null);
   const [description, setDescription] = useState("");
- 
+
   const [searchTerm, setSearchTerm] = useState("");
- 
+
   const [medicineList, setMedicineList] = useState([
     { name: "Paracetamol", details: "500mg" },
     { name: "Cilacar 10", details: "10mg" },
@@ -18,11 +19,11 @@ const PharmacyOrder = ({ onUploadSubmit, onCartSubmit }) => {
   ]);
   const [cart, setCart] = useState([]);
 
-  const handleAddToCart = (med) => {
-    if (!cart.includes(med)) {
-      setCart([...cart, med]);
-    }
-  };
+  // const handleAddToCart = (med) => {
+  //   if (!cart.includes(med)) {
+  //     setCart([...cart, med]);
+  //   }
+  // };
 
   // handle prescription upload
   const handleFileChange = (e) => {
@@ -43,6 +44,49 @@ const PharmacyOrder = ({ onUploadSubmit, onCartSubmit }) => {
 
   const handleRemoveMedicine = (index) => {
     setMedicineList(medicineList.filter((_, i) => i !== index));
+  };
+
+  const [cartItems, setCartItems] = useState([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  // Add medicine to cart
+  const handleAddToCart = (medicine) => {
+     if (!cart.includes(medicine)) {
+      setCart([...cart, medicine]);
+    }
+    setCartItems((prev) => {
+      const exists = prev.find((item) => item.name === medicine.name);
+      if (exists) {
+        return prev.map((item) =>
+          item.name === medicine.name ? { ...item, qty: item.qty + 1 } : item
+        );
+      }
+      return [...prev, { ...medicine, qty: 1 }];
+    });
+  };
+
+  // Update quantity
+  const handleUpdateQty = (item, newQty) => {
+    if (newQty <= 0) {
+      handleRemove(item);
+    } else {
+      setCartItems((prev) =>
+        prev.map((cartItem) =>
+          cartItem.name === item.name ? { ...cartItem, qty: newQty } : cartItem
+        )
+      );
+    }
+  };
+
+  // Remove item
+  const handleRemove = (item) => {
+    setCartItems((prev) => prev.filter((cartItem) => cartItem.name !== item.name));
+  };
+
+  // Checkout
+  const handleCheckout = () => {
+    alert("Proceeding to checkout 🚀");
+    setIsCartOpen(false);
   };
 
   return (
@@ -130,21 +174,40 @@ const PharmacyOrder = ({ onUploadSubmit, onCartSubmit }) => {
       {mode === "select" && (
         <div className="relative  flex flex-col">
           {/* Header */}
-          <div className="px-4 py-3   sticky top-0 z-10">
-            <h2 className="text-lg font-semibold text-gray-800">
-              Search for medicines
+          <div className="px-6 py-4 sticky top-0 z-20   border-b">
+            {/* Header + Search */}
+            <h2 className="text-xl font-bold text-gray-900">
+              Search Medicines
             </h2>
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search for medicines"
-              className="w-full mt-2 border border-gray-300 bg-white rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-            />
+            <div className="relative mt-3">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="🔍 Type to search medicines..."
+                className="w-full border border-gray-300 bg-white rounded-2xl pl-4 pr-12 py-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none shadow-sm"
+              />
+              <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-500">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-5 h-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M21 21l-4.35-4.35M17 10.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
 
           {/* Medicine List */}
-          <div className="flex-1 px-4 py-2 space-y-3">
+          <div className="flex-1 px-6 py-4 space-y-4 ">
             {medicineList
               .filter((med) =>
                 med.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -152,15 +215,20 @@ const PharmacyOrder = ({ onUploadSubmit, onCartSubmit }) => {
               .map((med, idx) => (
                 <div
                   key={idx}
-                  className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border hover:shadow-md transition-all"
+                  className="flex justify-between items-center bg-white p-5 rounded-2xl shadow-md border border-gray-100 hover:shadow-lg transition-all duration-200"
                 >
+                  {/* Medicine Info */}
                   <div>
-                    <p className="text-gray-800 font-medium">{med.name}</p>
-                    <p className="text-gray-500 text-sm">{med.details}</p>
+                    <p className="text-gray-900 font-semibold text-base">
+                      {med.name}
+                    </p>
+                    <p className="text-gray-500 text-sm mt-1">{med.details}</p>
                   </div>
+
+                  {/* Add Button */}
                   <button
                     onClick={() => handleAddToCart(med)}
-                    className="w-9 h-9 flex items-center justify-center bg-blue-600 text-white rounded-full shadow-md hover:bg-blue-700 transition-all"
+                    className="w-10 h-10 flex items-center justify-center bg-blue-600 text-white rounded-full shadow-md hover:bg-blue-700 hover:scale-105 transition-transform duration-150"
                   >
                     <Plus className="w-5 h-5" />
                   </button>
@@ -172,7 +240,7 @@ const PharmacyOrder = ({ onUploadSubmit, onCartSubmit }) => {
           {cart.length > 0 && (
             <div className="sticky bottom-0 w-full p-4">
               <button
-                onClick={() => onCartSubmit(cart)}
+                  onClick={() => setIsCartOpen(true)}
                 className="w-full  bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-center gap-2 text-white py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all"
               >
                 <ShoppingCart className="w-5 h-5" />
@@ -182,6 +250,15 @@ const PharmacyOrder = ({ onUploadSubmit, onCartSubmit }) => {
           )}
         </div>
       )}
+       {/* Cart Modal */}
+      <CartModal
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        cartItems={cartItems}
+        onUpdateQty={handleUpdateQty}
+        onRemove={handleRemove}
+        onCheckout={handleCheckout}
+      />
     </div>
   );
 };
