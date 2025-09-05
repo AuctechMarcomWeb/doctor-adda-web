@@ -38,22 +38,21 @@ const Home = () => {
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(true);
   console.log("dfgfdg======>", data);
-  useEffect(() => {
+  const fetchUser = async () => {
     if (UserId) {
-      const fetchUser = async () => {
-        try {
-          const res = await getRequest(`auth/getUserById/${UserId}`);
-          console.log("User API response:", res.data.data);
-          dispatch(updateUserProfile(res?.data?.data));
-          dispatch(login({ userData: res?.data?.data }));
-        } catch (error) {
-          console.error("Error fetching user:", error);
-        }
-      };
-      fetchUser();
+      try {
+        const res = await getRequest(`auth/getUserById/${UserId}`);
+        dispatch(updateUserProfile(res?.data?.data));
+        dispatch(login({ userData: res?.data?.data }));
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
     }
-  }, [location.pathname, UserId, dispatch, update, open]);
+  };
 
+  useEffect(() => {
+    fetchUser();
+  }, [location.pathname, UserId, update]);
   useEffect(() => {
     getRequest(`banner?isPagination=false`)
       .then((res) => {
@@ -69,7 +68,15 @@ const Home = () => {
   }, []);
   return (
     <>
-      {!token && open ? <HealthcareRegistrationModal setOpen={setOpen} /> : ""}
+      {!token && open ? (
+        <HealthcareRegistrationModal
+          setOpen={setOpen}
+          onSuccess={() => {
+            setOpen(false); // close modal
+            fetchUser(); // immediately fetch updated user
+          }}
+        />
+      ) : null}
       {/* <MedicalHeroSection/> */}
 
       {/* <HomePageImagePopup data={data} /> */}

@@ -15,7 +15,7 @@ import { setCookieItem } from "../../Hooks/cookie";
 import DocumentsUpload from "./documentsUpload/documentsUpload";
 import toast from "react-hot-toast";
 
-const HealthcareRegistrationModal = ({ setOpen }) => {
+const HealthcareRegistrationModal = ({ setOpen, onSuccess }) => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [selectedCard, setSelectedCard] = useState("");
   const [formData, setFormData] = useState({});
@@ -781,7 +781,7 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
     // 1. Validate before building payload
     const isValid = validateForm();
     if (!isValid) {
-      toast.error("Please fill out all the highlighted fields")
+      toast.error("Please fill out all the highlighted fields");
       return;
     }
     setSubmitting(true);
@@ -931,7 +931,8 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
         );
         setCookieItem("Token", response?.data?.data?.token, 30);
         setCookieItem("UserId", response?.data?.data?.savedEntity?.userId, 30);
-
+        setCookieItem("loginTime", new Date().toISOString(), 30);
+        onSuccess();
         setIsModalOpen(false);
       } else {
         toast.error(
