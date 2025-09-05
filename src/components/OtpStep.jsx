@@ -24,8 +24,6 @@ const slides = [
   },
 ];
 
-
-
 const OtpStep = ({
   mobile = "",
   onVerifySuccess,
@@ -42,14 +40,13 @@ const OtpStep = ({
   const [resendTimer, setResendTimer] = useState(30);
   const [canResend, setCanResend] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
-  
+
   const otpRefs = useRef([]);
-   useEffect(() => {
-      window.scrollTo(0, 0);
-    }, []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
-
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   // Slider rotation
   useEffect(() => {
@@ -138,27 +135,22 @@ const OtpStep = ({
   };
 
   // Store authentication data
-  const handleAuthSuccess = (token) => {
+  const handleAuthSuccess = (token, id) => {
     try {
       // Store auth token using cookies
       if (token) {
-        setCookieItem("DoctorAddaPanel", token, 30);
-        setCookieItem("userMobile", mobile, 30);
-        setCookieItem("loginTime", new Date().toISOString(), 30);
+        setCookieItem("Token", token, 30);
       }
 
-      // Set user as authenticated
-      setCookieItem("isAuthenticated", "true", 30);
-
-      // Call custom auth success handler if provided
-      if (onAuthSuccess) {
-        onAuthSuccess({
-          token,
-          mobile,
-          isAuthenticated: true,
-          loginTime: new Date().toISOString(),
-        });
-      }
+      // // Call custom auth success handler if provided
+      // if (onAuthSuccess) {
+      //   onAuthSuccess({
+      //     token,
+      //     mobile,
+      //     isAuthenticated: true,
+      //     loginTime: new Date().toISOString(),
+      //   });
+      // }
     } catch (error) {
       console.error("Error storing auth data:", error);
     }
@@ -191,29 +183,29 @@ const OtpStep = ({
         if (!token) {
           throw new Error("Token not found in response");
         }
-        const userData = response?.data
-        console.log("userData", userData)
-        dispatch(login(userData))
-       // console.log("userData?.data?.isNew", userData?.data?.isNew)
+        const userData = response?.data;
+        console.log("userData", userData?.data?._id);
+        // dispatch(login(userData))
+        // console.log("userData?.data?.isNew", userData?.data?.isNew)
 
         // Update user profile for both new and existing users
-        if (userData?.data?.isNew === false) {
-          dispatch(updateUserProfile(userData.data));
-        }                                                                 
+        // if (userData?.data?.isNew === false) {
+        //   dispatch(updateUserProfile(userData.data));
+        // }
 
         setIsVerified(true);
-        handleAuthSuccess(token);
-        
+        handleAuthSuccess(token, userData?.data?._id);
+
         // Only navigate to UserDetails if user came from signup
         if (isFromSignup) {
           navigateToNextScreen();
         } else {
           // For login users, just show success and call the callback
-          toast.success("Login successful!")
+          toast.success("Login successful!");
 
           if (onLoginSuccess) {
             onLoginSuccess();
-            navigate("/location")
+            navigate("/location", { state: {userId: userData?.data?._id} });
           }
         }
       }
@@ -252,8 +244,8 @@ const OtpStep = ({
         cred,
       });
 
-      console.log(response?.data?.data?.otp)
-      toast.success('OTP sent successfully!');
+      console.log(response?.data?.data?.otp);
+      toast.success("OTP sent successfully!");
     } catch (error) {
       console.error("Error resending OTP:", error);
       alert("Failed to resend OTP. Please try again.");

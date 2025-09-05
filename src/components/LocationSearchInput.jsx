@@ -6,10 +6,12 @@ const LocationSearchInput = ({ value, onSelect }) => {
   const [places, setPlaces] = useState([]);
   const [detailsVisible, setDetailsVisible] = useState(false);
   const [location, setLocation] = useState(null);
-  const [permissionStatus, setPermissionStatus] = useState('pending');
-  const apiKey = "AIzaSyAQqh6qd0umyH9zAmfsfbVHuMvFcN_m3kQ";
+  const [permissionStatus, setPermissionStatus] = useState("pending");
+
+  // ✅ Load from .env (Vite convention)
+  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+
   const url = "https://places.googleapis.com/v1/places:searchText";
-  //const geocodeUrl = "https://maps.googleapis.com/maps/api/geocode/json";
 
   // 🧹 Clean Plus Code from address
   const cleanAddress = (address) => {
@@ -46,7 +48,6 @@ const LocationSearchInput = ({ value, onSelect }) => {
       );
 
       if (response.data?.places) {
-        // 🧹 Clean all addresses in search results
         const cleaned = response.data.places.map((p) => ({
           ...p,
           formattedAddress: cleanAddress(p.formattedAddress),
@@ -78,55 +79,56 @@ const LocationSearchInput = ({ value, onSelect }) => {
     });
   };
 
-  // 📍 Handle current location
-const handleCurrentLocation = async () => {
-  try {
-    if (!navigator.geolocation) {
-      setPermissionStatus("unsupported");
-      return;
-    }
-    const position = await new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(resolve, reject, {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 60000,
+  // 📍 Handle current location with Google Geocoding API
+  const handleCurrentLocation = async () => {
+    try {
+      if (!navigator.geolocation) {
+        setPermissionStatus("unsupported");
+        return;
+      }
+
+      const position = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 60000,
+        });
       });
-    });
 
-    const { latitude, longitude } = position.coords;
-    console.log("Fetched Location:", latitude, longitude);
+      const { latitude, longitude } = position.coords;
+      console.log("Fetched Location:", latitude, longitude);
 
-    setLocation({ latitude, longitude });
-    setPermissionStatus("granted");
+      setLocation({ latitude, longitude });
+      setPermissionStatus("granted");
 
-    // 🌍 Reverse geocoding (OpenStreetMap Nominatim API)
-    const res = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-    );
-    const data = await res.json();
+      // 🌍 Reverse geocoding with Google API
+      const res = await axios.get(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`
+      );
 
-    const currentAddress = data.display_name || `${latitude}, ${longitude}`;
+      let currentAddress = `${latitude}, ${longitude}`;
+      if (res.data?.results?.length > 0) {
+        currentAddress = res.data.results[0].formatted_address;
+      }
 
-    // Input box me set karo
-    setSearchTerm(currentAddress);
+      setSearchTerm(currentAddress);
 
-    // ✅ onSelect ko call karo
-    onSelect({
-      address: currentAddress,
-      latitude,
-      longitude,
-      location: {
-        type: "Point",
-        coordinates: [longitude, latitude],
-      },
-    });
+      onSelect({
+        address: currentAddress,
+        latitude,
+        longitude,
+        location: {
+          type: "Point",
+          coordinates: [longitude, latitude],
+        },
+      });
 
-    setDetailsVisible(false);
-  } catch (error) {
-    console.error("Location permission error:", error);
-    setPermissionStatus("denied");
-  }
-};
+      setDetailsVisible(false);
+    } catch (error) {
+      console.error("Location permission error:", error);
+      setPermissionStatus("denied");
+    }
+  };
 
   return (
     <div className="space-y-2 group">
@@ -144,9 +146,8 @@ const handleCurrentLocation = async () => {
           onClick={handleCurrentLocation}
           className="px-4 py-2 bg-gradient-to-r from-blue-600 to-green-600 text-white rounded-lg hover:from-blue-700 hover:to-green-700 whitespace-nowrap"
         >
-          📍Current Location
+          📍 Current Location
         </button>
-        
       </div>
 
       {/* Suggestions Dropdown */}
