@@ -82,6 +82,14 @@ const HospitalRegistrationForm = ({
       facilities: updatedFacilities,
     }));
   };
+  useEffect(() => {
+    if (!formData.facilities || formData.facilities.length === 0) {
+      setFormData((prev) => ({
+        ...prev,
+        facilities: [{ name: "", discription: "" }],
+      }));
+    }
+  }, []);
 
   return (
     <>

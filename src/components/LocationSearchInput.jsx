@@ -137,7 +137,7 @@ const handleCurrentLocation = async () => {
           value={searchTerm}
           onChange={handleSearch}
           placeholder="Search for a location"
-          className="w-full px-4 py-2 border rounded-md"
+          className="w-full px-4 py-2 border border-gray-300 rounded-md"
         />
         <button
           type="button"
@@ -151,7 +151,7 @@ const handleCurrentLocation = async () => {
 
       {/* Suggestions Dropdown */}
       {detailsVisible && places.length > 0 && (
-        <div className="absolute bg-white border rounded shadow w-full z-10 mt-1 max-h-60 overflow-auto">
+        <div className="absolute bg-white border border-gray-300 rounded shadow w-full z-10 mt-1 max-h-60 overflow-auto">
           {places.map((place, idx) => (
             <div
               key={idx}

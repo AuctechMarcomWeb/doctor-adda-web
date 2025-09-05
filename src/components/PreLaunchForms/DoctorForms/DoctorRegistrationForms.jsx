@@ -239,6 +239,28 @@ const DoctorRegistrationForm = ({
     });
   };
 
+  useEffect(() => {
+    if (!formData.clinics || formData.clinics.length === 0) {
+      setFormData((prev) => ({
+        ...prev,
+        clinics: [
+          {
+            clinicName: "",
+            clinicAddress: "",
+            consultationFee: "",
+            startTime: "",
+            endTime: "",
+            duration: "",
+            videoStartTime: "",
+            videoEndTime: "",
+            videoDuration: "",
+            location: { type: "Point", coordinates: [0, 0] },
+          },
+        ],
+      }));
+    }
+  }, [formData.clinics, setFormData]);
+
   return (
     <>
       <h3 className="text-xl font-semibold text-[#005b8e] mb-4">
@@ -259,7 +281,7 @@ const DoctorRegistrationForm = ({
             name="dob"
             value={formData?.dob}
             onChange={handleInputChange}
-            className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500"
           />
           {errors?.dob && <p className="text-red-500 text-xs">{errors?.dob}</p>}
         </div>
@@ -272,7 +294,7 @@ const DoctorRegistrationForm = ({
             value={formData?.gender}
             name="gender"
             onChange={handleInputChange}
-            className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500"
           >
             <option value="">Select Gender</option>
             <option value="Male">Male</option>
@@ -283,12 +305,22 @@ const DoctorRegistrationForm = ({
             <p className="text-red-500 text-xs">{errors?.gender}</p>
           )}
         </div>
-        {renderInput(
-          "About",
-          "textarea",
-          "about",
-          "Enter description for yourself"
-        )}
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-gray-700">
+            Select Hospital
+          </label>
+          <select
+            name="hospital"
+            value={formData.hospital || ""}
+            onChange={handleInputChange}
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">Select Hospital</option>
+            {hospitalOption}
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
         {renderInput(
           "Medical Qualification",
           "text",
@@ -312,7 +344,7 @@ const DoctorRegistrationForm = ({
             name="category"
             value={formData?.category || ""} // 👈 ensures default empty
             onChange={handleInputChange}
-            className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500"
           >
             <option value="" disabled>
               Select Your Specialization
@@ -329,6 +361,7 @@ const DoctorRegistrationForm = ({
         </div>
 
         {/* Service type */}
+        {/* Service type */}
         <div className="col-md-6 space-y-2">
           <label className="form-label">Service Type</label>
           <Select
@@ -337,7 +370,15 @@ const DoctorRegistrationForm = ({
             style={{ width: "100%" }}
             placeholder="Please select"
             defaultValue={[]}
-            onChange={categoryName === "Veterinary" ? selectData1 : selectData2}
+            onChange={(value) => {
+              if (categoryName === "Veterinary") {
+                selectData1(value);
+                if (value.length > 0) clearError("veterinaryserviceType"); // ✅ clear error
+              } else {
+                selectData2(value);
+                if (value.length > 0) clearError("serviceType"); // ✅ clear error
+              }
+            }}
             options={
               categoryName === "Veterinary"
                 ? veterinaryserviceType
@@ -372,13 +413,18 @@ const DoctorRegistrationForm = ({
               style={{ width: "100%" }}
               placeholder="Select Services"
               defaultValue={[]}
-              onChange={selectData}
+              onChange={(value) => {
+                selectData(value);
+                if (value.length > 0) clearError("veterinaryDoctorType"); // ✅ clear error
+              }}
               size="large"
               options={serviceProvideOption}
               value={formData?.veterinaryDoctorType}
             />
-            {errors?.serviceType && (
-              <p className="text-red-500 text-xs">{errors?.serviceType}</p>
+            {errors?.veterinaryDoctorType && (
+              <p className="text-red-500 text-xs">
+                {errors?.veterinaryDoctorType}
+              </p>
             )}
           </div>
         ) : (
@@ -513,6 +559,13 @@ const DoctorRegistrationForm = ({
         )}
       </div>
 
+      {renderInput(
+        "About",
+        "textarea",
+        "about",
+        "Enter description for yourself"
+      )}
+
       {/* Clinics */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
@@ -568,6 +621,7 @@ const DoctorRegistrationForm = ({
               {/* Row 1 → Clinic Name */}
               {/* Clinic Name + Fee */}
               <div className="grid md:grid-cols-2 gap-4">
+                {/* Clinic Name */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">
                     Clinic Name
@@ -580,15 +634,20 @@ const DoctorRegistrationForm = ({
                       const newClinics = [...formData.clinics];
                       newClinics[index].clinicName = e.target.value;
                       setFormData({ ...formData, clinics: newClinics });
+
+                      if (e.target.value.trim())
+                        clearError(`clinicName_${index}`);
                     }}
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   />
-                  {errors?.[`clinics.${index}.clinicName`] && (
+                  {errors[`clinicName_${index}`] && (
                     <p className="text-red-500 text-xs">
-                      {errors[`clinics.${index}.clinicName`]}
+                      {errors[`clinicName_${index}`]}
                     </p>
                   )}
                 </div>
+
+                {/* Consultation Fee */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">
                     Consultation Fee
@@ -601,12 +660,14 @@ const DoctorRegistrationForm = ({
                       const newClinics = [...formData.clinics];
                       newClinics[index].consultationFee = e.target.value;
                       setFormData({ ...formData, clinics: newClinics });
+                      if (e.target.value.trim())
+                        clearError(`consultationFee_${index}`);
                     }}
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
                   />
-                  {errors?.[`clinics.${index}.consultationFee`] && (
+                  {errors[`consultationFee_${index}`] && (
                     <p className="text-red-500 text-xs">
-                      {errors[`clinics.${index}.consultationFee`]}
+                      {errors[`consultationFee_${index}`]}
                     </p>
                   )}
                 </div>
@@ -618,86 +679,57 @@ const DoctorRegistrationForm = ({
                   Clinic Availability
                 </label>
                 <div className="grid md:grid-cols-3 gap-4">
-                  <input
-                    type="time"
-                    value={clinic?.startTime}
-                    onChange={(e) => {
-                      const newClinics = [...formData.clinics];
-                      newClinics[index].startTime = e.target.value;
-                      setFormData({ ...formData, clinics: newClinics });
-                    }}
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500"
-                  />
-                  <input
-                    type="time"
-                    value={clinic?.endTime}
-                    onChange={(e) => {
-                      const newClinics = [...formData.clinics];
-                      newClinics[index].endTime = e.target.value;
-                      setFormData({ ...formData, clinics: newClinics });
-                    }}
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500"
-                  />
-                  <select
-                    value={clinic?.duration}
-                    onChange={(e) => {
-                      const newClinics = [...formData.clinics];
-                      newClinics[index].duration = e.target.value;
-                      setFormData({ ...formData, clinics: newClinics });
-                    }}
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
-                  >
-                    <option value="">Duration Per Patient</option>
-                    <option value="15">15 min</option>
-                    <option value="30">30 min</option>
-                    <option value="45">45 min</option>
-                    <option value="60">60 min</option>
-                    <option value="90">90 min</option>
-                    <option value="120">120 min</option>
-                  </select>
-                </div>
-                {errors?.[`clinics.${index}.duration`] && (
-                  <p className="text-red-500 text-xs">
-                    {errors[`clinics.${index}.duration`]}
-                  </p>
-                )}
-              </div>
+                  {/* Start Time */}
+                  <div className="space-y-2">
+                    <input
+                      type="time"
+                      value={clinic?.startTime}
+                      onChange={(e) => {
+                        const newClinics = [...formData.clinics];
+                        newClinics[index].startTime = e.target.value;
+                        setFormData({ ...formData, clinics: newClinics });
+                        if (e.target.value) clearError(`startTime_${index}`);
+                      }}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500"
+                    />
+                    {errors[`startTime_${index}`] && (
+                      <p className="text-red-500 text-xs">
+                        {errors[`startTime_${index}`]}
+                      </p>
+                    )}
+                  </div>
 
-              {/* Video Consulting */}
-              {formData?.serviceType?.includes("Video Consultation") && (
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
-                    Video Consulting Availability
-                  </label>
-                  <div className="grid md:grid-cols-3 gap-4">
+                  {/* End Time */}
+                  <div className="space-y-2">
                     <input
                       type="time"
-                      value={clinic?.videoStartTime}
+                      value={clinic?.endTime}
                       onChange={(e) => {
                         const newClinics = [...formData.clinics];
-                        newClinics[index].videoStartTime = e.target.value;
+                        newClinics[index].endTime = e.target.value;
                         setFormData({ ...formData, clinics: newClinics });
+                        if (e.target.value) clearError(`endTime_${index}`);
                       }}
-                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500"
                     />
-                    <input
-                      type="time"
-                      value={clinic?.videoEndTime}
-                      onChange={(e) => {
-                        const newClinics = [...formData.clinics];
-                        newClinics[index].videoEndTime = e.target.value;
-                        setFormData({ ...formData, clinics: newClinics });
-                      }}
-                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
-                    />
+                    {errors[`endTime_${index}`] && (
+                      <p className="text-red-500 text-xs">
+                        {errors[`endTime_${index}`]}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Duration */}
+                  <div className="space-y-2">
                     <select
-                      value={clinic?.videoDuration}
+                      value={clinic?.duration}
                       onChange={(e) => {
                         const newClinics = [...formData.clinics];
-                        newClinics[index].videoDuration = e.target.value;
+                        newClinics[index].duration = e.target.value;
                         setFormData({ ...formData, clinics: newClinics });
+                        if (e.target.value) clearError(`duration_${index}`);
                       }}
-                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
                     >
                       <option value="">Duration Per Patient</option>
                       <option value="15">15 min</option>
@@ -707,12 +739,92 @@ const DoctorRegistrationForm = ({
                       <option value="90">90 min</option>
                       <option value="120">120 min</option>
                     </select>
+                    {errors[`duration_${index}`] && (
+                      <p className="text-red-500 text-xs">
+                        {errors[`duration_${index}`]}
+                      </p>
+                    )}
                   </div>
-                  {errors?.[`clinics.${index}.videoDuration`] && (
-                    <p className="text-red-500 text-xs">
-                      {errors[`clinics.${index}.videoDuration`]}
-                    </p>
-                  )}
+                </div>
+              </div>
+
+              {/* Video Consulting */}
+              {formData?.serviceType?.includes("Video Consultation") && (
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">
+                    Video Consulting Availability
+                  </label>
+                  <div className="grid md:grid-cols-3 gap-4">
+                    {/* Video Start */}
+                    <div className="space-y-2">
+                      <input
+                        type="time"
+                        value={clinic?.videoStartTime}
+                        onChange={(e) => {
+                          const newClinics = [...formData.clinics];
+                          newClinics[index].videoStartTime = e.target.value;
+                          setFormData({ ...formData, clinics: newClinics });
+                          if (e.target.value)
+                            clearError(`videoStartTime_${index}`);
+                        }}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                      />
+                      {errors[`videoStartTime_${index}`] && (
+                        <p className="text-red-500 text-xs">
+                          {errors[`videoStartTime_${index}`]}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Video End */}
+                    <div className="space-y-2">
+                      <input
+                        type="time"
+                        value={clinic?.videoEndTime}
+                        onChange={(e) => {
+                          const newClinics = [...formData.clinics];
+                          newClinics[index].videoEndTime = e.target.value;
+                          setFormData({ ...formData, clinics: newClinics });
+                          if (e.target.value)
+                            clearError(`videoEndTime_${index}`);
+                        }}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                      />
+                      {errors[`videoEndTime_${index}`] && (
+                        <p className="text-red-500 text-xs">
+                          {errors[`videoEndTime_${index}`]}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Video Duration */}
+                    <div className="space-y-2">
+                      <select
+                        value={clinic?.videoDuration}
+                        onChange={(e) => {
+                          const newClinics = [...formData.clinics];
+                          newClinics[index].videoDuration = e.target.value;
+                          setFormData({ ...formData, clinics: newClinics });
+                          if (e.target.value)
+                            clearError(`videoDuration_${index}`);
+                        }}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                      >
+                        <option value="">Duration Per Patient</option>
+                        <option value="15">15 min</option>
+                        <option value="30">30 min</option>
+                        <option value="45">45 min</option>
+                        <option value="60">60 min</option>
+                        <option value="90">90 min</option>
+                        <option value="120">120 min</option>
+                      </select>
+                      {errors[`videoDuration_${index}`] && (
+                        <p className="text-red-500 text-xs">
+                          {errors[`videoDuration_${index}`]}
+                        </p>
+                      )}
+                    </div>
+                  </div>
                 </div>
               )}
 
@@ -730,11 +842,12 @@ const DoctorRegistrationForm = ({
                       updatedClinics[index].clinicAddress = place.address;
                       updatedClinics[index].location = place.location;
                       setFormData({ ...formData, clinics: updatedClinics });
+                      clearError(`clinicAddress_${index}`);
                     }}
                   />
-                  {errors?.[`clinics.${index}.clinicAddress`] && (
+                  {errors[`clinicAddress_${index}`] && (
                     <p className="text-red-500 text-xs">
-                      {errors[`clinics.${index}.clinicAddress`]}
+                      {errors[`clinicAddress_${index}`]}
                     </p>
                   )}
                 </div>
@@ -808,22 +921,6 @@ const DoctorRegistrationForm = ({
               </label>
             </div>
           </div>
-        </div>
-
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-700">
-            Select Hospital
-          </label>
-          <select
-            name="hospital"
-            value={formData.hospital || ""}
-            onChange={handleInputChange}
-            className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">Select Hospital</option>
-            {hospitalOption}
-            <option value="Other">Other</option>
-          </select>
         </div>
       </div>
     </>

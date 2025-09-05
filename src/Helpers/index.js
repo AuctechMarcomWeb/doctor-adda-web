@@ -5,7 +5,7 @@ import { confirmDialog } from "primereact/confirmdialog";
 import toast from "react-hot-toast";
 
 // Function to fetch the latest token from cookie
-export const getToken = () => Cookies.get("DoctorAddaPanel");
+export const getToken = () => Cookies.get(["DoctorAddaPanel", "Token"]);
 
 export const request = async (props) => {
 
