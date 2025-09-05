@@ -6,8 +6,23 @@ const PharmacyOrder = ({ onUploadSubmit, onCartSubmit }) => {
   const [mode, setMode] = useState("upload"); // "upload" or "select"
   const [prescription, setPrescription] = useState(null);
   const [description, setDescription] = useState("");
-  const [medicineList, setMedicineList] = useState([]); // selected medicines
+ 
   const [searchTerm, setSearchTerm] = useState("");
+ 
+  const [medicineList, setMedicineList] = useState([
+    { name: "Paracetamol", details: "500mg" },
+    { name: "Cilacar 10", details: "10mg" },
+    { name: "Disprin", details: "Headache" },
+    { name: "Olsar", details: "20 mg" },
+    { name: "Vff", details: "Xdff" },
+  ]);
+  const [cart, setCart] = useState([]);
+
+  const handleAddToCart = (med) => {
+    if (!cart.includes(med)) {
+      setCart([...cart, med]);
+    }
+  };
 
   // handle prescription upload
   const handleFileChange = (e) => {
@@ -113,56 +128,58 @@ const PharmacyOrder = ({ onUploadSubmit, onCartSubmit }) => {
 
       {/* Select Medicines Flow */}
       {mode === "select" && (
-        <div>
-          <label className="block mb-2 font-medium text-gray-700">
-            Search and Add Medicines
-          </label>
-          <div className="flex gap-2">
+        <div className="relative  flex flex-col">
+          {/* Header */}
+          <div className="px-4 py-3   sticky top-0 z-10">
+            <h2 className="text-lg font-semibold text-gray-800">
+              Search for medicines
+            </h2>
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Enter medicine name"
-              className="flex-1 border border-gray-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+              placeholder="Search for medicines"
+              className="w-full mt-2 border border-gray-300 bg-white rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
             />
-            <button
-              onClick={handleAddMedicine}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all"
-            >
-              <Plus className="w-5 h-5" />
-            </button>
           </div>
 
-          {/* List of added medicines */}
-          {medicineList.length > 0 && (
-            <div className="mt-4 space-y-2">
-              {medicineList.map((med, idx) => (
+          {/* Medicine List */}
+          <div className="flex-1 px-4 py-2 space-y-3">
+            {medicineList
+              .filter((med) =>
+                med.name.toLowerCase().includes(searchTerm.toLowerCase())
+              )
+              .map((med, idx) => (
                 <div
                   key={idx}
-                  className="flex justify-between items-center bg-white p-3 rounded-lg border"
+                  className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border hover:shadow-md transition-all"
                 >
-                  <span className="text-sm font-medium text-gray-700">
-                    {med}
-                  </span>
+                  <div>
+                    <p className="text-gray-800 font-medium">{med.name}</p>
+                    <p className="text-gray-500 text-sm">{med.details}</p>
+                  </div>
                   <button
-                    onClick={() => handleRemoveMedicine(idx)}
-                    className="text-red-500 text-sm"
+                    onClick={() => handleAddToCart(med)}
+                    className="w-9 h-9 flex items-center justify-center bg-blue-600 text-white rounded-full shadow-md hover:bg-blue-700 transition-all"
                   >
-                    Remove
+                    <Plus className="w-5 h-5" />
                   </button>
                 </div>
               ))}
+          </div>
+
+          {/* View Cart Button */}
+          {cart.length > 0 && (
+            <div className="sticky bottom-0 w-full p-4">
+              <button
+                onClick={() => onCartSubmit(cart)}
+                className="w-full  bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-center gap-2 text-white py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all"
+              >
+                <ShoppingCart className="w-5 h-5" />
+                View Cart ({cart.length})
+              </button>
             </div>
           )}
-
-          <button
-            onClick={() => onCartSubmit(medicineList)}
-            disabled={medicineList.length === 0}
-            className="mt-6 w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl disabled:opacity-50"
-          >
-            <ShoppingCart className="w-5 h-5" />
-            Add to Cart
-          </button>
         </div>
       )}
     </div>

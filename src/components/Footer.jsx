@@ -166,7 +166,7 @@ const Footer = () => {
                 to="/price-policy"
                 className="text-gray-400 hover:text-white transition-colors cursor-pointer"
               >
-                Pricing AndShipping Policy
+                Pricing And Shipping Policy
               </Link>
             </div>
           </div>
