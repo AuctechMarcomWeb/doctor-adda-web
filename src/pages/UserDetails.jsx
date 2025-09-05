@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateUserProfile } from "../redux/slices/userSlice";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { patchRequest } from "../Helpers";
 const slides = [
   {
     image:
@@ -118,13 +119,12 @@ const UserDetails = ({ onSubmitSuccess }) => {
     console.log("User Data to Submit: cred", cred);
 
     try {
-
-      if (onSubmitSuccess) {
-        onSubmitSuccess(userData);
-      } else {
-        toast.success("Profile details saved!");
-      }
-
+      const res = await patchRequest({
+        url: `auth/updateProfile/${userId}`,
+        cred,
+      });
+      console.log("User Detail screen response", res)
+      toast.success("Profile details saved!");
       navigate("/location", { state: { userId: userId } });
     } catch (err) {
       console.error("Error saving profile data:", err);
