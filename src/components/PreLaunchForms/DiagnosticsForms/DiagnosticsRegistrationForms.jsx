@@ -8,6 +8,7 @@ const DiagnosticsRegistrationForms = ({
   setFormData,
   errors = {},
   setErrors, // ✅ need setter for errors
+  // clearError
 }) => {
   const [packages, setPackages] = useState([
     { name: "", price: "", details: "" },
@@ -127,18 +128,6 @@ const DiagnosticsRegistrationForms = ({
           handleInputChange,
           errors.phone
         )}
-
-        {/* Description - 2 Column */}
-        <div className="grid md:grid-cols gap-6">
-          {renderInput(
-            "Description",
-            "textarea",
-            "description",
-            "Enter description",
-            handleInputChange,
-            errors.description
-          )}
-        </div>
       </div>
 
       {/* Blood Bank & Home Collection Checkboxes */}
@@ -181,18 +170,19 @@ const DiagnosticsRegistrationForms = ({
           </label>
         </div>
       </div>
-
-      {/* Address - Full Width */}
-      <div className="mt-4">
+      {/* Description - 2 Column */}
+      <div className="grid md:grid-cols gap-6">
         {renderInput(
-          "Address",
+          "Description",
           "textarea",
-          "address",
-          "Enter full address",
+          "description",
+          "Enter description",
           handleInputChange,
-          errors.address
+          errors.description
         )}
       </div>
+      {/* Address - Full Width */}
+      {renderInput("Address", "textarea", "address", "Enter full address")}
 
       {/* Services Section */}
       <div className="space-y-4 mt-6">
@@ -210,16 +200,18 @@ const DiagnosticsRegistrationForms = ({
 
         <div className="grid md:grid-cols-2 gap-2">
           {services.map((service, index) => (
-            <div key={index} className="relative p-4 bg-gray-50 rounded-xl">
+            <div key={index} className="relative bg-gray-50 rounded-xl">
               {/* Input */}
               <input
                 type="text"
                 placeholder="Service name (e.g., ICU, X-Ray)"
                 value={service?.name}
-                onChange={(e) =>
-                  handleServicesChange(index, "name", e.target.value)
-                }
-                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                onChange={(e) => {
+                  handleServicesChange(index, "name", e.target.value);
+                  if (e.target.value.trim())
+                    clearError("services", index, "name"); // <-- FIX
+                }}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               />
 
               {/* Error message */}
@@ -242,10 +234,6 @@ const DiagnosticsRegistrationForms = ({
             </div>
           ))}
         </div>
-
-        {typeof errors.services === "string" && (
-          <p className="text-red-500 text-xs">{errors.services}</p>
-        )}
       </div>
 
       {/* Packages Section */}
@@ -266,7 +254,7 @@ const DiagnosticsRegistrationForms = ({
           {packages.map((pkg, index) => (
             <div
               key={index}
-              className="grid md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-xl"
+              className="grid md:grid-cols-3 gap-4 bg-gray-50 rounded-xl"
             >
               {/* Name */}
               <div className="space-y-1">
@@ -277,10 +265,12 @@ const DiagnosticsRegistrationForms = ({
                   type="text"
                   placeholder="Package name"
                   value={pkg?.name}
-                  onChange={(e) =>
-                    handlePackageChange(index, "name", e.target.value)
-                  }
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  onChange={(e) => {
+                    handlePackageChange(index, "name", e.target.value);
+                    if (e.target.value.trim())
+                      clearError("packages", index, "name"); // <-- FIX
+                  }}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
                 {errors.packages?.[index]?.name && (
                   <p className="text-red-500 text-xs">
@@ -298,10 +288,12 @@ const DiagnosticsRegistrationForms = ({
                   type="number"
                   placeholder="Price"
                   value={pkg?.price}
-                  onChange={(e) =>
-                    handlePackageChange(index, "price", e.target.value)
-                  }
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  onChange={(e) => {
+                    handlePackageChange(index, "price", e.target.value);
+                    if (e.target.value.trim())
+                      clearError("packages", index, "price");
+                  }}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
                 {errors.packages?.[index]?.price && (
                   <p className="text-red-500 text-xs">
@@ -320,10 +312,12 @@ const DiagnosticsRegistrationForms = ({
                     type="text"
                     placeholder="Details"
                     value={pkg?.details}
-                    onChange={(e) =>
-                      handlePackageChange(index, "details", e.target.value)
-                    }
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                    onChange={(e) => {
+                      handlePackageChange(index, "details", e.target.value);
+                      if (e.target.value.trim())
+                        clearError("packages", index, "details");
+                    }}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   />
                   {packages.length > 1 && (
                     <button
@@ -349,7 +343,7 @@ const DiagnosticsRegistrationForms = ({
       {/* Store Timings */}
       <div className="space-y-2 mt-6">
         <label className="text-sm font-medium text-gray-700">
-          Clinic Availability
+          Diagnostics Opening Hours
         </label>
         <div className="grid grid-cols-2 gap-6">
           {/* Start Time */}
@@ -357,8 +351,11 @@ const DiagnosticsRegistrationForms = ({
             <input
               type="time"
               value={formData?.startTime}
-              onChange={(e) => handleInputChange("startTime", e.target.value)}
-              className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-gray-500"
+              onChange={(e) => {
+                handleInputChange("startTime", e.target.value);
+                if (e.target.value) clearError("startTime"); // <-- FIX
+              }}
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gray-500"
             />
             {errors.startTime && (
               <p className="text-red-500 text-xs">{errors.startTime}</p>
@@ -370,8 +367,11 @@ const DiagnosticsRegistrationForms = ({
             <input
               type="time"
               value={formData?.endTime}
-              onChange={(e) => handleInputChange("endTime", e.target.value)}
-              className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-gray-500"
+              onChange={(e) => {
+                handleInputChange("endTime", e.target.value);
+                if (e.target.value) clearError("endTime"); // <-- FIX
+              }}
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gray-500"
             />
             {errors.endTime && (
               <p className="text-red-500 text-xs">{errors.endTime}</p>

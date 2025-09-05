@@ -87,12 +87,7 @@ const AmbulanceRegistrationForm = ({
           </div>
         </div>
         {/* Row 3: Description + Operating Hours */}
-        {renderInput(
-          "Description",
-          "textarea",
-          "description",
-          "Enter description"
-        )}
+
         <div className="space-y-2 group">
           <label className="text-sm font-medium text-gray-700">
             Operating Hours
@@ -103,7 +98,7 @@ const AmbulanceRegistrationForm = ({
             onChange={(e) =>
               handleInputChange("operatingHours", e.target.value)
             }
-            className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-gray-500"
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gray-500"
             placeholder="Operating Hours of ambulance service"
           />
           {errors.operatingHours && (
@@ -119,7 +114,7 @@ const AmbulanceRegistrationForm = ({
           <select
             value={formData?.ambulanceType}
             onChange={(e) => handleInputChange("ambulanceType", e.target.value)}
-            className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500"
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500"
           >
             <option value="">Select Options</option>
             <option value="BLS - Basic Life Support">
@@ -144,7 +139,7 @@ const AmbulanceRegistrationForm = ({
             onChange={(e) =>
               handleInputChange("ambulanceNumber", e.target.value)
             }
-            className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-green-500"
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500"
           >
             <option value="">Select Options</option>
             <option value="1">1</option>
@@ -192,17 +187,13 @@ const AmbulanceRegistrationForm = ({
         )}
         {renderInput("Price", "number", "price", "Enter service charge")}
       </div>
-
-      <div className="space-y-2 group">
-        <label className="text-sm font-medium text-gray-700">Address</label>
-        <LocationSearchInput
-          value={formData?.address}
-          onSelect={(place) => setFormData((prev) => ({ ...prev, ...place }))}
-        />
-        {errors.address && (
-          <p className="text-red-500 text-sm">{errors.address}</p>
-        )}
-      </div>
+      {renderInput(
+        "Description",
+        "textarea",
+        "description",
+        "Enter description"
+      )}
+      {renderInput("Address", "textarea", "address", "Enter full address")}
 
       {/* Driver Info (full row) */}
       <div className="space-y-4 mt-6">
@@ -236,7 +227,7 @@ const AmbulanceRegistrationForm = ({
                   onChange={(e) =>
                     handleDriverChange(index, "name", e.target.value)
                   }
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
@@ -256,7 +247,7 @@ const AmbulanceRegistrationForm = ({
                       .slice(0, 10);
                     handleDriverChange(index, "phone", e.target.value);
                   }}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
@@ -273,7 +264,7 @@ const AmbulanceRegistrationForm = ({
                     onChange={(e) =>
                       handleDriverChange(index, "licenseNumber", e.target.value)
                     }
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   />
                   {drivers.length > 1 && (
                     <button

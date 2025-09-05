@@ -14,6 +14,7 @@ const PharmacyRegistrationForms = ({
   formData,
   setFormData,
   errors = {},
+  clearError,
 }) => {
   const [services, setservices] = useState([{ name: "", discription: "" }]);
 
@@ -22,6 +23,9 @@ const PharmacyRegistrationForms = ({
     updated[index][field] = value;
     setservices(updated);
     setFormData((prev) => ({ ...prev, services: updated })); // ✅ sync
+    if (value.trim()) {
+      clearError("services", index, field); // ✅ clears service errors
+    }
   };
 
   const addService = () => {
@@ -41,6 +45,9 @@ const PharmacyRegistrationForms = ({
   const handleInputChange = (name, value) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
     console.log("Pharmacy formdata", formData);
+    if (value?.toString().trim()) {
+      clearError(name); // ✅ clears simple field errors
+    }
   };
   return (
     <>
@@ -59,15 +66,6 @@ const PharmacyRegistrationForms = ({
 
         {/* Address*/}
 
-        {/* Description */}
-        {renderInput(
-          "Description",
-          "textarea",
-          "description",
-          "Enter description",
-          1
-        )}
-
         {/* Store Timings */}
         <div className="space-y-2 group">
           <label className="text-sm font-medium text-gray-700">
@@ -76,8 +74,11 @@ const PharmacyRegistrationForms = ({
           <input
             type="text"
             value={formData?.storeTiming}
-            onChange={(e) => handleInputChange("storeTiming", e.target.value)}
-            className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-500"
+            onChange={(e) => {
+              handleInputChange("storeTiming", e.target.value);
+              if (e.target.value.trim()) clearError("storeTiming"); // ✅
+            }}
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500"
             placeholder="Ex: 9:00 AM - 9:00 PM"
           />
           {errors.storeTiming && (
@@ -85,6 +86,14 @@ const PharmacyRegistrationForms = ({
           )}
         </div>
       </div>
+      {/* Description */}
+      {renderInput(
+        "Description",
+        "textarea",
+        "description",
+        "Enter description"
+      )}
+
       {renderInput("Address", "textarea", "address", "Enter full address")}
 
       {/* services Section */}
@@ -117,7 +126,7 @@ const PharmacyRegistrationForms = ({
                   onChange={(e) =>
                     handleServiceChange(index, "name", e.target.value)
                   }
-                  className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 w-full"
+                  className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 w-full"
                 />
                 {errors[`serviceName_${index}`] && (
                   <p className="text-red-500 text-sm">
@@ -135,7 +144,7 @@ const PharmacyRegistrationForms = ({
                     onChange={(e) =>
                       handleServiceChange(index, "discription", e.target.value)
                     }
-                    className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 w-full"
+                    className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 w-full"
                   />
                   {errors[`serviceDescription_${index}`] && (
                     <p className="text-red-500 text-sm">
@@ -161,89 +170,103 @@ const PharmacyRegistrationForms = ({
           <p className="text-red-500 text-sm">{errors.services}</p>
         )}
       </div>
+      <div className="grid md:grid-cols-2 gap-6">
+        {/* Owner Name */}
+        {renderInput("Owner Name", "text", "ownerName", "Enter owner name")}
 
-      {/* Owner Name */}
-      {renderInput("Owner Name", "text", "ownerName", "Enter owner name")}
+        {/* GST Number */}
+        {renderInput("GST Number", "text", "gstNumber", "Enter GST number")}
 
-      {/* GST Number */}
-      {renderInput("GST Number", "text", "gstNumber", "Enter GST number")}
-
-      {/* Verification Phone */}
-      {renderInput(
-        "Verification Phone",
-        "tel",
-        "phoneNumber",
-        "Enter verification phone"
-      )}
-
-      {/* COD Preference */}
-      <div className="space-y-2 group">
-        <label className="text-sm font-medium text-gray-700">
-          COD Preference
-        </label>
-        <div className="flex gap-4">
-          <button
-            type="button"
-            onClick={() => handleInputChange("cod", "true")}
-            className={`w-full px-4 py-3 border rounded-xl font-medium transition-all duration-200
+        {/* Verification Phone */}
+        {renderInput(
+          "Verification Phone",
+          "tel",
+          "phoneNumber",
+          "Enter verification phone"
+        )}
+      </div>
+      <div className="grid md:grid-cols-2 gap-6">
+        {/* COD Preference */}
+        <div className="space-y-2 group">
+          <label className="text-sm font-medium text-gray-700">
+            COD Preference
+          </label>
+          <div className="flex gap-4">
+            <button
+              type="button"
+              onClick={() => {
+                handleInputChange("cod", "true");
+                clearError("cod"); // ✅ clear error when selecting
+              }}
+              className={`w-full px-4 py-3 border border-gray-300 rounded-xl font-medium transition-all duration-200
               ${
                 formData?.cod === "true"
                   ? "bg-green-500 text-white border-green-500"
                   : "bg-white text-gray-700 border-gray-300 hover:bg-green-50"
               }`}
-          >
-            Yes
-          </button>
-          <button
-            type="button"
-            onClick={() => handleInputChange("cod", "false")}
-            className={`w-full px-4 py-3 border rounded-xl font-medium transition-all duration-200
+            >
+              Yes
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                handleInputChange("cod", "false");
+                clearError("cod"); // ✅ clear error when selecting
+              }}
+              className={`w-full px-4 py-3 border border-gray-300 rounded-xl font-medium transition-all duration-200
               ${
                 formData?.cod === "false"
                   ? "bg-red-500 text-white border-red-500"
                   : "bg-white text-gray-700 border-gray-300 hover:bg-red-50"
               }`}
-          >
-            No
-          </button>
+            >
+              No
+            </button>
+          </div>
+          {errors.cod && <p className="text-red-500 text-sm">{errors.cod}</p>}
         </div>
-        {errors.cod && <p className="text-red-500 text-sm">{errors.cod}</p>}
-      </div>
 
-      {/* Online Payment */}
-      <div className="space-y-2 group">
-        <label className="text-sm font-medium text-gray-700">
-          Online Payment
-        </label>
-        <div className="flex gap-4">
-          <button
-            type="button"
-            onClick={() => handleInputChange("onlinePayment", "true")}
-            className={`flex-1 px-4 py-3 border rounded-xl font-medium transition-all duration-200
+        {/* Online Payment */}
+        <div className="space-y-2 group">
+          <label className="text-sm font-medium text-gray-700">
+            Online Payment
+          </label>
+          <div className="flex gap-4">
+            <button
+              type="button"
+              onClick={() => {
+                handleInputChange("onlinePayment", "true");
+                clearError("onlinePayment"); // ✅ clear error
+              }}
+              className={`flex-1 px-4 py-3 border border-gray-300 rounded-xl font-medium transition-all duration-200
               ${
                 formData?.onlinePayment === "true"
                   ? "bg-green-500 text-white border-green-500"
                   : "bg-white text-gray-700 border-gray-300 hover:bg-green-50"
               }`}
-          >
-            Yes
-          </button>
-          <button
-            type="button"
-            onClick={() => handleInputChange("onlinePayment", "false")}
-            className={`flex-1 px-4 py-3 border rounded-xl font-medium transition-all duration-200
+            >
+              Yes
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                handleInputChange("onlinePayment", "false");
+                clearError("onlinePayment"); // ✅ clear error
+              }}
+              className={`flex-1 px-4 py-3 border border-gray-300 rounded-xl font-medium transition-all duration-200
               ${
                 formData?.onlinePayment === "false"
                   ? "bg-red-500 text-white border-red-500"
                   : "bg-white text-gray-700 border-gray-300 hover:bg-red-50"
               }`}
-          >
-            No
-          </button>
+            >
+              No
+            </button>
+          </div>
+          {errors.onlinePayment && (
+            <p className="text-red-500 text-sm">{errors.onlinePayment}</p>
+          )}
         </div>
-        {errors.onlinePayment && (
-          <p className="text-red-500 text-sm">{errors.onlinePayment}</p>
-        )}
       </div>
     </>
   );

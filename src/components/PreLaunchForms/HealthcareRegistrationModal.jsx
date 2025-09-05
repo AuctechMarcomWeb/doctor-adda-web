@@ -111,6 +111,8 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
     if (!file) return;
     setProfileFile(file);
     setProfilePreview(URL.createObjectURL(file));
+    setErrors((prev) => ({ ...prev, profileImage: "" }));
+
     await handleUploadProfile(file); // auto upload after select
   };
 
@@ -126,6 +128,7 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
       });
       const uploadedUrl = response?.data?.data?.imageUrl;
       setFormData((prev) => ({ ...prev, profileImage: uploadedUrl }));
+      // Clear error if previously set
       console.log("Profile uploaded:", uploadedUrl);
     } catch (err) {
       console.error("Error uploading profile image:", err);
@@ -143,6 +146,9 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
 
     const previews = files.map((file) => URL.createObjectURL(file));
     setImagesPreview((prev) => [...prev, ...previews]);
+
+    // Clear error if previously set
+    setErrors((prev) => ({ ...prev, profileImages: "" }));
 
     // Upload newly selected files only
     await handleUploadImages(files);
@@ -239,7 +245,6 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
           "clinics", // must have at least 1
           "about",
           "experience",
-          "serviceType",
           "education",
           "profileImage", // ✅ added
           "profileImages", // ✅ added
@@ -395,6 +400,8 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
               location: locData.location,
             }));
 
+            clearError("address");
+
             // Check if form is complete
             const requiredFields = getRequiredFields(selectedCard);
             const isComplete = requiredFields.every(
@@ -474,6 +481,7 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
             formData={formData}
             setFormData={setFormData}
             errors={errors}
+            clearError={clearError}
           />
         );
       case "diagnostic":
@@ -483,6 +491,8 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
             formData={formData}
             setFormData={setFormData}
             errors={errors}
+            setErrors={setErrors}
+            clearError={clearError}
           />
         );
       case "pharmacy":
@@ -492,6 +502,7 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
             formData={formData}
             setFormData={setFormData}
             errors={errors}
+            clearError={clearError}
           />
         );
       default:
@@ -546,8 +557,55 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
         if (!formData.clinics || formData.clinics.length === 0) {
           newErrors.clinics = "At least one clinic is required";
           isValid = false;
-        }
+        } else {
+          formData.clinics.forEach((clinic, index) => {
+            if (!clinic.clinicName?.trim()) {
+              newErrors[`clinicName_${index}`] = "Clinic name is required";
+              isValid = false;
+            }
+            if (!clinic.clinicAddress?.trim()) {
+              newErrors[`clinicAddress_${index}`] =
+                "Clinic address is required";
+              isValid = false;
+            }
+            if (!clinic.consultationFee?.toString().trim()) {
+              newErrors[`consultationFee_${index}`] =
+                "Consultation fee is required";
+              isValid = false;
+            }
+            if (!clinic.startTime?.trim()) {
+              newErrors[`startTime_${index}`] = "Start time is required";
+              isValid = false;
+            }
+            if (!clinic.endTime?.trim()) {
+              newErrors[`endTime_${index}`] = "End time is required";
+              isValid = false;
+            }
+            if (!clinic.duration?.trim()) {
+              newErrors[`duration_${index}`] = "Duration is required";
+              isValid = false;
+            }
 
+            // Optional: if video consultation is enabled, validate those too
+            if (clinic.videoAvailability) {
+              if (!clinic.videoStartTime?.trim()) {
+                newErrors[`videoStartTime_${index}`] =
+                  "Video start time is required";
+                isValid = false;
+              }
+              if (!clinic.videoEndTime?.trim()) {
+                newErrors[`videoEndTime_${index}`] =
+                  "Video end time is required";
+                isValid = false;
+              }
+              if (!clinic.videoDuration?.trim()) {
+                newErrors[`videoDuration_${index}`] =
+                  "Video duration is required";
+                isValid = false;
+              }
+            }
+          });
+        }
         break;
 
       case "hospital":
@@ -601,9 +659,87 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
         break;
 
       case "diagnostic":
+        // services
+        if (!formData.services || formData.services.length === 0) {
+          newErrors.services = [{ name: "At least one service is required" }];
+          isValid = false;
+        } else {
+          newErrors.services = formData.services.map((s) => {
+            let err = {};
+            if (!s.name?.trim()) {
+              err.name = "Service name is required";
+              isValid = false;
+            }
+            return err;
+          });
+        }
+
+        // packages
+        if (!formData.packages || formData.packages.length === 0) {
+          newErrors.packages = [
+            {
+              name: "Package name is required",
+              price: "Valid price is required",
+              details: "Details are required",
+            },
+          ];
+          isValid = false;
+        } else {
+          newErrors.packages = formData.packages.map((p) => {
+            let err = {};
+            if (!p.name?.trim()) {
+              err.name = "Package name is required";
+              isValid = false;
+            }
+            if (!p.price || isNaN(p.price) || Number(p.price) <= 0) {
+              err.price = "Valid price is required";
+              isValid = false;
+            }
+            if (!p.details?.trim()) {
+              err.details = "Details are required";
+              isValid = false;
+            }
+            return err;
+          });
+        }
+        break;
+
+        // services
         if (!formData.services || formData.services.length === 0) {
           newErrors.services = "At least one service is required";
           isValid = false;
+        } else {
+          newErrors.services = formData.services.map((s, i) => {
+            let err = {};
+            if (!s.name || s.name.trim() === "") {
+              err.name = "Service name is required";
+              isValid = false;
+            }
+            return err;
+          });
+        }
+
+        // packages
+        if (!formData.packages || formData.packages.length === 0) {
+          newErrors.packages = "At least one package is required";
+          isValid = false;
+        } else {
+          newErrors.packages = formData.packages.map((p, i) => {
+            let err = {};
+            if (!p.name || p.name.trim() === "") {
+              err.name = "Package name is required";
+              isValid = false;
+            }
+            if (!p.price || isNaN(p.price) || Number(p.price) <= 0) {
+              err.price = "Valid price is required";
+              isValid = false;
+            }
+            if (!p.details || p.details.trim() === "") {
+              err.details = "Details are required";
+              isValid = false;
+            }
+            return err;
+          });
         }
         break;
 
@@ -799,6 +935,9 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
         setIsModalOpen(false);
       } else {
         alert(response?.data?.message || "Failed to submit registration.");
+        toast.error(
+          response?.data?.message || "Failed to submit registration."
+        );
       }
     } catch (error) {
       console.error("Error submitting registration:", error);
@@ -907,144 +1046,147 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
 
               <form onSubmit={handleSubmit} className="space-y-5">
                 {renderForm()}
-                {/* Profile Image Upload */}
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Profile Image
-                  </label>
+                {/* Profile + Gallery Upload in Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Profile Image Upload */}
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Profile Image
+                    </label>
 
-                  {/* Styled Upload Button */}
-                  <label
-                    htmlFor="profile-upload"
-                    className="cursor-pointer inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 mr-2"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
+                    <label
+                      htmlFor="profile-upload"
+                      className="cursor-pointer inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
                     >
-                      <path d="M16.88 9.94A1.5 1.5 0 0015.5 9h-2.793l1.147-1.146a.5.5 0 10-.708-.708L12 8.293V5.5a.5.5 0 00-1 0v2.793L9.854 7.146a.5.5 0 00-.708.708L10.293 9H7.5a1.5 1.5 0 000 3h8a1.5 1.5 0 001.38-2.06z" />
-                    </svg>
-                    Upload Profile Image
-                  </label>
-                  <input
-                    id="profile-upload"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleProfileSelect}
-                    className="hidden"
-                  />
-
-                  {errors.profileImage && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {errors.profileImage}
-                    </p>
-                  )}
-
-                  {profilePreview && (
-                    <div className="mt-2 relative inline-block">
-                      <img
-                        src={profilePreview}
-                        alt="Profile Preview"
-                        className="w-24 h-24 rounded-full object-cover border shadow"
-                      />
-                      {uploadingProfile && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-white/70 rounded-full">
-                          <span className="loader border-t-2 border-indigo-600 w-6 h-6 rounded-full animate-spin"></span>
-                        </div>
-                      )}
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setProfilePreview(null);
-                          setProfileFile(null);
-                          setFormData((prev) => ({
-                            ...prev,
-                            profileImage: null,
-                          }));
-                        }}
-                        className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs shadow"
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 mr-2"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
                       >
-                        ✕
-                      </button>
-                    </div>
-                  )}
-                </div>
+                        <path d="M16.88 9.94A1.5 1.5 0 0015.5 9h-2.793l1.147-1.146a.5.5 0 10-.708-.708L12 8.293V5.5a.5.5 0 00-1 0v2.793L9.854 7.146a.5.5 0 00-.708.708L10.293 9H7.5a1.5 1.5 0 000 3h8a1.5 1.5 0 001.38-2.06z" />
+                      </svg>
+                      Upload Profile Image
+                    </label>
+                    <input
+                      id="profile-upload"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleProfileSelect}
+                      className="hidden"
+                    />
 
-                {/* Gallery Images Upload */}
-                <div className="space-y-2 mt-4">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Gallery Images
-                  </label>
+                    {errors.profileImage && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.profileImage}
+                      </p>
+                    )}
 
-                  {/* Styled Upload Button */}
-                  <label
-                    htmlFor="gallery-upload"
-                    className="cursor-pointer inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 mr-2"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
+                    {profilePreview && (
+                      <div className="mt-2 relative w-20 h-20">
+                        <img
+                          src={profilePreview}
+                          alt="Profile Preview"
+                          className="w-20 h-20 object-cover rounded-md border border-gray-300"
+                        />
+                        {uploadingProfile && (
+                          <div className="absolute inset-0 flex items-center justify-center bg-white/70 rounded-md">
+                            <span className="loader border-t-2 border-indigo-600 w-6 h-6 rounded-full animate-spin"></span>
+                          </div>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setProfilePreview(null);
+                            setProfileFile(null);
+                            setFormData((prev) => ({
+                              ...prev,
+                              profileImage: null,
+                            }));
+                          }}
+                          className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs shadow"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Gallery Images Upload */}
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Gallery Images
+                    </label>
+
+                    <label
+                      htmlFor="gallery-upload"
+                      className="cursor-pointer inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 4v16m8-8H4"
-                      />
-                    </svg>
-                    Upload Gallery Images
-                  </label>
-                  <input
-                    id="gallery-upload"
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={handleImagesSelect}
-                    className="hidden"
-                  />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 mr-2"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 4v16m8-8H4"
+                        />
+                      </svg>
+                      Upload Gallery Images
+                    </label>
+                    <input
+                      id="gallery-upload"
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={handleImagesSelect}
+                      className="hidden"
+                    />
 
-                  {errors.profileImages && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {errors.profileImages}
-                    </p>
-                  )}
+                    {errors.profileImages && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.profileImages}
+                      </p>
+                    )}
 
-                  {imagesPreview.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      {imagesPreview.map((src, idx) => (
-                        <div key={idx} className="relative w-20 h-20">
-                          <img
-                            src={src}
-                            alt={`preview-${idx}`}
-                            className="w-20 h-20 object-cover rounded border shadow"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveImage(idx)}
-                            className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs shadow"
-                          >
-                            ✕
-                          </button>
-                        </div>
-                      ))}
-                      {uploadingImages && (
-                        <div className="flex items-center justify-center w-20 h-20 border rounded shadow">
-                          <span className="loader border-t-2 border-indigo-600 w-6 h-6 rounded-full animate-spin"></span>
-                        </div>
-                      )}
-                    </div>
-                  )}
+                    {imagesPreview.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {imagesPreview.map((src, idx) => (
+                          <div key={idx} className="relative w-20 h-20">
+                            <img
+                              src={src}
+                              alt={`preview-${idx}`}
+                              className="w-20 h-20 object-cover rounded-md border border-gray-300 shadow"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveImage(idx)}
+                              className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs shadow"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        ))}
+                        {uploadingImages && (
+                          <div className="flex items-center justify-center w-20 h-20 border rounded-md shadow">
+                            <span className="loader border-t-2 border-indigo-600 w-6 h-6 rounded-full animate-spin"></span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <DocumentsUpload
                   formData={formData}
                   setFormData={setFormData}
                   documentOptions={documentsOptionsMap[selectedCard] || []}
+                  errors={errors}
+                  clearError={clearError}
                 />
                 {errors?.documents && (
                   <p className="text-red-500 text-sm mt-1">
