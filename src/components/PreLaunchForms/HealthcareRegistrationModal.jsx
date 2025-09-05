@@ -781,7 +781,7 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
     // 1. Validate before building payload
     const isValid = validateForm();
     if (!isValid) {
-      alert("Please correct the highlighted errors before submitting.");
+      toast.error("Please fill out all the highlighted fields")
       return;
     }
     setSubmitting(true);
@@ -934,7 +934,6 @@ const HealthcareRegistrationModal = ({ setOpen }) => {
 
         setIsModalOpen(false);
       } else {
-        alert(response?.data?.message || "Failed to submit registration.");
         toast.error(
           response?.data?.message || "Failed to submit registration."
         );
