@@ -88,7 +88,7 @@ const  AboutSection = () => {
             <h2 className="text-4xl  font-bold text-gray-900 mb-6 leading-tight">
               About{' '}
               <span className="bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
-                Doctor's Adda
+                Doctor's Adda  [DoctorsAdda Healthtech Private Limited]
               </span>
             </h2>
             
