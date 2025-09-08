@@ -22,6 +22,7 @@ import NavBar2 from "./NavBar2";
 import { toast } from "react-hot-toast";
 import NotificationBell from "./NotificationBell";
 import DashboardButton from "./DashboardButton";
+import LocationDropdown from "./locationDropDown/locationDropdown";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -29,30 +30,74 @@ const Navbar = () => {
   const dropdownRef = useRef(null); // added
   const [isVisible, setIsVisible] = useState({});
   const dispatch = useDispatch();
+  const [locationOpen, setLocationOpen] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState("Lucknow");
 
   // Get user profile data from Redux
   const { userProfileData, isLoggedIn, userData } = useSelector(
     (state) => state.user
   );
 
-console.log("userProfileData in Navbar:", userProfileData);
-console.log("User Id:", userProfileData?._id);
-console.log("Upgrade Id:", userProfileData?.upgradeAccountId);
+  console.log("userProfileData in Navbar:", userProfileData);
+  console.log("User Id:", userProfileData?._id);
+  console.log("Upgrade Id:", userProfileData?.upgradeAccountId);
 
+  const hasUpgradeRequest = !!(
+    userProfileData?.upgradeAccountId && userProfileData?.upgradeAccountType
+  );
 
-  const hasUpgradeRequest =
-  !!(userProfileData?.upgradeAccountId && userProfileData?.upgradeAccountType);
-
-console.log("Has Upgrade Request:", hasUpgradeRequest);
+  console.log("Has Upgrade Request:", hasUpgradeRequest);
 
   const { upgradeAccountId, upgradeAccountType, upgradeAccountApproveStatus } =
     userProfileData ?? {};
 
   // Determine if user is upgraded
-  const isUpgraded =
-    upgradeAccountId && upgradeAccountType ;
+  const isUpgraded = upgradeAccountId && upgradeAccountType;
 
   console.log("isUpgraded", isUpgraded);
+
+  // Auto-detect location with Geolocation API + Google Maps
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          try {
+            const { latitude, longitude } = position.coords;
+
+            const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+            const res = await fetch(
+              `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`
+            );
+            const data = await res.json();
+
+            if (data.status === "OK") {
+              const addressComponents = data.results[0].address_components;
+              let city = "";
+              let state = "";
+
+              addressComponents.forEach((component) => {
+                if (component.types.includes("locality")) {
+                  city = component.long_name;
+                }
+                if (component.types.includes("administrative_area_level_1")) {
+                  state = component.long_name;
+                }
+              });
+
+              setSelectedLocation(`${city}, ${state}`);
+            } else {
+              console.error("Google Maps API error:", data.status);
+            }
+          } catch (err) {
+            console.error("Error fetching location:", err);
+          }
+        },
+        (error) => {
+          console.error("Geolocation error:", error);
+        }
+      );
+    }
+  }, []);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -119,16 +164,29 @@ console.log("Has Upgrade Request:", hasUpgradeRequest);
             </Link>
 
             {/* Location */}
-            <div className="hidden md:flex items-center gap-2 pl-4 cursor-pointer">
-              <div className="bg-gray-100 p-2 rounded-full">
-                <FaMapMarkerAlt className="text-gray-600 text-base" />
-              </div>
-              <div>
-                <div className="text-xs text-gray-500">Your Location</div>
-                <div className=" md:text-xs xl:text-sm  text-gray-800 font-semibold flex items-center">
-                  Lucknow <span className="ml-1">▾</span>
+            <div className="hidden md:flex items-center gap-2 pl-4 cursor-pointer relative">
+              <div
+                className="flex items-center gap-2"
+                onClick={() => setLocationOpen(!locationOpen)}
+              >
+                <div className="bg-gray-100 p-2 rounded-full">
+                  <FaMapMarkerAlt className="text-gray-600 text-base" />
+                </div>
+                <div>
+                  <div className="text-xs text-gray-500">Your Location</div>
+                  <div className="md:text-xs xl:text-sm text-gray-800 font-semibold flex items-center">
+                    {selectedLocation} <span className="ml-1">▾</span>
+                  </div>
                 </div>
               </div>
+
+              {/* Dropdown */}
+              {locationOpen && (
+                <LocationDropdown
+                  onClose={() => setLocationOpen(false)}
+                  setSelectedLocation={setSelectedLocation}
+                />
+              )}
             </div>
 
             {/* Notification + Profile */}

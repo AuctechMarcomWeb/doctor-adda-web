@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { REHYDRATE } from 'redux-persist';
+import { createSlice } from "@reduxjs/toolkit";
+import { REHYDRATE } from "redux-persist";
 
 const initialState = {
   isLoggedIn: false,
@@ -9,7 +9,7 @@ const initialState = {
 };
 
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {
     login(state, action) {
@@ -20,7 +20,7 @@ const userSlice = createSlice({
     logout(state) {
       state.isLoggedIn = false;
       state.userData = null;
-      state.userProfileData = null; 
+      state.userProfileData = null;
       state.locationData = null;
     },
     updateUserProfile(state, action) {
@@ -29,8 +29,11 @@ const userSlice = createSlice({
     },
     updateLocationData(state, action) {
       state.locationData = action.payload;
-      console.log("action.payload",action.payload);
+      console.log("action.payload", action.payload);
       console.log("location data updated in redux", state.locationData);
+    },
+    updateUserLocation: (state, action) => {
+      state.userLocation = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -46,5 +49,11 @@ const userSlice = createSlice({
   },
 });
 
-export const { login, logout, updateUserProfile, updateLocationData } = userSlice.actions;
+export const {
+  login,
+  logout,
+  updateUserProfile,
+  updateLocationData,
+  updateUserLocation,
+} = userSlice.actions;
 export default userSlice.reducer;

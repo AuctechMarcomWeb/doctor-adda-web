@@ -112,7 +112,6 @@ const DoctorSearch = () => {
         </div>
 
         {/* Specialties Dropdown */}
-       <SpecialtiesDropdown />
 
         {/* Search Button */}
         <button
