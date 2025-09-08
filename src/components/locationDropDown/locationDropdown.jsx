@@ -1,128 +1,179 @@
-import React, { useState, useRef, useEffect } from "react";
-import { FaMapMarkerAlt } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
-import { updateUserLocation } from "../redux/slices/userSlice"; // create this action in Redux
-import axios from "axios";
+import React, { useState, useEffect, useRef } from "react";
+import useLoadGoogleMaps from "../../Utils";
 
-const LocationDropdown = () => {
-  const dispatch = useDispatch();
-  const { userLocation } = useSelector((state) => state.user);
-
-  const [open, setOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [results, setResults] = useState([]);
+const LocationDropdown = ({ onClose, setSelectedLocation }) => {
+  const [search, setSearch] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [activeIndex, setActiveIndex] = useState(-1);
   const dropdownRef = useRef(null);
+  const inputRef = useRef(null);
 
-  const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+  const mapsLoaded = useLoadGoogleMaps();
 
-  // Handle search
-  const handleSearch = async (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-
-    if (!value) return setResults([]);
-
-    try {
-      const res = await axios.get(
-        `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${value}&key=${GOOGLE_API_KEY}`
-      );
-      setResults(res.data.results || []);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  // Select a place from search results
-  const handleSelect = (place) => {
-    setSearchTerm(place.formatted_address);
-    setResults([]);
-    setOpen(false);
-
-    dispatch(
-      updateUserLocation({
-        address: place.formatted_address,
-        latitude: place.geometry.location.lat,
-        longitude: place.geometry.location.lng,
-      })
-    );
-  };
-
-  // Use current location
-  const useCurrentLocation = () => {
-    if (!navigator.geolocation) return alert("Geolocation not supported");
-    navigator.geolocation.getCurrentPosition(async (position) => {
-      const { latitude, longitude } = position.coords;
-
-      // Reverse geocode to get address
-      const res = await axios.get(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${GOOGLE_API_KEY}`
-      );
-
-      const address = res.data.results[0]?.formatted_address || "";
-
-      setSearchTerm(address);
-      setOpen(false);
-
-      dispatch(
-        updateUserLocation({
-          address,
-          latitude,
-          longitude,
-        })
-      );
-    });
-  };
-
-  // Close dropdown if clicked outside
+  // Fetch suggestions using the new AutocompleteSuggestion API
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setOpen(false);
+    if (!mapsLoaded || !search) {
+      setSuggestions([]);
+      setActiveIndex(-1);
+      return;
+    }
+
+    let debounceTimer;
+    (async () => {
+      const {
+        AutocompleteSuggestion,
+        AutocompleteSessionToken,
+      } = await google.maps.importLibrary("places");
+
+      const token = new AutocompleteSessionToken();
+
+      debounceTimer = setTimeout(async () => {
+        try {
+          const {
+            suggestions,
+          } = await AutocompleteSuggestion.fetchAutocompleteSuggestions({
+            input: search,
+            sessionToken: token,
+            includedRegionCodes: ["IN"], // optional restriction
+          });
+
+          setSuggestions(suggestions || []);
+          setActiveIndex(-1);
+        } catch (err) {
+          console.error("Autocomplete fetch error:", err);
+          setSuggestions([]);
+        }
+      }, 300);
+    })();
+
+    return () => clearTimeout(debounceTimer);
+  }, [search, mapsLoaded]);
+
+  // Close when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        onClose();
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [onClose]);
+
+  // Handle suggestion select
+  const handleSelect = async (suggestion) => {
+    try {
+      const { placePrediction } = suggestion;
+      const place = await placePrediction.toPlace();
+
+      await place.fetchFields({
+        fields: ["displayName", "formattedAddress"],
+      });
+
+      const location = place.displayName || place.formattedAddress;
+      setSelectedLocation(location);
+      onClose();
+    } catch (err) {
+      console.error("Place details fetch error:", err);
+    }
+  };
+
+  // Keyboard navigation
+  const handleKeyDown = (e) => {
+    if (!suggestions.length) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveIndex((prev) => (prev < suggestions.length - 1 ? prev + 1 : 0));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveIndex((prev) => (prev > 0 ? prev - 1 : suggestions.length - 1));
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      if (activeIndex >= 0 && activeIndex < suggestions.length) {
+        handleSelect(suggestions[activeIndex]);
+      }
+    }
+  };
+
+  // Use current location
+  const handleUseCurrentLocation = () => {
+    if (!mapsLoaded) return;
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async ({ coords }) => {
+          const geocoder = new window.google.maps.Geocoder();
+          const latlng = { lat: coords.latitude, lng: coords.longitude };
+
+          geocoder.geocode({ location: latlng }, (results, status) => {
+            if (status === window.google.maps.GeocoderStatus.OK && results[0]) {
+              let city = "";
+              let state = "";
+              results[0].address_components.forEach((c) => {
+                if (c.types.includes("locality")) city = c.long_name;
+                if (c.types.includes("administrative_area_level_1"))
+                  state = c.long_name;
+              });
+
+              const location =
+                city && state
+                  ? `${city}, ${state}`
+                  : results[0].formatted_address;
+              setSelectedLocation(location);
+              onClose();
+            }
+          });
+        },
+        (err) => console.error("Geolocation error:", err)
+      );
+    }
+  };
 
   return (
-    <div className="relative" ref={dropdownRef}>
-      <div
-        className="flex items-center gap-2 cursor-pointer"
-        onClick={() => setOpen(!open)}
-      >
-        <FaMapMarkerAlt />
-        <span>{userLocation?.address || "Your Location"} ▾</span>
-      </div>
+    <div
+      ref={dropdownRef}
+      className="absolute top-12 left-0 w-64 bg-white shadow-lg rounded-md border border-gray-200 z-[9999]"
+    >
+      <div className="p-3">
+        {/* Search Box */}
+        <input
+          ref={inputRef}
+          type="text"
+          placeholder="Search location..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onKeyDown={handleKeyDown}
+          className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+        />
 
-      {open && (
-        <div className="absolute mt-2 w-72 bg-white border rounded shadow-lg z-50 p-2">
-          <input
-            type="text"
-            placeholder="Search location"
-            value={searchTerm}
-            onChange={handleSearch}
-            className="w-full border p-2 rounded mb-2"
-          />
-          <button
-            className="w-full bg-blue-600 text-white py-2 rounded mb-2"
-            onClick={useCurrentLocation}
-          >
-            📍 Use My Location
-          </button>
-
-          <div className="max-h-60 overflow-auto">
-            {results.map((place, idx) => (
-              <div
-                key={idx}
-                className="cursor-pointer p-2 hover:bg-gray-100"
-                onClick={() => handleSelect(place)}
+        {/* Suggestions */}
+        {suggestions.length > 0 && (
+          <div className="mt-2 max-h-40 overflow-y-auto text-sm text-gray-700">
+            {suggestions.map((s, idx) => (
+              <p
+                key={s.placePrediction.placeId}
+                className={`px-2 py-1 cursor-pointer rounded ${
+                  idx === activeIndex ? "bg-blue-100" : "hover:bg-gray-100"
+                }`}
+                onClick={() => handleSelect(s)}
               >
-                {place.formatted_address}
-              </div>
+                {s.placePrediction.text.text}
+              </p>
             ))}
           </div>
-        </div>
-      )}
+        )}
+
+        <hr className="my-2" />
+
+        {/* Use Current Location */}
+        <button
+          onClick={handleUseCurrentLocation}
+          className="text-blue-600 text-sm hover:underline"
+        >
+          📍 Use Current Location
+        </button>
+      </div>
     </div>
   );
 };

@@ -1,5 +1,7 @@
 /* eslint-disable no-useless-escape */
 /* eslint-disable no-unused-vars */
+import { useEffect, useState } from "react";
+
 const regex = {
   email:
     /^(?:[\w!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!\.)){0,61}[a-zA-Z0-9]?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!$)){0,61}[a-zA-Z0-9]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/,
@@ -362,3 +364,48 @@ export const AppointmentDateFormat = (date) => {
   return formatted;
 };
 
+const useLoadGoogleMaps = () => {
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    // Already loaded?
+    if (window.google && window.google.maps && loaded) {
+      setLoaded(true);
+      return;
+    }
+
+    const existingScript = document.getElementById("google-maps-script");
+    if (existingScript) {
+      existingScript.addEventListener("load", () => setLoaded(true));
+      return;
+    }
+
+    // Create script
+    const script = document.createElement("script");
+    script.id = "google-maps-script";
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${
+      import.meta.env.VITE_GOOGLE_MAPS_API_KEY
+    }&libraries=places`;
+    script.async = true;
+    script.defer = true;
+
+    script.onload = () => setLoaded(true);
+    script.onerror = () => {
+      console.error("Failed to load Google Maps script");
+      setLoaded(false);
+    };
+
+    document.body.appendChild(script);
+
+    return () => {
+      script.onload = null;
+      script.onerror = null;
+    };
+  }, []);
+
+  return loaded;
+};
+
+export default useLoadGoogleMaps;
