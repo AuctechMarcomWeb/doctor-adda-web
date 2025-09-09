@@ -16,6 +16,8 @@ import hero from "../assets/dr-adda-website.png";
 import DoctorSearch from "./DoctorSearch";
 import { Skeleton } from "antd";
 import { FaGooglePlay } from "react-icons/fa";
+import { FaUserDoctor } from "react-icons/fa6";
+import { GiHospitalCross } from "react-icons/gi";
 
 const BannerSection = () => {
   const [hoveredButton, setHoveredButton] = useState(null);
@@ -78,28 +80,28 @@ const BannerSection = () => {
 
         {/* Features */}
         <div className="hidden lg:grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6 text-sm">
-          <div className="flex items-start gap-2">
+          {/* <div className="flex items-start gap-2">
             <FaMotorcycle size={30} className="text-orange-400 mt-1" />
             <span>
               <span className="font-semibold">Free Sample Collection</span>
               <br />
               within <span className="text-yellow-300 font-bold">60 Mins</span>
             </span>
-          </div>
+          </div> */}
           <div className="flex items-start gap-2">
-            <FaClipboardCheck size={30} className="text-orange-400 mt-1" />
+            <FaUserDoctor size={30} className="text-orange-400 mt-1" />
             <span>
-              <span className="font-semibold">Smart Reports</span> with
+              <span className="font-semibold">Book Appointment</span> with
               <br />
-              Real-Time Updates
+              Near by Doctors
             </span>
           </div>
           <div className="flex items-start gap-2">
-            <FaUserMd size={30} className="text-orange-400 mt-1" />
+            <GiHospitalCross size={30} className="text-orange-400 mt-1" />
             <span>
-              <span className="font-semibold">Free Report</span>
+              <span className="font-semibold">Hospital appointment</span>
               <br />
-              Counselling
+              On your fingertips
             </span>
           </div>
         </div>

@@ -101,9 +101,9 @@ const AboutUsSection = () => {
                   <Award size={20} className="text-[#fcbe57]" />
                   <span className="font-bold text-sm">Trusted Care</span>
                 </div>
-                <div className="text-xs text-gray-600 text-center">
+                {/* <div className="text-xs text-gray-600 text-center">
                   Since 1999
-                </div>
+                </div> */}
               </div>
 
               <div className="absolute -bottom-6 -left-6 bg-gradient-to-r from-[#fcbe57] to-[#ffd700] text-white p-4 rounded-2xl shadow-xl transform hover:scale-110 transition-transform duration-300">
