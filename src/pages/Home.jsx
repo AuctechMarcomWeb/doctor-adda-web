@@ -100,8 +100,6 @@ const Home = () => {
       {/* <Carousel /> */}
       <AboutUsSection />
       {/* <TestimonialsSection/> */}
-
-      <HealthBlogSection />
       <DownloadAppSection />
     </>
   );
