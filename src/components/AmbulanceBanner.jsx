@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Download } from "lucide-react";
+import { FaGooglePlay } from "react-icons/fa";
 const AmbulanceBanner = () => {
   const [hoveredButton, setHoveredButton] = useState(null);
 
@@ -73,7 +74,7 @@ const AmbulanceBanner = () => {
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                   <div className="relative  z-10 flex items-center md:gap-3 gap-1 group-hover:text-white transition-colors duration-300">
-                    <Download className="w-5 h-5 group-hover:animate-bounce" />
+                    <FaGooglePlay className="w-5 h-5 group-hover:animate-bounce" />
                     Download App
                     {hoveredButton === "download" && (
                       <div className="absolute -right-2 -top-2 w-3 h-3 bg-green-400 rounded-full animate-ping"></div>

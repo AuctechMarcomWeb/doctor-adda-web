@@ -19,6 +19,7 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import { getRequest } from "../Helpers";
 import { Skeleton, Card } from "antd";
+import { FaApple, FaGooglePlay } from "react-icons/fa";
 
 const DoctorCard = ({ data, modeFilter }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -306,12 +307,12 @@ const DoctorList = () => {
 
                   <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
                     <button className="w-full sm:w-auto flex items-center gap-2 bg-white text-blue-600 px-6 py-3 rounded-2xl font-semibold hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 shadow-lg cursor-pointer">
-                      <Download className="w-5 h-5" />
+                      <FaApple className="w-5 h-5" />
                       <span>App Store</span>
                     </button>
                     <a href="https://play.google.com/store/apps/details?id=com.doctors.adda">
                       <button className="w-full sm:w-auto flex items-center gap-2 bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-2xl font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 shadow-lg cursor-pointer">
-                        <Download className="w-5 h-5" />
+                        <FaGooglePlay className="w-5 h-5" />
                         <span>Play Store</span>
                       </button>
                     </a>

@@ -15,6 +15,7 @@ import banner from "../assets/Header.png";
 import hero from "../assets/dr-adda-website.png";
 import DoctorSearch from "./DoctorSearch";
 import { Skeleton } from "antd";
+import { FaGooglePlay } from "react-icons/fa";
 
 const BannerSection = () => {
   const [hoveredButton, setHoveredButton] = useState(null);
@@ -65,12 +66,11 @@ const BannerSection = () => {
             Smart Healthcare Access – Anytime, Anywhere
           </span>
           <p
-                className="text-white/90 text-sm sm:text-base mb-2 mt-2  leading-relaxed animate-fade-in-up lg:hidden "
-                style={{ animationDelay: "0.5s" }}
-              >
-               Connect with world-class doctors.
-              </p>
-          
+            className="text-white/90 text-sm sm:text-base mb-2 mt-2  leading-relaxed animate-fade-in-up lg:hidden "
+            style={{ animationDelay: "0.5s" }}
+          >
+            Connect with world-class doctors.
+          </p>
         </div>
 
         {/* Search Bar */}
@@ -83,8 +83,7 @@ const BannerSection = () => {
             <span>
               <span className="font-semibold">Free Sample Collection</span>
               <br />
-              within{" "}
-              <span className="text-yellow-300 font-bold">60 Mins</span>
+              within <span className="text-yellow-300 font-bold">60 Mins</span>
             </span>
           </div>
           <div className="flex items-start gap-2">
@@ -106,31 +105,32 @@ const BannerSection = () => {
         </div>
 
         <div className=" flex items-center gap-4 lg:mt-6  md:mb-0 mt-2 mb-2">
-           <div
-                className="flex flex-col sm:flex-row gap-4 md:pt-6 animate-fade-up"
-                style={{ animationDelay: "1.6s" }}
+          <div
+            className="flex flex-col sm:flex-row gap-4 md:pt-6 animate-fade-up"
+            style={{ animationDelay: "1.6s" }}
+          >
+            <a
+              href="https://play.google.com/store/apps/details?id=com.doctors.adda"
+              target="_blank"
+            >
+              <button
+                onMouseEnter={() => setHoveredButton("download")}
+                onMouseLeave={() => setHoveredButton(null)}
+                className="group relative bg-white text-[#0074b2] md:px-6 md:py-4 px-3 py-2 md:rounded-2xl rounded-lg font-bold text-xs md:text-base lg:text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105 transition-all duration-300 overflow-hidden animate-slide-in-left cursor-pointer"
+                style={{ animationDelay: "1s" }}
               >
-
-                <a href="https://play.google.com/store/apps/details?id=com.doctors.adda" target="_blank" >
-                  <button
-                    onMouseEnter={() => setHoveredButton("download")}
-                    onMouseLeave={() => setHoveredButton(null)}
-                    className="group relative bg-white text-[#0074b2] md:px-6 md:py-4 px-3 py-2 md:rounded-2xl rounded-lg font-bold text-xs md:text-base lg:text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105 transition-all duration-300 overflow-hidden animate-slide-in-left cursor-pointer"
-                    style={{ animationDelay: "1s" }}
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-                    <div className="relative z-10 flex items-center md:gap-3 gap-1 group-hover:text-white transition-colors duration-300">
-                      <Download className="w-5 h-5 group-hover:animate-bounce" />
-                      Download App
-                      {hoveredButton === "download" && (
-                        <div className="absolute -right-2 -top-2 w-3 h-3 bg-green-400 rounded-full animate-ping"></div>
-                      )}
-                    </div>
-                  </button>
-                </a>
-
-              </div>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                <div className="relative z-10 flex items-center md:gap-3 gap-1 group-hover:text-white transition-colors duration-300">
+                  <FaGooglePlay className="w-5 h-5 group-hover:animate-bounce" />
+                  Download App
+                  {hoveredButton === "download" && (
+                    <div className="absolute -right-2 -top-2 w-3 h-3 bg-green-400 rounded-full animate-ping"></div>
+                  )}
+                </div>
+              </button>
+            </a>
+          </div>
         </div>
       </div>
 
@@ -156,9 +156,7 @@ const BannerSection = () => {
         <img
           src={hero}
           alt="hero"
-          className={`w-full max-h-100 object-contain rounded-2xl ${
-            loading 
-          }`}
+          className={`w-full max-h-100 object-contain rounded-2xl ${loading}`}
           onLoad={() => setLoading(false)}
         />
       </div>

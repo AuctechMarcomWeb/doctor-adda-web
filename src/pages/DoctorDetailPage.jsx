@@ -150,7 +150,7 @@ const DoctorDetailPage = () => {
     weight: ""
   });
   const [appointmentData, setAppointmentData] = useState(null);
-  const userId = useSelector((state) => state.user.userData.data._id);
+  const userId = useSelector((state) => state.user.userData._id);
 
   const phoneNumber = "102";
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
