@@ -16,7 +16,7 @@ import { useSelector, useDispatch } from "react-redux";
 import logo from "../assets/dr-adda-logo.png";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaUser, FaPhoneAlt } from "react-icons/fa";
-import { logout } from "../redux/slices/userSlice";
+import { logout, updateLocationData } from "../redux/slices/userSlice";
 import { deleteCookie, clearAuthCookies } from "../Hooks/cookie";
 import NavBar2 from "./NavBar2";
 import { toast } from "react-hot-toast";
@@ -31,6 +31,7 @@ const Navbar = () => {
   const [isVisible, setIsVisible] = useState({});
   const dispatch = useDispatch();
   const [locationOpen, setLocationOpen] = useState(false);
+  const [currentLocation, setCurrentLocation] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("Lucknow");
 
   // Get user profile data from Redux
@@ -55,6 +56,12 @@ const Navbar = () => {
   const isUpgraded = upgradeAccountId && upgradeAccountType;
 
   console.log("isUpgraded", isUpgraded);
+
+  const displayLocation =
+    selectedLocation ||
+    locationData?.address ||
+    currentLocation ||
+    "Detecting...";
 
   // Auto-detect location with Geolocation API + Google Maps
   useEffect(() => {
@@ -83,6 +90,18 @@ const Navbar = () => {
                   state = component.long_name;
                 }
               });
+
+              const detectedLocation = `${city}, ${state}`;
+              setCurrentLocation(detectedLocation);
+
+              // ✅ Save to Redux
+              dispatch(
+                updateLocationData({
+                  latitude,
+                  longitude,
+                  address: detectedLocation,
+                })
+              );
 
               setSelectedLocation(`${city}, ${state}`);
             } else {
@@ -174,8 +193,9 @@ const Navbar = () => {
                 </div>
                 <div>
                   <div className="text-xs text-gray-500">Your Location</div>
-                  <div className="md:text-xs xl:text-sm text-gray-800 font-semibold flex items-center">
-                    {selectedLocation} <span className="ml-1">▾</span>
+                  <div className="md:text-xs xl:text-sm text-gray-800 font-semibold flex items-center max-w-[150px] truncate">
+                    <span className="truncate">{displayLocation}</span>
+                    <span className="ml-1 flex-shrink-0">▾</span>
                   </div>
                 </div>
               </div>
@@ -184,11 +204,30 @@ const Navbar = () => {
               {locationOpen && (
                 <LocationDropdown
                   onClose={() => setLocationOpen(false)}
-                  setSelectedLocation={setSelectedLocation}
+                  setSelectedLocation={(addrObjOrString) => {
+                    const address =
+                      typeof addrObjOrString === "string"
+                        ? addrObjOrString
+                        : addrObjOrString.address;
+                    setSelectedLocation(address);
+                    // optionally include lat/lng if you have them
+                    dispatch(
+                      updateLocationData({
+                        address,
+                        latitude: addrObjOrString?.lat,
+                        longitude: addrObjOrString?.lng,
+                      })
+                    );
+                  }}
                 />
               )}
             </div>
-
+            {/* Example Debug UI (Remove in prod)
+            <div className="hidden md:flex flex-col text-xs text-gray-500 ml-4">
+              <span>🌍 Current: {currentLocation || "..."}</span>
+              <span>📍 Selected: {selectedLocation || "None"}</span>
+              <span>💾 Redux: {selectedLocation?.address || "None"}</span>
+            </div> */}
             {/* Notification + Profile */}
 
             {/* Vertical Divider */}

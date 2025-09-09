@@ -54,7 +54,8 @@ const Location = () => {
       // ✅ fetch and store address
       const addr = await fetchAddressFromCoords(latitude, longitude);
       setAddress(addr);
-
+      // ✅ save to Redux
+      dispatch(updateLocationData({ latitude, longitude, address: addr }));
       // ✅ immediately update profile
       await updateUserProfileWithLocation(latitude, longitude, addr);
     } catch (error) {
