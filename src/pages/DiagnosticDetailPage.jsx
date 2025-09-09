@@ -30,7 +30,7 @@ import { toast } from "react-hot-toast";
 //import ManagePatientsModal from "../components/ManagePatientsModal";
 import { useNavigate } from "react-router-dom";
 const DiagnosticDetailPage = () => {
-  const userId = useSelector((state) => state.user.userData.data._id);
+  const userId = useSelector((state) => state.user.userProfileData._id);
   const userProfileData = useSelector((state) => state.user.userProfileData);
   console.log("userProfileData", userProfileData);
 
@@ -47,7 +47,7 @@ const DiagnosticDetailPage = () => {
   const [selectedDateData, setSelectedDateData] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [updateStatus, setUpdateStatus] = useState(false);
-//for booking
+  //for booking
   const [selectedServices, setSelectedServices] = useState([]);
   const [selectedPackages, setSelectedPackages] = useState([]);
   const [showAppointmentPopup, setShowAppointmentPopup] = useState(false);
@@ -60,7 +60,7 @@ const DiagnosticDetailPage = () => {
     weight: "",
   });
 
-  console.log("otherPatientDetails", otherPatientDetails);   
+  console.log("otherPatientDetails", otherPatientDetails);
 
   const navigate = useNavigate();
   const handleAddOtherPatient = (patientData) => {
