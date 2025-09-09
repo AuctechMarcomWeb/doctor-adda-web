@@ -1,5 +1,6 @@
-import React from 'react';
-import { Heart, Users, Award, Clock, Shield, Star } from 'lucide-react';
+import React from "react";
+import { Heart, Users, Award, Clock, Shield, Star } from "lucide-react";
+import { FaGooglePlay } from "react-icons/fa";
 
 const AboutUsSection = () => {
   return (
@@ -31,15 +32,19 @@ const AboutUsSection = () => {
           <div className="space-y-6">
             <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 sm:p-8 border border-white/10">
               <p className="text-white/90 leading-relaxed mb-4 text-sm sm:text-base">
-                At <strong className="text-[#fcbe57]">Doctors Adda</strong>, we believe that quality healthcare should be accessible
-                to everyone. With a legacy spanning over <strong className="text-white">two decades</strong>, we've remained committed to
-                offering world-class medical care—where modern innovation meets human compassion.
+                At <strong className="text-[#fcbe57]">Doctors Adda</strong>, we
+                believe that quality healthcare should be accessible to
+                everyone. With a legacy spanning over{" "}
+                <strong className="text-white">two decades</strong>, we've
+                remained committed to offering world-class medical care—where
+                modern innovation meets human compassion.
               </p>
 
               <p className="text-white/80 leading-relaxed mb-6 text-sm sm:text-base">
-                Our team of skilled doctors, nurses, and health professionals work collaboratively to
-                ensure every patient receives personalized care—whether it's a regular health check-up
-                or a complex procedure. Your health journey is our priority.
+                Our team of skilled doctors, nurses, and health professionals
+                work collaboratively to ensure every patient receives
+                personalized care—whether it's a regular health check-up or a
+                complex procedure. Your health journey is our priority.
               </p>
 
               {/* Stats */}
@@ -52,9 +57,13 @@ const AboutUsSection = () => {
                   <div
                     key={index}
                     className="text-center p-4 bg-white/5 rounded-xl border border-white/10 hidden md:block"
-                  > 
-                    <div className="text-2xl font-bold text-[#fcbe57] mb-1">{item.value}</div>
-                    <div className="text-white/70 text-sm sm:text-base">{item.label}</div>
+                  >
+                    <div className="text-2xl font-bold text-[#fcbe57] mb-1">
+                      {item.value}
+                    </div>
+                    <div className="text-white/70 text-sm sm:text-base">
+                      {item.label}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -63,13 +72,13 @@ const AboutUsSection = () => {
               <div className="flex flex-col sm:flex-row gap-4">
                 <a href="https://play.google.com/store/apps/details?id=com.doctors.adda">
                   <button className="bg-white text-[#00659c] hover:bg-gray-100 font-semibold px-6 py-3 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center group">
-                    <span>Download App Now</span>
-                    <Heart size={18} className="ml-2 group-hover:text-red-500 transition-colors" />
+                    <FaGooglePlay
+                      size={18}
+                      className="ml-2 transition-colors mr-2"
+                    />
+                    <span>Download App</span>
                   </button>
                 </a>
-                <button className="border-2 border-white/30 text-white hover:bg-white/10 font-semibold px-6 py-3 rounded-full transition-all duration-300 backdrop-blur-sm hidden md:block">
-                  Book Appointment
-                </button>
               </div>
             </div>
           </div>
@@ -92,7 +101,9 @@ const AboutUsSection = () => {
                   <Award size={20} className="text-[#fcbe57]" />
                   <span className="font-bold text-sm">Trusted Care</span>
                 </div>
-                <div className="text-xs text-gray-600 text-center">Since 1999</div>
+                <div className="text-xs text-gray-600 text-center">
+                  Since 1999
+                </div>
               </div>
 
               <div className="absolute -bottom-6 -left-6 bg-gradient-to-r from-[#fcbe57] to-[#ffd700] text-white p-4 rounded-2xl shadow-xl transform hover:scale-110 transition-transform duration-300">
@@ -100,7 +111,9 @@ const AboutUsSection = () => {
                   <Shield size={20} />
                   <span className="font-bold text-sm">ISO Certified</span>
                 </div>
-                <div className="text-xs opacity-90 text-center">Quality Assured</div>
+                <div className="text-xs opacity-90 text-center">
+                  Quality Assured
+                </div>
               </div>
 
               <div className="absolute top-1/2 -left-8 bg-white text-[#00659c] p-3 rounded-xl shadow-xl border border-blue-100 transform hover:scale-110 transition-transform duration-300 hidden sm:block">
@@ -116,12 +129,16 @@ const AboutUsSection = () => {
             <div className="mt-8 grid grid-cols-2 gap-4 max-w-xs mx-auto sm:max-w-sm">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20 text-center hidden md:block">
                 <Users size={24} className="text-[#fcbe57] mx-auto mb-2" />
-                <div className="text-white font-semibold text-sm">Expert Team</div>
+                <div className="text-white font-semibold text-sm">
+                  Expert Team
+                </div>
                 <div className="text-white/70 text-xs">Specialized Care</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20 text-center hidden md:block">
                 <Clock size={24} className="text-[#fcbe57] mx-auto mb-2" />
-                <div className="text-white font-semibold text-sm">24/7 Support</div>
+                <div className="text-white font-semibold text-sm">
+                  24/7 Support
+                </div>
                 <div className="text-white/70 text-xs">Always Available</div>
               </div>
             </div>
