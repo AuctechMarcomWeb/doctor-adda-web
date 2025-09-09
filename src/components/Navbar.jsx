@@ -35,7 +35,7 @@ const Navbar = () => {
   const [selectedLocation, setSelectedLocation] = useState("Lucknow");
 
   // Get user profile data from Redux
-  const { userProfileData, isLoggedIn, userData } = useSelector(
+  const { userProfileData, isLoggedIn, locationData } = useSelector(
     (state) => state.user
   );
 
@@ -59,8 +59,8 @@ const Navbar = () => {
 
   const displayLocation =
     selectedLocation ||
-    locationData?.address ||
     currentLocation ||
+    locationData?.address ||
     "Detecting...";
 
   // Auto-detect location with Geolocation API + Google Maps
@@ -78,6 +78,7 @@ const Navbar = () => {
             const data = await res.json();
 
             if (data.status === "OK") {
+              const formattedAddress = data.results[0].formatted_address;
               const addressComponents = data.results[0].address_components;
               let city = "";
               let state = "";
@@ -91,19 +92,18 @@ const Navbar = () => {
                 }
               });
 
-              const detectedLocation = `${city}, ${state}`;
-              setCurrentLocation(detectedLocation);
+              // const detectedLocation = `${city}, ${state}`;
+              setCurrentLocation(formattedAddress);
+              setSelectedLocation(formattedAddress);
 
               // ✅ Save to Redux
               dispatch(
                 updateLocationData({
                   latitude,
                   longitude,
-                  address: detectedLocation,
+                  address: formattedAddress,
                 })
               );
-
-              setSelectedLocation(`${city}, ${state}`);
             } else {
               console.error("Google Maps API error:", data.status);
             }
@@ -205,6 +205,11 @@ const Navbar = () => {
                 <LocationDropdown
                   onClose={() => setLocationOpen(false)}
                   setSelectedLocation={(addrObjOrString) => {
+                    console.log(
+                      "Address selected or clicked on current location",
+                      addrObjOrString
+                    );
+
                     const address =
                       typeof addrObjOrString === "string"
                         ? addrObjOrString
@@ -214,8 +219,8 @@ const Navbar = () => {
                     dispatch(
                       updateLocationData({
                         address,
-                        latitude: addrObjOrString?.lat,
-                        longitude: addrObjOrString?.lng,
+                        latitude: addrObjOrString?.latitude,
+                        longitude: addrObjOrString?.longitude,
                       })
                     );
                   }}

@@ -1,33 +1,36 @@
 import React, { useState, useEffect, useRef } from "react";
-import useLoadGoogleMaps from "../../Utils";
+import { useJsApiLoader } from "@react-google-maps/api";
 
 /**
  * LocationDropdown
  * Props:
  *  - onClose(): called when dropdown should close
- *  - setSelectedLocation(locationString | { address, lat, lng }): called with selected location
+ *  - setSelectedLocation(locationObject): called with { address, latitude, longitude }
  */
 const LocationDropdown = ({ onClose, setSelectedLocation }) => {
   const [search, setSearch] = useState("");
-  const [suggestions, setSuggestions] = useState([]); // array of place prediction objects
+  const [suggestions, setSuggestions] = useState([]);
   const [activeIndex, setActiveIndex] = useState(-1);
+
   const dropdownRef = useRef(null);
   const inputRef = useRef(null);
-  const mapsLoaded = useLoadGoogleMaps();
-
-  // Debounce timer ref
   const debounceRef = useRef(null);
+
+  // ✅ useJsApiLoader handles loading Google Maps JS API
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+    libraries: ["places"], // needed for autocomplete + geocoder
+  });
 
   // 1) AUTOCOMPLETE SUGGESTIONS
   useEffect(() => {
-    if (!mapsLoaded) return;
-    if (!search || search.trim().length === 0) {
+    if (!isLoaded) return;
+    if (!search.trim()) {
       setSuggestions([]);
       setActiveIndex(-1);
       return;
     }
 
-    // clear any existing debounce timer
     if (debounceRef.current) clearTimeout(debounceRef.current);
 
     debounceRef.current = setTimeout(() => {
@@ -39,7 +42,7 @@ const LocationDropdown = ({ onClose, setSelectedLocation }) => {
         service.getPlacePredictions(
           {
             input: search,
-            componentRestrictions: { country: "IN" }, // optional, adapt if needed
+            componentRestrictions: { country: "IN" },
             sessionToken,
           },
           (predictions, status) => {
@@ -51,7 +54,6 @@ const LocationDropdown = ({ onClose, setSelectedLocation }) => {
               setActiveIndex(-1);
             } else {
               setSuggestions([]);
-              setActiveIndex(-1);
             }
           }
         );
@@ -59,12 +61,12 @@ const LocationDropdown = ({ onClose, setSelectedLocation }) => {
         console.error("AutocompleteService error:", err);
         setSuggestions([]);
       }
-    }, 300); // debounce 300ms
+    }, 300);
 
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
-  }, [search, mapsLoaded]);
+  }, [search, isLoaded]);
 
   // 2) CLOSE WHEN CLICK OUTSIDE
   useEffect(() => {
@@ -77,62 +79,46 @@ const LocationDropdown = ({ onClose, setSelectedLocation }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [onClose]);
 
-  // 3) SELECT A PREDICTION -> fetch place details (address / geometry)
-  const handleSelect = async (prediction) => {
-    if (!prediction || !mapsLoaded) return;
+  // 3) SELECT A PREDICTION -> fetch details
+  const handleSelect = (prediction) => {
+    if (!prediction || !isLoaded) return;
 
-    try {
-      // create PlacesService with an off-DOM div
-      const service = new window.google.maps.places.PlacesService(
-        document.createElement("div")
-      );
+    const service = new window.google.maps.places.PlacesService(
+      document.createElement("div")
+    );
 
-      const placeId = prediction.place_id;
-      service.getDetails(
-        {
-          placeId,
-          fields: ["formatted_address", "geometry", "name"],
-        },
-        (placeResult, status) => {
-          if (
-            status === window.google.maps.places.PlacesServiceStatus.OK &&
-            placeResult
-          ) {
-            const address = placeResult.formatted_address || placeResult.name;
-            const lat = placeResult.geometry?.location?.lat?.();
-            const lng = placeResult.geometry?.location?.lng?.();
+    service.getDetails(
+      {
+        placeId: prediction.place_id,
+        fields: ["formatted_address", "geometry", "name"],
+      },
+      (placeResult, status) => {
+        if (
+          status === window.google.maps.places.PlacesServiceStatus.OK &&
+          placeResult
+        ) {
+          const address = placeResult.formatted_address || placeResult.name;
+          const lat = placeResult.geometry?.location?.lat?.();
+          const lng = placeResult.geometry?.location?.lng?.();
 
-            // update parent
-            setSelectedLocation?.({
-              address,
-              latitude: lat,
-              longitude: lng,
-            });
+          setSelectedLocation?.({ address, latitude: lat, longitude: lng });
 
-            // reflect in input and close dropdown
-            setSearch(address);
-            setSuggestions([]);
-            setActiveIndex(-1);
-            onClose?.();
+          setSearch(address);
+          setSuggestions([]);
+          setActiveIndex(-1);
+          onClose?.();
 
-            // focus the input (optional UX)
-            setTimeout(() => {
-              inputRef.current?.focus();
-            }, 50);
-          } else {
-            console.error("getDetails failed:", status);
-          }
+          setTimeout(() => inputRef.current?.focus(), 50);
+        } else {
+          console.error("getDetails failed:", status);
         }
-      );
-    } catch (err) {
-      console.error("Place details fetch error:", err);
-    }
+      }
+    );
   };
 
   // 4) KEYBOARD NAVIGATION
   const handleKeyDown = (e) => {
     if (!suggestions.length) return;
-
     if (e.key === "ArrowDown") {
       e.preventDefault();
       setActiveIndex((prev) => (prev < suggestions.length - 1 ? prev + 1 : 0));
@@ -149,77 +135,39 @@ const LocationDropdown = ({ onClose, setSelectedLocation }) => {
     }
   };
 
-  // 5) USE CURRENT LOCATION (geolocation -> reverse geocode)
+  // 5) USE CURRENT LOCATION
   const handleUseCurrentLocation = () => {
-    if (!mapsLoaded) {
-      // optionally show a small message to user
-      console.warn("Google Maps not loaded yet");
-      return;
-    }
+    if (!isLoaded) return;
 
-    if (!navigator.geolocation) {
-      console.warn("Geolocation not supported by browser");
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      async ({ coords }) => {
-        try {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        ({ coords }) => {
+          const { latitude, longitude } = coords;
           const geocoder = new window.google.maps.Geocoder();
-          const latlng = { lat: coords.latitude, lng: coords.longitude };
+          const latlng = { lat: latitude, lng: longitude };
 
           geocoder.geocode({ location: latlng }, (results, status) => {
-            if (
-              status === window.google.maps.GeocoderStatus.OK &&
-              results?.[0]
-            ) {
-              // Prefer a full formatted address (results[0])
+            if (status === "OK" && results?.[0]) {
               const formatted = results[0].formatted_address;
-
-              // Pass object to parent (address + lat/lng)
-              setSelectedLocation?.({
+              // ✅ Pass both address + lat/lng
+              setSelectedLocation({
                 address: formatted,
-                latitude: coords.latitude,
-                longitude: coords.longitude,
+                lat: latitude,
+                lng: longitude,
               });
 
-              // reflect in input and reset suggestions
               setSearch(formatted);
               setSuggestions([]);
               setActiveIndex(-1);
               onClose?.();
-
-              // focus input so user can still type if needed
               setTimeout(() => inputRef.current?.focus(), 50);
-            } else {
-              // fallback: use lat/lng string
-              const fallback = `${coords.latitude.toFixed(
-                6
-              )}, ${coords.longitude.toFixed(6)}`;
-              setSelectedLocation?.({
-                address: fallback,
-                latitude: coords.latitude,
-                longitude: coords.longitude,
-              });
-              setSearch(fallback);
-              setSuggestions([]);
-              setActiveIndex(-1);
-              onClose?.();
             }
           });
-        } catch (err) {
-          console.error("Reverse geocode error:", err);
-        }
-      },
-      (err) => {
-        console.error("Geolocation error:", err);
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0,
-      }
-    );
+        },
+        (err) => console.error("Geolocation error:", err),
+        { enableHighAccuracy: true }
+      );
+    }
   };
 
   return (
@@ -251,10 +199,8 @@ const LocationDropdown = ({ onClose, setSelectedLocation }) => {
                 onClick={() => handleSelect(p)}
                 onMouseEnter={() => setActiveIndex(idx)}
               >
-                {/* display the prediction description */}
                 <div className="font-medium">{p.description}</div>
                 <div className="text-xs text-gray-500">
-                  {/* show main_text + secondary_text if available */}
                   {p.structured_formatting?.secondary_text || ""}
                 </div>
               </div>
@@ -264,9 +210,9 @@ const LocationDropdown = ({ onClose, setSelectedLocation }) => {
 
         <hr className="my-2" />
 
-        {/* Use Current Location */}
+        {/* Use Current Location + Clear */}
         <div className="flex gap-2">
-          {!mapsLoaded ? (
+          {!isLoaded ? (
             <p className="text-gray-400 text-sm">Loading Google Maps…</p>
           ) : (
             <button
@@ -278,13 +224,11 @@ const LocationDropdown = ({ onClose, setSelectedLocation }) => {
             </button>
           )}
 
-          {/* optional clear button */}
           <button
             onClick={() => {
               setSearch("");
               setSuggestions([]);
               setActiveIndex(-1);
-              // keep focus for quick input
               setTimeout(() => inputRef.current?.focus(), 50);
             }}
             className="text-sm text-gray-500 hover:underline"
