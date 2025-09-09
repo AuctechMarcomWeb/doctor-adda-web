@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { getRequest } from "../Helpers";
 import { Download } from "lucide-react";
 import { FaGooglePlay } from "react-icons/fa";
-import { Skeleton, Card } from "antd";
+import { Skeleton, Card, Pagination } from "antd";
 
 // Mock DiagnosticCard component for demonstration
 
@@ -24,7 +24,8 @@ const DiagnosticCard = ({
   storeTiming,
   address,
   averageRating,
-  profileImage, _id
+  profileImage,
+  _id,
 }) => {
   const navigate = useNavigate();
   const handleViewDetails = () => {
@@ -32,11 +33,17 @@ const DiagnosticCard = ({
     navigate(`/diagnostic/${_id}`);
   };
   return (
-    <div onClick={() => handleViewDetails()} className="bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
+    <div
+      onClick={() => handleViewDetails()}
+      className="bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden"
+    >
       <div className="flex flex-col md:flex-row gap-4 p-4">
         {/* Thumbnail */}
         <img
-          src={profileImage || "https://media.istockphoto.com/id/1778188472/photo/doctor-examining-x-ray-images-in-mri-control-room.jpg?s=612x612&w=0&k=20&c=Qyw6_HvR1H7Yy4U7Nqz_fByN9n5n0tJcfNOVGRJEPjQ="}
+          src={
+            profileImage ||
+            "https://media.istockphoto.com/id/1778188472/photo/doctor-examining-x-ray-images-in-mri-control-room.jpg?s=612x612&w=0&k=20&c=Qyw6_HvR1H7Yy4U7Nqz_fByN9n5n0tJcfNOVGRJEPjQ="
+          }
           alt={profileImage}
           className="w-full md:w-20 h-40 md:h-28 rounded-xl object-cover border border-gray-200"
         />
@@ -109,37 +116,44 @@ const DiagnosticPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
   const [diagnosticData, setDiagnosticData] = useState([]);
-   const [loading, setLoading] = useState(true); // 👈 loading state
+  const [loading, setLoading] = useState(true); // 👈 loading state
   const [location, setLocation] = useState({
     radius: "5000",
     latitude: "",
     longitude: "",
     page: 1,
-    // limit: 5,
+    limit: 6,
   });
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalDiagnostics, setTotalDiagnostics] = useState(0);
+
   useEffect(() => {
     const fetchDiagostic = async () => {
       const url = `diagnostics?longitude=${location?.longitude}&latitude=${location?.latitude}&radius=${location?.radius}&page=${location?.page}`;
       try {
-         setLoading(true); // start skeleton
+        setLoading(true);
         const response = await getRequest(url);
-        if (response) {
-          console.log(
-            "Diagnostic Lists:",
-            response?.data?.data?.diagnostics || []
-          );
-          setDiagnosticData(response?.data?.data?.diagnostics || []);
+        if (response?.data?.data) {
+          const diagnostics = response.data.data.diagnostics || [];
+          const pages = response.data.data.totalPages || 1;
+          const current = response.data.data.currentPage || 1;
+          const total = response.data.data.totalDiagnostics || 0;
+
+          setDiagnosticData(diagnostics);
+          setTotalPages(pages);
+          setLocation((prev) => ({ ...prev, page: current }));
+          setTotalDiagnostics(total);
+          setLocation((prev) => ({ ...prev, page: current }));
         }
       } catch (error) {
         console.error("Error in Diagnostic Search:", error);
-      }finally {
-          setLoading(false); // stop skeleton
-        }
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchDiagostic();
-  }, [location]); // ✅ Add dependency here
-  
+  }, [location.page]);
 
   const filteredData = diagnosticData.filter((diagnostic) => {
     const matchesSearch =
@@ -284,8 +298,6 @@ const DiagnosticPage = () => {
           <div className="grid grid-cols-2 md:gap-16 items-center">
             {/* Left Content - Enhanced with Animations */}
             <div className="text-white space-y-4 md:space-y-8 animate-slide-left">
-
-
               {/* Main Heading */}
               <div className="">
                 <h2 className="text-xl md:text-2xl lg:text-4xl font-bold leading-tight">
@@ -323,7 +335,6 @@ const DiagnosticPage = () => {
                 className="flex flex-col sm:flex-row gap-4 md:pt-6 animate-fade-up"
                 style={{ animationDelay: "1.6s" }}
               >
-
                 <a href="https://play.google.com/store/apps/details?id=com.doctors.adda">
                   <button
                     onMouseEnter={() => setHoveredButton("download")}
@@ -342,7 +353,6 @@ const DiagnosticPage = () => {
                     </div>
                   </button>
                 </a>
-
               </div>
             </div>
 
@@ -490,8 +500,18 @@ const DiagnosticPage = () => {
                 <option value="24/7">24/7</option>
               </select>
               <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                <svg
+                  className="h-4 w-4 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
                 </svg>
               </div>
             </div>
@@ -544,6 +564,19 @@ const DiagnosticPage = () => {
           )}
         </div>
       </div>
+
+      {/* Pagination */}
+      {!loading && totalDiagnostics > 0 && (
+        <div className="flex justify-center mt-8">
+          <Pagination
+            current={location.page}
+            total={totalDiagnostics} // 👈 uses total items, not totalPages
+            pageSize={10} // 👈 same as your API limit
+            showSizeChanger={false} // hide pageSize dropdown (optional)
+            onChange={(page) => setLocation((prev) => ({ ...prev, page }))}
+          />
+        </div>
+      )}
 
       {/* WHY CHOOSE US */}
       {/* Why Choose Us Section */}

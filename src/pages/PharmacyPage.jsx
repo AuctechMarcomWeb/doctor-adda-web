@@ -1,64 +1,59 @@
 import React, { useEffect, useState } from "react";
-import PharmacyCard from "../components/PharmacyCard"; 
+import PharmacyCard from "../components/PharmacyCard";
 import { getRequest } from "../Helpers";
 import { Download } from "lucide-react";
 import { FaGooglePlay } from "react-icons/fa";
-import { Skeleton, Card } from "antd";
+import { Skeleton, Card, Pagination } from "antd";
 
 const PharmacyPage = () => {
   const [hoveredButton, setHoveredButton] = useState(null);
-
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
   const [pharmacyData, setPharmacyData] = useState([]);
-   const [loading, setLoading] = useState(true); // 👈 loading state
+  const [loading, setLoading] = useState(true);
+
+  // 🔹 Pagination states (from API)
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalPharmacies, setTotalPharmacies] = useState(0);
+  const itemsPerPage = 6; // server decides, but we’ll keep it for UI control
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  // 🔹 Fetch pharmacies (server-side pagination)
   useEffect(() => {
     const fetchPharmacies = async () => {
       try {
-         setLoading(true); // start skeleton
-        const response = await getRequest(`pharmacy`);
-        console.log("Pharmacies Lists:", response?.data?.data?.pharmacies || []);
-        setPharmacyData(response?.data?.data?.pharmacies || []);
+        setLoading(true);
+        // Pass pagination params to API
+        const response = await getRequest(
+          `pharmacy?page=${currentPage}&limit=${itemsPerPage}`
+        );
+        const result = response?.data?.data;
+
+        setPharmacyData(result?.pharmacies || []);
+        setTotalPages(result?.totalPages || 1);
+        setTotalPharmacies(result?.totalPharmacies || 0);
       } catch (error) {
         console.error("Error Fetching Pharmacies:", error);
         setPharmacyData([]);
-      }finally {
-          setLoading(false); // stop skeleton
-        }
+      } finally {
+        setLoading(false);
+      }
     };
     fetchPharmacies();
-  }, []);
+  }, [currentPage]);
 
-
-  //  useEffect(() => {
-  //     const fetchAmbulances = async () => {
-  //       try {
-  //         setLoading(true); // start skeleton
-  //         const res = await getRequest(`ambulance?radius=${location?.radius}`);
-  //         setAmbulanceData(res?.data?.data?.ambulances || []);
-  //       } catch (error) {
-  //         console.error(" Error fetching ambulances:", error);
-  //         setAmbulanceData([]);
-  //       } finally {
-  //         setLoading(false); // stop skeleton
-  //       }
-  //     };
-  
-  //     fetchAmbulances();
-  //   }, [location?.radius]);
-
-
+  // 🔹 Client-side filter/search (only on current page data)
   const filteredData = pharmacyData.filter((pharmacy) => {
     const matchesSearch =
       pharmacy.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       pharmacy.address.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter =
       filterType === "all" ||
-      pharmacy.type.toLowerCase().includes(filterType.toLowerCase());
+      pharmacy.type?.toLowerCase().includes(filterType.toLowerCase());
     return matchesSearch && matchesFilter;
   });
 
@@ -71,7 +66,7 @@ const PharmacyPage = () => {
           background:
             "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
         }}
-        >
+      >
         {/* Animated Background Elements */}
         <div className="absolute inset-0 bg-black/10"></div>
 
@@ -126,8 +121,6 @@ const PharmacyPage = () => {
           <div className="grid grid-cols-2 lg:grid-cols-2 md:gap-12 items-center">
             {/* Left Content */}
             <div className=" lg:text-left">
-              
-
               <h2 className="text-xl md:text-2xl lg:text-4xl font-bold mb-2 md:mb-6 animate-fadeIn">
                 <span className="block">Pharmacy &</span>
                 <span className="block bg-gradient-to-r from-cyan-200 to-green-200 bg-clip-text text-transparent">
@@ -170,23 +163,23 @@ const PharmacyPage = () => {
                 style={{ animationDelay: "0.9s" }}
               >
                 <a href="https://play.google.com/store/apps/details?id=com.doctors.adda">
-                <button
-                  onMouseEnter={() => setHoveredButton("download")}
-                  onMouseLeave={() => setHoveredButton(null)}
-                  className="group relative bg-white text-gray-900 md:px-6 md:py-4 px-3 py-2 md:rounded-2xl rounded-lg font-bold   text-xs md:text-base lg:text-lg hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105 transition-all duration-300 overflow-hidden animate-slide-in-left cursor-pointer"
-                  style={{ animationDelay: "1s" }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-                  <div className="relative z-10 flex items-center md:gap-3 gap-1 group-hover:text-white transition-colors duration-300">
-                    <FaGooglePlay className="w-5 h-5 group-hover:animate-bounce" />
-                    Download App
-                    {hoveredButton === "download" && (
-                      <div className="absolute -right-2 -top-2 w-3 h-3 bg-green-400 rounded-full animate-ping"></div>
-                    )}
-                  </div>
-                </button>
-              </a>
+                  <button
+                    onMouseEnter={() => setHoveredButton("download")}
+                    onMouseLeave={() => setHoveredButton(null)}
+                    className="group relative bg-white text-gray-900 md:px-6 md:py-4 px-3 py-2 md:rounded-2xl rounded-lg font-bold   text-xs md:text-base lg:text-lg hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105 transition-all duration-300 overflow-hidden animate-slide-in-left cursor-pointer"
+                    style={{ animationDelay: "1s" }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                    <div className="relative z-10 flex items-center md:gap-3 gap-1 group-hover:text-white transition-colors duration-300">
+                      <FaGooglePlay className="w-5 h-5 group-hover:animate-bounce" />
+                      Download App
+                      {hoveredButton === "download" && (
+                        <div className="absolute -right-2 -top-2 w-3 h-3 bg-green-400 rounded-full animate-ping"></div>
+                      )}
+                    </div>
+                  </button>
+                </a>
 
                 {/* <button className="border-2 border-white text-white font-bold py-4 px-6 rounded-full text-lg hover:bg-white hover:text-blue-600 transition-all duration-300 transform hover:scale-105 cursor-pointer">
                   Book Appointment
@@ -237,7 +230,7 @@ const PharmacyPage = () => {
               <div
                 className="absolute -bottom-6 -right-6 bg-white rounded-2xl p-4 shadow-xl animate-bounce hidden md:block"
                 style={{ animationDelay: "2s", animationDuration: "2.5s" }}
-                >
+              >
                 <div className="flex items-center gap-3 ">
                   <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
                     <span className="text-2xl">
@@ -330,14 +323,14 @@ const PharmacyPage = () => {
         }
       `}</style>
 
-      {/* Search and Filters */}
-      <div className="sm:w-full lg:w-[80%]  xl:w-[80%] 2xl:w-[70%] mx-auto px-2  py-8">
+      {/* Search + Filters */}
+      <div className="sm:w-full lg:w-[80%] xl:w-[80%] 2xl:w-[70%] mx-auto px-2 py-8">
         <div className="bg-white rounded-2xl shadow-lg p-2 md:p-6 mb-8 border border-gray-100">
           <div className="flex flex-row items-center md:flex-row gap-4">
-            <input 
+            <input
               type="text"
               placeholder="Search by name or location..."
-              className=" w-full pl-4 pr-4 md:py-3 py-1 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+              className="w-full pl-4 pr-4 md:py-3 py-1 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -355,23 +348,8 @@ const PharmacyPage = () => {
         </div>
 
         {/* Results */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl  md:text-2xl lg:text-3xl font-bold text-gray-800 text-center text-gray-800">
-            Available{" "}
-            <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-              Pharmacies{" "}
-            </span>
-          </h2>
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <span className="w-3 h-3 bg-green-500 rounded-full"></span>
-            <span>Live Updates</span>
-          </div>
-        </div>
-        {/* Stats Section */}
-
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {loading ? (
-            // 🔹 Skeleton grid (shows 4 placeholders)
             Array.from({ length: 4 }).map((_, i) => (
               <Card key={i} className="rounded-2xl shadow-md">
                 <Skeleton active avatar paragraph={{ rows: 3 }} />
@@ -391,7 +369,7 @@ const PharmacyPage = () => {
             <div className="col-span-full text-center py-12">
               <div className="text-6xl mb-4">🔍</div>
               <h3 className="text-xl font-semibold text-gray-700 mb-2">
-                No ambulances found
+                No pharmacies found
               </h3>
               <p className="text-gray-500">
                 Try adjusting your search or filter criteria
@@ -399,8 +377,23 @@ const PharmacyPage = () => {
             </div>
           )}
         </div>
-      </div>
 
+        {/* Pagination (now uses API totalPharmacies) */}
+        {totalPharmacies > itemsPerPage && (
+          <div className="flex justify-center mt-10">
+            <Pagination
+              current={currentPage}
+              total={totalPharmacies} // from API
+              pageSize={itemsPerPage}
+              onChange={(page) => {
+                setCurrentPage(page);
+                window.scrollTo({ top: 500, behavior: "smooth" });
+              }}
+              showSizeChanger={false}
+            />
+          </div>
+        )}
+      </div>
       {/* why choose us */}
       {/* Why Choose Section */}
       <div className="sm:w-full lg:w-[80%]  xl:w-[80%] 2xl:w-[70%] mx-auto px-4 md:py-8">
