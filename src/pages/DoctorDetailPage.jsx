@@ -28,7 +28,12 @@ import {
   TrendingUp,
   Zap,
 } from "lucide-react";
-import { useNavigate, useLocation, useParams, Navigate } from "react-router-dom";
+import {
+  useNavigate,
+  useLocation,
+  useParams,
+  Navigate,
+} from "react-router-dom";
 import { getRequest } from "../Helpers";
 import { AppointmentDateFormat } from "../Utils";
 import AppointmentFlow from "../components/AppointmentFlow";
@@ -135,8 +140,8 @@ const DoctorDetailPage = () => {
   const [reviews, setReviews] = useState([]);
   const [showAppointmentPopup, setShowAppointmentPopup] = useState(false);
   const [doctor, setDoctor] = useState(null);
-  console.log("doctor====",doctor);
-  const [updateStatus,setUpdateStatus] = useState(null);
+  console.log("doctor====", doctor);
+  const [updateStatus, setUpdateStatus] = useState(null);
   const [clinicData, setClinicData] = useState(null);
   const [selectedClinicIndex, setSelectedClinicIndex] = useState(0);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -147,10 +152,10 @@ const DoctorDetailPage = () => {
     age: "",
     gender: "",
     number: "",
-    weight: ""
+    weight: "",
   });
   const [appointmentData, setAppointmentData] = useState(null);
-  const userId = useSelector((state) => state.user.userData._id);
+  const userId = useSelector((state) => state.user.userProfileData._id);
 
   const phoneNumber = "102";
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -196,15 +201,14 @@ const DoctorDetailPage = () => {
   console.log("selectedDateData", selectedDateData);
 
   const { id } = useParams();
-    const navigate = useNavigate();
-  
-const handleOpenManagePatients = () => {
+  const navigate = useNavigate();
+
+  const handleOpenManagePatients = () => {
     navigate("/manage-patients");
   };
   const handleOpenManagePets = () => {
     navigate("/pets");
   };
-
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -275,7 +279,6 @@ const handleOpenManagePatients = () => {
     console.log("clinicData", clinicData);
 
     console.log("finalData", finalData);
-    
   };
 
   return (
@@ -614,14 +617,14 @@ const handleOpenManagePatients = () => {
           </aside>
         </div>
       </main>
-      <DiagonsticsReviewPopup    
-    open={showReviewPopup}
+      <DiagonsticsReviewPopup
+        open={showReviewPopup}
         onClose={() => setShowReviewPopup(false)}
         id={id}
         entityType="doctor"
-        onReviewAdded={review => setReviews([...reviews, review])}
+        onReviewAdded={(review) => setReviews([...reviews, review])}
         setUpdateStatus={setUpdateStatus}
-/>
+      />
       <AppointmentFlow
         open={showAppointmentPopup}
         onClose={() => setShowAppointmentPopup(false)}
@@ -631,7 +634,6 @@ const handleOpenManagePatients = () => {
         setOtherPatientDetails={setOtherPatientDetails}
         onOpenManagePatients={handleOpenManagePatients}
         onOpenManagePets={handleOpenManagePets}
-
       />
     </div>
   );

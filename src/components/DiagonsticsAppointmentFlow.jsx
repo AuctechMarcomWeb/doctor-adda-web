@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { AppointmentDateFormat } from "../Utils";
 import toast from "react-hot-toast";
 import RenderRazorPay from "../components/RenderRazorPay";
+import { useNavigate } from "react-router-dom";
 
 const DiagonsticsAppointmentFlow = ({
   open,
@@ -18,6 +19,7 @@ const DiagonsticsAppointmentFlow = ({
   setOtherPatientDetails,
   onOpenManagePatients = () => {},
 }) => {
+  const navigate = useNavigate()
   const [diagnostics, setDiagnostics] = useState(null);
   const [step, setStep] = useState(1);
   const [bookingData, setBookingData] = useState(null);
@@ -58,6 +60,8 @@ const DiagonsticsAppointmentFlow = ({
     setSelectedPayment(null);
     setShowRazorpay(false);
     setOrderId("");
+    navigate("/appointments");
+
     onClose();
   };
 
@@ -149,44 +153,48 @@ const DiagonsticsAppointmentFlow = ({
   };
 
   // Razorpay verifyPayment
-const handlePayment = async (paymentResponse) => {
-  console.log("paymentResponse", paymentResponse);
+  const handlePayment = async (paymentResponse) => {
+    console.log("paymentResponse", paymentResponse);
 
-  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = paymentResponse;
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+      paymentResponse;
 
-  if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
-    toast.error("Invalid payment response");
-    return;
-  }
-
-  const payload = { razorpay_order_id, razorpay_payment_id, razorpay_signature };
-
-  try {
-    setPaymentLoading(true);
-
-    // ✅ Correct payload key
-    const verifyRes = await postRequest({
-      url: `diagnosticBooking/verifyPayment`,
-      cred: {...payload}, 
-    });
-
-    console.log("Verify Payment API Response:", verifyRes?.data?.data);
-    setBookingData(verifyRes?.data?.data); // ✅ store complete booking details
-
-    if (verifyRes?.data?.success) {
-      toast.success("Payment Verified Successfully");
-    } else {
-      toast.error("Payment Verification Failed");
+    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+      toast.error("Invalid payment response");
+      return;
     }
 
-  } catch (err) {
-    console.error("Error verifying payment:", err);
-    toast.error("Error verifying payment");
-  } finally {
-    setPaymentLoading(false);
-    setShowRazorpay(false);
-  }
-};
+    const payload = {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+    };
+
+    try {
+      setPaymentLoading(true);
+
+      // ✅ Correct payload key
+      const verifyRes = await postRequest({
+        url: `diagnosticBooking/verifyPayment`,
+        cred: { ...payload },
+      });
+
+      console.log("Verify Payment API Response:", verifyRes?.data?.data);
+      setBookingData(verifyRes?.data?.data); // ✅ store complete booking details
+
+      if (verifyRes?.data?.success) {
+        toast.success("Payment Verified Successfully");
+      } else {
+        toast.error("Payment Verification Failed");
+      }
+    } catch (err) {
+      console.error("Error verifying payment:", err);
+      toast.error("Error verifying payment");
+    } finally {
+      setPaymentLoading(false);
+      setShowRazorpay(false);
+    }
+  };
 
   useEffect(() => {
     console.log("Step changed:", step);
@@ -197,7 +205,6 @@ const handlePayment = async (paymentResponse) => {
       <div className="fixed inset-0 bg-black/30 backdrop-blur-sm" />
       <div className="fixed inset-0 flex items-center justify-center p-4 sm:p-6">
         <Dialog.Panel className="bg-white p-5 sm:p-6 rounded-xl shadow-2xl w-full max-w-sm sm:max-w-md lg:max-w-lg">
-          
           {/* Step 1: Who is this appointment for */}
           {step === 1 && (
             <>
@@ -395,7 +402,7 @@ const handlePayment = async (paymentResponse) => {
                 </Dialog.Title>
 
                 <div className="bg-red-50 border border-red-200 text-red-600 font-semibold text-sm rounded-xl px-2 py-2 mb-2 text-center">
-                      {bookingData?.status  || "N/A"}
+                  {bookingData?.status || "N/A"}
                 </div>
 
                 {/* Diagnostic Info */}
@@ -532,26 +539,23 @@ const handlePayment = async (paymentResponse) => {
             </div>
           )}
 
-{showRazorpay && orderId && (
-  <RenderRazorPay
-    orderId={orderId}
-    currency="INR"
-    amount={appointmentData?.amount * 100 || 0}
-    setUpdateStatus={async (response) => {
-      console.log("🔄 Payment verified", response);
-      await handlePayment(response); // backend verify
-      setShowRazorpay(false);
+          {showRazorpay && orderId && (
+            <RenderRazorPay
+              orderId={orderId}
+              currency="INR"
+              amount={appointmentData?.amount * 100 || 0}
+              setUpdateStatus={async (response) => {
+                console.log("🔄 Payment verified", response);
+                await handlePayment(response); // backend verify
+                setShowRazorpay(false);
 
-      // Trigger Step 4 only after modal fully closes
-      setTimeout(() => setStep(4), 100);
-    }}
-    onClose={() => setShowRazorpay(false)}
-  />
-)}
-
-
-
-</Dialog.Panel>
+                // Trigger Step 4 only after modal fully closes
+                setTimeout(() => setStep(4), 100);
+              }}
+              onClose={() => setShowRazorpay(false)}
+            />
+          )}
+        </Dialog.Panel>
       </div>
     </Dialog>
   );
