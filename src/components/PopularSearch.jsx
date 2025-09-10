@@ -1,102 +1,172 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
-import AmbulanceCard from "../components/AmbulanceCard";
+import { useLocation } from "react-router-dom";
 import { getRequest } from "../Helpers";
-import AmbulanceBanner from "../components/AmbulanceBanner";
-import SearchCard from "./SearchCard";
+import { useSelector } from "react-redux";
+
+import { DoctorCard } from "../pages/DoctorList";
+import HospitalCard from "./HospitalCard";
+import { DiagnosticCard } from "../pages/DiagnosticPage";
+import PharmacyCard from "./PharmacyCard";
+import AmbulanceCard from "./AmbulanceCard";
 
 const PopularSearch = () => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filterType, setFilterType] = useState("all");
-  const [ambulanceData, setAmbulanceData] = useState([]);
-  const [location, setLocation] = useState({
-    radius: "8000",
+  const locationState = useLocation();
+  const { query = "" } = locationState.state || {};
+
+  const location = useSelector((state) => state?.user?.locationData);
+
+  const [searchQuery, setSearchQuery] = useState(query);
+  const [results, setResults] = useState({
+    doctors: [],
+    hospitals: [],
+    ambulances: [],
+    pharmacies: [],
+    diagnostics: [],
   });
+  const [activeTab, setActiveTab] = useState("doctors");
+  const [loading, setLoading] = useState(true);
+
+  // 🔹 Fetch global search data
+  const fetchData = async (searchText = "") => {
+    try {
+      setLoading(true);
+      const res = await getRequest(
+        `global-search?longitude=${location?.longitude}&latitude=${location?.latitude}&query=${searchText}&radius=10000`
+      );
+      console.log("Global Search Response:", res?.data?.data);
+
+      setResults({
+        doctors: res?.data?.data?.doctors || [],
+        hospitals: res?.data?.data?.hospitals || [],
+        ambulances: res?.data?.data?.ambulances || [],
+        pharmacies: res?.data?.data?.pharmacies || [],
+        diagnostics: res?.data?.data?.diagnostics || [],
+      });
+    } catch (err) {
+      console.error("Error fetching search results:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchAmbulances = async () => {
-      try {
-        const res = await getRequest(`ambulance?radius=${location?.radius}`);
-        console.log(" Ambulance Lists:", res?.data?.data?.ambulances || []);
-        setAmbulanceData(res?.data?.data?.ambulances || []);
-      } catch (error) {
-        console.error(" Error fetching ambulances:", error);
-        setAmbulanceData([]);
+    fetchData(searchQuery || query);
+  }, [query]);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    fetchData(searchQuery);
+  };
+
+  // 🔹 Card Renderer
+  // 🔹 Card Renderer
+  const renderCards = (data, type) => {
+    if (!data || data.length === 0) {
+      return (
+        <div className="col-span-full text-center py-12">
+          <div className="text-6xl mb-4">🔍</div>
+          <h3 className="text-xl font-semibold text-gray-700 mb-2">
+            No {type} found
+          </h3>
+          <p className="text-gray-500">Try a different search</p>
+        </div>
+      );
+    }
+
+    return data.map((item, index) => {
+      switch (type) {
+        case "doctors":
+          return (
+            <div key={index} className="animate-fadeIn">
+              <DoctorCard data={item} />
+            </div>
+          );
+        case "hospitals":
+          return (
+            <div key={index} className="animate-fadeIn">
+              <HospitalCard data={item} />
+            </div>
+          );
+        case "ambulances":
+          return (
+            <div key={index} className="animate-fadeIn">
+              <AmbulanceCard {...item} />
+            </div>
+          );
+        case "pharmacies":
+          return (
+            <div key={index} className="animate-fadeIn">
+              <PharmacyCard {...item} />
+            </div>
+          );
+        case "diagnostics":
+          return (
+            <div key={index} className="animate-fadeIn">
+              <DiagnosticCard {...item} />
+            </div>
+          );
+        default:
+          return null;
       }
-    };
-
-    fetchAmbulances();
-  }, [location?.radius]);
-
-  const filteredData = ambulanceData.filter((ambulance) => {
-    const matchesSearch =
-      ambulance.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      ambulance.address.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter =
-      filterType === "all" ||
-      ambulance.ambulanceType.toLowerCase().includes(filterType.toLowerCase());
-    return matchesSearch && matchesFilter;
-  });
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-red-50">
-      {/* Hero Banner */}
+      <div className="sm:w-full lg:w-[80%] mx-auto px-4 py-10 pt-33 pb-10">
+        {/* 🔹 Search Box */}
+        <form onSubmit={handleSearch} className="mb-8 flex items-center gap-3">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search doctors, hospitals, ambulances..."
+            className="flex-1 px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            type="submit"
+            className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition"
+          >
+            Search
+          </button>
+        </form>
 
-      
+        {/* 🔹 Tabs for categories */}
+        <div className="flex flex-wrap gap-3 mb-8 border-b border-gray-200">
+          {[
+            "doctors",
+            "hospitals",
+            "ambulances",
+            "pharmacies",
+            "diagnostics",
+          ].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`px-4 py-2 rounded-t-md text-sm font-medium transition ${
+                activeTab === tab
+                  ? "bg-white border border-b-0 border-gray-300 text-blue-600 shadow-sm"
+                  : "text-gray-600 hover:text-blue-600"
+              }`}
+            >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}{" "}
+              <span className="ml-1 text-gray-400">
+                ({results[tab]?.length || 0})
+              </span>
+            </button>
+          ))}
+        </div>
 
-      
-
-      {/* Search and Filter Section */}
-      <div className="sm:w-full lg:w-[80%]  xl:w-[80%] 2xl:w-[70%] mx-auto px-4 py-36">
-       
-        {/* Results Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl  md:text-2xl lg:text-3xl font-bold text-gray-800">
-            Available{" "}
-            <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-              Hospital
-            </span>
-            <span className="ml-2 text-lg text-gray-500">
-              ({filteredData.length})
-            </span>
-          </h2>
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <span className="w-3 h-3 bg-green-500 rounded-full"></span>
-            <span>Live Updates </span>
+        {/* 🔹 Results */}
+        {loading ? (
+          <p className="text-center text-gray-600">Loading...</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {renderCards(results[activeTab], activeTab)}
           </div>
-        </div>
-
-        {/* Ambulance Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {filteredData.length > 0 ? (
-            filteredData.map((data, index) => (
-              <div
-                key={index}
-                className="animate-fadeIn"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <SearchCard {...data} />
-              </div>
-            ))
-          ) : (
-
-            <div className="col-span-full text-center py-12">
-              <div className="text-6xl mb-4">🔍</div>
-              <h3 className="text-xl font-semibold text-gray-700 mb-2">
-                No ambulancess found
-              </h3>
-              <p className="text-gray-500">
-                Try adjusting your search or filter criteria
-              </p>
-            </div>
-          )}
-        </div>
+        )}
       </div>
-
-      
     </div>
   );
 };

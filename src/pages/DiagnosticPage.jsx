@@ -18,7 +18,7 @@ import { Skeleton, Card, Pagination } from "antd";
 
 // Mock DiagnosticCard component for demonstration
 
-const DiagnosticCard = ({
+export const DiagnosticCard = ({
   name,
   services,
   storeTiming,

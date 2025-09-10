@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SpecialtiesDropdown from "./SpecialtiesDropdown";
+import { getRequest } from "../Helpers";
 
 const DoctorSearch = () => {
   const [query, setQuery] = useState("");
@@ -8,6 +9,8 @@ const DoctorSearch = () => {
   const [filteredSuggestions, setFilteredSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [warning, setWarning] = useState(""); // 🔹 Warning message
+  const [searchResults, setSearchResults] = useState([]);
+  const [loading, setLoading] = useState(true); // for skeleton
   const navigate = useNavigate();
 
   // Example list (replace with API)
@@ -61,7 +64,9 @@ const DoctorSearch = () => {
       return;
     }
     setWarning(""); // clear any warning
-    navigate("/popular");
+    navigate("/popular", {
+      state: { query, specialty }, // ✅ pass query & specialty here
+    });
   };
 
   // 🔹 Enter Key Press
@@ -71,6 +76,25 @@ const DoctorSearch = () => {
       handleSearch();
     }
   };
+
+  const fetchData = async () => {
+    const url = `global-search?longitude=${location?.longitude}&latitude=${location?.latitude}&query=${query}&radius=${location?.radius}`;
+
+    try {
+      const response = await getRequest(url);
+
+      if (response) {
+        console.log("Global Search Response:", response?.data?.data);
+        setSearchResults(response?.data?.data || []);
+      }
+    } catch (error) {
+      console.error("Error in Global Search:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <div className="hidden md:grid mt-8 w-full max-w-xl mx-auto text-black relative  ">
