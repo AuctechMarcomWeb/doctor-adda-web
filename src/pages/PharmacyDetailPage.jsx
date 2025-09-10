@@ -28,6 +28,7 @@ import { getRequest } from "../Helpers";
 import { useParams } from "react-router-dom";
 import PharmacyAppointmentFlow from "../components/PharmacyAppointmentFlow";
 import PharmacyOrder from "./Pharmacy/pharmacyOrder";
+import AppDownloadModal from "../components/AppDownloadModal/AppDownLoadMOdal";
 
 const PharmacyDetailPage = () => {
   const [pharmacy, setPharmacy] = useState(null);
@@ -42,6 +43,7 @@ const PharmacyDetailPage = () => {
   const [showReviewPopup, setShowReviewPopup] = useState(false);
   const [updateStatus, setUpdateStatus] = useState(false);
   const [showAppointmentFlow, setShowAppointmentFlow] = useState(false);
+  const [showAppDownloadModal, setShowAppDownloadModal] = useState(false);
 
   const { id } = useParams();
 
@@ -334,11 +336,33 @@ const PharmacyDetailPage = () => {
                   </p>
                 </div>
 
-                {/* Prescription Upload Section */}
+                {/* Prescription Upload Section
                 <PharmacyOrder
                   onUploadSubmit={handlePrescriptionUpload}
                   onCartSubmit={handleCartSubmit}
-                />
+                /> */}
+                {/* ✅ New Order Medicine Section */}
+                <div className="p-6">
+                  {/* ✅ New Order Medicine Section */}
+                  <div className="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-xl p-6 shadow-sm">
+                    <p className="text-gray-800 font-semibold text-lg">
+                      Want to order medicine to nearby pharmacy?
+                    </p>
+                    <button
+                      onClick={() => setShowAppDownloadModal(true)} // 👉 open modal
+                      className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:from-blue-700 hover:to-indigo-700 transition-all duration-300"
+                    >
+                      Book Now
+                    </button>
+                  </div>
+
+                  {/* ✅ App Download Modal */}
+                  <AppDownloadModal
+                    open={showAppDownloadModal}
+                    onClose={() => setShowAppDownloadModal(false)}
+                    playStoreLink="https://play.google.com/store/apps/details?id=com.doctors.adda" // 👉 replace with your actual Play Store link
+                  />
+                </div>
 
                 {/* Services Grid */}
                 <div>
