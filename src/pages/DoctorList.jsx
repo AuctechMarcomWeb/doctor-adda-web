@@ -21,7 +21,7 @@ import { getRequest } from "../Helpers";
 import { Skeleton, Card, Pagination } from "antd";
 import { FaApple, FaGooglePlay } from "react-icons/fa";
 
-const DoctorCard = ({ data, modeFilter }) => {
+export const DoctorCard = ({ data, modeFilter }) => {
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
 

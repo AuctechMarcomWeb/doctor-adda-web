@@ -30,24 +30,7 @@ const BannerSection = () => {
     radius: "5000",
   });
 
-  const fetchData = async () => {
-    const url = `global-search?longitude=${location?.longitude}&latitude=${location?.latitude}&query=${location?.query}&radius=${location?.radius}`;
 
-    try {
-      const response = await getRequest(url);
-
-      if (response) {
-        console.log("Global Search Response:", response?.data?.data);
-        setSearchResults(response?.data?.data || []);
-      }
-    } catch (error) {
-      console.error("Error in Global Search:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   return (
     <div
