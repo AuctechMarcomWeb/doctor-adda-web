@@ -23,14 +23,14 @@ const DownloadAppSection = () => {
               <span className="text-xs md:text-base font-semibold">Download App</span>
             </a>
 
-            {/* App Store Button */}
+            {/* App Store Button
             <a
               href="#"
               className="flex items-center gap-3 bg-white text-blue-700 px-5 py-3 rounded-xl shadow-md hover:bg-gray-100 transition"
             >
               <FaApple size={22} />
               <span className="text-xs md:text-base font-semibold">App Store</span>
-            </a>
+            </a> */}
           </div>
         </div>
 
