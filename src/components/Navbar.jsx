@@ -204,7 +204,7 @@ const Navbar = () => {
               {locationOpen && (
                 <LocationDropdown
                   onClose={() => setLocationOpen(false)}
-                  setSelectedLocation={(addrObjOrString) => {
+                  setSelectedLocation={async (addrObjOrString) => {
                     console.log(
                       "Address selected or clicked on current location",
                       addrObjOrString
@@ -214,15 +214,33 @@ const Navbar = () => {
                       typeof addrObjOrString === "string"
                         ? addrObjOrString
                         : addrObjOrString.address;
+
                     setSelectedLocation(address);
-                    // optionally include lat/lng if you have them
-                    dispatch(
-                      updateLocationData({
-                        address,
-                        latitude: addrObjOrString?.latitude,
-                        longitude: addrObjOrString?.longitude,
-                      })
-                    );
+
+                    // prepare location payload
+                    const payload = {
+                      address,
+                      latitude: addrObjOrString?.latitude,
+                      longitude: addrObjOrString?.longitude,
+                    };
+
+                    // ✅ Save to Redux
+                    dispatch(updateLocationData(payload));
+
+                    // ✅ Update user profile via API
+                    if (userProfileData?._id) {
+                      try {
+                        const res = await patchRequest({
+                          url: `auth/updateProfile/${userProfileData._id}`,
+                          cred: payload,
+                        });
+                        toast.success("Profile updated successfully!");
+                        console.log("Update Location API Response:", res);
+                      } catch (err) {
+                        console.error("Error updating profile location:", err);
+                        toast.error("Failed to update location");
+                      }
+                    }
                   }}
                 />
               )}
