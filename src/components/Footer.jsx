@@ -36,7 +36,7 @@ const Footer = () => {
     <>
       {/* Footer */}
       <footer id="contact" className="bg-gray-900 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 max-w-[85%]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 md:max-w-[85%] ">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center space-x-2 mb-6">
@@ -140,7 +140,7 @@ const Footer = () => {
               &copy; 2025 Doctor Adda. All rights reserved. Designed by Auctech
               MarCom
             </p>
-            <div className="mt-4 flex justify-center items-center gap-4 text-sm">
+            <div className="mt-4 flex justify-center items-center flex-wrap gap-4 text-sm">
               <Link
                 to="/privacy-policy"
                 className="text-gray-400 hover:text-white transition-colors cursor-pointer"

@@ -72,7 +72,7 @@ const LoginStep = ({ setStep, setMobile, setMode }) => {
   const { image, heading, subtext, icon: Icon } = slides[currentSlide];
 
   return (
-    <div className=" flex items-center justify-center p-4">
+    <div className=" flex items-center justify-center md:p-4">
       <div className="flex w-full max-w-6xl bg-white/90 backdrop-blur-sm shadow-2xl rounded-2xl overflow-hidden border border-white/20">
         {/* Left Slider Section */}
         <div className="hidden lg:flex lg:w-1/2 relative text-white flex-col justify-center items-center p-12 transition-all duration-700 ease-in-out">
@@ -115,17 +115,17 @@ const LoginStep = ({ setStep, setMobile, setMode }) => {
         </div>
 
         {/* Right Login Form Section */}
-        <div className="w-full lg:w-1/2 p-8 lg:p-12 bg-white relative">
+        <div className="w-full lg:w-1/2 py-12 px-4 lg:p-12 bg-white relative">
         
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-100 to-blue-100 rounded-full -translate-y-16 translate-x-16 opacity-50"></div>
 
           <div className="relative z-10 space-y-8">
 
             <div className="space-y-3">
-              <h2 className="text-3xl font-bold text-gray-900 tracking-tight">
+              <h2 className=" text-xl md:text-3xl font-bold text-gray-900 tracking-tight">
                 Welcome <span className="text-blue-600">Back</span> To Doctor Adda
               </h2>
-              <p className="text-gray-600 text-lg">
+              <p className="text-gray-600 text-sm md:text-lg">
                 Enter your mobile number to continue
               </p>
             </div>
@@ -137,9 +137,9 @@ const LoginStep = ({ setStep, setMobile, setMode }) => {
                   Mobile Number
                 </label>
                 <div className="relative">
-                  <div className="flex items-center border-2 border-gray-200 rounded-xl px-4 py-4 transition-all duration-300 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10 hover:border-gray-300">
+                  <div className="flex items-center border-2 border-gray-200 rounded-xl px-4 py-4 transition-all duration-300 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10 hover:border-gray-300 overflow-x-hidden">
                     <div className="flex items-center gap-3 text-gray-600 border-r border-gray-200 pr-4">
-                      <span className="text-xl">🇮🇳</span>
+                      <span className="text-sm md:text-xl">🇮🇳</span>
                       <span className="font-semibold">+91</span>
                     </div>
                     <input
@@ -153,7 +153,7 @@ const LoginStep = ({ setStep, setMobile, setMode }) => {
                         setMobileNumber(value);
                         setMobile(value);
                       }}
-                      className="flex-1 text-lg outline-none bg-transparent ml-4 placeholder-gray-400"
+                      className="flex-1 text-sm md:text-lg outline-none bg-transparent ml-4 placeholder-gray-400"
                     />
                   </div>
                 </div>
@@ -164,7 +164,7 @@ const LoginStep = ({ setStep, setMobile, setMode }) => {
                   handleLogin()
                 }}
                 disabled={mobileNumber.length < 10 || isLoading}
-                className="w-full py-4 bg-gradient-to-r from-emerald-600 to-blue-600 text-white font-semibold rounded-xl flex items-center justify-center gap-3 hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0"
+                className="w-full py-4 bg-gradient-to-r from-emerald-600 to-blue-600 text-white font-semibold rounded-xl flex items-center justify-center gap-3 hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 text-sm md:text-lg"
               >
                 {isLoading ? (
                   <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>

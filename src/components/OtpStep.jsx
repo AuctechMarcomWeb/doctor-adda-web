@@ -240,7 +240,7 @@ const OtpStep = ({
   const isOtpComplete = otp.every((digit) => digit !== "");
 
   return (
-    <div className="flex items-center justify-center p-4">
+    <div className="flex items-center justify-center py-4 md:py-0 md:p-4">
       <div className="flex w-full max-w-6xl bg-white/90 backdrop-blur-sm shadow-2xl rounded-2xl overflow-hidden border border-white/20">
         {/* Left Slider Section */}
         <div className="hidden lg:flex lg:w-1/2 relative text-white flex-col justify-center items-center p-12 transition-all duration-700 ease-in-out">
@@ -283,7 +283,7 @@ const OtpStep = ({
         </div>
 
         {/* Right OTP Form Section */}
-        <div className="w-full lg:w-1/2 p-8 lg:p-12 bg-white relative">
+        <div className="w-full lg:w-1/2 p-4 md:p-8 lg:p-12 bg-white relative">
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-100 to-blue-100 rounded-full -translate-y-16 translate-x-16 opacity-50"></div>
 
           <div className="relative z-10 space-y-8">
@@ -302,7 +302,7 @@ const OtpStep = ({
                 )}
               </div>
               <div className="space-y-2">
-                <h2 className="text-3xl font-bold text-gray-900 tracking-tight">
+                <h2 className="text-xl md:text-3xl font-bold text-gray-900 tracking-tight">
                   {isVerified ? "Verified!" : "Verify OTP"}
                 </h2>
                 <p className="text-gray-600 text-lg">
@@ -313,7 +313,7 @@ const OtpStep = ({
                   ) : (
                     <>
                       Enter the 4-digit code sent to{" "}
-                      <span className="font-semibold text-gray-900">
+                      <span className="text-sm md:text-lg font-semibold text-gray-900"> <br />
                         +91-{mobile}
                       </span>
                     </>
@@ -359,7 +359,7 @@ const OtpStep = ({
               <button
                 onClick={handleVerifyOtp}
                 disabled={!isOtpComplete || isLoading || isVerified}
-                className={`w-full py-4 font-semibold rounded-xl flex items-center justify-center gap-3 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 ${
+                className={`w-full py-4 text-sm text-lg font-semibold rounded-xl flex items-center justify-center gap-3 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 ${
                   isVerified
                     ? "bg-green-600 text-white"
                     : "bg-gradient-to-r from-emerald-600 to-blue-600 text-white hover:from-emerald-700 hover:to-blue-700"
