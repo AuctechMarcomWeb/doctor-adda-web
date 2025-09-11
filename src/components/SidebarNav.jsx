@@ -17,10 +17,7 @@ const SidebarNav = ({ formData }) => {
 
   const menuItems = [
     { path: "/profile", label: "My Profile", icon: User },
-    { path: "/address", label: "Address", icon: MapPin },
-    { path: "/medical", label: "Medical", icon: Heart },
-    { path: "/lifestyle", label: "Lifestyle", icon: Settings },
-    { path: "/invite", label: "Invite Friends", icon: Users },
+    { path: "/manageAddresses", label: "Address", icon: MapPin },
     { path: "/manage-patients", label: "Manage Patients", icon: User },
     { path: "/pets", label: "Manage Pets", icon: PawPrint },
   ];

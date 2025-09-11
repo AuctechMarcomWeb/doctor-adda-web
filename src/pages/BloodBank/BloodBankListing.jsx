@@ -15,6 +15,8 @@ import { getRequest } from "../../Helpers";
 import { Download } from "lucide-react";
 import { FaGooglePlay } from "react-icons/fa";
 import { Skeleton, Card, Pagination } from "antd";
+import useSelection from "antd/es/table/hooks/useSelection";
+import { useSelector } from "react-redux";
 
 // Mock DiagnosticCard component for demonstration
 
@@ -124,6 +126,9 @@ const BloodBankListing = () => {
   });
   const [totalPages, setTotalPages] = useState(1);
   const [totalDiagnostics, setTotalDiagnostics] = useState(0);
+
+  const locationData = useSelector((state) => state?.user?.locationData);
+  console.log("locationData", locationData);
 
   useEffect(() => {
     const fetchDiagostic = async () => {
@@ -520,7 +525,7 @@ const BloodBankListing = () => {
           <h2 className="text-xl  md:text-2xl lg:text-3xl font-bold text-gray-800 text-center text-gray-800">
             Available{" "}
             <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-              Diagnostic{" "}
+              Blood banks{" "}
             </span>
           </h2>
           <div className="flex items-center gap-2 text-sm text-gray-600">

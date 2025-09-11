@@ -2,14 +2,20 @@ import React, { useState, useEffect } from "react";
 import SidebarNav from "./SidebarNav";
 import { Plus, PawPrint, Edit, Trash2, X } from "lucide-react";
 import { useSelector } from "react-redux";
-import { getRequest, postRequest, patchRequest, deleteRequest } from "../Helpers";
+import {
+  getRequest,
+  postRequest,
+  patchRequest,
+  deleteRequest,
+} from "../Helpers";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
+import { getCookieItem } from "../Hooks/cookie";
 
 const ManagePets = () => {
   useEffect(() => {
-      window.scrollTo(0, 0);
-    }, []);
+    window.scrollTo(0, 0);
+  }, []);
   const [pets, setPets] = useState([
     { id: 1, name: "Max", type: "Dog", age: 3, breed: "Labrador" },
     { id: 2, name: "Whiskers", type: "Cat", age: 2, breed: "Persian" },
@@ -18,7 +24,7 @@ const ManagePets = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPet, setEditingPet] = useState(null);
   const { userProfileData } = useSelector((state) => state.user);
-  const UserId = userProfileData?._id;
+  const UserId = getCookieItem("UserId");
 
   const [formData, setFormData] = useState({
     name: "",
@@ -73,14 +79,14 @@ const ManagePets = () => {
         cred: { ...formData, age: parseInt(formData?.age) || 0 },
       });
       console.log("Pet add:", res?.data?.data);
-    toast.success("Pet added successfully!");
+      toast.success("Pet added successfully!");
 
       // Refresh pets list
       await fetchPets();
       closeModal();
     } catch (error) {
       console.error("Error adding pet:", error);
-    toast.error(" Failed to add pet");
+      toast.error(" Failed to add pet");
     }
   };
 
@@ -109,48 +115,46 @@ const ManagePets = () => {
 
   // Delete pet API
 
-const handleDelete = async (petId) => {
-  console.log("petId", petId);
+  const handleDelete = async (petId) => {
+    console.log("petId", petId);
 
-  Swal.fire({
-    title: "Are you sure?",
-    text: "This pet will be permanently deleted!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#d33",
-    cancelButtonColor: "#3085d6",
-    confirmButtonText: "Yes, delete it!",
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      try {
-        const res = await deleteRequest(`auth/deletepets/${UserId}/${petId}`);
-        console.log("✅ Patient deleted successfully:", res?.data?.data);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This pet will be permanently deleted!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await deleteRequest(`auth/deletepets/${UserId}/${petId}`);
+          console.log("✅ Patient deleted successfully:", res?.data?.data);
 
-        await fetchPets();
+          await fetchPets();
 
-        Swal.fire({
-          title: "Deleted!",
-          text: "The pet has been deleted.",
-          icon: "success",
-          timer: 2000,
-          showConfirmButton: false
-        });
-      } catch (error) {
-        console.error("Error deleting pet:", error);
-        Swal.fire("Error", "Something went wrong while deleting!", "error");
+          Swal.fire({
+            title: "Deleted!",
+            text: "The pet has been deleted.",
+            icon: "success",
+            timer: 2000,
+            showConfirmButton: false,
+          });
+        } catch (error) {
+          console.error("Error deleting pet:", error);
+          Swal.fire("Error", "Something went wrong while deleting!", "error");
+        }
       }
-    }
-  });
-};
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 font-sans">
       <div className="max-w-7xl mx-auto p-6 md:pt-42">
         <div className="flex flex-col md:flex-row gap-8">
           {/* Sidebar */}
-          <SidebarNav activeTab="pets"
-                  formData={userProfileData}
-           />
+          <SidebarNav activeTab="pets" formData={userProfileData} />
 
           {/* Main Content */}
           <main className="flex-1 p-8 bg-white rounded-3xl shadow-lg">
@@ -192,11 +196,12 @@ const handleDelete = async (petId) => {
                           {pet.name}
                         </h2>
                         <p className="text-sm text-gray-600 mt-1">
-                          Age: <span className="font-medium">{pet?.age}</span> | {" "}
+                          Age: <span className="font-medium">{pet?.age}</span> |{" "}
                           <span className="font-medium">{pet?.type}</span>
                         </p>
                         <p className="text-sm text-gray-600 mt-0.5">
-                          Weight: <span className="font-medium">{pet?.weight}</span>
+                          Weight:{" "}
+                          <span className="font-medium">{pet?.weight}</span>
                         </p>
                       </div>
                     </div>

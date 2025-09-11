@@ -4,16 +4,23 @@ import React, { useEffect, useState } from "react";
 import SidebarNav from "./SidebarNav";
 import { Plus, User, Edit3, Trash2, X, LogIn, Edit } from "lucide-react";
 import { useSelector } from "react-redux";
-import { deleteRequest, getRequest, patchRequest, postRequest } from "../Helpers";
+import {
+  deleteRequest,
+  getRequest,
+  patchRequest,
+  postRequest,
+} from "../Helpers";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
+import { getCookieItem } from "../Hooks/cookie";
 
 const ManagePatients = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
   const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
-  const UserId = userProfileData?._id;
+  // const UserId = userProfileData?._id;
+  const UserId = getCookieItem("UserId");
   console.log("UserId", UserId);
 
   const [patients, setPatients] = useState([]);
@@ -56,7 +63,13 @@ const ManagePatients = () => {
 
   //add api
   const handleAddPatient = async () => {
-    if (!newPatient.name || !newPatient.age || !newPatient.email || !newPatient.gender || !newPatient.oderingFor) {
+    if (
+      !newPatient.name ||
+      !newPatient.age ||
+      !newPatient.email ||
+      !newPatient.gender ||
+      !newPatient.oderingFor
+    ) {
       alert("Please fill all fields");
       return;
     }
@@ -70,7 +83,13 @@ const ManagePatients = () => {
 
       await fetchPatients(); // ✅ Refresh from API
       setShowAddModal(false);
-      setNewPatient({ name: "", age: "", email: "", gender: "", oderingFor: "" });
+      setNewPatient({
+        name: "",
+        age: "",
+        email: "",
+        gender: "",
+        oderingFor: "",
+      });
       toast.success("Patient added successfully!");
     } catch (error) {
       console.error("Error adding patient:", error);
@@ -80,7 +99,13 @@ const ManagePatients = () => {
 
   //edit api
   const handleUpdatePatient = async () => {
-    if (!editPatient?.name || !editPatient.age || !editPatient.email || !editPatient.gender || !editPatient.oderingFor) {
+    if (
+      !editPatient?.name ||
+      !editPatient.age ||
+      !editPatient.email ||
+      !editPatient.gender ||
+      !editPatient.oderingFor
+    ) {
       alert("Please fill all fields");
       return;
     }
@@ -115,7 +140,9 @@ const ManagePatients = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const res = await deleteRequest(`auth/deleteMember/${UserId}/${patientId}`);
+          const res = await deleteRequest(
+            `auth/deleteMember/${UserId}/${patientId}`
+          );
           console.log("✅ Patient deleted successfully:", res?.data?.data);
 
           await fetchPatients();
@@ -125,7 +152,7 @@ const ManagePatients = () => {
             text: "The patient has been deleted.",
             icon: "success",
             timer: 2000,
-            showConfirmButton: false
+            showConfirmButton: false,
           });
         } catch (error) {
           console.error("Error deleting patient:", error);
@@ -138,11 +165,8 @@ const ManagePatients = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 font-sans">
       <div className="max-w-7xl mx-auto p-6 md:pt-42">
         <div className="flex flex-col md:flex-row gap-8">
-
           {/* Sidebar */}
-          <SidebarNav activeTab="patients"
-            formData={userProfileData}
-          />
+          <SidebarNav activeTab="patients" formData={userProfileData} />
 
           {/* Patients Section */}
           <div className="flex-1 bg-white rounded-3xl shadow-lg md:p-8 p-4 pt-8">
@@ -170,7 +194,7 @@ const ManagePatients = () => {
                   <div
                     key={patient._id}
                     className="flex  items-center justify-between md:p-5 p-2 border border-gray-200 rounded-2xl bg-white shadow-sm hover:shadow-lg transition-shadow duration-300 transform hover:scale-[1.02]"
-                    >
+                  >
                     <div className="flex items-center gap-5">
                       <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center shadow-inner">
                         <User size={24} className="text-[#006ca7]" />
@@ -180,12 +204,11 @@ const ManagePatients = () => {
                           {patient?.name}
                         </h3>
                         <p className="text-sm text-gray-600 mt-1">
-                          {patient?.age} |  {patient?.gender}
+                          {patient?.age} | {patient?.gender}
                         </p>
                         <p className="text-sm text-gray-600 mt-0.5">
                           {patient?.email}
                         </p>
-
                       </div>
                     </div>
                     <div className="flex  flex-col md:flex-row gap-4">
