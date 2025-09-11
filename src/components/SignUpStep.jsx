@@ -71,7 +71,7 @@ const SignUpStep = ({ setStep, setMobile, setMode }) => {
   const { image, heading, subtext, icon: Icon } = slides[currentSlide];
 
   return (
-    <div className=" flex items-center justify-center py-4 md:py-0 md:p-4">
+    <div className=" flex items-center justify-center  md:p-4">
       <div className="flex w-full max-w-6xl bg-white/90 backdrop-blur-sm shadow-2xl rounded-2xl overflow-hidden border border-white/20">
         {/* Left Slider Section */}
         <div className="hidden lg:flex lg:w-1/2 relative text-white flex-col justify-center items-center p-12 transition-all duration-700 ease-in-out">
