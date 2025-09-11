@@ -100,7 +100,7 @@ const DoctorSearch = () => {
     <div className=" md:grid md:mt-8 mb-3 md:mb-0 w-full max-w-xl mx-auto text-black relative  ">
       <div className="flex flex-row gap-4 items-stretch md:items-center justify-between w-full">
         {/* Search Input */}
-        <div className="relative w-full md:flex-1 border-1 border-[#0069a3] rounded-md shadow-sm">
+        <div className="relative w-full md:flex-1 border-1 border-[#0069a3] rounded-md shadow-lg ">
           <input
             type="text"
             value={query}

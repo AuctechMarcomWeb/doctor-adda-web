@@ -33,7 +33,7 @@ const BannerSection = () => {
   return (
     <>
       <div
-        className="mx-auto text-white pl-4 pt-24 md:pl-10 md:pt-30 rounded-3xl   sm:w-full lg:w-[80%] xl:w-[80%] 2xl:w-[70%]"
+        className="mx-auto text-white pl-4  md:pl-10 md:pt-30 md:rounded-3xl rounded-b-3xl   sm:w-full lg:w-[80%] xl:w-[80%] 2xl:w-[70%]"
         style={{
           background:
             "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
@@ -41,11 +41,11 @@ const BannerSection = () => {
       >
        
         <div
-          className="mx-auto text-white    flex flex-row md:flex-row gap-4 justify-between "
+          className="mx-auto text-white    flex flex-row md:flex-row gap-4 justify-between  items-center"
           
         >
           {/* Left Content */}
-          <div className="max-w-7xl pt-12 md:pt-8 md:mb-2">
+          <div className="max-w-7xl  md:pt-8 md:mb-2">
             <h2 className="text-lg lg:text-2xl xl:text-3xl 2xl:text-4xl font-bold">
               Your Health, One Tap Away
             </h2>
