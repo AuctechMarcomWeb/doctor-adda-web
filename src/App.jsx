@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+import Cookies from "js-cookie";
 
 import "./App.css";
 import "slick-carousel/slick/slick.css";
@@ -54,12 +55,25 @@ import PricingAndShippingPolicy from "./pages/PricingAndShippingPolicy";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Location from "./pages/Location";
+import BloodBankListing from "./pages/BloodBank/BloodBankListing";
+import BloodBankDetailPage from "./pages/BloodBank/bloodBankDetailPage";
 
 function App() {
-  // const dispatch = useDispatch()
-  // dispatch(login())
   const [step, setStep] = useState(1);
   const [mobile, setMobile] = useState("");
+  const [user, setUser] = useState(null);
+
+  // Load cookie globally on every refresh
+  useEffect(() => {
+    const userCookie = Cookies.get("user");
+    if (userCookie) {
+      try {
+        setUser(JSON.parse(userCookie));
+      } catch {
+        setUser(userCookie); // fallback if not JSON
+      }
+    }
+  }, []);
 
   return (
     <Router>
@@ -67,26 +81,17 @@ function App() {
         position="top-right"
         toastOptions={{
           duration: 4000,
-          style: {
-            background: "#363636",
-            color: "#fff",
-          },
-          success: {
-            duration: 3000,
-            style: {
-              background: "#10B981",
-            },
-          },
-          error: {
-            duration: 4000,
-            style: {
-              background: "#EF4444",
-            },
-          },
+          style: { background: "#363636", color: "#fff" },
+          success: { duration: 3000, style: { background: "#10B981" } },
+          error: { duration: 4000, style: { background: "#EF4444" } },
         }}
       />
 
+      {/* Navbar always visible, gets cookie user */}
+      <Navbar user={user} />
+
       <Routes>
+        {/* Standalone routes */}
         <Route path="/location" element={<Location />} />
         <Route path="/flow" element={<AppointmentFlow />} />
         <Route path="/pharmacy-dashboard" element={<Dashboard />} />
@@ -96,93 +101,63 @@ function App() {
         <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
         <Route path="/pharmacy-profile" element={<PharmacyProfile />} />
 
-        {/* All routes wrapped with Navbar + Footer */}
+        {/* Main public routes */}
+        <Route path="/" element={<Home />} />
+        <Route path="/verification" element={<Verification />} />
+        <Route path="/manage-patients" element={<ManagePatients />} />
+        <Route path="/pets" element={<ManagePets />} />
+        <Route path="/login" element={<LoginSignupFlow />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/profile" element={<UserProfile />} />
+        <Route path="/appointments" element={<AppointmentSelection />} />
         <Route
-          path="*"
-          element={
-            <>
-              <Navbar />
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/verification" element={<Verification />} />
-                <Route path="/manage-patients" element={<ManagePatients />} />
-                <Route path="/pets" element={<ManagePets />} />
-                <Route path="/login" element={<LoginSignupFlow />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/profile" element={<UserProfile />} />
-                <Route
-                  path="/appointments"
-                  element={<AppointmentSelection />}
-                />
-                <Route
-                  path="/doctor-appointments"
-                  element={<DoctorAppointmentsPage />}
-                />
-                <Route path="/upgrade-profile" element={<UpgradeProfile />} />
-                <Route path="/all-registration" element={<AllRegistration />} />
-                <Route
-                  path="/hospital-registration"
-                  element={<HospitalRegistration />}
-                />
-                <Route
-                  path="/pharmacy-registration"
-                  element={<PharmacyRegistration />}
-                />
-                <Route
-                  path="/diagonstics-registration"
-                  element={<DiagonsticRegistration />}
-                />
-                <Route
-                  path="/doctors-registration"
-                  element={<DoctorsRegistration />}
-                />
-                <Route
-                  path="/ambulance-registration"
-                  element={<AmbulanceRegistration />}
-                />
-
-                <Route
-                  path="/terms-and-conditions"
-                  element={<TermsAndConditions />}
-                />
-                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                <Route path="/refund" element={<RefundAndCancellation />} />
-                <Route path="/price-policy" element={<PricingAndShippingPolicy />} />
-                <Route path="/user-details" element={<UserDetails />} />
-                <Route path="/bloodbank" element={<AmbulancePage />} />
-                <Route path="/ambulance" element={<AmbulancePage />} />
-                <Route path="/popular" element={<PopularSearch />} />
-                <Route
-                  path="/ambulance/:id"
-                  element={<AmbulanceDetailPage />}
-                />
-                <Route path="/pharmacy" element={<PharmacyPage />} />
-                <Route path="/pharmacy/:id" element={<PharmacyDetailPage />} />
-                <Route path="/diagnostic" element={<DiagnosticPage />} />
-                <Route
-                  path="/diagnostic/:id"
-                  element={<DiagnosticDetailPage />}
-                />
-                <Route path="/doctor" element={<DoctorPage />} />
-                <Route path="/doctorlist/:id" element={<DoctorList />} />
-                {/* <Route path="/doctorlist/:id" element={<DoctorList />} /> */}
-                <Route
-                  path="/doctordetail/:id"
-                  element={<DoctorDetailPage />}
-                />
-                <Route path="/hospital" element={<HospitalPage />} />
-                <Route path="/hospital/:id" element={<HospitalDetailPage />} />
-                <Route
-                  path="/hospitaldetail/:id"
-                  element={<HospitalDetailPage />}
-                />
-              </Routes>
-              <Footer />
-            </>
-          }
+          path="/doctor-appointments"
+          element={<DoctorAppointmentsPage />}
         />
+        <Route path="/upgrade-profile" element={<UpgradeProfile />} />
+        <Route path="/all-registration" element={<AllRegistration />} />
+        <Route
+          path="/hospital-registration"
+          element={<HospitalRegistration />}
+        />
+        <Route
+          path="/pharmacy-registration"
+          element={<PharmacyRegistration />}
+        />
+        <Route
+          path="/diagonstics-registration"
+          element={<DiagonsticRegistration />}
+        />
+        <Route path="/doctors-registration" element={<DoctorsRegistration />} />
+        <Route
+          path="/ambulance-registration"
+          element={<AmbulanceRegistration />}
+        />
+        <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/refund" element={<RefundAndCancellation />} />
+        <Route path="/price-policy" element={<PricingAndShippingPolicy />} />
+        <Route path="/user-details" element={<UserDetails />} />
+        <Route path="/bloodbank" element={<BloodBankListing />} />
+        <Route path="/bloodbank/:id" element={<BloodBankDetailPage />} />
+        <Route path="/ambulance" element={<AmbulancePage />} />
+        <Route path="/popular" element={<PopularSearch />} />
+        <Route path="/ambulance/:id" element={<AmbulanceDetailPage />} />
+        <Route path="/pharmacy" element={<PharmacyPage />} />
+        <Route path="/pharmacy/:id" element={<PharmacyDetailPage />} />
+        <Route path="/diagnostic" element={<DiagnosticPage />} />
+        <Route path="/diagnostic/:id" element={<DiagnosticDetailPage />} />
+        <Route path="/doctor" element={<DoctorPage />} />
+        <Route path="/doctorlist/:id" element={<DoctorList />} />
+        <Route path="/doctordetail/:id" element={<DoctorDetailPage />} />
+        <Route path="/hospital" element={<HospitalPage />} />
+        <Route path="/hospital/:id" element={<HospitalDetailPage />} />
+        <Route path="/hospitaldetail/:id" element={<HospitalDetailPage />} />
       </Routes>
+
+      {/* Footer always visible */}
+      <Footer />
     </Router>
   );
 }
