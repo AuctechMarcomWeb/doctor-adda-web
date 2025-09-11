@@ -97,7 +97,7 @@ const DoctorSearch = () => {
   }, []);
 
   return (
-    <div className="hidden md:grid mt-8 w-full max-w-xl mx-auto text-black relative  ">
+    <div className=" md:grid mt-8 w-full max-w-xl mx-auto text-black relative  ">
       <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between w-full">
         {/* Search Input */}
         <div className="relative w-full md:flex-1">
@@ -139,8 +139,9 @@ const DoctorSearch = () => {
 
         {/* Search Button */}
         <button
+        style={{width:"93px"}}
           onClick={handleSearch}
-          className="w-full md:w-auto px-6 py-2 bg-[#297cff] text-sm 2xl:text-base text-white font-semibold rounded-md hover:bg-blue-700 transition"
+          className="  px-6 py-2 bg-[#297cff] text-sm 2xl:text-base text-white font-semibold rounded-md hover:bg-blue-700 transition"
         >
           Search
         </button>
