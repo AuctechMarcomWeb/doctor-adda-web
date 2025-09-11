@@ -330,12 +330,12 @@ const PharmacyPage = () => {
             <input
               type="text"
               placeholder="Search by name or location..."
-              className="w-full pl-4 pr-4 md:py-3 py-1 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+              className="w-full pl-4 pr-4 md:py-3 py-1 text-sm md:text-base border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
             <select
-              className="bg-white border border-gray-300 rounded-xl px-4 md:py-3 py-1 pr-8 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+              className="bg-white text-sm md:text-base border border-gray-300 rounded-xl px-4 md:py-3 py-1 pr-8 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
             >
@@ -542,12 +542,12 @@ const PharmacyPage = () => {
           <div className="flex items-center justify-center gap-4 mb-4">
             <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
               <span className="text-2xl">
-                <img src="src/assets/alert.png" height={50} width={50} alt="" />
+                <img src="src/assets/alert.png" height={40} width={40} alt="" />
               </span>
             </div>
             <div>
-              <h3 className="text-2xl font-bold">Emergency?</h3>
-              <p className="text-red-100">
+              <h3 className="text-xl md:text-2xl font-bold">Emergency?</h3>
+              <p className=" text-sm md:text-base text-red-100">
                 Call immediately for urgent medical assistance
               </p>
             </div>
@@ -559,11 +559,11 @@ const PharmacyPage = () => {
             <div className="flex gap-1">
               <img
                 src="https://i.pinimg.com/1200x/7e/21/b9/7e21b9661c85d61676143a8ae2c9a73b.jpg"
-                height={25}
-                width={25}
+                height={20}
+                width={20}
                 alt=""
               />
-              <span>Call 108</span>
+              <span className="text-sm md:text-base">Call 108</span>
             </div>
           </a>
         </div>
