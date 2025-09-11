@@ -57,6 +57,7 @@ import Footer from "./components/Footer";
 import Location from "./pages/Location";
 import BloodBankListing from "./pages/BloodBank/BloodBankListing";
 import BloodBankDetailPage from "./pages/BloodBank/bloodBankDetailPage";
+import ManageAddresses from "./components/ManageAddresses";
 
 function App() {
   const [step, setStep] = useState(1);
@@ -105,6 +106,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/verification" element={<Verification />} />
         <Route path="/manage-patients" element={<ManagePatients />} />
+        <Route path="/manageAddresses" element={<ManageAddresses />} />
         <Route path="/pets" element={<ManagePets />} />
         <Route path="/login" element={<LoginSignupFlow />} />
         <Route path="/contact" element={<Contact />} />
