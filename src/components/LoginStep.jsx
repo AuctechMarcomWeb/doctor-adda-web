@@ -178,7 +178,7 @@ const LoginStep = ({ setStep, setMobile, setMode }) => {
             </div>
 
             {/* Enhanced Promo Info */}
-            <div className="bg-gradient-to-r from-emerald-50 to-blue-50 border border-emerald-200 rounded-xl p-5 transition-all duration-300 hover:shadow-md">
+            {/* <div className="bg-gradient-to-r from-emerald-50 to-blue-50 border border-emerald-200 rounded-xl p-5 transition-all duration-300 hover:shadow-md">
               <div className="flex items-center gap-3">
                 <div className="bg-emerald-100 rounded-full p-2">
                   <Gift className="text-emerald-600" size={20} />
@@ -193,7 +193,7 @@ const LoginStep = ({ setStep, setMobile, setMode }) => {
                   </p>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <div className="flex items-center justify-center gap-1 text-gray-500 text-sm">
               <p>Don't have an account?</p>
