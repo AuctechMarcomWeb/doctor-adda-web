@@ -81,6 +81,9 @@ const Home = () => {
       {/* <MedicalHeroSection/> */}
 
       {/* <HomePageImagePopup data={data} /> */}
+       <div className="block md:hidden w-full px-4 z-100 pt-20 bg-white ">
+                <DoctorSearch />
+              </div>
 
       <BannerSection />
 
