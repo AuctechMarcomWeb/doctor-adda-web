@@ -115,7 +115,7 @@ const LoginStep = ({ setStep, setMobile, setMode }) => {
         </div>
 
         {/* Right Login Form Section */}
-        <div className="w-full lg:w-1/2 py-12 px-4 lg:p-12 bg-white relative">
+        <div className="w-full lg:w-1/2 py-4 md:py-12 px-4 lg:p-12 bg-white relative">
         
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-100 to-blue-100 rounded-full -translate-y-16 translate-x-16 opacity-50"></div>
 

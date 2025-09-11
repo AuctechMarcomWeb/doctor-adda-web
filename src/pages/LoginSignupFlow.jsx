@@ -13,7 +13,7 @@ const LoginSignupFlow = () => {
   const [mobile, setMobile] = useState("");
 
   return (
-    <div className="mx-auto shadow-md rounded-lg bg-white pt-18 py-8 px-4 md:pt-40 overflow-x-hidden overflow-y-hidden" >
+    <div className="mx-auto shadow-md rounded-lg bg-white pt-24 py-8 px-4 md:pt-40 overflow-x-hidden overflow-y-hidden" >
       {step === 1 ? (
         mode === 'signup' ? (
           <SignUpStep setStep={setStep} setMobile={setMobile} setMode={setMode} />
