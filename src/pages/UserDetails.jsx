@@ -137,7 +137,7 @@ const UserDetails = ({ onSubmitSuccess }) => {
   const { image, heading, subtext, icon: Icon } = slides[currentSlide];
 
   return (
-    <div className=" flex items-center justify-center p-4 py-10 pt-40">
+    <div className=" flex items-center justify-center p-4 py-10 pt-24 md:pt-40">
       <div className="flex w-full max-w-6xl bg-white/90 backdrop-blur-sm shadow-2xl rounded-2xl overflow-hidden border border-white/20">
         {/* Left Slider Section */}
         <div className="hidden lg:flex lg:w-1/2 relative text-white flex-col justify-center items-center p-12 transition-all duration-700 ease-in-out">
@@ -180,7 +180,7 @@ const UserDetails = ({ onSubmitSuccess }) => {
         </div>
 
         {/* Right Form Section */}
-        <div className="w-full lg:w-1/2 p-8 lg:p-12 bg-white relative">
+        <div className="w-full lg:w-1/2 p-4 md:p-8 lg:p-12 bg-white relative">
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-100 to-blue-100 rounded-full -translate-y-16 translate-x-16 opacity-50"></div>
 
           <div className="relative z-10 space-y-8">
@@ -189,10 +189,10 @@ const UserDetails = ({ onSubmitSuccess }) => {
                 <User className="text-white" size={28} />
               </div>
               <div className="space-y-2">
-                <h2 className="text-3xl font-bold text-gray-900 tracking-tight">
+                <h2 className="text-xl md:text-3xl font-bold text-gray-900 tracking-tight">
                   Complete Your Profile
                 </h2>
-                <p className="text-gray-600 text-lg">
+                <p className="text-gray-600 text-sm md:text-lg">
                   Just a few more details to get started
                 </p>
               </div>
@@ -212,7 +212,7 @@ const UserDetails = ({ onSubmitSuccess }) => {
                     placeholder="Enter your full name"
                     value={userData.name}
                     onChange={handleChange}
-                    className={`w-full px-4 py-4 border-2 rounded-xl text-lg outline-none transition-all duration-300 bg-gray-50 focus:bg-white placeholder-gray-400 ${
+                    className={`w-full px-4 py-4 border-2 rounded-xl md:text-lg text-sm outline-none transition-all duration-300 bg-gray-50 focus:bg-white placeholder-gray-400 ${
                       errors.name
                         ? "border-red-300 focus:border-red-500 focus:ring-4 focus:ring-red-500/10"
                         : "border-gray-200 focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 hover:border-gray-300"
@@ -242,7 +242,7 @@ const UserDetails = ({ onSubmitSuccess }) => {
                     placeholder="Enter your email address"
                     value={userData.email}
                     onChange={handleChange}
-                    className={`w-full px-4 py-4 border-2 rounded-xl text-lg outline-none transition-all duration-300 bg-gray-50 focus:bg-white placeholder-gray-400 ${
+                    className={`w-full px-4 py-4 border-2 rounded-xl md:text-lg text-sm outline-none transition-all duration-300 bg-gray-50 focus:bg-white placeholder-gray-400 ${
                       errors.email
                         ? "border-red-300 focus:border-red-500 focus:ring-4 focus:ring-red-500/10"
                         : "border-gray-200 focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 hover:border-gray-300"
@@ -270,7 +270,7 @@ const UserDetails = ({ onSubmitSuccess }) => {
                     name="gender"
                     value={userData.gender}
                     onChange={handleChange}
-                    className={`w-full px-4 py-4 border-2 rounded-xl text-lg outline-none transition-all duration-300 bg-gray-50 focus:bg-white ${
+                    className={`w-full px-4 py-4 border-2 rounded-xl text-sm md:text-lg outline-none transition-all duration-300 bg-gray-50 focus:bg-white ${
                       errors.gender
                         ? "border-red-300 focus:border-red-500 focus:ring-4 focus:ring-red-500/10"
                         : "border-gray-200 focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 hover:border-gray-300"
@@ -295,7 +295,7 @@ const UserDetails = ({ onSubmitSuccess }) => {
               <button
                 onClick={handleSubmit}
                 disabled={isLoading}
-                className="w-full py-4 bg-gradient-to-r from-emerald-600 to-blue-600 text-white font-semibold rounded-xl flex items-center justify-center gap-3 hover:from-violet-700 hover:to-pink-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0"
+                className="w-full py-4 bg-gradient-to-r from-emerald-600 to-blue-600 text-white font-semibold rounded-xl flex items-center justify-center gap-3 hover:from-violet-700 hover:to-pink-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 text-sm md:text-lg"
               >
                 {isLoading ? (
                   <>
