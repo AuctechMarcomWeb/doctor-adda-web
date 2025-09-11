@@ -126,8 +126,8 @@ const PharmacyDetailPage = () => {
           name: s.name,
           icon: (
             <img
-              width="50"
-              height="50"
+              width="30"
+              height="30"
               src="https://img.icons8.com/3d-fluency/94/pill.png"
               alt="pill"
             />
@@ -220,7 +220,7 @@ const PharmacyDetailPage = () => {
                   {/* Header */}
                   <div className="text-center pb-4 border-b border-gray-100">
                     <div className="flex items-center justify-center gap-2 mb-2">
-                      <h1 className="text-2xl font-bold text-gray-900">
+                      <h1 className="md:text-2xl text-xl font-bold text-gray-800">
                         {pharmacy.name}
                       </h1>
                       <BadgeCheck className="w-6 h-6 text-blue-600" />
@@ -273,7 +273,7 @@ const PharmacyDetailPage = () => {
                   <div className="space-y-3">
                     <a
                       href={`tel:${pharmacy.phone}`}
-                      className="w-full block bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
+                      className=" w-full md:text-base text-sm block bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
                     >
                       <PhoneCall className="w-5 h-5" />
                       Call Now
@@ -322,16 +322,16 @@ const PharmacyDetailPage = () => {
           </div>
 
           {/* Tab Content */}
-          <div className="p-8">
+          <div className="md:p-8 p-4">
             {/* About Tab */}
             {activeTab === "about" && (
               <div className="space-y-8">
                 {/* Description */}
                 <div className="prose max-w-none">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                  <h2 className="md:text-2xl text-xl font-bold text-gray-800 mb-4">
                     About {pharmacy.name}
                   </h2>
-                  <p className="text-gray-600 leading-relaxed">
+                  <p className="text-gray-600 md:text-base text-sm leading-relaxed">
                     {pharmacy.description}
                   </p>
                 </div>
@@ -342,15 +342,15 @@ const PharmacyDetailPage = () => {
                   onCartSubmit={handleCartSubmit}
                 /> */}
                 {/* ✅ New Order Medicine Section */}
-                <div className="p-6">
+                <div className="md:p-6">
                   {/* ✅ New Order Medicine Section */}
-                  <div className="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-xl p-6 shadow-sm">
-                    <p className="text-gray-800 font-semibold text-lg">
+                  <div className="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-xl md:p-6 p-2 shadow-sm">
+                    <p className="text-gray-800 font-semibold text-sm md:text-base">
                       Want to order medicine to nearby pharmacy?
                     </p>
                     <button
                       onClick={() => setShowAppDownloadModal(true)} // 👉 open modal
-                      className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:from-blue-700 hover:to-indigo-700 transition-all duration-300"
+                      className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white md:px-6 px-2 py-3 md:text-base text-xs rounded-lg font-semibold shadow-md hover:from-blue-700 hover:to-indigo-700 transition-all duration-300"
                     >
                       Book Now
                     </button>
@@ -366,7 +366,7 @@ const PharmacyDetailPage = () => {
 
                 {/* Services Grid */}
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-6">
+                  <h3 className="md:text-xl text-lg font-bold text-gray-900 mb-6">
                     Our Services
                   </h3>
                   <div className="grid md:grid-cols-3 gap-6">
@@ -375,10 +375,10 @@ const PharmacyDetailPage = () => {
                         key={index}
                         className="bg-gray-50 rounded-xl p-6 hover:bg-white hover:shadow-lg transition-all duration-300 group border border-gray-100"
                       >
-                        <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">
+                        <div className="text-xl mb-3 group-hover:scale-110 transition-transform duration-300">
                           {service.icon}
                         </div>
-                        <h4 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors duration-300">
+                        <h4 className="font-semibold md:text-base text-sm  text-gray-900 group-hover:text-blue-600 transition-colors duration-300">
                           {service.name}
                         </h4>
                       </div>
@@ -394,7 +394,7 @@ const PharmacyDetailPage = () => {
                 {/* Reviews Header */}
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                    <h3 className="md:text-2xl text-xl font-bold text-gray-900 mb-2">
                       Customer Reviews
                     </h3>
                     <div className="flex items-center gap-4">
@@ -411,7 +411,7 @@ const PharmacyDetailPage = () => {
                             />
                           ))}
                         </div>
-                        <span className="text-lg font-semibold text-gray-900">
+                        <span className="md:text-lg text-base font-semibold text-gray-900">
                           {pharmacy.averageRating || 0}
                         </span>
                         <span className="text-gray-600">out of 5</span>
@@ -426,7 +426,7 @@ const PharmacyDetailPage = () => {
                   <div className="text-right">
                     <button
                       onClick={() => setShowReviewPopup(true)}
-                      className="group bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-8 py-4 rounded-full hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 font-semibold flex items-center gap-3 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                      className="group bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-8 py-4 rounded-full hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 font-semibold flex items-center gap-3 shadow-lg hover:shadow-xl transform hover:-translate-y-1 md:text-base text-sm "
                     >
                       <PlusCircle className="w-5 h-5 group-hover:animate-spin" />
                       Share Your Experience
