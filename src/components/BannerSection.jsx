@@ -33,15 +33,13 @@ const BannerSection = () => {
   return (
     <>
       <div
-        className="mx-auto text-white pl-4 pt-18 md:pl-10 md:pt-30 rounded-3xl   sm:w-full lg:w-[80%] xl:w-[80%] 2xl:w-[70%]"
+        className="mx-auto text-white pl-4 pt-24 md:pl-10 md:pt-30 rounded-3xl   sm:w-full lg:w-[80%] xl:w-[80%] 2xl:w-[70%]"
         style={{
           background:
             "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
         }}
       >
-        <div className="block md:hidden w-full px-4 mt-4">
-          <DoctorSearch />
-        </div>
+       
         <div
           className="mx-auto text-white    flex flex-row md:flex-row gap-4 justify-between "
           
@@ -109,13 +107,13 @@ const BannerSection = () => {
                   <button
                     onMouseEnter={() => setHoveredButton("download")}
                     onMouseLeave={() => setHoveredButton(null)}
-                    className="group relative bg-white text-[#0074b2] md:px-6 md:py-4 px-3 py-2 md:rounded-2xl rounded-lg font-bold text-xs md:text-base lg:text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105 transition-all duration-300 overflow-hidden animate-slide-in-left cursor-pointer"
+                    className="group relative bg-white text-[#0074b2] md:px-6 md:py-4 px-3 py-2  md:rounded-2xl rounded-lg font-bold text-xs md:text-base lg:text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105 transition-all duration-300 overflow-hidden animate-slide-in-left cursor-pointer"
                     style={{ animationDelay: "1s" }}
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-                    <div className="relative z-10 flex items-center md:gap-3 gap-1 group-hover:text-white transition-colors duration-300">
-                      <FaGooglePlay className="w-5 h-5 group-hover:animate-bounce" />
+                    <div className="relative z-10 flex items-center md:gap-3 gap-1  group-hover:text-white transition-colors duration-300">
+                      <FaGooglePlay className="md:w-5 md:h-5 w-3 h-3 group-hover:animate-bounce" />
                       Download App
                       {hoveredButton === "download" && (
                         <div className="absolute -right-2 -top-2 w-3 h-3 bg-green-400 rounded-full animate-ping"></div>
