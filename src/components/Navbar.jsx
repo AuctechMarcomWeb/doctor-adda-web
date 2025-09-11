@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef } from "react";
+import DoctorSearch from "./DoctorSearch";
 import {
   Menu,
   X,
@@ -431,6 +432,7 @@ const Navbar = () => {
 
             <NotificationBell />
 
+
             {/* Mobile Menu Toggle */}
             <button
               className="md:hidden"
@@ -443,6 +445,9 @@ const Navbar = () => {
               )}
             </button>
           </div>
+           <div className="block md:hidden w-full px-4 ">
+          <DoctorSearch />
+        </div>
           <div>
             <NavBar2 />
           </div>
