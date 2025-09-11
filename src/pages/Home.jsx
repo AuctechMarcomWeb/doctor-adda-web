@@ -26,6 +26,7 @@ import { useUpdate } from "../context/updateContext";
 import HealthcareRegistrationModal from "../components/PreLaunchForms/HealthcareRegistrationModal";
 import { getCookieItem } from "../Hooks/cookie";
 import { useLocation } from "react-router-dom";
+import DoctorSearch from "../components/DoctorSearch";
 
 const Home = () => {
   const location = useLocation();
@@ -82,6 +83,7 @@ const Home = () => {
       {/* <HomePageImagePopup data={data} /> */}
 
       <BannerSection />
+
 
       {/* <ScrollingNotice /> */}
 
