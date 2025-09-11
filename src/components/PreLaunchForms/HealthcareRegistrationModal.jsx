@@ -974,12 +974,12 @@ const HealthcareRegistrationModal = ({ setOpen, onSuccess }) => {
           <img src={logo} alt="Logo" className="h-14 mx-auto mb-3" />
 
           {/* Title */}
-          <h2 className="text-3xl font-bold text-white">
+          <h2 className="text-xl md:text-3xl font-bold text-white">
             Registration for Pre-Launch
           </h2>
 
           {/* Subtitle */}
-          <p className="text-indigo-100 mt-2">
+          <p className="text-indigo-100 mt-2 text-sm md:text-base">
             Join our healthcare network early and get exclusive benefits
           </p>
         </div>
@@ -988,7 +988,7 @@ const HealthcareRegistrationModal = ({ setOpen, onSuccess }) => {
         <div className="py-6 px-8">
           {!selectedCard ? (
             <>
-              <h3 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
+              <h3 className="text-lg md:text-2xl font-semibold text-gray-800 mb-6 text-center">
                 Choose Your Registration Type
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
