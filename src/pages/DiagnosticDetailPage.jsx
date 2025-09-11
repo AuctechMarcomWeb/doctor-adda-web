@@ -30,7 +30,7 @@ import { toast } from "react-hot-toast";
 //import ManagePatientsModal from "../components/ManagePatientsModal";
 import { useNavigate } from "react-router-dom";
 const DiagnosticDetailPage = () => {
-  const userId = useSelector((state) => state.user.userProfileData._id);
+  const userId = useSelector((state) => state?.user?.userProfileData?._id);
   const userProfileData = useSelector((state) => state.user.userProfileData);
   console.log("userProfileData", userProfileData);
 
