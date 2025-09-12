@@ -1056,7 +1056,7 @@ const HealthcareRegistrationModal = ({ setOpen, onSuccess }) => {
 
                     <label
                       htmlFor="profile-upload"
-                      className="cursor-pointer inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+                      className="cursor-pointer inline-flex items-center px-4 py-2 bg-gradient-to-r from-[#007BBD] to-[#005A8C] text-white text-sm font-medium rounded-lg shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -1201,7 +1201,7 @@ const HealthcareRegistrationModal = ({ setOpen, onSuccess }) => {
                     className={`px-8 py-3 rounded-xl font-semibold text-white transition-all duration-300 ${
                       submitting
                         ? "bg-gray-400 cursor-not-allowed"
-                        : "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl"
+                        : "bg-gradient-to-r from-[#007BBD] to-[#005A8C] hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl"
                     }`}
                   >
                     {submitting ? (

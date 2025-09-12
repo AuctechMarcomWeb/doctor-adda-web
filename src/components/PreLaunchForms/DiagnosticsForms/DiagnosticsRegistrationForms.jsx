@@ -191,7 +191,7 @@ const DiagnosticsRegistrationForms = ({
           <button
             type="button"
             onClick={addServices}
-            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-green-600 text-white rounded-lg hover:from-blue-700 hover:to-green-700"
+            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#007BBD] to-[#005A8C] text-white rounded-lg hover:from-blue-700 hover:to-green-700"
           >
             <Plus className="w-4 h-4" />
             Add Services
@@ -243,7 +243,7 @@ const DiagnosticsRegistrationForms = ({
           <button
             type="button"
             onClick={addPackage}
-            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-green-600 text-white rounded-lg hover:from-blue-700 hover:to-green-700"
+            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#007BBD] to-[#005A8C] text-white rounded-lg hover:from-blue-700 hover:to-green-700"
           >
             <Plus className="w-4 h-4" />
             Add Package

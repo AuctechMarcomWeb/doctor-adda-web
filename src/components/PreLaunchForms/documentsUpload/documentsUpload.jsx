@@ -78,7 +78,7 @@ const DocumentsUpload = ({
         <button
           type="button"
           onClick={handleAddDocument}
-          className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg shadow hover:bg-blue-700 transition"
+          className="px-4 py-2 bg-gradient-to-r from-[#007BBD] to-[#005A8C] text-white text-sm font-medium rounded-lg shadow hover:bg-blue-700 transition"
         >
           + Add more Document
         </button>
