@@ -112,6 +112,7 @@ const AppointmentSelection = () => {
               iconText: "text-emerald-600",
               hoverOverlay: "bg-emerald-600",
             }}
+            onClick={() => navigate("/diagnostic-appointments")}
           />
           <AppointmentTypeCard
             icon={Home}
@@ -124,6 +125,7 @@ const AppointmentSelection = () => {
               iconText: "text-rose-600",
               hoverOverlay: "bg-rose-600",
             }}
+            
           />
         </div>
 
