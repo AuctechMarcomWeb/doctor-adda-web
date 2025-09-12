@@ -144,9 +144,9 @@ const LocationSearchInput = ({ value, onSelect }) => {
         <button
           type="button"
           onClick={handleCurrentLocation}
-          className="px-4 py-2 bg-gradient-to-r from-blue-600 to-green-600 text-white rounded-lg hover:from-blue-700 hover:to-green-700 whitespace-nowrap"
+          className="px-4 py-2 bg-gradient-to-r from-[#007BBD] to-[#005A8C] text-white rounded-lg hover:from-blue-700 hover:to-green-700 whitespace-nowrap"
         >
-          📍 Current Location
+           Current Location
         </button>
       </div>
 
