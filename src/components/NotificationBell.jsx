@@ -92,7 +92,7 @@ const NotificationBell = () => {
     <div className="relative hidden md:block" ref={bellRef}>
       {/* Bell Button */}
       <button
-        className="relative bg-[#3c83f8] text-white p-3 rounded-full shadow-lg hover:scale-105 transition"
+        className="relative bg-gradient-to-r from-[#007BBD] to-[#005A8C] text-white p-3 rounded-full shadow-lg hover:scale-105 transition"
         onClick={() => setIsOpen(!isOpen)}
       >
         <Bell
@@ -101,7 +101,7 @@ const NotificationBell = () => {
           }`}
         />
         {total > 0 && (
-          <span className="absolute -top-1 -right-1 min-w-[20px] h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
+          <span className="absolute -top-1 -right-1 min-w-[20px] h-5 bg-[#d50d52] text-white text-xs font-bold rounded-full flex items-center justify-center">
             {total > 99 ? "99+" : total}
           </span>
         )}
