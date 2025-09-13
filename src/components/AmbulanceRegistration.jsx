@@ -22,7 +22,7 @@ const AmbulanceRegistration = () => {
   const [categories, setCategories] = useState([]);
   const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
   const userId = userProfileData?._id;
-  console.log("userId", userId);
+
 
   // Profile Image states
   const [profileFile, setProfileFile] = useState(null);
@@ -34,8 +34,7 @@ const AmbulanceRegistration = () => {
   const [drivers, setDrivers] = useState([
     { name: "", phone: "", licenseNumber: "" },
   ]);
-  console.log("drivers", drivers);
-
+  
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -53,8 +52,7 @@ const AmbulanceRegistration = () => {
     emergencyContact: "911",
     profileImages: [],
   });
-  console.log("form data", formData);
-
+ 
   const uploadImage = async (file) => {
     try {
       const formDataData = new FormData();
@@ -63,10 +61,8 @@ const AmbulanceRegistration = () => {
         url: `upload/uploadImage`,
         cred: formDataData,
       });
-      console.log("Image uploaded successfully:", response);
-      const uploadedUrl = response?.data?.data?.imageUrl;
+     const uploadedUrl = response?.data?.data?.imageUrl;
       setUploadProfileImage(uploadedUrl);
-      console.log("uploadedUrl", uploadedUrl);
       setFormData((prev) => ({ ...prev, profileImage: uploadedUrl }));
     } catch (error) {
       console.error("Error uploading image:", error);

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import dayjs from "dayjs";
 
 const HospitalTimeSelection = ({ isOpen, onClose, slotDetails, onSlotSelected }) => {
 
@@ -25,8 +26,29 @@ const HospitalTimeSelection = ({ isOpen, onClose, slotDetails, onSlotSelected })
 
 
   // Convert API dates to labels and values
-  const dates =
-    slotDetails?.availability?.map((item) => {
+  // const dates =
+  //   slotDetails?.availability?.map((item) => {
+  //     const dateObj = new Date(item.date);
+  //     const label = dateObj.toLocaleDateString("en-US", {
+  //       weekday: "short",
+  //       day: "numeric",
+  //       month: "short",
+  //     });
+  //     const value = dateObj.toISOString().split("T")[0]; // YYYY-MM-DD
+  //     return { label, value, slots: item.slots };
+  //   }) || []
+
+  const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+const dates =
+  slotDetails?.availability
+    ?.filter((item) => {
+      const dateObj = new Date(item.date);
+      dateObj.setHours(0, 0, 0, 0);
+      return dateObj >= today; // ✅ keep only today & future
+    })
+    .map((item) => {
       const dateObj = new Date(item.date);
       const label = dateObj.toLocaleDateString("en-US", {
         weekday: "short",
@@ -35,7 +57,7 @@ const HospitalTimeSelection = ({ isOpen, onClose, slotDetails, onSlotSelected })
       });
       const value = dateObj.toISOString().split("T")[0]; // YYYY-MM-DD
       return { label, value, slots: item.slots };
-    }) || []
+    }) || [];
 
 
      // Disable background scrolling when modal is open
@@ -54,8 +76,33 @@ const HospitalTimeSelection = ({ isOpen, onClose, slotDetails, onSlotSelected })
 
 
   // Get slots for selected date
-  const slotsForSelectedDate =
-    dates.find((d) => d.value === selectedDate)?.slots || [];
+  // const slotsForSelectedDate =
+  //   dates.find((d) => d.value === selectedDate)?.slots || [];
+
+
+    const selectedDateObj = new Date(selectedDate);
+selectedDateObj.setHours(0, 0, 0, 0);
+
+
+
+let slotsForSelectedDate =
+  dates.find((d) => d.value === selectedDate)?.slots || [];
+
+// ✅ If selected date is today, filter past time slots
+if (selectedDateObj.getTime() === today.getTime()) {
+  const now = dayjs(); // current time
+
+  slotsForSelectedDate = slotsForSelectedDate.filter((slot) => {
+    const slotTime = dayjs(slot.startTime, "hh:mm A"); // Parse "10:00 AM"
+    return slotTime.isAfter(now); // ✅ keep only upcoming slots
+  });
+}
+
+
+    console.log("slotsForSelectedDate",slotsForSelectedDate);
+    
+
+
 
   if (!isOpen) return null;
 

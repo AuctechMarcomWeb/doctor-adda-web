@@ -45,9 +45,7 @@ const HospitalDetailPage = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
 
-  console.log(" selectedDoctor  : ", selectedDoctor)
-  console.log(" selectedDate  : ", selectedDate)
-  console.log(" selectedTime  : ", selectedTime)
+
 
   const fetchHospitalDetails = async (id) => {
     try {

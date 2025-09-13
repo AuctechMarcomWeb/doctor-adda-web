@@ -8,8 +8,7 @@ import toast from "react-hot-toast";
 const AddPetModal = ({ isOpen, onClose, onAddPet }) => {
    const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
   const UserId = userProfileData?._id;
-  console.log("UserId", UserId);
-  const [form, setForm] = useState({
+   const [form, setForm] = useState({
     image: "",
     name: "",
     type: "",

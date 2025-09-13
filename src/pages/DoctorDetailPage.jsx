@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
+import dayjs from "dayjs";
 import React, { useState, useEffect, useMemo } from "react";
 // import DiagonsticsReviewPopup from "../components/DiagonsticsReviewPopup";
 import {
@@ -144,10 +145,16 @@ const DoctorDetailPage = () => {
   console.log("doctor====", doctor);
   const [updateStatus, setUpdateStatus] = useState(null);
   const [clinicData, setClinicData] = useState(null);
+
+  console.log("clinicData", clinicData);
+
   const [selectedClinicIndex, setSelectedClinicIndex] = useState(0);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedDateData, setSelectedDateData] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
+
+  console.log("selectedSlot============>", selectedSlot);
+
   const [otherPatientDetails, setOtherPatientDetails] = useState({
     name: "",
     age: "",
@@ -196,11 +203,6 @@ const DoctorDetailPage = () => {
   const queryParams = new URLSearchParams(location.search);
   const modeFilter = queryParams.get("modeFilter");
 
-  console.log("modeFilter", modeFilter);
-
-  console.log("selectedDate", selectedDate);
-  console.log("selectedDateData", selectedDateData);
-
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -217,20 +219,42 @@ const DoctorDetailPage = () => {
       .then((res) => {
         const doc = res?.data?.data;
         setDoctor(doc);
-        setClinicData(doc?.clinics?.[0]);
-        setSelectedDate(doc?.clinics?.[0]?.availability[0]?.date);
-        setSelectedDateData(doc?.clinics?.[0]?.availability[0]);
+
+        // setSelectedDateData(doc?.clinics?.[0]?.availability[0]);
+        // setSelectedDate(doc?.clinics?.[0]?.availability[0]?.date);
+
         const firstClinic = doc?.clinics?.[0];
-        const firstAvailability = firstClinic?.availability?.[0];
+
+        // Today's date (set time to 00:00:00 for comparison)
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        // Filter availability
+        const futureAvailability =
+          firstClinic?.availability?.filter((slot) => {
+            const slotDate = new Date(slot.date);
+            slotDate.setHours(0, 0, 0, 0); // ignore time
+
+            return slotDate >= today; // keep only today & future
+          }) || [];
+
+        // Optional: assign filtered availability back
+        firstClinic.availability = futureAvailability;
+
         setClinicData(firstClinic);
-        setSelectedDate(firstAvailability?.date);
-        setSelectedDateData(firstAvailability);
+
+        // console.log("firstClinic===>", firstClinic);
+        // const firstAvailability = firstClinic?.availability?.[0];
+        // setClinicData(firstClinic);
+        // setSelectedDate(firstAvailability?.date);
+        // setSelectedDateData(firstAvailability);
+        // console.log("Filtered availability =>", firstAvailability);
 
         //  Set default slot
-        const availableSlot = firstAvailability?.slots?.find(
-          (slot) => !slot.isBooked
-        );
-        setSelectedSlot(availableSlot || null);
+        // const availableSlot = firstAvailability?.slots?.find(
+        //   (slot) => !slot.isBooked
+        // );
+        // setSelectedSlot(availableSlot || null);
       })
       .catch((error) => {
         console.log("error", error);
@@ -241,12 +265,6 @@ const DoctorDetailPage = () => {
     new Date(date1).toDateString() === new Date(date2).toDateString();
 
   const selectedClinic = clinicData || {};
-
-  const handleReviewSubmit = () => {
-    console.log("Submitted Review:", reviewData);
-    setShowReviewForm(false);
-    setReviewData({ name: "", comment: "", rating: 5 });
-  };
 
   const HIGHLIGHTS = [
     { icon: Shield, text: "100% Trusted", color: "text-green-600" },
@@ -285,21 +303,17 @@ const DoctorDetailPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       {/* Hero Section */}
-    
+
       <section className="py-10 px-4 pt-32 sm:pt-36">
         <div className="lg:w-[70%] sm:w-full xl:w-[70%] mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-       
           {/* Doctor Image & Highlights */}
           <div className="lg:col-span-2">
             <div className="rounded-3xl overflow-hidden shadow-2xl border border-gray-200">
-            <img
-                src={
-                  doctor?.profilepic || doctorImage
-                }
+              <img
+                src={doctor?.profilepic || doctorImage}
                 alt={doctor?.fullName || "No Name"}
                 className="w-full h-72 sm:h-80 object-contain transition-transform duration-700"
               />
-
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
@@ -374,7 +388,6 @@ const DoctorDetailPage = () => {
               </a>
             </div>
           </div>
-
         </div>
       </section>
 
@@ -396,10 +409,10 @@ const DoctorDetailPage = () => {
                         onClick={() => {
                           setClinicData(clinic);
                           setSelectedClinicIndex(index);
-                          setSelectedDate(clinic?.availability[0]?.date);
-                          setSelectedDateData(clinic?.availability[0]);
+                          // setSelectedDate(clinic?.availability[0]?.date);
+                          // setSelectedDateData(clinic?.availability[0]);
 
-                          setSelectedSlot(clinic?.availability[0]?.slots[0]);
+                          // setSelectedSlot(clinic?.availability[0]?.slots[0]);
                         }}
                         className={`px-4 py-2 rounded-xl font-bold text-sm transition-all duration-300 cursor-pointer ${
                           index === selectedClinicIndex
@@ -433,9 +446,12 @@ const DoctorDetailPage = () => {
                             onClick={() => {
                               setSelectedDate(d?.date);
 
-                              console.log("d", d);
+                              console.log("d=================>", d);
 
-                              setSelectedSlot(d?.slots[0]);
+                       
+                             
+
+                              // setSelectedSlot(d?.slots[0]);
                               setSelectedDateData(d);
                             }}
                             className={`px-3 py-2 text-sm rounded-lg font-medium cursor-pointer ${
@@ -458,19 +474,23 @@ const DoctorDetailPage = () => {
                       {selectedDateData?.slots?.length > 0 ? (
                         selectedDateData?.slots
                           .filter((slot) => !slot.isBooked)
-                          .map((slot, i) => (
-                            <button
-                              key={i}
-                              onClick={() => setSelectedSlot(slot)}
-                              className={`px-2 py-2 text-sm rounded-lg font-medium cursor-pointer ${
-                                selectedSlot === slot
-                                  ? "bg-blue-600 text-white"
-                                  : "bg-gray-100 text-gray-700 hover:bg-blue-50"
-                              }`}
-                            >
-                              {slot.startTime} - {slot.endTime}
-                            </button>
-                          ))
+                          .map((slot, i) => {
+                            console.log("slot", slot);
+
+                            return (
+                              <button
+                                key={i}
+                                onClick={() => setSelectedSlot(slot)}
+                                className={`px-2 py-2 text-sm rounded-lg font-medium cursor-pointer ${
+                                  selectedSlot === slot
+                                    ? "bg-blue-600 text-white"
+                                    : "bg-gray-100 text-gray-700 hover:bg-blue-50"
+                                }`}
+                              >
+                                {slot.startTime} - {slot.endTime}
+                              </button>
+                            );
+                          })
                       ) : (
                         <p className="text-gray-500 text-sm col-span-2">
                           No slots available
@@ -643,7 +663,6 @@ const DoctorDetailPage = () => {
         onOpenManagePatients={handleOpenManagePatients}
         onOpenManagePets={handleOpenManagePets}
       />
-
     </div>
   );
 };
