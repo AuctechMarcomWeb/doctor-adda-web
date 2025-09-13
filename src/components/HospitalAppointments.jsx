@@ -112,7 +112,7 @@ const HospitalAppointments = () => {
       </div>
 
       {/* Content */}
-      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8  sm:py-12">
+      <div className="sm:w-full lg:w-[80%] xl:w-[80%] 2xl:w-[70%] mx-auto px-2 sm:px-6 lg:px-8  sm:py-12">
         
         {/* Appointments List */}
         <div className="space-y-6">

@@ -65,7 +65,7 @@ const DoctorCategoryCards = () => {
           <Swiper
             modules={[Navigation, Pagination, Autoplay]}
             spaceBetween={16}
-            slidesPerView={1}
+            slidesPerView={2}
             navigation={{
               nextEl: ".swiper-button-next-custom",
               prevEl: ".swiper-button-prev-custom",
@@ -76,8 +76,8 @@ const DoctorCategoryCards = () => {
             }}
             autoplay={{ delay: 4000 }}
             breakpoints={{
-              640: { slidesPerView: 1 },
-              768: { slidesPerView: 2 },
+              640: { slidesPerView: 2 },
+              768: { slidesPerView: 3 },
               1024: { slidesPerView: 3 },
               1280: { slidesPerView: 4 },
             }}
@@ -105,11 +105,11 @@ const DoctorCategoryCards = () => {
                         onClick={() => navigate(`/doctorlist/${category?._id}`)}
                         className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 cursor-pointer overflow-hidden"
                       >
-                        <div className="relative h-30 sm:h-48 md:h-52 overflow-hidden">
+                        <div className="relative h-30 sm:h-48 md:h-40 overflow-hidden">
                           <img
                             src={category.imageUrl}
                             alt={category.name}
-                            className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
+                            className="w-full h-full md:p-4 p-1 object-contain group-hover:scale-110 transition-transform duration-500"
                           />
 
                           <div
