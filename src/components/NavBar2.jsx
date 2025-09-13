@@ -166,15 +166,18 @@ const NavBar2 = () => {
   ];
 
   const renderMegaMenu = (menuKey) => {
+
     const data = megaMenuData[menuKey];
+
     if (!data) return null;
 
     const active = activeSubCategory || data.left[0];
 
     return (
-      <div className="absolute left-0 top-full w-full bg-white shadow-2xl z-50 border-t border-gray-200 flex p-4 rounded-b-md">
+      <div className="absolute left-0 top-full w-full bg-white shadow-2xl z-50 border-t border-gray-200 flex flex-col sm:flex-row p-4 rounded-b-md">
+    
         {/* Left - Subcategories */}
-        <div className="w-1/4 max-w-[250px] border-r pr-4">
+        <div className="sm:w-1/4 w-full max-w-[250px] border-r pr-4 mb-4 sm:mb-0">
           {data.left.map((item, idx) => (
             <div
               key={idx}
@@ -191,19 +194,23 @@ const NavBar2 = () => {
         </div>
 
         {/* Right - Subitems */}
-        <div className="w-3/4 pl-6 flex gap-4">
+        <div className="sm:w-3/4 w-full grid grid-cols-2 md:grid-cols-3 gap-y-2 gap-x-6 px-2">
           {data.right[active]?.map((subItem, i) => (
             <div
               key={i}
-              className="py-2 px-2 text-sm text-gray-700 hover:text-[#0074b2] cursor-pointer"
+              className="text-sm text-gray-700 hover:text-[#0074b2] cursor-pointer break-words"
             >
               {subItem}
             </div>
           ))}
         </div>
+        
       </div>
-    );
-  };
+
+    
+    )
+
+  }
 
   return (
     <div className="w-full bg-white border-t hidden sm:block relative z-50">
@@ -260,9 +267,9 @@ const NavBar2 = () => {
             </div>
           ))}
 
-          <span className="cursor-pointer px-3 py-2 hover:bg-[#0074b2] hover:text-white rounded transition">
+          {/* <span className="cursor-pointer px-3 py-2 hover:bg-[#0074b2] hover:text-white rounded transition">
             More
-          </span>
+          </span> */}
         </div>
 
         {/* Mega Menu dropdown — placed outside of loop, full area hoverable */}

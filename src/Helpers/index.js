@@ -5,7 +5,7 @@ import { confirmDialog } from "primereact/confirmdialog";
 import toast from "react-hot-toast";
 
 // Function to fetch the latest token from cookie
-export const getToken = () => Cookies.get(["DoctorAddaPanel", "Token"]);
+export const getToken = () => Cookies.get("Token");
 
 export const request = async (props) => {
 
@@ -83,7 +83,7 @@ export const postRequest = async (props) => {
       props?.cred,
       {
         headers: {
-            Authorization: getToken(),
+            Authorization: `${getToken()}`,
         },
       }
     );
@@ -143,6 +143,7 @@ export const patchRequest = async (props) => {
     throw error; // Re-throw the error to allow the caller to handle it
   }
 };
+
 export const deleteRequest = async (url) => {
   try {
     const response = await axios.delete(
