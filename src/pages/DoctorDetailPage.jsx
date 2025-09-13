@@ -38,6 +38,7 @@ import { getRequest } from "../Helpers";
 import { AppointmentDateFormat } from "../Utils";
 import AppointmentFlow from "../components/AppointmentFlow";
 import { useSelector } from "react-redux";
+import doctorImage from "../assets/doctorImage.jpg";
 
 import DiagonsticsReviewPopup from "../components/DiagonsticsReviewPopup";
 
@@ -284,16 +285,21 @@ const DoctorDetailPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       {/* Hero Section */}
+    
       <section className="py-10 px-4 pt-32 sm:pt-36">
         <div className="lg:w-[70%] sm:w-full xl:w-[70%] mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+       
           {/* Doctor Image & Highlights */}
           <div className="lg:col-span-2">
             <div className="rounded-3xl overflow-hidden shadow-2xl border border-gray-200">
-              <img
-                src={doctor?.profilepic}
-                alt={doctor?.fullName}
+            <img
+                src={
+                  doctor?.profilepic || doctorImage
+                }
+                alt={doctor?.fullName || "No Name"}
                 className="w-full h-72 sm:h-80 object-contain transition-transform duration-700"
               />
+
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
@@ -368,6 +374,7 @@ const DoctorDetailPage = () => {
               </a>
             </div>
           </div>
+
         </div>
       </section>
 
@@ -617,6 +624,7 @@ const DoctorDetailPage = () => {
           </aside>
         </div>
       </main>
+
       <DiagonsticsReviewPopup
         open={showReviewPopup}
         onClose={() => setShowReviewPopup(false)}
@@ -635,6 +643,7 @@ const DoctorDetailPage = () => {
         onOpenManagePatients={handleOpenManagePatients}
         onOpenManagePets={handleOpenManagePets}
       />
+
     </div>
   );
 };

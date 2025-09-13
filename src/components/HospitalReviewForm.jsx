@@ -37,6 +37,8 @@ const HospitalReviewForm = ({ open, onClose, hospitalId, onReviewAdded,setUpdate
         url: `hospital/${hospitalId}/review`,
         cred: { rating, comment },
       });
+
+      
       const data = res?.data;
 
       if (data?.success) {
@@ -50,13 +52,10 @@ const HospitalReviewForm = ({ open, onClose, hospitalId, onReviewAdded,setUpdate
           setSuccess(false);
           onClose();
         }, 1200);
-      } else {
-        setError(data?.message || "Alreeady submitted a review.");
-        toast.error(data?.message || "Alreeady submitted a review.");
-      }
+      } 
     } catch (err) {
       console.error(err);
-      const errorMsg = err?.response?.data?.message || "Alreeady submitted a review.";
+      const errorMsg = err?.response?.data?.message ;
       setError(errorMsg);
       toast.error(errorMsg);
     } finally {
