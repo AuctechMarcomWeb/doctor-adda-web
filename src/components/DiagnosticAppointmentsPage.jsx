@@ -87,7 +87,7 @@ const DiagnosticAppointmentsPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      <div className="max-w-5xl mx-auto px-4 py-28 sm:px-6 lg:px-8 sm:py-38">
+      <div className="max-w-5xl mx-auto px-4 py-24 sm:px-6 lg:px-8 sm:py-38">
         {/* Notification */}
         {notification && (
           <div className="fixed top-4 right-4 z-50 bg-green-500 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg shadow-lg">
@@ -96,7 +96,7 @@ const DiagnosticAppointmentsPage = () => {
         )}
 
         {/* Header */}
-        <div className="text-center mb-8 px-2">
+        <div className="text-center md:mb-8 mb-4 px-2">
           <h2 className="text-xl 2xl:text-3xl lg:text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent mb-3">
             Diagnostic Appointments
           </h2>
@@ -106,7 +106,7 @@ const DiagnosticAppointmentsPage = () => {
         </div>
 
         {/* Filters */}
-        <div className="flex gap-3 sm:gap-4 mb-8 flex-wrap justify-center">
+        <div className="flex gap-3 sm:gap-4 md:mb-8 mb-4 flex-wrap justify-center">
           {[
             { label: "All", value: "All", count: counts.all },
             { label: "Pending", value: "Pending", count: counts.pending },
@@ -126,7 +126,7 @@ const DiagnosticAppointmentsPage = () => {
           ))}
         </div>
 
-        <p className="text-gray-500 mb-8 text-center text-sm sm:text-base">
+        <p className="text-gray-500 md:mb-8 mb-4 text-center text-sm sm:text-base">
           Showing {filteredAppointments.length} appointments
         </p>
 
