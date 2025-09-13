@@ -82,6 +82,7 @@ const FeaturedHospitals2 = () => {
 
   return (
     <div className=" mx-auto px-4 sm:px-6 lg:px-8 md:py-8 py-4 relative sm:w-full lg:w-[80%]  xl:w-[80%] 2xl:w-[70%] ">
+   
       <div className="text-center mb-8">
         <h2 className="text-xl  md:text-2xl lg:text-4xl font-bold text-gray-800 mb-4">
           Featured{" "}
@@ -102,6 +103,7 @@ const FeaturedHospitals2 = () => {
       >
         <ChevronLeft className="w-5 h-5 text-gray-700" />
       </button>
+
       <button
         onClick={handleScrollRight}
         className="hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-gray-800 border border-gray-300 shadow p-2 rounded-full"
@@ -150,10 +152,14 @@ const FeaturedHospitals2 = () => {
           hospitalList.map((hospital, index) => (
             <div
               key={index}
-              className="mx-2 sm:mx-4 flex-shrink-0 cursor-pointer group"
-              onClick={stopScrolling}
+                className="mx-2 cursor-pointer  sm:mx-4 flex-shrink-0  group"
+              onClick={stopScrolling} 
             >
-              <div className="w-64 sm:w-72 md:w-80 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
+              <div 
+
+              onClick={() => handleViewDetails(hospital._id)}
+
+              className="w-64 sm:w-72 md:w-80 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
                 <div className="relative overflow-hidden rounded-t-2xl h-40 sm:h-48">
                   <img
                     src={
@@ -180,18 +186,15 @@ const FeaturedHospitals2 = () => {
                       ? `${hospital.description.substring(0, 100)}...`
                       : hospital.description}
                   </p>
-                  <div className="flex flex-col sm:flex-row gap-2 md:pt-4 pt-2 border-t border-gray-100">
-                    <button className="flex-1 bg-[#00669e] text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
-                      <Phone className="w-4 h-4" />
-                      Book Appointment
-                    </button>
+                  <div className="flex  pt-2 border-t border-gray-200 cursor-pointer ">
                     <button
                       onClick={() => handleViewDetails(hospital._id)}
-                      className="flex-1 sm:flex-none px-3 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors cursor-pointer"
+                      className="w-full cursor-pointer px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md text-sm font-medium shadow-sm hover:bg-gray-100 transition-all"
                     >
                       View Details
                     </button>
                   </div>
+
                 </div>
               </div>
             </div>
@@ -208,6 +211,7 @@ const FeaturedHospitals2 = () => {
       display: none;
     }
   `}</style>
+
     </div>
 
   );
