@@ -62,7 +62,7 @@ const HospitalPage = () => {
     currentPage * pageSize
   );
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 pt-22">
       {/* Hero Banner */}
       {/* Enhanced Hero Banner */}
       <div
@@ -96,7 +96,7 @@ const HospitalPage = () => {
         </div>
 
         {/* Main content */}
-        <div className="relative sm:w-full lg:w-[80%] xl:w-[80%] 2xl:w-[70%] mx-auto px-4 pt-24 pb-10 md:pt-32 flex items-center">
+        <div className="relative sm:w-full lg:w-[80%] xl:w-[80%] 2xl:w-[70%] mx-auto px-4 py-12 pb-18 md:pb-32 md:py-28 flex items-center">
           <div className="grid grid-cols-2 gap-4 md:gap-12 items-center w-full">
             {/* Left content */}
             <div className="text-left space-y-6">
@@ -132,12 +132,12 @@ const HospitalPage = () => {
                     Expert Medical Staff
                   </span>
                 </div>
-                <div className="flex items-center gap-3 bg-white/20 backdrop-blur-sm rounded-full px-6 py-3 transform hover:scale-105 transition-transform duration-300">
+                {/* <div className="flex items-center gap-3 bg-white/20 backdrop-blur-sm rounded-full px-6 py-3 transform hover:scale-105 transition-transform duration-300">
                   <div className="w-3 h-3 bg-green-400 rounded-full animate-ping animation-delay-300"></div>
                   <span className="text-sm font-medium">
                     Advanced Equipment
                   </span>
-                </div>
+                </div> */}
               </div>
 
               {/* <div className="pt-6 animate-fadeInUp animation-delay-700">
@@ -153,12 +153,12 @@ const HospitalPage = () => {
                 </button>
               </div> */}
               {/* Enhanced Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 mb-6">
+              <div className="flex flex-col sm:flex-row gap-4 ">
                 <a href="https://play.google.com/store/apps/details?id=com.doctors.adda">
                   <button
                     onMouseEnter={() => setHoveredButton("download")}
                     onMouseLeave={() => setHoveredButton(null)}
-                    className="group relative bg-white text-gray-900 md:px-6 md:py-4 px-3 py-2 md:rounded-2xl rounded-lg font-bold text-xs md:text-base lg:text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105 transition-all duration-300 overflow-hidden animate-slide-in-left cursor-pointer"
+                    className="group relative bg-white text-[#00669e] md:px-6 md:py-4 px-3 py-2 md:rounded-2xl rounded-lg font-bold text-xs md:text-base lg:text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105 transition-all duration-300 overflow-hidden animate-slide-in-left cursor-pointer"
                     style={{ animationDelay: "1s" }}
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -350,7 +350,7 @@ const HospitalPage = () => {
               <input
                 type="text"
                 placeholder="Search by name or location..."
-                className="w-full pl-10 pr-4 md:py-3 py-1 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+                className="w-full pl-10 pr-4 md:py-3 py-1  text-sm md:text-base border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />

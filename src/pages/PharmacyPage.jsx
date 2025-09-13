@@ -58,10 +58,10 @@ const PharmacyPage = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 pt-22">
       {/*  Hero Banner with Animations and Images */}
       <div
-        className="relative text-white overflow-hidden min-h-[360px]"
+        className="relative text-white overflow-hidden "
         style={{
           background:
             "linear-gradient(135deg, rgb(0, 123, 189) 0%, rgb(0, 90, 140) 100%)",
@@ -117,7 +117,7 @@ const PharmacyPage = () => {
           ></div>
         </div>
 
-        <div className="relative sm:w-full lg:w-[80%] xl:w-[80%] 2xl:w-[70%] mx-auto  pt-24 px-4 md:px-4 md:pt-36 md:pb-18 ">
+        <div className="relative sm:w-full lg:w-[80%] xl:w-[80%] 2xl:w-[70%] mx-auto  pt-4 pb-12  px-4 md:px-4 md:pt-22 md:pb-28 ">
           <div className="grid grid-cols-2 lg:grid-cols-2 md:gap-12 items-center">
             {/* Left Content */}
             <div className=" lg:text-left">
@@ -166,7 +166,7 @@ const PharmacyPage = () => {
                   <button
                     onMouseEnter={() => setHoveredButton("download")}
                     onMouseLeave={() => setHoveredButton(null)}
-                    className="group relative bg-white text-gray-900 md:px-6 md:py-4 px-3 py-2 md:rounded-2xl rounded-lg font-bold   text-xs md:text-base lg:text-lg hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105 transition-all duration-300 overflow-hidden animate-slide-in-left cursor-pointer"
+                    className="group relative bg-white text-[#00669e] md:px-6 md:py-4 px-3 py-2 md:rounded-2xl rounded-lg font-bold   text-xs md:text-base lg:text-lg hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105 transition-all duration-300 overflow-hidden animate-slide-in-left cursor-pointer"
                     style={{ animationDelay: "1s" }}
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -203,7 +203,7 @@ const PharmacyPage = () => {
               </div>
 
               {/* Floating Medicine Cards */}
-              <div
+              {/* <div
                 className="absolute -top-6 -left-6 bg-white rounded-2xl p-4 shadow-xl animate-bounce hidden md:block"
                 style={{ animationDelay: "1s", animationDuration: "3s" }}
               >
@@ -225,7 +225,7 @@ const PharmacyPage = () => {
                     <p className="text-xs text-gray-600">30 mins</p>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               <div
                 className="absolute -bottom-6 -right-6 bg-white rounded-2xl p-4 shadow-xl animate-bounce hidden md:block"

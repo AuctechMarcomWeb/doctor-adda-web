@@ -18,7 +18,7 @@ import { FaGooglePlay } from "react-icons/fa";
 const SpecialtyCard = ({ id, name, imageUrl, onViewDoctors }) => {
   return (
     <div
-      className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-105 overflow-hidden border border-gray-100"
+      className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-105 overflow-hidden border border-gray-100 "
       onClick={() => onViewDoctors(id)}
     >
       {/* Image Section */}
@@ -142,13 +142,13 @@ const DoctorPage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 pt-16 md:pt-28">
       {/* Hero Banner */}
 
       {/* Download App Banner */}
 
       <div
-        className={`relative overflow-hidden text-white rounded-3xl shadow-2xl transform transition-all duration-1000 ${isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+        className={`relative overflow-hidden text-white  rounded-b-3xl shadow-2xl transform transition-all duration-1000 ${isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
           }`}
         style={{
           background:
@@ -208,7 +208,7 @@ const DoctorPage = () => {
         {/* Enhanced Glassmorphism Overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/8 via-transparent to-blue-900/10 backdrop-blur-sm"></div>
 
-        <div className="relative z-10 relative sm:w-full lg:w-[80%] xl:w-[80%] 2xl:w-[70%] mx-auto px-4 pt-24 md:pt-40 pb-4  ">
+        <div className="relative z-10 relative sm:w-full lg:w-[80%] xl:w-[80%] 2xl:w-[70%] mx-auto py-16 md:py-18 px-4 pb-12 md:pb-18 ">
           <div className="flex flex-row lg:flex-row items-center justify-between md:gap-12 gap-2">
             {/* Left Content - Enhanced */}
             <div className="flex-1  lg:text-left max-w-2xl">
@@ -260,12 +260,12 @@ const DoctorPage = () => {
               </div>
 
               {/* Enhanced Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 mb-6">
+              <div className="flex flex-col sm:flex-row gap-4 ">
                 <a href="https://play.google.com/store/apps/details?id=com.doctors.adda">
                   <button
                     onMouseEnter={() => setHoveredButton("download")}
                     onMouseLeave={() => setHoveredButton(null)}
-                    className="group relative bg-white text-gray-900 md:px-6 md:py-4 px-3 py-2 md:rounded-2xl rounded-lg font-bold text-xs md:text-base lg:text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105 transition-all duration-300 overflow-hidden animate-slide-in-left cursor-pointer"
+                    className="group relative bg-white text-[#00669e] md:px-6 md:py-4 px-3 py-2 md:rounded-2xl rounded-lg font-bold text-xs md:text-base lg:text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105 transition-all duration-300 overflow-hidden animate-slide-in-left cursor-pointer"
                     style={{ animationDelay: "1s" }}
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
