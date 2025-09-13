@@ -53,7 +53,7 @@ export const DiagnosticCard = ({
         {/* Content */}
         <div className="flex-1 flex flex-col justify-between">
           <div>
-            <h3 className="text-base sm:text-lg font-semibold text-gray-800">
+            <h3 className="text-base sm:text-lg font-semibold text-[#00669e]">
               {name}
             </h3>
             <div className="text-sm sm:text-base text-gray-600 mt-1">
@@ -341,7 +341,7 @@ const BloodBankListing = () => {
                   <button
                     onMouseEnter={() => setHoveredButton("download")}
                     onMouseLeave={() => setHoveredButton(null)}
-                    className="group relative bg-white text-gray-900 md:px-6 md:py-4 px-3 py-2 md:rounded-2xl rounded-lg font-bold text-xs md:text-base lg:text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105 transition-all duration-300 overflow-hidden animate-slide-in-left cursor-pointer"
+                    className="group relative bg-white text-[#00669e] md:px-6 md:py-4 px-3 py-2 md:rounded-2xl rounded-lg font-bold text-xs md:text-base lg:text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 hover:scale-105 transition-all duration-300 overflow-hidden animate-slide-in-left cursor-pointer"
                     style={{ animationDelay: "1s" }}
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -483,7 +483,7 @@ const BloodBankListing = () => {
               <input
                 type="text"
                 placeholder="Search by name or location..."
-                className="w-full pl-10 pr-4 md:py-3 py-1 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+                className="w-full pl-10 pr-4 md:py-3 py-1  text-sm md:text-base border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />

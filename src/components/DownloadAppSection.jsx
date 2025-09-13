@@ -17,7 +17,7 @@ const DownloadAppSection = () => {
             {/* Play Store Button */}
             <a
               href="https://play.google.com/store/apps/details?id=com.doctors.adda"
-              className="flex items-center gap-3 bg-white text-blue-700 px-5 py-3 rounded-xl shadow-md hover:bg-gray-100 transition"
+              className="flex items-center gap-3 bg-white text-[#00669e] px-5 py-3 rounded-xl shadow-md hover:bg-gray-100 transition"
             >
               <FaGooglePlay size={22} />
               <span className="text-xs md:text-base font-semibold">Download App</span>
