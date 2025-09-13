@@ -59,6 +59,7 @@ import BloodBankListing from "./pages/BloodBank/BloodBankListing";
 import BloodBankDetailPage from "./pages/BloodBank/bloodBankDetailPage";
 import ManageAddresses from "./components/ManageAddresses";
 import DiagnosticAppointmentsPage from "./components/DiagnosticAppointmentsPage";
+import HospitalAppointments from "./components/HospitalAppointments";
 
 function App() {
   const [step, setStep] = useState(1);
@@ -121,6 +122,10 @@ function App() {
         <Route
           path="/diagnostic-appointments"
           element={<DiagnosticAppointmentsPage />}
+        />
+        <Route
+          path="/hospital-appointments"
+          element={<HospitalAppointments />}
         />
         <Route path="/upgrade-profile" element={<UpgradeProfile />} />
         <Route path="/all-registration" element={<AllRegistration />} />
