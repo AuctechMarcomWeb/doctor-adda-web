@@ -16,13 +16,13 @@ const PharmacyCard = ({_id  , name, phoneNumber, storeTiming, address, averageRa
       <img
         src={profileImage || 'https://i.pinimg.com/736x/6f/ee/63/6fee63ba6f6ffa494e5b634517df342d.jpg'}
         alt={name}
-        className="w-full md:w-20 h-40 md:h-28 rounded-xl object-cover border border-gray-200"
+        className="w-full md:w-28 h-40  md:h-28 rounded-xl object-cover border border-gray-200"
       />
 
       {/* Content */}
       <div className="flex-1 flex flex-col justify-between">
         <div>
-          <h3 className="text-base sm:text-lg font-semibold text-gray-800">{name}</h3>
+          <h3 className="text-base sm:text-lg font-semibold text-[#00669e]">{name}</h3>
           <p className="text-sm sm:text-base text-gray-600 mt-1 line-clamp-1">{phoneNumber}</p>
         </div>
 
