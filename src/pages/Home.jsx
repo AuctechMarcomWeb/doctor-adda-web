@@ -69,6 +69,7 @@ const Home = () => {
   }, []);
   return (
     <>
+      
       {!token && open ? (
         <HealthcareRegistrationModal
           setOpen={setOpen}
