@@ -407,7 +407,27 @@ const DoctorDetailPage = () => {
                       <button
                         key={index}
                         onClick={() => {
-                          setClinicData(clinic);
+                          const firstClinic = clinic;
+
+                          // Today's date (set time to 00:00:00 for comparison)
+                          const today = new Date();
+                          today.setHours(0, 0, 0, 0);
+
+                          // Filter availability
+                          const futureAvailability =
+                            firstClinic?.availability?.filter((slot) => {
+                              const slotDate = new Date(slot.date);
+                              slotDate.setHours(0, 0, 0, 0); // ignore time
+
+                              return slotDate >= today; // keep only today & future
+                            }) || [];
+
+                          // Optional: assign filtered availability back
+                          firstClinic.availability = futureAvailability;
+
+                          setClinicData(firstClinic);
+
+                          // setClinicData(clinic);
                           setSelectedClinicIndex(index);
                           // setSelectedDate(clinic?.availability[0]?.date);
                           // setSelectedDateData(clinic?.availability[0]);
@@ -435,6 +455,15 @@ const DoctorDetailPage = () => {
                     </p>
                     <p className="text">Consultation Fee</p>
                   </div>
+
+                    {
+                      clinicData?.availability.length == 0 ? 
+                      <div>
+                        No Slots Available
+                      </div> :
+
+                  <div>
+
                   {/* Date Selector */}
                   <div className="mt-6 ">
                     <h4 className="text-sm font-semibold mb-2">Select Date</h4>
@@ -447,9 +476,6 @@ const DoctorDetailPage = () => {
                               setSelectedDate(d?.date);
 
                               console.log("d=================>", d);
-
-                       
-                             
 
                               // setSelectedSlot(d?.slots[0]);
                               setSelectedDateData(d);
@@ -498,6 +524,8 @@ const DoctorDetailPage = () => {
                       )}
                     </div>
                   </div>
+                  </div>
+                    }
 
                   <div className="space-y-3 pt-4">
                     <ActionButton
