@@ -55,7 +55,10 @@ const ManagePets = () => {
       setFormData({
         name: pet?.name,
         type: pet?.type,
-        age: pet?.age?.toString() || "",
+        age:
+          typeof pet?.age === "string" || typeof pet?.age === "number"
+            ? pet?.age.toString()
+            : `${pet.age?.year || 0}`,
         weight: pet?.weight || "",
       });
     } else {
@@ -196,9 +199,18 @@ const ManagePets = () => {
                           {pet.name}
                         </h2>
                         <p className="text-sm text-gray-600 mt-1">
-                          Age: <span className="font-medium">{pet?.age}</span> |{" "}
-                          <span className="font-medium">{pet?.type}</span>
+                          Age:{" "}
+                          <span className="font-medium">
+                            {typeof pet.age === "string" ||
+                            typeof pet.age === "number"
+                              ? pet.age
+                              : `${pet.age?.year || 0} yrs ${
+                                  pet.age?.month || 0
+                                } mos`}
+                          </span>{" "}
+                          | <span className="font-medium">{pet?.type}</span>
                         </p>
+
                         <p className="text-sm text-gray-600 mt-0.5">
                           Weight:{" "}
                           <span className="font-medium">{pet?.weight}</span>

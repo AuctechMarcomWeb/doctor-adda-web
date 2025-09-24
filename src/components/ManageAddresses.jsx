@@ -27,6 +27,7 @@ const ManageAddresses = () => {
   const { userProfileData } = useSelector((state) => state.user);
   const [errors, setErrors] = useState({});
   const UserId = getCookieItem("UserId");
+  console.log("userProfileData", userProfileData);
 
   const autocompleteRef = useRef(null);
 
@@ -147,7 +148,7 @@ const ManageAddresses = () => {
         fullName: address?.fullName || "",
         mobile: address?.mobile || "",
         label: address?.label || "Home",
-        addressLine: address?.addressLine || "",
+        addressLine: address?.addressLine || address.address || "",
         house: address?.house || "", // ✅ Add this
         city: address?.city || "",
         state: address?.state || "",
@@ -197,6 +198,8 @@ const ManageAddresses = () => {
           address: fullAddress, // ✅ new field
         },
       });
+      console.log("after api", formData);
+
       toast.success("Address added successfully!");
       await fetchAddresses();
       closeModal();
@@ -343,161 +346,179 @@ const ManageAddresses = () => {
 
           {/* Modal */}
           {isModalOpen && (
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                editingAddress ? updateAddress() : addAddress();
-              }}
-              className="space-y-5 bg-white p-6 rounded-2xl shadow-xl fixed inset-0 z-50 max-w-lg mx-auto overflow-y-auto"
-            >
-              <input
-                type="text"
-                placeholder="Full Name"
-                value={formData.fullName}
-                onChange={(e) =>
-                  setFormData({ ...formData, fullName: e.target.value })
-                }
-                className="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:ring-4 focus:ring-[#006ca7]"
-              />
-              {errors.fullName && (
-                <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>
-              )}
-
-              <input
-                type="tel"
-                placeholder="Mobile Number"
-                value={formData.mobile}
-                maxLength={10} // ✅ restricts to 10 digits
-                onChange={(e) => {
-                  const value = e.target.value;
-                  // ✅ allow only numbers (0–9)
-                  if (/^\d*$/.test(value)) {
-                    setFormData({ ...formData, mobile: value });
-                  }
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  editingAddress ? updateAddress() : addAddress();
                 }}
-                className="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:ring-4 focus:ring-[#006ca7]"
-                required
-              />
-              {errors.mobile && (
-                <p className="text-red-500 text-sm mt-1">{errors.mobile}</p>
-              )}
-
-              <select
-                value={formData.label}
-                onChange={(e) =>
-                  setFormData({ ...formData, label: e.target.value })
-                }
-                className="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:ring-4 focus:ring-[#006ca7]"
+                className="space-y-5 bg-white p-6 rounded-2xl shadow-xl  z-50 max-w-lg overflow-y-auto"
               >
-                <option value="Home">Home</option>
-                <option value="Work">Work</option>
-                <option value="Other">Other</option>
-              </select>
+                {/* Header */}
+                <div className="flex items-center gap-3 mb-6 border-b border-gray-200 pb-3">
+                  <div className="bg-[#E6F3FA] p-3 rounded-full">
+                    {editingAddress ? (
+                      <Edit size={24} className="text-[#006ca7]" />
+                    ) : (
+                      <MapPin size={24} className="text-[#006ca7]" />
+                    )}
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900">
+                    {editingAddress ? "Edit Address" : "Add New Address"}
+                  </h3>
+                </div>
 
-              {/* Google Autocomplete Input */}
-              {isLoaded && (
-                <div className="relative">
-                  <Autocomplete
-                    onLoad={(ref) => (autocompleteRef.current = ref)}
-                    onPlaceChanged={handlePlaceChanged}
-                  >
-                    <input
-                      type="text"
-                      value={formData.addressLine}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          addressLine: e.target.value,
-                        })
-                      }
-                      placeholder="Search Address..."
-                      className="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:ring-4 focus:ring-[#006ca7]"
-                    />
-                  </Autocomplete>
+                <input
+                  type="text"
+                  placeholder="Full Name"
+                  value={formData.fullName}
+                  onChange={(e) =>
+                    setFormData({ ...formData, fullName: e.target.value })
+                  }
+                  className="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:ring-4 focus:ring-[#006ca7]"
+                />
+                {errors.fullName && (
+                  <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>
+                )}
+
+                <input
+                  type="tel"
+                  placeholder="Mobile Number"
+                  value={formData.mobile}
+                  maxLength={10} // ✅ restricts to 10 digits
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    // ✅ allow only numbers (0–9)
+                    if (/^\d*$/.test(value)) {
+                      setFormData({ ...formData, mobile: value });
+                    }
+                  }}
+                  className="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:ring-4 focus:ring-[#006ca7]"
+                  required
+                />
+                {errors.mobile && (
+                  <p className="text-red-500 text-sm mt-1">{errors.mobile}</p>
+                )}
+
+                <select
+                  value={formData.label}
+                  onChange={(e) =>
+                    setFormData({ ...formData, label: e.target.value })
+                  }
+                  className="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:ring-4 focus:ring-[#006ca7]"
+                >
+                  <option value="Home">Home</option>
+                  <option value="Work">Work</option>
+                  <option value="Other">Other</option>
+                </select>
+
+                {/* Google Autocomplete Input */}
+                {isLoaded && (
+                  <div className="relative">
+                    <Autocomplete
+                      onLoad={(ref) => (autocompleteRef.current = ref)}
+                      onPlaceChanged={handlePlaceChanged}
+                    >
+                      <input
+                        type="text"
+                        value={formData.addressLine}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            addressLine: e.target.value,
+                          })
+                        }
+                        placeholder="Search Address..."
+                        className="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:ring-4 focus:ring-[#006ca7]"
+                      />
+                    </Autocomplete>
+                    <button
+                      type="button"
+                      onClick={fetchCurrentLocation}
+                      className="absolute top-3 right-3 text-[#006ca7] hover:text-[#004a70]"
+                    >
+                      <LocateFixed size={20} />
+                    </button>
+                  </div>
+                )}
+                {errors.addressLine && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.addressLine}
+                  </p>
+                )}
+
+                <input
+                  type="text"
+                  placeholder="House No. / Street"
+                  value={formData.house || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, house: e.target.value })
+                  }
+                  className="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:ring-4 focus:ring-[#006ca7]"
+                />
+                {errors.house && (
+                  <p className="text-red-500 text-sm mt-1">{errors.house}</p>
+                )}
+
+                {/* City, State, Pincode */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <input
+                    type="text"
+                    placeholder="City"
+                    value={formData.city}
+                    onChange={(e) =>
+                      setFormData({ ...formData, city: e.target.value })
+                    }
+                    className="p-4 border border-gray-300 rounded-xl"
+                  />
+                  {errors.city && (
+                    <p className="text-red-500 text-sm mt-1">{errors.city}</p>
+                  )}
+                  <input
+                    type="text"
+                    placeholder="State"
+                    value={formData.state}
+                    onChange={(e) =>
+                      setFormData({ ...formData, state: e.target.value })
+                    }
+                    className="p-4 border border-gray-300 rounded-xl"
+                  />
+                  {errors.state && (
+                    <p className="text-red-500 text-sm mt-1">{errors.state}</p>
+                  )}
+                  <input
+                    type="text"
+                    placeholder="Pincode"
+                    value={formData.pincode}
+                    onChange={(e) =>
+                      setFormData({ ...formData, pincode: e.target.value })
+                    }
+                    className="p-4 border border-gray-300 rounded-xl"
+                  />
+                  {errors.pincode && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.pincode}
+                    </p>
+                  )}
+                </div>
+
+                <div className="flex justify-end gap-4 mt-6">
                   <button
                     type="button"
-                    onClick={fetchCurrentLocation}
-                    className="absolute top-3 right-3 text-[#006ca7] hover:text-[#004a70]"
+                    onClick={closeModal}
+                    className="px-6 py-3 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300"
                   >
-                    <LocateFixed size={20} />
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-6 py-3 bg-[#006ca7] text-white rounded-xl hover:bg-[#005a8c] shadow-lg"
+                  >
+                    {editingAddress ? "Update" : "Save"}
                   </button>
                 </div>
-              )}
-              {errors.addressLine && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.addressLine}
-                </p>
-              )}
-
-              <input
-                type="text"
-                placeholder="House No. / Street"
-                value={formData.house || ""}
-                onChange={(e) =>
-                  setFormData({ ...formData, house: e.target.value })
-                }
-                className="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:ring-4 focus:ring-[#006ca7]"
-              />
-              {errors.house && (
-                <p className="text-red-500 text-sm mt-1">{errors.house}</p>
-              )}
-
-              {/* City, State, Pincode */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <input
-                  type="text"
-                  placeholder="City"
-                  value={formData.city}
-                  onChange={(e) =>
-                    setFormData({ ...formData, city: e.target.value })
-                  }
-                  className="p-4 border border-gray-300 rounded-xl"
-                />
-                {errors.city && (
-                  <p className="text-red-500 text-sm mt-1">{errors.city}</p>
-                )}
-                <input
-                  type="text"
-                  placeholder="State"
-                  value={formData.state}
-                  onChange={(e) =>
-                    setFormData({ ...formData, state: e.target.value })
-                  }
-                  className="p-4 border border-gray-300 rounded-xl"
-                />
-                {errors.state && (
-                  <p className="text-red-500 text-sm mt-1">{errors.state}</p>
-                )}
-                <input
-                  type="text"
-                  placeholder="Pincode"
-                  value={formData.pincode}
-                  onChange={(e) =>
-                    setFormData({ ...formData, pincode: e.target.value })
-                  }
-                  className="p-4 border border-gray-300 rounded-xl"
-                />
-                {errors.pincode && (
-                  <p className="text-red-500 text-sm mt-1">{errors.pincode}</p>
-                )}
-              </div>
-
-              <div className="flex justify-end gap-4 mt-6">
-                <button
-                  type="button"
-                  onClick={closeModal}
-                  className="px-6 py-3 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-6 py-3 bg-[#006ca7] text-white rounded-xl hover:bg-[#005a8c] shadow-lg"
-                >
-                  {editingAddress ? "Update" : "Save"}
-                </button>
-              </div>
-            </form>
+              </form>
+            </div>
           )}
         </div>
       </div>

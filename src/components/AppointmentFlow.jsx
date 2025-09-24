@@ -28,7 +28,7 @@ const AppointmentFlow = ({
   onOpenManagePatients = () => {},
   onOpenManagePets = () => {},
 }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [selectedDateData, setSelectedDateData] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
@@ -128,7 +128,7 @@ const AppointmentFlow = ({
     setStep(1);
     setSelectedFor(null);
     setSelectedPayment(null);
-    navigate("/doctor-appointments")
+    navigate("/doctor-appointments");
     onClose();
   };
   useEffect(() => {
@@ -272,7 +272,12 @@ const AppointmentFlow = ({
                               }`}
                               onClick={() => setSelectedPet(p)}
                             >
-                              {p.name}, {p.gender}, {p.age} yrs
+                              {p.name}, {p.gender},{" "}
+                              {typeof p.age === "string"
+                                ? p.age + " yrs"
+                                : `${p.age?.year || 0} yrs ${
+                                    p.age?.month || 0
+                                  } mos`}
                             </li>
                           ))}
                         </ul>
