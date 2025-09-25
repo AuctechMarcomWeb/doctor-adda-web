@@ -42,6 +42,7 @@ import { useSelector } from "react-redux";
 import doctorImage from "../assets/doctorImage.jpg";
 
 import DiagonsticsReviewPopup from "../components/DiagonsticsReviewPopup";
+import Swal from "sweetalert2";
 
 const GradientCard = ({
   children,
@@ -280,6 +281,36 @@ const DoctorDetailPage = () => {
   const bookAppointment = (e) => {
     e.preventDefault();
 
+    if (!selectedDate && !selectedSlot) {
+      Swal.fire({
+        icon: "warning",
+        title: "Oops!",
+        text: "Please select a date and time slot before booking.",
+        confirmButtonColor: "#0d6efd",
+      });
+      return;
+    }
+
+    if (!selectedDate) {
+      Swal.fire({
+        icon: "warning",
+        title: "Oops!",
+        text: "Please select a date before booking.",
+        confirmButtonColor: "#0d6efd",
+      });
+      return;
+    }
+
+    if (!selectedSlot) {
+      Swal.fire({
+        icon: "warning",
+        title: "Oops!",
+        text: "Please select a time slot before booking.",
+        confirmButtonColor: "#0d6efd",
+      });
+      return;
+    }
+
     const finalData = {
       clinicName: clinicData?.clinicName,
       date: selectedDate,
@@ -456,76 +487,76 @@ const DoctorDetailPage = () => {
                     <p className="text">Consultation Fee</p>
                   </div>
 
-                    {
-                      clinicData?.availability.length == 0 ? 
-                      <div>
-                        No Slots Available
-                      </div> :
-
-                  <div>
-
-                  {/* Date Selector */}
-                  <div className="mt-6 ">
-                    <h4 className="text-sm font-semibold mb-2">Select Date</h4>
-                    <div className="flex flex-wrap gap-2 ">
-                      {clinicData?.availability?.map((d, i) => {
-                        return (
-                          <button
-                            key={i}
-                            onClick={() => {
-                              setSelectedDate(d?.date);
-
-                              console.log("d=================>", d);
-
-                              // setSelectedSlot(d?.slots[0]);
-                              setSelectedDateData(d);
-                            }}
-                            className={`px-3 py-2 text-sm rounded-lg font-medium cursor-pointer ${
-                              areDatesEqual(selectedDate, d?.date)
-                                ? "bg-blue-600 text-white"
-                                : "bg-gray-100 text-gray-700 hover:bg-blue-50"
-                            }`}
-                          >
-                            {AppointmentDateFormat(d?.date)}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Time Slots */}
-                  <div className="mt-6">
-                    <h4 className="font-bold text-sm mb-2">Available Slots</h4>
-                    <div className="grid grid-cols-2 gap-2 max-h-52 overflow-y-auto">
-                      {selectedDateData?.slots?.length > 0 ? (
-                        selectedDateData?.slots
-                          .filter((slot) => !slot.isBooked)
-                          .map((slot, i) => {
-                            console.log("slot", slot);
-
+                  {clinicData?.availability.length == 0 ? (
+                    <div>No Slots Available</div>
+                  ) : (
+                    <div>
+                      {/* Date Selector */}
+                      <div className="mt-6 ">
+                        <h4 className="text-sm font-semibold mb-2">
+                          Select Date
+                        </h4>
+                        <div className="flex flex-wrap gap-2 ">
+                          {clinicData?.availability?.map((d, i) => {
                             return (
                               <button
                                 key={i}
-                                onClick={() => setSelectedSlot(slot)}
-                                className={`px-2 py-2 text-sm rounded-lg font-medium cursor-pointer ${
-                                  selectedSlot === slot
+                                onClick={() => {
+                                  setSelectedDate(d?.date);
+
+                                  console.log("d=================>", d);
+
+                                  // setSelectedSlot(d?.slots[0]);
+                                  setSelectedDateData(d);
+                                }}
+                                className={`px-3 py-2 text-sm rounded-lg font-medium cursor-pointer ${
+                                  areDatesEqual(selectedDate, d?.date)
                                     ? "bg-blue-600 text-white"
                                     : "bg-gray-100 text-gray-700 hover:bg-blue-50"
                                 }`}
                               >
-                                {slot.startTime} - {slot.endTime}
+                                {AppointmentDateFormat(d?.date)}
                               </button>
                             );
-                          })
-                      ) : (
-                        <p className="text-gray-500 text-sm col-span-2">
-                          No slots available
-                        </p>
-                      )}
+                          })}
+                        </div>
+                      </div>
+
+                      {/* Time Slots */}
+                      <div className="mt-6">
+                        <h4 className="font-bold text-sm mb-2">
+                          Available Slots
+                        </h4>
+                        <div className="grid grid-cols-2 gap-2 max-h-52 overflow-y-auto">
+                          {selectedDateData?.slots?.length > 0 ? (
+                            selectedDateData?.slots
+                              .filter((slot) => !slot.isBooked)
+                              .map((slot, i) => {
+                                console.log("slot", slot);
+
+                                return (
+                                  <button
+                                    key={i}
+                                    onClick={() => setSelectedSlot(slot)}
+                                    className={`px-2 py-2 text-sm rounded-lg font-medium cursor-pointer ${
+                                      selectedSlot === slot
+                                        ? "bg-blue-600 text-white"
+                                        : "bg-gray-100 text-gray-700 hover:bg-blue-50"
+                                    }`}
+                                  >
+                                    {slot.startTime} - {slot.endTime}
+                                  </button>
+                                );
+                              })
+                          ) : (
+                            <p className="text-gray-500 text-sm col-span-2">
+                              No slots available
+                            </p>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  </div>
-                    }
+                  )}
 
                   <div className="space-y-3 pt-4">
                     <ActionButton

@@ -52,18 +52,31 @@ const ManagePets = () => {
   const openModal = (pet = null) => {
     if (pet) {
       setEditingPet(pet);
+      let ageObj = { year: 0, month: 0 };
+      if (typeof pet.age === "number") {
+        ageObj.year = pet.age;
+      } else if (typeof pet.age === "string") {
+        ageObj.year = parseInt(pet.age) || 0;
+      } else if (typeof pet.age === "object") {
+        ageObj = {
+          year: pet.age?.year || 0,
+          month: pet.age?.month || 0,
+        };
+      }
       setFormData({
-        name: pet?.name,
-        type: pet?.type,
-        age:
-          typeof pet?.age === "string" || typeof pet?.age === "number"
-            ? pet?.age.toString()
-            : `${pet.age?.year || 0}`,
-        weight: pet?.weight || "",
+        name: pet.name || "",
+        type: pet.type || "",
+        age: ageObj,
+        weight: pet.weight || "",
       });
     } else {
       setEditingPet(null);
-      setFormData({ name: "", type: "", age: "", weight: "" });
+      setFormData({
+        name: "",
+        type: "",
+        age: { year: 0, month: 0 },
+        weight: "",
+      });
     }
     setIsModalOpen(true);
   };
@@ -79,7 +92,13 @@ const ManagePets = () => {
     try {
       const res = await postRequest({
         url: `auth/addpets/${UserId}`,
-        cred: { ...formData, age: parseInt(formData?.age) || 0 },
+        cred: {
+          ...formData,
+          age: {
+            year: formData.age.year || 0,
+            month: formData.age.month || 0,
+          },
+        },
       });
       console.log("Pet add:", res?.data?.data);
       toast.success("Pet added successfully!");
@@ -102,7 +121,13 @@ const ManagePets = () => {
     try {
       const res = await patchRequest({
         url: `auth/updatepets/${UserId}/${editingPet?._id}`,
-        cred: { ...formData, age: parseInt(formData?.age) || 0 },
+        cred: {
+          ...formData,
+          age: {
+            year: formData.age.year || 0,
+            month: formData.age.month || 0,
+          },
+        },
       });
       console.log("Pet updated:", res?.data?.data);
       toast.success("Pet updated successfully!");
@@ -201,12 +226,7 @@ const ManagePets = () => {
                         <p className="text-sm text-gray-600 mt-1">
                           Age:{" "}
                           <span className="font-medium">
-                            {typeof pet.age === "string" ||
-                            typeof pet.age === "number"
-                              ? pet.age
-                              : `${pet.age?.year || 0} yrs ${
-                                  pet.age?.month || 0
-                                } mos`}
+                            {pet.age?.year} yrs {pet.age?.month} months
                           </span>{" "}
                           | <span className="font-medium">{pet?.type}</span>
                         </p>
@@ -300,17 +320,49 @@ const ManagePets = () => {
                     className="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:ring-4 focus:ring-[#006ca7] outline-none transition"
                     required
                   />
-                  <input
-                    type="number"
-                    min={0}
-                    placeholder="Age"
-                    value={formData.age}
-                    onChange={(e) =>
-                      setFormData({ ...formData, age: e.target.value })
-                    }
-                    className="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:ring-4 focus:ring-[#006ca7] outline-none transition"
-                    required
-                  />
+                  <div className="flex gap-2">
+                    <input
+                      type="number"
+                      min={0}
+                      placeholder="Years"
+                      value={formData.age?.year || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          age: {
+                            ...formData.age,
+                            year:
+                              e.target.value === ""
+                                ? 0
+                                : parseInt(e.target.value, 10),
+                          },
+                        })
+                      }
+                      className="w-1/2 p-4 border border-gray-300 rounded-xl shadow-sm focus:ring-4 focus:ring-[#006ca7] outline-none transition"
+                      required
+                    />
+                    <input
+                      type="number"
+                      min={0}
+                      placeholder="Months"
+                      value={formData.age?.month || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          age: {
+                            ...formData.age,
+                            month:
+                              e.target.value === ""
+                                ? 0
+                                : parseInt(e.target.value, 10),
+                          },
+                        })
+                      }
+                      className="w-1/2 p-4 border border-gray-300 rounded-xl shadow-sm focus:ring-4 focus:ring-[#006ca7] outline-none transition"
+                      required
+                    />
+                  </div>
+
                   <input
                     type="text"
                     placeholder="Weight"

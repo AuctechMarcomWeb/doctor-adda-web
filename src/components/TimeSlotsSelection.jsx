@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { AppointmentDateFormat } from "../Utils";
 import { MessageCircle } from "lucide-react";
+import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 
 const ActionButton = ({
   children,
@@ -37,12 +39,38 @@ const TimeSlotsSection = ({ availability = [], onBook }) => {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const bookAppointment = (e) => {
     e.preventDefault();
-    if (!selectedDate || !selectedSlot) {
-      alert("Please select a date and time slot before booking.");
+    if (!selectedDate && !selectedSlot) {
+      Swal.fire({
+        icon: "warning",
+        title: "Oops!",
+        text: "Please select a date and time slot before booking.",
+        confirmButtonColor: "#0d6efd",
+      });
       return;
     }
+
+    if (!selectedDate) {
+      Swal.fire({
+        icon: "warning",
+        title: "Oops!",
+        text: "Please select a date before booking.",
+        confirmButtonColor: "#0d6efd",
+      });
+      return;
+    }
+
+    if (!selectedSlot) {
+      Swal.fire({
+        icon: "warning",
+        title: "Oops!",
+        text: "Please select a time slot before booking.",
+        confirmButtonColor: "#0d6efd",
+      });
+      return;
+    }
+
     if (onBook) {
-      onBook(e, selectedDate, selectedSlot); 
+      onBook(e, selectedDate, selectedSlot);
     }
   };
 
@@ -136,8 +164,6 @@ const TimeSlotsSection = ({ availability = [], onBook }) => {
           Book Appointment
         </ActionButton>
       </div>
-
-      
     </div>
   );
 };

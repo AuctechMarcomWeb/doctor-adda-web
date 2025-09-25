@@ -17,6 +17,7 @@ import { getRequest, postRequest } from "../Helpers";
 import { useSelector } from "react-redux";
 import RenderRazorPay from "../components/RenderRazorPay";
 import toast from "react-hot-toast";
+import { getCookieItem } from "../Hooks/cookie";
 
 const AppointmentFlow = ({
   open,
@@ -42,8 +43,9 @@ const AppointmentFlow = ({
   const selectedClinic = clinicData || {};
 
   // Get user profile data from Redux
-  const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
-  const UserId = userProfileData?._id;
+  const { userProfileData } = useSelector((state) => state.user);
+  const UserId = getCookieItem("UserId");
+  console.log("User Profile Data:", userProfileData);
   const [patients, setPatients] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(null);
 
@@ -108,12 +110,13 @@ const AppointmentFlow = ({
   useEffect(() => {
     fetchPatients();
   }, [UserId]);
+  console.log("UserId", UserId);
 
   // Fetch pets from API
   const fetchPets = async () => {
     try {
       const res = await getRequest(`auth/getpets/${UserId}`);
-      console.log("Fetch Pets ===", res?.data?.data);
+      console.log("=======Fetch Pets ===", res?.data?.data);
       setPets(res?.data?.data || []);
     } catch (error) {
       console.error("Error fetching pets:", error);
@@ -272,12 +275,8 @@ const AppointmentFlow = ({
                               }`}
                               onClick={() => setSelectedPet(p)}
                             >
-                              {p.name}, {p.gender},{" "}
-                              {typeof p.age === "string"
-                                ? p.age + " yrs"
-                                : `${p.age?.year || 0} yrs ${
-                                    p.age?.month || 0
-                                  } mos`}
+                              {p.name}, {p.type}, {p.age?.year} yrs{" "}
+                              {p.age?.month} months, {p?.weight}{" "}
                             </li>
                           ))}
                         </ul>
