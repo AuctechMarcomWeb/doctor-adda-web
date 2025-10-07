@@ -17,6 +17,7 @@ import { getRequest, postRequest } from "../Helpers";
 import { useSelector } from "react-redux";
 import RenderRazorPay from "../components/RenderRazorPay";
 import toast from "react-hot-toast";
+import { getCookieItem } from "../Hooks/cookie";
 
 const AppointmentFlow = ({
   open,
@@ -28,7 +29,7 @@ const AppointmentFlow = ({
   onOpenManagePatients = () => {},
   onOpenManagePets = () => {},
 }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [selectedDateData, setSelectedDateData] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
@@ -42,8 +43,9 @@ const AppointmentFlow = ({
   const selectedClinic = clinicData || {};
 
   // Get user profile data from Redux
-  const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
-  const UserId = userProfileData?._id;
+  const { userProfileData } = useSelector((state) => state.user);
+  const UserId = getCookieItem("UserId");
+  console.log("User Profile Data:", userProfileData);
   const [patients, setPatients] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(null);
 
@@ -108,12 +110,13 @@ const AppointmentFlow = ({
   useEffect(() => {
     fetchPatients();
   }, [UserId]);
+  console.log("UserId", UserId);
 
   // Fetch pets from API
   const fetchPets = async () => {
     try {
       const res = await getRequest(`auth/getpets/${UserId}`);
-      console.log("Fetch Pets ===", res?.data?.data);
+      console.log("=======Fetch Pets ===", res?.data?.data);
       setPets(res?.data?.data || []);
     } catch (error) {
       console.error("Error fetching pets:", error);
@@ -128,7 +131,7 @@ const AppointmentFlow = ({
     setStep(1);
     setSelectedFor(null);
     setSelectedPayment(null);
-    navigate("/doctor-appointments")
+    navigate("/doctor-appointments");
     onClose();
   };
   useEffect(() => {
@@ -272,7 +275,8 @@ const AppointmentFlow = ({
                               }`}
                               onClick={() => setSelectedPet(p)}
                             >
-                              {p.name}, {p.gender}, {p.age} yrs
+                              {p.name}, {p.type}, {p.age?.year} yrs{" "}
+                              {p.age?.month} months, {p?.weight}{" "}
                             </li>
                           ))}
                         </ul>

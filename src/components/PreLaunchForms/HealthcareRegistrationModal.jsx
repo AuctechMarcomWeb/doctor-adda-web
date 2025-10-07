@@ -99,10 +99,10 @@ const HealthcareRegistrationModal = ({ setOpen, onSuccess }) => {
       "Lab Photo(Exterior + Lab tables)",
     ],
     ambulance: [
-      "Vehile RC",
+      "Vehicle RC",
       "Driver License",
       "Ambulance Photo",
-      "Aadhar of Owner",
+      "Aadhaar of Owner",
     ],
   };
 

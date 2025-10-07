@@ -1,9 +1,11 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import { postRequest } from "../Helpers/index";
 import { FaStar } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { getCookieItem } from "../Hooks/cookie";
 
 const DiagonsticsReviewPopup = ({
   open,
@@ -23,21 +25,30 @@ const DiagonsticsReviewPopup = ({
   const [successMessage, setSuccessMessage] = useState("");
 
   const navigate = useNavigate();
-  const userProfileData = useSelector((state) => state.user.userProfileData);
+  const { userProfileData } = useSelector((state) => state.user);
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const UserId = getCookieItem("UserId");
   if (!open) return null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!userProfileData?.authToken) {
-      const msg = "You must be logged in to submit a review.";
-      toast.error(msg);
-      setError(msg);
+    if (!isLoggedIn) {
+      toast.error("You must be logged in to submit a review.");
+      setError("You must be logged in to submit a review.");
       setTimeout(() => {
         navigate("/login");
       }, 1000);
       return;
     }
+    // if (!userProfileData?.authToken) {
+    //   const msg = "You must be logged in to submit a review.";
+    //   toast.error(msg);
+    //   setError(msg);
+    //   setTimeout(() => {
+    //     navigate("/login");
+    //   }, 1000);
+    //   return;
+    // }
 
     setLoading(true);
     setError("");
