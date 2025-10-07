@@ -24,6 +24,7 @@ import { toast } from "react-hot-toast";
 import NotificationBell from "./NotificationBell";
 import DashboardButton from "./DashboardButton";
 import LocationDropdown from "./locationDropDown/locationDropdown";
+import axios from "axios";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -35,6 +36,43 @@ const Navbar = () => {
   const [currentLocation, setCurrentLocation] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("Lucknow");
 
+
+   const orderData = {
+    doctor: "683403903c943b18ae94a573",
+    clinicName: "Mehdi clinic ",
+    patient: "68ad9219c8053ea3a6d10651",
+    date: "2025-09-24T00:00:00.000Z",
+    slots: {
+      startTime: "05:30 AM",
+      endTime: "06:00 AM",
+    },
+    serviceType: "In-clinic",
+    fee: 1000,
+    isSelf: true,
+  };
+
+
+  const handlePayment = async () => {
+    try {
+      // Send order data to backend
+      const res = await axios.post(
+        "https://doctors-adda-back.onrender.com/api/appointment/order", 
+        orderData,
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      // CC Avenue returns HTML form
+      const html = res.data;
+
+      // Open payment page in a new tab
+      const paymentWindow = window.open("", "_blank");
+      paymentWindow.document.write(html);
+      paymentWindow.document.close();
+
+    } catch (error) {
+      console.error("Payment initiation failed:", error);
+    }
+  };
   // Get user profile data from Redux
   const { userProfileData, isLoggedIn, locationData } = useSelector(
     (state) => state.user
@@ -289,6 +327,11 @@ const Navbar = () => {
                 </span>
               </div>
             </a>
+            <div >
+              <button onClick={handlePayment}>
+      Pay Now
+    </button>
+            </div>
 
             {/* User Profile */}
             {isLoggedIn && userProfileData ? (
