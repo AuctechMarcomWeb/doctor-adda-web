@@ -107,7 +107,7 @@ function App() {
 
         {/* Main public routes */}
         <Route path="/" element={<Home />} />
-        <Route path="/verify" element={<VerifyPayment />} />
+        <Route path="/success" element={<VerifyPayment />} />
         <Route path="/verification" element={<Verification />} />
         <Route path="/manage-patients" element={<ManagePatients />} />
         <Route path="/manageAddresses" element={<ManageAddresses />} />
