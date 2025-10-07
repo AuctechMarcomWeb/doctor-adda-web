@@ -60,6 +60,7 @@ import BloodBankDetailPage from "./pages/BloodBank/bloodBankDetailPage";
 import ManageAddresses from "./components/ManageAddresses";
 import DiagnosticAppointmentsPage from "./components/DiagnosticAppointmentsPage";
 import HospitalAppointments from "./components/HospitalAppointments";
+import VerifyPayment from "./components/VerifyPayment";
 
 function App() {
   const [step, setStep] = useState(1);
@@ -106,6 +107,7 @@ function App() {
 
         {/* Main public routes */}
         <Route path="/" element={<Home />} />
+        <Route path="/verify" element={<VerifyPayment />} />
         <Route path="/verification" element={<Verification />} />
         <Route path="/manage-patients" element={<ManagePatients />} />
         <Route path="/manageAddresses" element={<ManageAddresses />} />
