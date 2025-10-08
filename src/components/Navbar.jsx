@@ -56,7 +56,7 @@ const Navbar = () => {
     try {
       // Send order data to backend
       const res = await axios.post(
-        "https://doctors-adda-back.onrender.com/api/appointment/ccvanuePayment", 
+        "http://localhost:5000/api/appointment/ccvanuePayment", 
         orderData,
         { headers: { "Content-Type": "application/json" } }
       );
