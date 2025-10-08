@@ -68,6 +68,7 @@ const Navbar = () => {
       paymentWindow.document.close();
     } catch (error) {
       console.error("Payment initiation failed:", error);
+      toast.error(error?.response?.data?.message)
     }
   };
   // Get user profile data from Redux
