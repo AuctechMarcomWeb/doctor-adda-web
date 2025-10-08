@@ -46,7 +46,7 @@ const Navbar = () => {
       endTime: "01:00 AM",
     },
     serviceType: "In-clinic",
-    fee: 600,
+    fee: 1,
     isSelf: true,
   };
 
