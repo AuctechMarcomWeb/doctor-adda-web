@@ -36,27 +36,25 @@ const Navbar = () => {
   const [currentLocation, setCurrentLocation] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("Lucknow");
 
-
-   const orderData = {
-    doctor: "683403903c943b18ae94a573",
-    clinicName: "Mehdi clinic ",
-    patient: "68ad9219c8053ea3a6d10651",
-    date: "2025-09-24T00:00:00.000Z",
+  const orderData = {
+    doctor: "683af5d62d5586f5fad16866",
+    clinicName: "Ankit Multi-speciality Center",
+    patient: "689a0e42421e65d87e7f03cc",
+    date: "2025-10-09T00:00:00.000Z",
     slots: {
-      startTime: "05:30 AM",
-      endTime: "06:00 AM",
+      startTime: "12:30 AM",
+      endTime: "01:00 AM",
     },
     serviceType: "In-clinic",
-    fee: 1,
+    fee: 600,
     isSelf: true,
   };
-
 
   const handlePayment = async () => {
     try {
       // Send order data to backend
       const res = await axios.post(
-        "http://localhost:5000/api/appointment/ccvanuePayment", 
+        "http://localhost:5000/api/appointment/ccvanuePayment",
         orderData,
         { headers: { "Content-Type": "application/json" } }
       );
@@ -68,7 +66,6 @@ const Navbar = () => {
       const paymentWindow = window.open("", "_blank");
       paymentWindow.document.write(html);
       paymentWindow.document.close();
-
     } catch (error) {
       console.error("Payment initiation failed:", error);
     }
@@ -327,10 +324,8 @@ const Navbar = () => {
                 </span>
               </div>
             </a>
-            <div >
-              <button onClick={handlePayment}>
-      Pay Now
-    </button>
+            <div>
+              <button onClick={handlePayment}>Pay Now</button>
             </div>
 
             {/* User Profile */}
@@ -475,7 +470,6 @@ const Navbar = () => {
 
             <NotificationBell />
 
-
             {/* Mobile Menu Toggle */}
             <button
               className="md:hidden"
@@ -488,7 +482,7 @@ const Navbar = () => {
               )}
             </button>
           </div>
-          
+
           <div>
             <NavBar2 />
           </div>
