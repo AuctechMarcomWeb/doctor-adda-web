@@ -42,8 +42,8 @@ const Navbar = () => {
     patient: "689a0e42421e65d87e7f03cc",
     date: "2025-10-09T00:00:00.000Z",
     slots: {
-      startTime: "12:30 AM",
-      endTime: "01:00 AM",
+      startTime: "01:30 AM",
+      endTime: "02:00 AM",
     },
     serviceType: "In-clinic",
     fee: 1,
