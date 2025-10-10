@@ -37,24 +37,28 @@ const Navbar = () => {
   const [selectedLocation, setSelectedLocation] = useState("Lucknow");
 
   const orderData = {
-    doctor: "683af5d62d5586f5fad16866",
-    clinicName: "Ankit Multi-speciality Center",
-    patient: "689a0e42421e65d87e7f03cc",
-    date: "2025-10-09T00:00:00.000Z",
-    slots: {
-      startTime: "01:30 AM",
-      endTime: "02:00 AM",
-    },
-    serviceType: "In-clinic",
-    fee: 1,
+    hospital: "68bfde8b0b6c8913ec6cab9c",
+    doctorType: "Registered",
+    patientId: "689a0e42421e65d87e7f03cc",
+    fee: "500",
     isSelf: true,
+    date: "2025-10-10T00:00:00.000Z",
+    slots: {
+      startTime: "01:09 PM",
+      endTime: "01:39 PM",
+    },
+    registeredDoctorId: "68775f3b74354f021a20f878",
+    doctorsDetails: {
+      name: "Dr. Ramesh Chandra",
+      specialization: "General Physician",
+      exp: "12",
+    },
   };
-
   const handlePayment = async () => {
     try {
       // Send order data to backend
       const res = await axios.post(
-        "https://doctors-adda-back.onrender.com/api/appointment/ccvanuePayment",
+        "http://localhost:5000/api/hospitalAppointment/ccvanuePayment",
         orderData,
         { headers: { "Content-Type": "application/json" } }
       );
@@ -68,7 +72,7 @@ const Navbar = () => {
       paymentWindow.document.close();
     } catch (error) {
       console.error("Payment initiation failed:", error);
-      toast.error(error?.response?.data?.message)
+      toast.error(error?.response?.data?.message);
     }
   };
   // Get user profile data from Redux
