@@ -14,6 +14,7 @@ import { fileUpload, getRequest, postRequest } from "../Helpers/index";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import LocationSearchInput from "./LocationSearchInput";
+import { getCookieItem } from "../Hooks/cookie";
 
 const DiagonsticRegistration = () => {
   const [errors, setErrors] = useState({});
@@ -21,7 +22,7 @@ const DiagonsticRegistration = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [categories, setCategories] = useState([]);
   const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
-  const userId = userProfileData?._id;
+  const UserId = getCookieItem("UserId");
   // Profile Image states
   const [profileFile, setProfileFile] = useState(null);
   const [uploadProfileImage, setUploadProfileImage] = useState("");
@@ -86,7 +87,7 @@ const DiagonsticRegistration = () => {
       const payload = { ...formData, services, packages };
       console.log("Final payload before submit:", payload);
       const response = await postRequest({
-        url: `diagnostics/registerDiagnostic/${userId}`,
+        url: `diagnostics/registerDiagnostic/${UserId}`,
         cred: payload,
       });
 
@@ -324,7 +325,12 @@ const DiagonsticRegistration = () => {
                 <input
                   type="number"
                   value={formData?.phone}
-                  onChange={(e) => handleInputChange("phone", e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    /^\d*$/.test(value) &&
+                      value.length <= 10 &&
+                      handleInputChange("phone", value);
+                  }}
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-purple-500"
                   placeholder="+91 12345 67890"
                 />

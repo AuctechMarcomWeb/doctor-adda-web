@@ -16,15 +16,18 @@ import LocationSearchInput from "./LocationSearchInput";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useUpdate } from "../context/updateContext";
+import { getCookieItem } from "../Hooks/cookie";
 const PharmacyRegistration = () => {
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const { setUpdate } = useUpdate();
-  const { userProfileData, isLoggedIn ,userData} = useSelector((state) => state.user);
-  const userId = userData?.data?._id;
-  console.log("userProfileData user id ", userId);
+  const { userProfileData, isLoggedIn, userData } = useSelector(
+    (state) => state.user
+  );
+  const UserId = getCookieItem("UserId");
+  console.log("userProfileData user id ", UserId);
 
   // Profile Image states
   const [profileFile, setProfileFile] = useState(null);
@@ -88,7 +91,7 @@ const PharmacyRegistration = () => {
       const payload = { ...formData, services };
       console.log("Final payload before submit:", payload);
       const response = await postRequest({
-        url: `pharmacy/registerPharmacy/${userId}`,
+        url: `pharmacy/registerPharmacy/${UserId}`,
         cred: payload,
       });
 
@@ -317,7 +320,12 @@ const PharmacyRegistration = () => {
                 <input
                   type="number"
                   value={formData?.phone}
-                  onChange={(e) => handleInputChange("phone", e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    /^\d*$/.test(value) &&
+                      value.length <= 10 &&
+                      handleInputChange("phone", value);
+                  }}
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-purple-500"
                   placeholder="+91 12345 67890"
                 />
