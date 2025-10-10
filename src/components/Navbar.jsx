@@ -360,13 +360,6 @@ const Navbar = () => {
                   {/* Dropdown Menu */}
                   {dropdownOpen && (
                     <div className="absolute z-100 right-0 mt-2 w-55  bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200  ">
-                      <button
-                        onClick={handleLogout}
-                        className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
-                      >
-                        <LogOut className="w-4 h-4" />
-                        Logout
-                      </button>
                       <Link
                         onClick={() => setDropdownOpen(false)}
                         to="/profile"
@@ -391,14 +384,22 @@ const Navbar = () => {
                           Settings
                         </button>
                       </Link>
+                      <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        Logout
+                      </button>
                       {/* <Link onClick={() => setDropdownOpen(false)} to={isUpgraded ? "/dashboard" : "/upgrade-profile"}>
                           <button className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
                             <User className="w-4 h-4" />
                             {isUpgraded ? "Dashboard" : "Upgrade Profile"}
                           </button>
                         </Link> */}
-
-                      {hasUpgradeRequest ? (
+                        
+{/*upgrde or dashbord button */}
+                      {/* {hasUpgradeRequest ? (
                         <DashboardButton userDetails={userProfileData} />
                       ) : (
                         <Link to="/upgrade-profile">
@@ -407,7 +408,7 @@ const Navbar = () => {
                             Upgrade Profile
                           </button>
                         </Link>
-                      )}
+                      )} */}
 
                       {/* <Link
                         onClick={() => setDropdownOpen(false)}
@@ -524,13 +525,6 @@ const Navbar = () => {
                     {/* Dropdown Menu */}
                     {dropdownOpen && (
                       <div className="absolute z-100 right-0 mt-2 w-full   bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200  ">
-                        <button
-                          onClick={handleLogout}
-                          className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
-                        >
-                          <LogOut className="w-4 h-4" />
-                          Logout
-                        </button>
                         <Link
                           onClick={() => setDropdownOpen(false)}
                           to="/profile"
@@ -555,6 +549,13 @@ const Navbar = () => {
                             Settings
                           </button>
                         </Link>
+                        <button
+                          onClick={handleLogout}
+                          className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
+                        >
+                          <LogOut className="w-4 h-4" />
+                          Logout
+                        </button>
                         <Link
                           onClick={() => setDropdownOpen(false)}
                           to={isUpgraded ? "/dashboard" : "/upgrade-profile"}
