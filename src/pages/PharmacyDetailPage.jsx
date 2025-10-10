@@ -157,7 +157,7 @@ const PharmacyDetailPage = () => {
               <ChevronRight className="w-4 h-4" />
               <span className="text-blue-600 font-medium">{pharmacy.name}</span>
             </div>
-            <div className="flex items-center gap-3">
+            {/* <div className="flex items-center gap-3">
               <button
                 onClick={() => setIsLiked(!isLiked)}
                 className={`p-2 rounded-full transition-all duration-300 ${
@@ -171,7 +171,7 @@ const PharmacyDetailPage = () => {
               <button className="p-2 rounded-full bg-white text-gray-600 hover:text-blue-600 shadow-lg hover:shadow-xl transition-all duration-300">
                 <Share2 className="w-5 h-5" />
               </button>
-            </div>
+            </div> */}
           </div>
 
           {/* Main Content */}

@@ -17,6 +17,8 @@ const DoctorCategoryCards = () => {
   const fetchCategories = async () => {
     try {
       const response = await getRequest("category");
+      console.log("categorie", response?.data?.data?.categories);
+
       setCategories(response?.data?.data?.categories || []);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -41,6 +43,17 @@ const DoctorCategoryCards = () => {
     if (name.includes("Ear,Nose,Throat")) return Eye;
     if (name.includes("Physio")) return Activity;
     return User;
+  };
+  const getColorByCategory = (name = "") => {
+    if (name.includes("General Physician")) return "from-blue-500 to-blue-300";
+    if (name.includes("Dental Care")) return "from-green-500 to-green-300";
+    if (name.includes("Cardiologist")) return "from-red-500 to-red-300";
+    if (name.includes("Neurologist")) return "from-purple-500 to-purple-300";
+    if (name.includes("Child Specialist"))
+      return "from-yellow-400 to-yellow-200";
+    if (name.includes("Ear,Nose,Throat")) return "from-pink-500 to-pink-300";
+    if (name.includes("Physio")) return "from-indigo-500 to-indigo-300";
+    return "from-orange-400 to-orange-200";
   };
 
   return (
@@ -87,12 +100,13 @@ const DoctorCategoryCards = () => {
                 Array.from({ length: 4 }).map((_, i) => (
                   <SwiperSlide key={i}>
                     <div className="bg-white rounded-2xl shadow-md p-4 flex flex-col items-center">
-                      <Skeleton.Image
+                      <Skeleton.Image active />
+                      <Skeleton.Input
                         active
-                       
+                        className="mt-4 w-3/4"
+                        size="small"
                       />
-                      <Skeleton.Input active className="mt-4 w-3/4" size="small" />
-                      
+
                       <Skeleton.Button active className="mt-4 w-full" />
                     </div>
                   </SwiperSlide>
@@ -113,8 +127,11 @@ const DoctorCategoryCards = () => {
                           />
 
                           <div
-                            className={`absolute inset-0 bg-gradient-to-t ${category.color} opacity-0 group-hover:opacity-80 transition-opacity duration-300`}
+                            className={`absolute inset-0 bg-gradient-to-t ${getColorByCategory(
+                              category.name
+                            )} opacity-0 group-hover:opacity-80 transition-opacity duration-300`}
                           />
+
                           <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full p-3 transform group-hover:scale-110 transition-transform duration-300">
                             <IconComponent className="w-6 h-6 text-blue-600" />
                           </div>

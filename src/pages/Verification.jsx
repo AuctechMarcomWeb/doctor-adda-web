@@ -34,7 +34,7 @@ const Verification = () => {
       {/* Button */}
       <button
         onClick={goHome}
-        className="px-6 py-2 bg-teal-500 text-white text-lg font-semibold rounded-lg hover:bg-teal-600 transition"
+        className="px-6 py-2 bg-teal-500 text-white text-lg font-semibold rounded-lg hover:bg-teal-600 transition mb-22"
       >
         CONTINUE
       </button>

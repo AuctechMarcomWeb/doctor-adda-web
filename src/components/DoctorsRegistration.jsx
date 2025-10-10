@@ -17,6 +17,7 @@ import toast from "react-hot-toast";
 import LocationSearchInput from "./LocationSearchInput";
 import { Select } from "antd";
 import { useNavigate } from "react-router-dom";
+import { getCookieItem } from "../Hooks/cookie";
 
 const DoctorsRegistration = () => {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ const DoctorsRegistration = () => {
   const [category, setCategory] = useState([]);
   const [hospital, setHospital] = useState([]);
   const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
-  const userId = userProfileData?._id;
+  const UserId = getCookieItem("UserId");
   // Profile Image states
   const [profileFile, setProfileFile] = useState(null);
   const [uploadProfileImage, setUploadProfileImage] = useState("");
@@ -201,7 +202,7 @@ const DoctorsRegistration = () => {
       console.log("📦 Final payload before submit:", payload);
 
       const response = await postRequest({
-        url: `doctor/registers/${userId}`,
+        url: `doctor/registers/${UserId}`,
         cred: payload,
       });
       console.log(" Doctors Register Response:", response);
@@ -507,7 +508,12 @@ const DoctorsRegistration = () => {
                   type="number"
                   name="phone"
                   value={formData?.phone}
-                  onChange={handleInputChange}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    /^\d*$/.test(value) &&
+                      value.length <= 10 &&
+                      handleInputChange(e);
+                  }}
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-purple-500"
                   placeholder="+91 12345 67890"
                 />
