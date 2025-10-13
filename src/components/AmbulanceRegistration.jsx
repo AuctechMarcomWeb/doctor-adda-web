@@ -14,6 +14,7 @@ import { fileUpload, getRequest, postRequest } from "../Helpers/index";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import LocationSearchInput from "./LocationSearchInput";
+import { getCookieItem } from "../Hooks/cookie";
 
 const AmbulanceRegistration = () => {
   const [errors, setErrors] = useState({});
@@ -21,8 +22,7 @@ const AmbulanceRegistration = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [categories, setCategories] = useState([]);
   const { userProfileData, isLoggedIn } = useSelector((state) => state.user);
-  const userId = userProfileData?._id;
-
+  const UserId = getCookieItem("UserId");
 
   // Profile Image states
   const [profileFile, setProfileFile] = useState(null);
@@ -34,7 +34,7 @@ const AmbulanceRegistration = () => {
   const [drivers, setDrivers] = useState([
     { name: "", phone: "", licenseNumber: "" },
   ]);
-  
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -52,7 +52,7 @@ const AmbulanceRegistration = () => {
     emergencyContact: "911",
     profileImages: [],
   });
- 
+
   const uploadImage = async (file) => {
     try {
       const formDataData = new FormData();
@@ -61,7 +61,7 @@ const AmbulanceRegistration = () => {
         url: `upload/uploadImage`,
         cred: formDataData,
       });
-     const uploadedUrl = response?.data?.data?.imageUrl;
+      const uploadedUrl = response?.data?.data?.imageUrl;
       setUploadProfileImage(uploadedUrl);
       setFormData((prev) => ({ ...prev, profileImage: uploadedUrl }));
     } catch (error) {
@@ -83,7 +83,7 @@ const AmbulanceRegistration = () => {
       console.log("Final payload before submit:", payload);
 
       const response = await postRequest({
-        url: `ambulance/registerAmbulances/${userId}`,
+        url: `ambulance/registerAmbulances/${UserId}`,
         cred: payload,
       });
 
@@ -339,7 +339,12 @@ const AmbulanceRegistration = () => {
                 <input
                   type="number"
                   value={formData?.phone}
-                  onChange={(e) => handleInputChange("phone", e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    /^\d*$/.test(value) &&
+                      value.length <= 10 &&
+                      handleInputChange("phone", value);
+                  }}
                   className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-purple-500"
                   placeholder="+91 12345 67890"
                 />
@@ -535,9 +540,12 @@ const AmbulanceRegistration = () => {
                         type="text"
                         placeholder="Phone number"
                         value={driver.phone}
-                        onChange={(e) =>
-                          handleDriverChange(index, "phone", e.target.value)
-                        }
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          /^\d*$/.test(value) &&
+                            value.length <= 10 &&
+                            handleDriverChange(index, "phone", value);
+                        }}
                         className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                       />
                       {errors?.drivers?.[index]?.phone && (

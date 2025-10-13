@@ -59,7 +59,6 @@ const FeaturedHospitals2 = () => {
     }
   };
 
-
   useEffect(() => {
     fetchHospitals();
     animationRef.current = requestAnimationFrame(scroll);
@@ -68,7 +67,6 @@ const FeaturedHospitals2 = () => {
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
     };
   }, []);
-
 
   const handleScrollLeft = () => {
     stopScrolling();
@@ -82,7 +80,6 @@ const FeaturedHospitals2 = () => {
 
   return (
     <div className=" mx-auto px-4 sm:px-6 lg:px-8 md:py-8 py-4 relative sm:w-full lg:w-[80%]  xl:w-[80%] 2xl:w-[70%] ">
-   
       <div className="text-center mb-8">
         <h2 className="text-xl  md:text-2xl lg:text-4xl font-bold text-gray-800 mb-4">
           Featured{" "}
@@ -118,102 +115,108 @@ const FeaturedHospitals2 = () => {
         onMouseEnter={stopScrolling}
         onMouseLeave={resumeScrolling}
       >
+        {loading
+          ? // Skeleton cards
+            Array.from({ length: 6 }).map((_, i) => (
+              <div
+                key={i}
+                className="mx-2 sm:mx-4 flex-shrink-0 w-64 sm:w-72 md:w-80 bg-white rounded-2xl shadow-md p-4"
+              >
+                {/* Image skeleton */}
+                <Skeleton.Image
+                  active
+                  className="!w-full !h-40 sm:!h-48 rounded-xl"
+                />
 
-        {loading ? (
-          // Skeleton cards
-          Array.from({ length: 6 }).map((_, i) => (
-            <div
-              key={i}
-              className="mx-2 sm:mx-4 flex-shrink-0 w-64 sm:w-72 md:w-80 bg-white rounded-2xl shadow-md p-4"
-            >
-              {/* Image skeleton */}
-              <Skeleton.Image
-                active
-                className="!w-full !h-40 sm:!h-48 rounded-xl"
-              />
+                <div className="mt-4 space-y-3">
+                  {/* Title skeleton */}
+                  <Skeleton.Input active size="small" className="!w-2/3 !h-4" />
 
-              <div className="mt-4 space-y-3">
-                {/* Title skeleton */}
-                <Skeleton.Input active size="small" className="!w-2/3 !h-4" />
-
-                {/* Description skeleton (2–3 lines) */}
-                <Skeleton.Input active size="small" className="!w-full !h-3" />
-                <Skeleton.Input active size="small" className="!w-5/6 !h-3" />
-
-                {/* Buttons skeleton */}
-                <div className="flex gap-2 pt-4">
-                  <Skeleton.Button active size="small" className="!flex-1 !h-8" />
-                  <Skeleton.Button active size="small" className="!flex-1 !h-8" />
-                </div>
-              </div>
-            </div>
-          ))
-        ) : (
-          hospitalList.map((hospital, index) => (
-            <div
-              key={index}
-                className="mx-2 cursor-pointer  sm:mx-4 flex-shrink-0  group"
-              onClick={stopScrolling} 
-            >
-              <div 
-
-              onClick={() => handleViewDetails(hospital._id)}
-
-              className="w-64 sm:w-72 md:w-80 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
-                <div className="relative overflow-hidden rounded-t-2xl h-40 sm:h-48">
-                  <img
-                    src={
-                      hospital.profileImage ||
-                      "https://media.gettyimages.com/id/539204646/vector/modern-medical-facilities.jpg?s=612x612&w=gi&k=20&c=8Z_vHahm6VIDT1uOpmvhXo-DWUJ5G73mFzqVAPPSZtM="
-                    }
-                    alt={hospital.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  {/* Description skeleton (2–3 lines) */}
+                  <Skeleton.Input
+                    active
+                    size="small"
+                    className="!w-full !h-3"
                   />
-                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-1">
-                    <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                    <span className="text-sm font-semibold text-gray-700">
-                      {hospital.averageRating}
-                    </span>
-                  </div>
-                </div>
+                  <Skeleton.Input active size="small" className="!w-5/6 !h-3" />
 
-                <div className="p-4 sm:p-6">
-                  <h3 className="mb-2 text-sm sm:text-base font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-300">
-                    {hospital.name?.split(" ").slice(0, 3).join(" ")}
-                  </h3>
-                  <p className="text-gray-600 text-sm sm:text-base  leading-relaxed min-h-[6rem] md:min-h-[7rem]">
-                    {hospital.description?.length > 100
-                      ? `${hospital.description.substring(0, 100)}...`
-                      : hospital.description}
-                  </p>
-                  <div className="flex  pt-2 border-t border-gray-200 cursor-pointer ">
-                    <button
-                      onClick={() => handleViewDetails(hospital._id)}
-                      className="w-full cursor-pointer px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md text-sm font-medium shadow-sm hover:bg-gray-100 transition-all"
-                    >
-                      View Details
-                    </button>
+                  {/* Buttons skeleton */}
+                  <div className="flex gap-2 pt-4">
+                    <Skeleton.Button
+                      active
+                      size="small"
+                      className="!flex-1 !h-8"
+                    />
+                    <Skeleton.Button
+                      active
+                      size="small"
+                      className="!flex-1 !h-8"
+                    />
                   </div>
-
                 </div>
               </div>
-            </div>
-          )))}
+            ))
+          : hospitalList.map((hospital, index) => (
+              <div
+                key={index}
+                className="mx-2 cursor-pointer  sm:mx-4 flex-shrink-0  group"
+                onClick={stopScrolling}
+              >
+                <div
+                  onClick={() => handleViewDetails(hospital._id)}
+                  className="w-64 sm:w-72 md:w-80 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100"
+                >
+                  <div className="relative overflow-hidden rounded-t-2xl h-40 sm:h-48">
+                    <img
+                      src={
+                        hospital.profileImage ||
+                        "https://media.gettyimages.com/id/539204646/vector/modern-medical-facilities.jpg?s=612x612&w=gi&k=20&c=8Z_vHahm6VIDT1uOpmvhXo-DWUJ5G73mFzqVAPPSZtM="
+                      }
+                      alt={hospital.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-1">
+                      <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                      <span className="text-sm font-semibold text-gray-700">
+                        {hospital.averageRating}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-4 sm:p-6">
+                    <h3 className="mb-2 text-sm sm:text-base font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-300">
+                      {hospital.name?.split(" ").slice(0, 3).join(" ")}
+                    </h3>
+                    <p className="text-gray-600 text-sm sm:text-base  leading-relaxed min-h-[6rem] md:min-h-[7rem]">
+                      {hospital.description?.length > 100
+                        ? `${hospital.description.substring(0, 100)}...`
+                        : hospital.description}
+                    </p>
+                    <div className="flex  pt-2 border-t border-gray-200 cursor-pointer ">
+                      <button
+                        onClick={() => handleViewDetails(hospital._id)}
+                        className="w-full bg-[#00669e] text-white text-xs md:text-base font-semibold py-2 sm:py-3 px-4 rounded-lg hover:bg-blue-700 transform hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg"
+                      >
+                        View Details
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
       </div>
 
       {/* Scrollbar Hide */}
       <style jsx>{`
-    .no-scrollbar {
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-  `}</style>
-
+        .no-scrollbar {
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </div>
-
   );
 };
 
