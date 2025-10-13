@@ -37,28 +37,42 @@ const Navbar = () => {
   const [selectedLocation, setSelectedLocation] = useState("Lucknow");
 
   const orderData = {
-    hospital: "68bfde8b0b6c8913ec6cab9c",
-    doctorType: "Registered",
-    patientId: "689a0e42421e65d87e7f03cc",
-    fee: "500",
-    isSelf: true,
-    date: "2025-10-10T00:00:00.000Z",
-    slots: {
-      startTime: "01:09 PM",
-      endTime: "01:39 PM",
+    referBy: "60d21b4667d0d8992e610c85",
+    patient: "6863ba16cd84a3034f3226f4",
+    diagnostic: "686679ea4b9cfe2e7af2af46",
+    report:
+      "https://res.cloudinary.com/dxh8fqqvi/image/upload/v1752057537/file_lrnb0w.pdf",
+    date: "2025-07-03T00:00:00.000Z",
+    slots: { startTime: "09:30 AM", endTime: "10:00 AM" },
+    amount: 1200,
+    otherPatientDetails: {
+      name: "John Doe",
+      age: "30",
+      gender: "Male",
+      number: "9876543210",
+      weight: "70",
     },
-    registeredDoctorId: "68775f3b74354f021a20f878",
-    doctorsDetails: {
-      name: "Dr. Ramesh Chandra",
-      specialization: "General Physician",
-      exp: "12",
-    },
+    service: [
+      {
+        name: "Blood Test",
+        price: "500",
+        _id: "service123",
+      },
+    ],
+    packages: [
+      {
+        name: "Full Body Checkup",
+        price: "700",
+        details: "Includes CBC, Liver Function, Kidney Function",
+        _id: "package456",
+      },
+    ],
   };
   const handlePayment = async () => {
     try {
       // Send order data to backend
       const res = await axios.post(
-        "http://localhost:5000/api/hospitalAppointment/ccvanuePayment",
+        "http://localhost:5000/api/diagnosticBooking/ccvanuePayment",
         orderData,
         { headers: { "Content-Type": "application/json" } }
       );
