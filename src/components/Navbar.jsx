@@ -37,11 +37,11 @@ const Navbar = () => {
   const [selectedLocation, setSelectedLocation] = useState("Lucknow");
 
   const orderData = {
-    "patient":"689a0e42421e65d87e7f03cc",
-    "pharmacy":"689adb6eaaeb20ac65989bcc",
-    "amount":"500",
-    "orderId":"68c9533b77c0874b5bcb3281"
-};
+    patient: "689a0e42421e65d87e7f03cc",
+    pharmacy: "689adb6eaaeb20ac65989bcc",
+    amount: "500",
+    orderId: "68c9533b77c0874b5bcb3281",
+  };
   const handlePayment = async () => {
     try {
       // Send order data to backend
@@ -385,8 +385,8 @@ const Navbar = () => {
                             {isUpgraded ? "Dashboard" : "Upgrade Profile"}
                           </button>
                         </Link> */}
-                        
-{/*upgrde or dashbord button */}
+
+                      {/*upgrde or dashbord button */}
                       {/* {hasUpgradeRequest ? (
                         <DashboardButton userDetails={userProfileData} />
                       ) : (
